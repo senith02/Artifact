@@ -1,0 +1,33 @@
+# ── Data (read-only inputs, ~4 GB — never tracked) ───────────────────
+Dataset/
+
+# ── Local tooling / editor config ────────────────────────────────────
+.claude/settings.local.json
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+build/
+dist/
+.installed.cfg
+
+# ── Testing / tooling caches ─────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# ── OS cruft ─────────────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
