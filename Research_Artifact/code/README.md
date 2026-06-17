@@ -6,6 +6,7 @@ evaluation and the live demo.** Planned layout:
 ```
 code/
 ├── scheduler_core/      # THE shared decision logic (P1–P2)
+│   ├── config.py        # RANDOM_SEED = 42 — the single global seed (P0-T1) ✅
 │   ├── data.py          # TravisTorrent loader (P0-T2)
 │   ├── carbon.py        # carbon-intensity series + hour-of-week profile (P0-T3)
 │   ├── features.py      # commit-time feature extractor (P1-T1) — see context/feature_spec.md
@@ -21,5 +22,33 @@ code/
 └── tests/               # pytest suite
 ```
 
-Nothing here yet — Phase 0 (P0-T1) creates the skeleton. All code must obey
+## What exists now (after P0-T1)
+
+```
+code/
+├── scheduler_core/__init__.py   # re-exports RANDOM_SEED
+├── scheduler_core/config.py     # RANDOM_SEED = 42
+├── replay/__init__.py           # empty package (simulator added P2-T4)
+├── tests/test_smoke.py          # skeleton import + seed tests
+├── pyproject.toml               # package metadata + pytest config
+├── requirements.txt             # top-level deps (spec §3.2 stack)
+├── requirements.lock.txt        # fully-pinned, reproducible lock (from pip freeze)
+└── tasks.py                     # task runner: install | test | profile-data | fetch-carbon
+```
+
+## Setup (Windows / PowerShell, Python 3.11)
+
+```powershell
+cd Research_Artifact/code
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python tasks.py install          # installs requirements.lock.txt if present, else requirements.txt
+python tasks.py test             # runs pytest
+```
+
+To refresh dependency versions: `pip install -r requirements.txt; pip freeze > requirements.lock.txt`.
+
+The exact resolved versions for this artifact are recorded in `results/p0/env.txt`.
+
+Nothing models anything yet — Phase 0 (P0-T1) created this skeleton. All code must obey
 `governance/02_ANTI_HALLUCINATION.md` (real data, no leakage, reproducible).

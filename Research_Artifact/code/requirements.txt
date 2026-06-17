@@ -1,0 +1,15 @@
+# Top-level dependencies — the CPU-only stack pinned by spec §3.2.
+# This file lists WHAT we depend on (direct deps). Exact, fully-resolved
+# versions (including transitive deps) are frozen into requirements.lock.txt
+# after a real install — that lockfile is what gives a reproducible env (R8).
+#
+# Install (reproducible):   pip install -r requirements.lock.txt
+# Install (refresh deps):   pip install -r requirements.txt  &&  pip freeze > requirements.lock.txt
+
+pandas
+scikit-learn
+xgboost
+shap
+fastapi
+pytest
+matplotlib
