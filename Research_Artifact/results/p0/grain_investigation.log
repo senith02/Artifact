@@ -1,0 +1,46 @@
+  chunk 1: 300,000 rows, 67,688 builds so far
+  chunk 2: 600,000 rows, 152,298 builds so far
+  chunk 3: 900,000 rows, 227,712 builds so far
+  chunk 4: 1,200,000 rows, 305,241 builds so far
+  chunk 5: 1,500,000 rows, 383,340 builds so far
+  chunk 6: 1,800,000 rows, 457,039 builds so far
+  chunk 7: 2,100,000 rows, 530,522 builds so far
+  chunk 8: 2,400,000 rows, 601,148 builds so far
+  chunk 9: 2,700,000 rows, 668,270 builds so far
+  chunk 10: 3,000,000 rows, 730,328 builds so far
+  chunk 11: 3,300,000 rows, 796,196 builds so far
+  chunk 12: 3,600,000 rows, 864,195 builds so far
+  chunk 13: 3,881,992 rows, 925,897 builds so far
+
+=== GRAIN INVESTIGATION ===
+{
+  "command": "python scripts/investigate_grain.py",
+  "total_job_rows": 3881992,
+  "n_builds": 925897,
+  "jobs_per_build": {
+    "min": 1,
+    "max": 690,
+    "mean": 4.1927,
+    "median": 2,
+    "p95": 12,
+    "single_job_builds": 358350,
+    "multi_job_builds": 567547
+  },
+  "tr_status_within_build": {
+    "builds_with_varying_status": 0,
+    "pct_varying": 0.0,
+    "interpretation": "constant => tr_status is a build-level label"
+  },
+  "tr_duration_within_build": {
+    "builds_with_varying_duration": 340,
+    "pct_varying": 0.0367,
+    "interpretation": "constant => tr_duration is build-level (repeated per job row)"
+  },
+  "tr_jobs_field_vs_observed": {
+    "builds_checked": 0,
+    "builds_matching": 0,
+    "pct_matching": null
+  }
+}
+
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p0\grain_investigation.json

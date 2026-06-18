@@ -1,0 +1,316 @@
+{
+  "provenance": {
+    "command": "python scripts/profile_data.py",
+    "run_date": "2026-06-18",
+    "dataset_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Dataset\\19314170\\final-2017-01-25.csv\\final-2017-01-25.csv",
+    "chunksize": 300000
+  },
+  "row_counts": {
+    "total_job_rows": 3881992,
+    "exact_duplicate_job_rows": 0,
+    "total_builds": 925897,
+    "analytic_builds": 922624
+  },
+  "filter_funnel": [
+    {
+      "step": "raw job rows",
+      "grain": "job",
+      "rows_in": 3881992,
+      "rows_out": 3881992,
+      "dropped": 0
+    },
+    {
+      "step": "drop exact-duplicate job rows",
+      "grain": "job",
+      "rows_in": 3881992,
+      "rows_out": 3881992,
+      "dropped": 0
+    },
+    {
+      "step": "aggregate to builds (tr_build_id)",
+      "grain": "job->build",
+      "rows_in": 3881992,
+      "rows_out": 925897,
+      "dropped": 2956095
+    },
+    {
+      "step": "drop builds with missing/other label",
+      "grain": "build",
+      "rows_in": 925897,
+      "rows_out": 925896,
+      "dropped": 1
+    },
+    {
+      "step": "exclude canceled builds",
+      "grain": "build",
+      "rows_in": 925896,
+      "rows_out": 922624,
+      "dropped": 3272
+    },
+    {
+      "step": "drop missing/unparseable gh_build_started_at",
+      "grain": "build",
+      "rows_in": 922624,
+      "rows_out": 922624,
+      "dropped": 0
+    }
+  ],
+  "class_balance": {
+    "analytic_builds": 922624,
+    "failure": 231460,
+    "pass": 691164,
+    "failure_rate_pct": 25.0871
+  },
+  "build_status_distribution_all": {
+    "pass": 691164,
+    "failure": 231460,
+    "canceled": 3272,
+    "other": 1
+  },
+  "per_language_builds": {
+    "python": 336815,
+    "ruby": 272081,
+    "java": 200026,
+    "go": 113702
+  },
+  "duration_distribution_s": {
+    "count": 922198,
+    "zeros": 610,
+    "nonpositive": 610,
+    "min": 0.0,
+    "mean": 1671.34,
+    "max": 1044736.0,
+    "percentiles_s": {
+      "p1": 9.0,
+      "p25": 208.0,
+      "p50": 600.0,
+      "p75": 1548.0,
+      "p90": 3840.0,
+      "p95": 6889.0,
+      "p99": 18178.03
+    },
+    "over_1h": 98590,
+    "over_6h": 5704
+  },
+  "top_20_projects_by_build_count": [
+    {
+      "project": "ros/rosdistro",
+      "builds": 17167,
+      "failures": 229,
+      "failure_rate_pct": 1.33
+    },
+    {
+      "project": "CartoDB/cartodb",
+      "builds": 12202,
+      "failures": 4442,
+      "failure_rate_pct": 36.4
+    },
+    {
+      "project": "getsentry/sentry",
+      "builds": 11719,
+      "failures": 4029,
+      "failure_rate_pct": 34.38
+    },
+    {
+      "project": "opf/openproject",
+      "builds": 9714,
+      "failures": 3443,
+      "failure_rate_pct": 35.44
+    },
+    {
+      "project": "ets-berkeley-edu/calcentral",
+      "builds": 8433,
+      "failures": 1290,
+      "failure_rate_pct": 15.3
+    },
+    {
+      "project": "rg3/youtube-dl",
+      "builds": 8277,
+      "failures": 7834,
+      "failure_rate_pct": 94.65
+    },
+    {
+      "project": "apache/jackrabbit-oak",
+      "builds": 8205,
+      "failures": 3448,
+      "failure_rate_pct": 42.02
+    },
+    {
+      "project": "cloudfoundry/bosh",
+      "builds": 8176,
+      "failures": 2056,
+      "failure_rate_pct": 25.15
+    },
+    {
+      "project": "apache/sling",
+      "builds": 7660,
+      "failures": 7576,
+      "failure_rate_pct": 98.9
+    },
+    {
+      "project": "sharetribe/sharetribe",
+      "builds": 6899,
+      "failures": 2850,
+      "failure_rate_pct": 41.31
+    },
+    {
+      "project": "getnikola/nikola",
+      "builds": 6095,
+      "failures": 2191,
+      "failure_rate_pct": 35.95
+    },
+    {
+      "project": "matplotlib/matplotlib",
+      "builds": 6053,
+      "failures": 1836,
+      "failure_rate_pct": 30.33
+    },
+    {
+      "project": "wbond/package_control_channel",
+      "builds": 6012,
+      "failures": 302,
+      "failure_rate_pct": 5.02
+    },
+    {
+      "project": "Flexget/Flexget",
+      "builds": 5984,
+      "failures": 848,
+      "failure_rate_pct": 14.17
+    },
+    {
+      "project": "CloudifySource/cloudify",
+      "builds": 5742,
+      "failures": 1470,
+      "failure_rate_pct": 25.6
+    },
+    {
+      "project": "DataDog/dd-agent",
+      "builds": 5708,
+      "failures": 3367,
+      "failure_rate_pct": 58.99
+    },
+    {
+      "project": "tsuru/tsuru",
+      "builds": 5600,
+      "failures": 2336,
+      "failure_rate_pct": 41.71
+    },
+    {
+      "project": "ansible/ansible",
+      "builds": 5245,
+      "failures": 1178,
+      "failure_rate_pct": 22.46
+    },
+    {
+      "project": "Graylog2/graylog2-server",
+      "builds": 5197,
+      "failures": 546,
+      "failure_rate_pct": 10.51
+    },
+    {
+      "project": "StackStorm/st2",
+      "builds": 5193,
+      "failures": 932,
+      "failure_rate_pct": 17.95
+    }
+  ],
+  "per_column_null_rate_pct": {
+    "tr_build_id": 0.0,
+    "gh_project_name": 0.0,
+    "gh_is_pr": 0.0,
+    "gh_pr_created_at": 78.8577,
+    "gh_pull_req_num": 78.8577,
+    "gh_lang": 0.0,
+    "git_merged_with": 78.8577,
+    "git_branch": 0.0,
+    "gh_num_commits_in_push": 100.0,
+    "gh_commits_in_push": 100.0,
+    "git_prev_commit_resolution_status": 0.0,
+    "git_prev_built_commit": 32.3015,
+    "tr_prev_build": 32.4532,
+    "gh_first_commit_created_at": 100.0,
+    "gh_team_size": 0.0,
+    "git_all_built_commits": 0.0,
+    "git_num_all_built_commits": 0.0,
+    "git_trigger_commit": 0.0,
+    "tr_virtual_merged_into": 78.8577,
+    "gh_num_issue_comments": 78.8577,
+    "gh_num_commit_comments": 0.0,
+    "gh_num_pr_comments": 78.8577,
+    "git_diff_src_churn": 0.0,
+    "git_diff_test_churn": 0.0,
+    "gh_diff_files_added": 0.0,
+    "gh_diff_files_deleted": 0.0,
+    "gh_diff_files_modified": 0.0,
+    "gh_diff_tests_added": 0.0,
+    "gh_diff_tests_deleted": 0.0,
+    "gh_diff_src_files": 0.0,
+    "gh_diff_doc_files": 0.0,
+    "gh_diff_other_files": 0.0,
+    "gh_num_commits_on_files_touched": 0.0,
+    "gh_sloc": 0.0,
+    "gh_test_lines_per_kloc": 0.0,
+    "gh_test_cases_per_kloc": 0.0,
+    "gh_asserts_cases_per_kloc": 0.0,
+    "gh_by_core_team_member": 0.0,
+    "gh_description_complexity": 79.2271,
+    "gh_pushed_at": 100.0,
+    "gh_build_started_at": 0.0,
+    "gh_repo_age": 0.0,
+    "gh_repo_num_commits": 0.0,
+    "tr_job_id": 0.0,
+    "tr_build_number": 0.0,
+    "tr_log_lan": 0.0,
+    "tr_log_status": 0.0,
+    "tr_log_setup_time": 33.4436,
+    "tr_log_analyzer": 0.0,
+    "tr_log_frameworks": 39.7301,
+    "tr_log_bool_tests_ran": 0.0,
+    "tr_log_bool_tests_failed": 37.9827,
+    "tr_log_num_tests_ok": 40.1046,
+    "tr_log_num_tests_failed": 38.4931,
+    "tr_log_num_tests_run": 43.1588,
+    "tr_log_num_tests_skipped": 40.004,
+    "tr_log_num_test_suites_run": 95.7287,
+    "tr_log_num_test_suites_ok": 95.7287,
+    "tr_log_num_test_suites_failed": 95.7287,
+    "tr_log_tests_failed": 95.9509,
+    "tr_log_testduration": 39.6827,
+    "tr_log_buildduration": 95.3115,
+    "tr_original_commit": 0.0,
+    "tr_duration": 0.0827,
+    "tr_status": 0.0,
+    "tr_jobs": 0.0
+  },
+  "notable_findings": {
+    "fully_null_columns": [
+      "gh_num_commits_in_push",
+      "gh_commits_in_push",
+      "gh_first_commit_created_at",
+      "gh_pushed_at"
+    ],
+    "high_null_columns_ge_50pct": {
+      "gh_pr_created_at": 78.8577,
+      "gh_pull_req_num": 78.8577,
+      "git_merged_with": 78.8577,
+      "tr_virtual_merged_into": 78.8577,
+      "gh_num_issue_comments": 78.8577,
+      "gh_num_pr_comments": 78.8577,
+      "gh_description_complexity": 79.2271,
+      "tr_log_num_test_suites_run": 95.7287,
+      "tr_log_num_test_suites_ok": 95.7287,
+      "tr_log_num_test_suites_failed": 95.7287,
+      "tr_log_tests_failed": 95.9509,
+      "tr_log_buildduration": 95.3115
+    },
+    "n_languages": 4,
+    "languages": [
+      "python",
+      "ruby",
+      "java",
+      "go"
+    ],
+    "zero_or_nonpositive_duration_builds": 610,
+    "builds_missing_duration": 426
+  }
+}

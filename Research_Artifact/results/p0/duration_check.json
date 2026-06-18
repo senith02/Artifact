@@ -1,0 +1,19 @@
+{
+  "command": "python scripts/check_durations.py",
+  "total_job_rows": 3881992,
+  "n_builds": 925897,
+  "per_column_null_rate_pct": {
+    "tr_duration": 0.0827,
+    "tr_log_buildduration": 95.3115,
+    "tr_log_testduration": 39.6827,
+    "tr_log_setup_time": 33.4436
+  },
+  "per_column_nonpositive_rate_pct": {
+    "tr_duration": 0.0308,
+    "tr_log_buildduration": 0.2726,
+    "tr_log_testduration": 2.709,
+    "tr_log_setup_time": 14.0871
+  },
+  "builds_with_positive_summed_logbuildduration": 69574,
+  "pct_builds_with_positive_sum": 7.5142
+}

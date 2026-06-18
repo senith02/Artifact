@@ -18,31 +18,30 @@
 ```yaml
 state:
   tasks_total: 22        # derived — recount ### headings in development_plan.md
-  tasks_done: 1
-  current_task: P0-T2    # Data-loading harness + data-quality funnel
-  next_task: P0-T3       # Carbon-intensity acquisition
+  tasks_done: 2
+  current_task: P0-T3    # Carbon-intensity acquisition
+  next_task: P0-T4       # Lock evaluation protocol
   current_phase: P0
   blocked_on: null
-  last_gate_passed: P0-T1
-  last_updated: 2026-06-17
+  last_gate_passed: P0-T2
+  last_updated: 2026-06-18
 ```
 
 ```
-Overall   [█░░░░░░░░░░░░░░░░░░░]   5%   (1 / 22 tasks)   Milestone: M0 next (18% at P0 complete)
-Phase 0   [█████░░░░░░░░░░░░░░░]  25%   Setup & Data Harness   (1 / 4 tasks)
+Overall   [██░░░░░░░░░░░░░░░░░░]   9%   (2 / 22 tasks)   Milestone: M0 next (18% at P0 complete)
+Phase 0   [██████████░░░░░░░░░░]  50%   Setup & Data Harness   (2 / 4 tasks)
 
-► CURRENT : P0-T2 — Data-loading harness + data-quality funnel
-○ NEXT    : P0-T3 — Carbon-intensity acquisition
+► CURRENT : P0-T3 — Carbon-intensity data acquisition
+○ NEXT    : P0-T4 — Lock the evaluation protocol
 ⛔ BLOCKED : none
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*No task in progress (gate just passed for P0-T1). When the next task starts, record subtask-level
-state here so a dropped session can resume without redoing or skipping work:*
+*No task in progress (gate just passed for P0-T2). Record subtask state here when P0-T3 starts.*
 
 ```
-P0-T2  S1 ⬜   S2 ⬜   S3 ⬜   S4 ⬜
+P0-T3  S1 ⬜   S2 ⬜   S3 ⬜
 notes: —
 ```
 
@@ -55,8 +54,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | Phase | Task | Status | Deliverable | RQ |
 | :-- | :-- | :-: | :-- | :-: |
 | **P0 Setup** | P0-T1 Project skeleton & environment | ✅ | runnable empty project | infra |
-| | P0-T2 Data harness + quality funnel | ► ⬜ | `data.py` + data profile | RQ1 |
-| | P0-T3 Carbon-intensity acquisition | ⬜ | carbon series + `carbon.py` | RQ2/3 |
+| | P0-T2 Data harness + quality funnel | ✅ | `data.py` + data profile | RQ1 |
+| | P0-T3 Carbon-intensity acquisition | ► ⬜ | carbon series + `carbon.py` | RQ2/3 |
 | | P0-T4 Lock evaluation protocol | ⬜ | `eval_protocol.md` (frozen at gate) | RQ1–4 |
 | **P1 Risk model** | P1-T1 Feature extractor + human audit | ⬜ | `features.py` + `feature_audit.md` | RQ1 |
 | | P1-T2 Three-way leakage-safe splits | ⬜ | `splits.py` + manifests | RQ1 |
@@ -83,7 +82,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
-| P0 Setup | 1 / 4 | `[█████░░░░░░░░░░░░░░░]` 25% |
+| P0 Setup | 2 / 4 | `[██████████░░░░░░░░░░]` 50% |
 | P1 Risk model | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P2 Core + simulator | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P3 Evaluation | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -98,3 +97,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-- | :-- | :-- |
 | — | (none yet) | framework scaffolded + hardened (audit of 2026-06-12) | DL-001..DL-008 |
 | 2026-06-17 | P0-T1 Project skeleton & environment | `code/` skeleton + venv (py3.11.1); `results/p0/env.txt`; lockfile installs clean; `pytest` 2 passed | none |
+| 2026-06-18 | P0-T2 Data harness + quality funnel | `scheduler_core/data.py` (+23 pytest pass); `results/p0/data_profile.{json,md}` from real run — 3,881,992 job rows → 925,897 builds, 25.1% failure rate, 4 langs; grain/duration investigations | DL-009, DL-010 |

@@ -11,6 +11,7 @@ Commands for modules not yet built (profile-data, fetch-carbon) exit non-zero
 with a pointer to the task that creates them, rather than failing silently.
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -35,9 +36,12 @@ def test() -> int:
 
 
 def profile_data() -> int:
-    print("profile-data is not implemented yet — created in task P0-T2 "
-          "(scheduler_core/data.py + results/p0/data_profile.*).")
-    return 1
+    """Run the P0-T2 data-quality funnel + profile (scripts/profile_data.py)."""
+    env = {**os.environ, "PYTHONPATH": str(CODE_DIR)}
+    print("+ python scripts/profile_data.py")
+    return subprocess.call(
+        [sys.executable, "scripts/profile_data.py"], cwd=CODE_DIR, env=env
+    )
 
 
 def fetch_carbon() -> int:

@@ -1,0 +1,15 @@
+  chunk 1: 300,000 rows, 67,688 builds, 0 dup rows so far
+  chunk 2: 600,000 rows, 152,298 builds, 0 dup rows so far
+  chunk 3: 900,000 rows, 227,712 builds, 0 dup rows so far
+  chunk 4: 1,200,000 rows, 305,241 builds, 0 dup rows so far
+  chunk 5: 1,500,000 rows, 383,340 builds, 0 dup rows so far
+  chunk 6: 1,800,000 rows, 457,039 builds, 0 dup rows so far
+  chunk 7: 2,100,000 rows, 530,522 builds, 0 dup rows so far
+  chunk 8: 2,400,000 rows, 601,148 builds, 0 dup rows so far
+  chunk 9: 2,700,000 rows, 668,270 builds, 0 dup rows so far
+  chunk 10: 3,000,000 rows, 730,328 builds, 0 dup rows so far
+  chunk 11: 3,300,000 rows, 796,196 builds, 0 dup rows so far
+  chunk 12: 3,600,000 rows, 864,195 builds, 0 dup rows so far
+  chunk 13: 3,881,992 rows, 925,897 builds, 0 dup rows so far
+
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p0\data_profile.json and data_profile.md

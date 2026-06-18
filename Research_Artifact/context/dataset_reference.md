@@ -9,9 +9,12 @@
 - **Path (read-only input):** `../Dataset/19314170/final-2017-01-25.csv/final-2017-01-25.csv`
   (relative to `Research_Artifact/`). Also present compressed: `final-2017-01-25.csv.gz`,
   `travistorrent_5_3_2016.csv.gz`, `travistorrent_28_8_2015.csv.gz`.
-- **Grain:** one row = **one Travis build job**. (~2.6M rows in the 2017 release.)
+- **Grain:** one row = **one Travis build job**. **3,881,992 rows** in this 2017 release
+  (the earlier "~2.6M" estimate was wrong — measured by `scripts/profile_data.py`, see
+  `results/p0/data_profile.json`). These aggregate to **925,897 builds** by `tr_build_id` (DL-009).
 - **Columns:** 66 (listed below, in file order).
-- **Languages:** Ruby and Java projects (`gh_lang`).
+- **Languages (4, measured — corrected from the original "Ruby and Java"):** `python` (336,815),
+  `ruby` (272,081), `java` (200,026), `go` (113,702) builds in the analytic set. Source: profile run.
 - **Encoding note:** several columns are `#`-delimited lists inside a single CSV cell
   (e.g. `gh_commits_in_push`, `git_all_built_commits`); `NA` / empty strings appear for missing values.
 
@@ -95,6 +98,22 @@ tr_original_commit, tr_duration, tr_status, tr_jobs
 `tr_build_id`, `tr_job_id`, `tr_build_number`, `tr_prev_build`, `gh_project_name`,
 `git_trigger_commit`, `git_merged_with`, `git_all_built_commits`, `tr_jobs`, `tr_original_commit`,
 `tr_virtual_merged_into`, `git_prev_built_commit`, `git_prev_commit_resolution_status`.
+
+## Measured data quality (P0-T2 profile — `results/p0/data_profile.json`)
+
+> Pinned from the real run; later feature code must respect these (R2).
+
+- **100% NULL in this release — DO NOT use as features:** `gh_num_commits_in_push`,
+  `gh_commits_in_push`, `gh_first_commit_created_at`, `gh_pushed_at`. (So change-size must come from
+  `git_num_all_built_commits` / `git_all_built_commits`, which are populated; and replay arrival time
+  must use `gh_build_started_at`, not `gh_pushed_at`.)
+- **~79% null (PR-only fields, expected — most builds are push-triggered):** `gh_pr_created_at`,
+  `gh_pull_req_num`, `git_merged_with`, `tr_virtual_merged_into`, `gh_num_issue_comments`,
+  `gh_num_pr_comments`, `gh_description_complexity`.
+- **Per-job log fields heavily null:** `tr_log_buildduration` 95.3%, test-suite fields ~95.7%,
+  `tr_log_testduration` 39.7% — hence energy uses `tr_duration` (DL-010), not summed log durations.
+- **Label / clock columns are clean:** `tr_status` 0%, `gh_build_started_at` 0%, `tr_duration` 0.08%.
+- **Class balance:** failure (failed+errored) = 25.1% of the analytic set (231,460 / 922,624).
 
 ## Known gotchas (read before writing the loader)
 

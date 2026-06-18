@@ -137,4 +137,48 @@ edit or delete past entries (supersede them with a new entry instead).
 - **Consequences:** P2-T2 implements exactly this; P3-T3 sweeps it; the dissertation reports the
   mapping as a design parameter, not a tuned-on-test choice.
 
-<!-- Append DL-009, DL-010, … below as the project progresses. -->
+### DL-009 — Model at build grain; the build-level aggregation rule
+- **Date:** 2026-06-18
+- **Status:** Accepted
+- **Spec section affected:** §3.2/§3.5 — implementation detail (the spec/`dataset_reference.md` left job-vs-build grain as a "recommended: build grain" choice to be confirmed empirically)
+- **Context:** Rows are Travis build *jobs*; we must fix the modelling grain before any
+  feature/label/simulation code. Measured on the **real** file (commands
+  `python scripts/investigate_grain.py`, `python scripts/check_durations.py`;
+  evidence `results/p0/grain_investigation.json`, `results/p0/duration_check.json`):
+  - **3,881,992 job rows → 925,897 builds** (the docs' "~2.6M rows" estimate is wrong for this 2017 release; the real count governs — R1).
+  - `tr_status` is **constant within a build in 100%** of builds (0 varying) → usable as the build label.
+  - `tr_duration` is **constant within a build in 99.96%** (340 builds vary) → it is a build-level
+    wall-clock value repeated on every job row, **not** a per-job figure.
+  - `tr_jobs` is a **list of job IDs** (e.g. `[3161,3163,…]`), not a count → jobs-per-build is the
+    observed job-row count (mean 4.19, median 2, max 690).
+- **Decision:** Model at **build grain — one row per `tr_build_id`**. Aggregation rule:
+  - **label** ← `tr_status` (the single constant value per build); failure = {failed, errored},
+    pass = {passed}, `canceled` excluded (DL precedent: dataset_reference §Label).
+  - **commit-time feature columns** ← `first` (they are build-level, identical across the build's job rows).
+  - **`tr_duration`** ← `max` over the build's rows (handles the 0.037% inconsistent builds deterministically);
+    this is the build wall-clock used for **feedback latency** and (per DL-010) the **energy** duration.
+  - **`n_jobs`** ← count of job rows for the build.
+- **Rationale:** The label and features are build-level by construction; modelling per job would
+  duplicate identical feature vectors and leak build identity across the split. Empirically verified, not assumed.
+- **Consequences:** `scheduler_core/data.py` provides build-level aggregation; the P0-T2 funnel and
+  `data_profile.*` are reported at build grain; P1 features/splits and P2/P3 simulation all key on `tr_build_id`.
+
+### DL-010 — Energy-model duration source = `tr_duration` (refines DL-007)
+- **Date:** 2026-06-18
+- **Status:** Accepted (refines DL-007; DL-007's formula and ±50% P_avg band stand)
+- **Spec section affected:** §3.2 — refines DL-007's "energy uses the build-level summed job duration" clause
+- **Context:** DL-007 specified `E_kWh = (P_avg_W/1000) × (duration_s/3600)` with `duration_s` as the
+  **summed job duration**. Measured on the real file (`python scripts/check_durations.py`,
+  `results/p0/duration_check.json`): the per-job log duration `tr_log_buildduration` is **95.3% null**
+  (only 7.5% of builds have any positive summed value), so a faithful "sum of job durations" cannot be
+  computed for the population. `tr_duration` (build wall-clock) is by contrast **0.08% null / 0.03% non-positive**.
+- **Decision:** Set `duration_s = tr_duration` (build wall-clock seconds, aggregated by `max` per DL-009).
+  DL-007's formula, the cited `P_avg_W`, and the ±50% sensitivity band are unchanged.
+- **Rationale:** A 95%-missing column cannot drive a population-wide energy estimate without mass
+  imputation (a larger, less defensible assumption than using the clean wall-clock). `tr_duration` is the
+  only complete, build-level duration available.
+- **Consequences:** P2-T3 energy accounting uses `tr_duration`. **Threat to validity:** for multi-job
+  builds, wall-clock under-counts total compute when jobs run on parallel machines; recorded in the
+  threats chapter. P3-T3 may add an `n_jobs`-scaled energy variant alongside the DL-007 P_avg band to bracket this.
+
+<!-- Append DL-011, DL-012, … below as the project progresses. -->

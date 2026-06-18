@@ -1,0 +1,81 @@
+{
+  "command": "python scripts/investigate_grain.py",
+  "total_job_rows": 3881992,
+  "n_builds": 925897,
+  "jobs_per_build": {
+    "min": 1,
+    "max": 690,
+    "mean": 4.1927,
+    "median": 2,
+    "p95": 12,
+    "single_job_builds": 358350,
+    "multi_job_builds": 567547
+  },
+  "tr_status_within_build": {
+    "builds_with_varying_status": 0,
+    "pct_varying": 0.0,
+    "interpretation": "constant => tr_status is a build-level label"
+  },
+  "tr_duration_within_build": {
+    "builds_with_varying_duration": 340,
+    "pct_varying": 0.0367,
+    "interpretation": "constant => tr_duration is build-level (repeated per job row)"
+  },
+  "tr_jobs_field_vs_observed": {
+    "builds_checked": 0,
+    "builds_matching": 0,
+    "pct_matching": null
+  },
+  "multi_job_examples": [
+    {
+      "tr_build_id": "3154",
+      "n_job_rows": 5,
+      "tr_jobs_field": "[3161, 3163, 3160, 3162, 3164]",
+      "tr_status": "passed",
+      "tr_status_constant": true,
+      "tr_duration": "956",
+      "tr_duration_constant": true,
+      "sum_tr_log_buildduration": 0.0
+    },
+    {
+      "tr_build_id": "3211",
+      "n_job_rows": 5,
+      "tr_jobs_field": "[3214, 3215, 3212, 3216, 3213]",
+      "tr_status": "passed",
+      "tr_status_constant": true,
+      "tr_duration": "391",
+      "tr_duration_constant": true,
+      "sum_tr_log_buildduration": 0.0
+    },
+    {
+      "tr_build_id": "3233",
+      "n_job_rows": 5,
+      "tr_jobs_field": "[3235, 3234, 3238, 3237, 3236]",
+      "tr_status": "failed",
+      "tr_status_constant": true,
+      "tr_duration": "886",
+      "tr_duration_constant": true,
+      "sum_tr_log_buildduration": 0.0
+    },
+    {
+      "tr_build_id": "3239",
+      "n_job_rows": 5,
+      "tr_jobs_field": "[3244, 3240, 3242, 3243, 3241]",
+      "tr_status": "passed",
+      "tr_status_constant": true,
+      "tr_duration": "846",
+      "tr_duration_constant": true,
+      "sum_tr_log_buildduration": 0.0
+    },
+    {
+      "tr_build_id": "3245",
+      "n_job_rows": 5,
+      "tr_jobs_field": "[3246, 3250, 3248, 3249, 3247]",
+      "tr_status": "passed",
+      "tr_status_constant": true,
+      "tr_duration": "846",
+      "tr_duration_constant": true,
+      "sum_tr_log_buildduration": 0.0
+    }
+  ]
+}
