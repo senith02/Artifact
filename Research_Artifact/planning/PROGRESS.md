@@ -18,30 +18,30 @@
 ```yaml
 state:
   tasks_total: 22        # derived — recount ### headings in development_plan.md
-  tasks_done: 3
-  current_task: P0-T4    # Lock evaluation protocol
-  next_task: P1-T1       # Feature extractor + human audit
-  current_phase: P0
+  tasks_done: 4
+  current_task: P1-T1    # Feature extractor + human-reviewable feature audit
+  next_task: P1-T2       # Leakage-safe three-way split maker
+  current_phase: P1
   blocked_on: null
-  last_gate_passed: P0-T3
+  last_gate_passed: P0-T4
   last_updated: 2026-06-20
 ```
 
 ```
-Overall   [███░░░░░░░░░░░░░░░░░]  14%   (3 / 22 tasks)   Milestone: M0 next (18% at P0 complete)
-Phase 0   [███████████████░░░░░]  75%   Setup & Data Harness   (3 / 4 tasks)
+Overall   [████░░░░░░░░░░░░░░░░]  18%   (4 / 22 tasks)   Milestone: ✅ M0 reached — M1 next (36% at P1 complete)
+Phase 1   [░░░░░░░░░░░░░░░░░░░░]   0%   Build-Failure Risk Model   (0 / 4 tasks)
 
-► CURRENT : P0-T4 — Lock the evaluation protocol
-○ NEXT    : P1-T1 — Feature extractor + human-reviewable feature audit
+► CURRENT : P1-T1 — Feature extractor + human-reviewable feature audit
+○ NEXT    : P1-T2 — Leakage-safe three-way split maker
 ⛔ BLOCKED : none
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*No task in progress (gate just passed for P0-T3). Record subtask state here when P0-T4 starts.*
+*No task in progress (gate just passed for P0-T4 — Phase 0 complete, M0 reached). Record subtask state here when P1-T1 starts.*
 
 ```
-P0-T4  S1 ⬜   S2 ⬜
+P1-T1  S1 ⬜   S2 ⬜   S3 ⬜
 notes: —
 ```
 
@@ -56,8 +56,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | **P0 Setup** | P0-T1 Project skeleton & environment | ✅ | runnable empty project | infra |
 | | P0-T2 Data harness + quality funnel | ✅ | `data.py` + data profile | RQ1 |
 | | P0-T3 Carbon-intensity acquisition | ✅ | carbon series + `carbon.py` | RQ2/3 |
-| | P0-T4 Lock evaluation protocol | ► ⬜ | `eval_protocol.md` (frozen at gate) | RQ1–4 |
-| **P1 Risk model** | P1-T1 Feature extractor + human audit | ⬜ | `features.py` + `feature_audit.md` | RQ1 |
+| | P0-T4 Lock evaluation protocol | ✅ | `eval_protocol.md` (frozen at gate) | RQ1–4 |
+| **P1 Risk model** | P1-T1 Feature extractor + human audit | ► ⬜ | `features.py` + `feature_audit.md` | RQ1 |
 | | P1-T2 Three-way leakage-safe splits | ⬜ | `splits.py` + manifests | RQ1 |
 | | P1-T3 Train, tune & calibrate | ⬜ | models + calibration report | RQ1 |
 | | P1-T4 Test evaluation + SHAP | ⬜ | `model_report.md` | **RQ1** |
@@ -82,7 +82,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
-| P0 Setup | 3 / 4 | `[███████████████░░░░░]` 75% |
+| P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Risk model | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P2 Core + simulator | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P3 Evaluation | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -99,3 +99,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-06-17 | P0-T1 Project skeleton & environment | `code/` skeleton + venv (py3.11.1); `results/p0/env.txt`; lockfile installs clean; `pytest` 2 passed | none |
 | 2026-06-18 | P0-T2 Data harness + quality funnel | `scheduler_core/data.py` (+23 pytest pass); `results/p0/data_profile.{json,md}` from real run — 3,881,992 job rows → 925,897 builds, 25.1% failure rate, 4 langs; grain/duration investigations | DL-009, DL-010 |
 | 2026-06-20 | P0-T3 Carbon-intensity acquisition | `scheduler_core/carbon.py` + `scripts/fetch_carbon.py` (+20 pytest pass); real fetch (stdlib urllib, 53 reqs) → `code/data/carbon/` hourly series (17,544 h) + 168-slot profile + `PROVENANCE.md`; coverage 2024=99.83%, 2025=100.0%; `results/p0/carbon_{profile.md,hour_of_week.png}` | none |
+| 2026-06-20 | P0-T4 Lock evaluation protocol | `results/p0/eval_protocol.md` (frozen) — RQ1 metrics + calibration, 3-way split, tuning, sim metrics (TTFF/missed-failure), window mapping, energy model, paired bootstrap; `make_splits`/`paired_bootstrap` signatures; no TBD; DL-004..010 cross-checked. **Phase 0 complete → M0.** | none |
