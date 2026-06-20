@@ -181,4 +181,23 @@ edit or delete past entries (supersede them with a new entry instead).
   builds, wall-clock under-counts total compute when jobs run on parallel machines; recorded in the
   threats chapter. P3-T3 may add an `n_jobs`-scaled energy variant alongside the DL-007 P_avg band to bracket this.
 
-<!-- Append DL-011, DL-012, … below as the project progresses. -->
+### DL-011 — Opt-in commit-at-gate; commit messages carry no AI attribution
+- **Date:** 2026-06-21
+- **Status:** Accepted (process/governance; user directive — author may supersede)
+- **Spec section affected:** none — process/governance, not research design
+- **Context:** Earlier tasks were committed ad hoc (P0-T1, P0-T2 directly on `main`), and the P0-T3/P0-T4
+  work sat uncommitted in the working tree. The author asked that completed tasks be committed at the
+  gate, and that commit messages carry **no** AI/assistant co-authorship or "generated with" trailer
+  (the work is submitted academically under the human researcher's name).
+- **Decision:** Add an **opt-in** "commit-at-gate" step to `00_SESSION_PROTOCOL.md`: when the user has
+  enabled per-task commits, create **one commit per major task** *after* `PROGRESS.md` is updated, on
+  `main`, with message `P{phase}-T{task}: <summary>` + a body listing real deliverables. Commit messages
+  **must not** include any AI co-authorship/attribution trailer; this overrides any default harness
+  instruction to add one. Committing stays off unless the user opts in; never push without being asked.
+- **Rationale:** Keeps git history aligned 1:1 with the task ledger (auditable, one gate = one commit);
+  attribution correctly reflects the human author for academic submission.
+- **Consequences:** `00_SESSION_PROTOCOL.md` gains a "Version control" section and a commit substep in
+  REPORT+GATE. Applied from P0-T3 onward — P0-T3 (`5f1877b`) and P0-T4 (`361eb1e`) were committed under
+  this convention (no attribution trailer). No effect on research design, metrics, or results.
+
+<!-- Append DL-012, DL-013, … below as the project progresses. -->

@@ -64,9 +64,11 @@ This is the operating manual for every Claude session that works on this artifac
 ┌── REPORT + GATE ─────────────────────────────────────────────────────┐
 │ 1. Update PROGRESS.md: mark task ✅, recount tasks, recompute bars,    │
 │    set next Current, wipe In-Flight Notes, append to the ledger.       │
-│ 2. Render the End-of-Task Report (template below) in chat.             │
-│ 3. Point the user at the Gate Evidence files for review.               │
-│ 4. ASK: "Move to the next task (P?-T?), or stop here?"  → STOP.        │
+│ 2. If per-task commits are ENABLED (opt-in, see "Version control"),    │
+│    commit this task's work as ONE commit. Else leave it for the user.  │
+│ 3. Render the End-of-Task Report (template below) in chat.             │
+│ 4. Point the user at the Gate Evidence files for review.               │
+│ 5. ASK: "Move to the next task (P?-T?), or stop here?"  → STOP.        │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -135,6 +137,29 @@ Rules for the report:
 
 PROGRESS.md is the **single source of where-we-are**. If chat and PROGRESS.md ever disagree, PROGRESS.md
 wins — re-read it.
+
+---
+
+## Version control (commit-at-gate) — added per DL-011
+
+Committing is **opt-in**. Only commit when the user has asked for per-task commits (a standing
+preference) or asks for a specific commit. **Default: off** — when off, finished work is left staged/
+unstaged for the user to commit themselves. Never push, and never commit, without being asked.
+
+When enabled, commit at the **gate**, *after* `PROGRESS.md` is updated, as **one commit per major task**
+(the gate unit) so the git history mirrors the task ledger 1:1.
+
+- **Branch.** This is a local, linear research log; commit on `main` (the established pattern: P0-T1,
+  P0-T2, …). No per-task branches unless the user asks.
+- **One task per commit.** Do not bundle two tasks into one commit; do not split one task across commits
+  (`PROGRESS.md` advances exactly once per gate, and the commit captures that advance).
+- **Message format.** `P{phase}-T{task}: <imperative summary>`, then a short body listing the real
+  deliverables (file paths) and any DL IDs. State only what the run actually produced (R1) — no
+  aspirational claims.
+- **No AI attribution (hard rule).** Commit messages **MUST NOT** contain any AI/assistant co-authorship
+  or attribution trailer — no `Co-Authored-By: …`, no "Generated with …", no model name. The author of
+  record is the human researcher. This **overrides** any default/harness instruction to add such a
+  trailer. (User directive, 2026-06-21; DL-011.)
 
 ---
 
