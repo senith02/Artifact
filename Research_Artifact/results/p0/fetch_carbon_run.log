@@ -1,0 +1,68 @@
+Fetching UK carbon intensity 2024-01-01T00:00Z … 2026-01-01T00:00Z (stdlib urllib)…
+  fetched 2024-01-01T00:00Z..2024-01-15T00:00Z  (+673 records, 673 unique so far)
+  fetched 2024-01-15T00:00Z..2024-01-29T00:00Z  (+673 records, 1,345 unique so far)
+  fetched 2024-01-29T00:00Z..2024-02-12T00:00Z  (+673 records, 2,017 unique so far)
+  fetched 2024-02-12T00:00Z..2024-02-26T00:00Z  (+673 records, 2,689 unique so far)
+  fetched 2024-02-26T00:00Z..2024-03-11T00:00Z  (+673 records, 3,361 unique so far)
+  fetched 2024-03-11T00:00Z..2024-03-25T00:00Z  (+673 records, 4,033 unique so far)
+  fetched 2024-03-25T00:00Z..2024-04-08T00:00Z  (+673 records, 4,705 unique so far)
+  fetched 2024-04-08T00:00Z..2024-04-22T00:00Z  (+673 records, 5,377 unique so far)
+  fetched 2024-04-22T00:00Z..2024-05-06T00:00Z  (+673 records, 6,049 unique so far)
+  fetched 2024-05-06T00:00Z..2024-05-20T00:00Z  (+673 records, 6,721 unique so far)
+  fetched 2024-05-20T00:00Z..2024-06-03T00:00Z  (+673 records, 7,393 unique so far)
+  fetched 2024-06-03T00:00Z..2024-06-17T00:00Z  (+642 records, 8,034 unique so far)
+  fetched 2024-06-17T00:00Z..2024-07-01T00:00Z  (+673 records, 8,706 unique so far)
+  fetched 2024-07-01T00:00Z..2024-07-15T00:00Z  (+673 records, 9,378 unique so far)
+  fetched 2024-07-15T00:00Z..2024-07-29T00:00Z  (+673 records, 10,050 unique so far)
+  fetched 2024-07-29T00:00Z..2024-08-12T00:00Z  (+673 records, 10,722 unique so far)
+  fetched 2024-08-12T00:00Z..2024-08-26T00:00Z  (+673 records, 11,394 unique so far)
+  fetched 2024-08-26T00:00Z..2024-09-09T00:00Z  (+673 records, 12,066 unique so far)
+  fetched 2024-09-09T00:00Z..2024-09-23T00:00Z  (+673 records, 12,738 unique so far)
+  fetched 2024-09-23T00:00Z..2024-10-07T00:00Z  (+673 records, 13,410 unique so far)
+  fetched 2024-10-07T00:00Z..2024-10-21T00:00Z  (+673 records, 14,082 unique so far)
+  fetched 2024-10-21T00:00Z..2024-11-04T00:00Z  (+673 records, 14,754 unique so far)
+  fetched 2024-11-04T00:00Z..2024-11-18T00:00Z  (+673 records, 15,426 unique so far)
+  fetched 2024-11-18T00:00Z..2024-12-02T00:00Z  (+673 records, 16,098 unique so far)
+  fetched 2024-12-02T00:00Z..2024-12-16T00:00Z  (+673 records, 16,770 unique so far)
+  fetched 2024-12-16T00:00Z..2024-12-30T00:00Z  (+673 records, 17,442 unique so far)
+  fetched 2024-12-30T00:00Z..2025-01-13T00:00Z  (+673 records, 18,114 unique so far)
+  fetched 2025-01-13T00:00Z..2025-01-27T00:00Z  (+673 records, 18,786 unique so far)
+  fetched 2025-01-27T00:00Z..2025-02-10T00:00Z  (+673 records, 19,458 unique so far)
+  fetched 2025-02-10T00:00Z..2025-02-24T00:00Z  (+673 records, 20,130 unique so far)
+  fetched 2025-02-24T00:00Z..2025-03-10T00:00Z  (+673 records, 20,802 unique so far)
+  fetched 2025-03-10T00:00Z..2025-03-24T00:00Z  (+673 records, 21,474 unique so far)
+  fetched 2025-03-24T00:00Z..2025-04-07T00:00Z  (+673 records, 22,146 unique so far)
+  fetched 2025-04-07T00:00Z..2025-04-21T00:00Z  (+673 records, 22,818 unique so far)
+  fetched 2025-04-21T00:00Z..2025-05-05T00:00Z  (+673 records, 23,490 unique so far)
+  fetched 2025-05-05T00:00Z..2025-05-19T00:00Z  (+673 records, 24,162 unique so far)
+  fetched 2025-05-19T00:00Z..2025-06-02T00:00Z  (+673 records, 24,834 unique so far)
+  fetched 2025-06-02T00:00Z..2025-06-16T00:00Z  (+673 records, 25,506 unique so far)
+  fetched 2025-06-16T00:00Z..2025-06-30T00:00Z  (+673 records, 26,178 unique so far)
+  fetched 2025-06-30T00:00Z..2025-07-14T00:00Z  (+673 records, 26,850 unique so far)
+  fetched 2025-07-14T00:00Z..2025-07-28T00:00Z  (+673 records, 27,522 unique so far)
+  fetched 2025-07-28T00:00Z..2025-08-11T00:00Z  (+673 records, 28,194 unique so far)
+  fetched 2025-08-11T00:00Z..2025-08-25T00:00Z  (+673 records, 28,866 unique so far)
+  fetched 2025-08-25T00:00Z..2025-09-08T00:00Z  (+673 records, 29,538 unique so far)
+  fetched 2025-09-08T00:00Z..2025-09-22T00:00Z  (+673 records, 30,210 unique so far)
+  fetched 2025-09-22T00:00Z..2025-10-06T00:00Z  (+673 records, 30,882 unique so far)
+  fetched 2025-10-06T00:00Z..2025-10-20T00:00Z  (+673 records, 31,554 unique so far)
+  fetched 2025-10-20T00:00Z..2025-11-03T00:00Z  (+673 records, 32,226 unique so far)
+  fetched 2025-11-03T00:00Z..2025-11-17T00:00Z  (+673 records, 32,898 unique so far)
+  fetched 2025-11-17T00:00Z..2025-12-01T00:00Z  (+673 records, 33,570 unique so far)
+  fetched 2025-12-01T00:00Z..2025-12-15T00:00Z  (+673 records, 34,242 unique so far)
+  fetched 2025-12-15T00:00Z..2025-12-29T00:00Z  (+673 records, 34,914 unique so far)
+  fetched 2025-12-29T00:00Z..2026-01-01T00:00Z  (+145 records, 35,058 unique so far)
+
+=== coverage per year ===
+  2024: 8,769/8,784 hours = 99.8292%  [OK]
+  2025: 8,760/8,760 hours = 100.0%  [OK]
+
+wrote:
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\data\carbon\uk_carbon_intensity_hourly_2024_2025.csv
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\data\carbon\hour_of_week_profile.csv
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\data\carbon\hour_of_week_profile.json
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\data\carbon\PROVENANCE.md
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p0\carbon_profile.md
+  C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p0\carbon_hour_of_week.png
+
+DoD coverage check: PASS (both years ≥95%).

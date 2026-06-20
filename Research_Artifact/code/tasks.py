@@ -4,11 +4,8 @@ Plain-stdlib runner so it works in any venv with zero extra deps. Usage:
 
     python tasks.py install        # install the pinned stack into the active venv
     python tasks.py test           # run the pytest suite
-    python tasks.py profile-data   # P0-T2 — data-quality funnel (not built yet)
-    python tasks.py fetch-carbon   # P0-T3 — carbon-intensity acquisition (not built yet)
-
-Commands for modules not yet built (profile-data, fetch-carbon) exit non-zero
-with a pointer to the task that creates them, rather than failing silently.
+    python tasks.py profile-data   # P0-T2 — data-quality funnel
+    python tasks.py fetch-carbon   # P0-T3 — carbon-intensity acquisition
 """
 
 import os
@@ -45,9 +42,12 @@ def profile_data() -> int:
 
 
 def fetch_carbon() -> int:
-    print("fetch-carbon is not implemented yet — created in task P0-T3 "
-          "(scheduler_core/carbon.py + code/data/carbon/).")
-    return 1
+    """Fetch the UK carbon series + hour-of-week profile (scripts/fetch_carbon.py)."""
+    env = {**os.environ, "PYTHONPATH": str(CODE_DIR)}
+    print("+ python scripts/fetch_carbon.py")
+    return subprocess.call(
+        [sys.executable, "scripts/fetch_carbon.py"], cwd=CODE_DIR, env=env
+    )
 
 
 COMMANDS = {
