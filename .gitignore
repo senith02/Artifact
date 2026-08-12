@@ -4,6 +4,14 @@ Dataset/
 # ── Local tooling / editor config ────────────────────────────────────
 .claude/settings.local.json
 
+# ── Working notes / source briefs (untracked for now, kept locally) ──
+# Cited by DL-012 as the author directive + supporting advisory; held
+# out of history at the author's request (2026-08-12).
+research-title.md
+research-framework-change.md
+Research_Artifact/research-direction-shift.md
+final paper.md
+
 # ── Python ───────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
