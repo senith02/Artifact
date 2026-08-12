@@ -5,23 +5,34 @@
 
 ## What this project is (one paragraph)
 
-This project builds and evaluates a **risk-aware carbon scheduler for CI/CD pipelines**: a commit-level
-build-failure-likelihood model whose calibrated probability sets how long an *already-flexible* build
-may be deferred to a lower-carbon electricity window. It is evaluated by **trace-driven simulation** on
-the **TravisTorrent** dataset against historical UK grid carbon-intensity data, and demonstrated by a
-**live prototype** (REST API + GitHub Action + dashboard) that runs the *same* decision core. The full,
-frozen design is in `governance/01_SOURCE_OF_TRUTH.md`.
+*An Empirical Decision Model for Selective Carbon-Aware Scheduling in CI/CD Pipelines Using
+Commit-Level Software Engineering Characteristics.* This project asks **which** commit-triggered builds
+should enter carbon-aware scheduling at all — and specifically whether commit-level software-engineering
+(SE) characteristics carry decision value **beyond a commit-time estimate of build duration**. It is a
+**value-of-information study**, not a new scheduling algorithm: a finding that SE characteristics add
+nothing material is a valid, reportable result. The evidence comes from **trace-driven simulation** on
+the **TravisTorrent** dataset against UK grid carbon-intensity data; the findings are compiled into an
+**evidence-derived policy** (`policy_spec.yaml`) that a **live prototype** (REST API + GitHub Action +
+dashboard) runs through the *same* decision core.
+
+> ⚠ **The framing changed on 2026-08-09 (DL-012).** `governance/01_SOURCE_OF_TRUTH.md` now has an
+> **amendment layer (Layer 0-A)** above the frozen line: it carries the active title, aim, RQs, and
+> strategies. The frozen Layer 1 below the line is the *historical* approved design and is still
+> immutable. **Where they differ, Layer 0-A governs execution.** Do not act on Layer 1's headline
+> ("risk-aware carbon scheduling") without reading Layer 0-A first.
 
 ## Start-of-session ritual (do this every time, in order)
 
 1. Read this file (`CLAUDE.md`).
 2. Read `governance/00_SESSION_PROTOCOL.md` — **how** you must work (the task loop, the gate, the report).
 3. Read `governance/02_ANTI_HALLUCINATION.md` — the non-negotiable rules.
-4. Read `planning/PROGRESS.md` — **where we are**: the current task, what's done, what's next.
-5. Read `planning/development_plan.md` — find the **Current Task** entry and read its full spec.
-6. Read only the `context/` files relevant to the current task
-   (`context/dataset_reference.md` and/or `context/feature_spec.md`).
-7. Skim `governance/03_DECISION_LOG.md` for any decisions that amend the source of truth.
+4. Read `governance/01_SOURCE_OF_TRUTH.md` **Layer 0 + Layer 0-A** (above the frozen line) — the active
+   framing. Read Layer 1 when you need the approved design's exact wording.
+5. Read `planning/PROGRESS.md` — **where we are**: the current task, what's done, what's next.
+6. Read `planning/development_plan.md` — find the **Current Task** entry and read its full spec.
+7. Read only the `context/` files relevant to the current task
+   (`dataset_reference.md`, `feature_spec.md`, `duration_control_spec.md`).
+8. Skim `governance/03_DECISION_LOG.md` — **DL-012 is the framework migration; read it in full.**
 
 Then announce: *"Resuming at **{task-id} — {task-name}**. Plan: …"* and proceed per the protocol.
 
@@ -29,7 +40,7 @@ Then announce: *"Resuming at **{task-id} — {task-name}**. Plan: …"* and proc
 
 | File | Authority |
 | :-- | :-- |
-| `governance/01_SOURCE_OF_TRUTH.md` | **What** the project is. Frozen. Never silently changed. |
+| `governance/01_SOURCE_OF_TRUTH.md` | **What** the project is. Layer 1 frozen; Layer 0-A = active framing (DL-012). |
 | `planning/development_plan.md` | **The plan.** Every phase, task, subtask, Definition of Done. |
 | `planning/PROGRESS.md` | **The live state.** Progress bars + current/next task. Update at every gate. |
 | `governance/03_DECISION_LOG.md` | **The amendments.** Any deviation from the spec is logged here. |
@@ -46,14 +57,28 @@ Then announce: *"Resuming at **{task-id} — {task-name}**. Plan: …"* and proc
 - **Trace every claim.** Anything written in the dissertation cites a source-of-truth section, a
   result file in `results/`, or a decision-log entry.
 
+## The three rules this study lives or dies by (DL-012)
+
+1. **The current build's actual duration may never reach a decision.** `tr_duration` /
+   `tr_log_buildduration` are outcomes. They are permitted **only** for simulator accounting, as
+   *historical* training labels for the commit-time duration estimator, and as a clearly-labelled
+   oracle bound. "Beyond expected build duration" always means beyond a commit-time **estimate** `d̂`.
+2. **The policy is frozen before the test split is opened.** Family admission, thresholds and window
+   form are all fitted on **train + calibration** projects (P1, P2-T5). Test is touched **once**, in
+   Phase 3, against a frozen `policy_spec.yaml`.
+3. **The materiality rule is predeclared and is not negotiable after the fact.**
+   `results/p0/eval_protocol.md` §A1.7 fixes the floors *now*. At N ≈ 9.2×10⁵ builds significance is
+   nearly free — lead with effect sizes and CIs, and reserve "material" for results clearing the floor.
+   **If nothing clears it, the duration-only policy is the finding.**
+
 ## Where things live
 
 ```
-governance/   the rules + frozen spec + decision log
-planning/     development_plan.md (the map) + PROGRESS.md (the you-are-here)
-context/      grounded dataset + feature references
+governance/   the rules + spec (frozen Layer 1 + active Layer 0-A) + decision log
+planning/     development_plan.md (the map, 28 tasks) + PROGRESS.md (the you-are-here)
+context/      grounded dataset, feature + duration-control references
 code/         scheduler-core, replay simulator, api, github-action  (built in P1–P4)
-results/      model reports, figures, trade-off curves  (real outputs only)
+results/      model reports, ablations, figures, trade-off curves  (real outputs only)
 dissertation/ the written report, by chapter  (P5)
 ```
 

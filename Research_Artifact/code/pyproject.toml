@@ -1,7 +1,7 @@
 [project]
 name = "carbon-scheduler"
 version = "0.0.1"
-description = "Risk-aware carbon scheduling for CI/CD pipelines (BSc research artifact)"
+description = "Selective carbon-aware scheduling for CI/CD pipelines: an empirical decision model from commit-level SE characteristics (BSc research artifact)"
 requires-python = ">=3.11"
 # Runtime dependencies are managed in requirements.txt / requirements.lock.txt
 # (spec §3.2 stack). This pyproject.toml carries package metadata + tool config.

@@ -339,3 +339,268 @@ No clause in this protocol is left "TBD". The only value deferred by design is
   `results/p0/carbon_profile.md` (intensity series, P0-T3).
 - **Freeze:** this file becomes immutable on P0-T4 gate approval; amendments only
   via a new DL entry (≥ DL-011).
+
+---
+---
+
+# Amendment A1 (DL-012) — the duration control, feature-family ablation, and the incremental-value test
+
+> **Status:** appended 2026-08-09 under **DL-012**. **Nothing above this line was
+> edited** — §§1–12 remain the frozen P0-T4 protocol and still govern everything
+> they cover. This amendment is **additive**: it defines the machinery the
+> reframed study needs (a commit-time duration control, strategy ④, feature-family
+> ablation, and a predeclared materiality rule) and *narrows* two existing clauses
+> where the reframe requires it (§A1.7 extends §2's use-discipline; §A1.8 keeps
+> §7's mapping as the fallback form). Where A1 and the frozen body differ, **A1
+> governs and names the clause it amends**.
+>
+> **Version: A1.1** (A1 issued under DL-012; **§A1.5 and §A1.7 revised and §A1.13
+> added under DL-013**, before any code was written against them — see DL-013 for
+> the defect corrected). Further amendments append as A2, A3, … each under its own
+> DL entry. This amendment produces **no numbers** — it defines how they are
+> measured (R1).
+
+---
+
+## A1.1 The commit-time duration control `d̂` (the null signal)
+
+The active RQ2 asks whether SE characteristics add value **beyond expected build
+duration**. "Expected" is load-bearing: the actual duration is an **outcome**
+(§A1.2). The control is therefore an **estimate formed at commit time**.
+
+- **Information availability (hard rule).** `d̂(b)` for build `b` in project `P` at
+  time `t_b` may depend **only** on: (a) the commit-time features of `b`
+  (`context/feature_spec.md`), and (b) builds in **train-split projects** with
+  `gh_build_started_at < t_b`. For a build in its own project's history, only
+  strictly-earlier builds of that project may contribute. Nothing from the
+  calibration or test projects, and nothing at or after `t_b`, may enter the fit.
+- **Two admissible forms**, both evaluated (the better by validation MAE is the
+  primary control; the other is reported):
+  - **④b project/language historical prior** — a rolling statistic (median
+    duration) over the project's earlier builds; parameter-free, interpretable,
+    and the natural "does it just know which repo this is?" control (§A1.9).
+  - **④a estimator** — a regressor on the commit-time feature matrix, trained on
+    train-split builds only, targeting `log(1 + tr_duration)` of **historical**
+    builds. Model family, search space and seeds are fixed in the P1-T1 design
+    spec (`context/duration_control_spec.md`) before any code (DL-012 §9).
+- **Cold start.** A project with no admissible earlier build falls back, in order:
+  project prior → language prior → global train-split prior. The fallback level
+  used is **recorded per build** and reported as a coverage table; results are
+  reported with and without cold-start builds.
+- **Reported quality of the control.** MAE and median absolute error of `d̂` on
+  calibration and test splits, plus Spearman ρ against observed duration. The
+  control's error is a **stated threat**: RQ2 answers "beyond *predictable*
+  duration", not "beyond duration".
+- **Leakage tests (DoD, P1-T4).** (i) an assertion that no blocklisted column
+  reaches the estimator's feature matrix; (ii) a temporal test that shuffling
+  future rows into the fit changes the output (proving the cut-off binds);
+  (iii) a negative test that a deliberately leaky fixture is rejected.
+
+## A1.2 The three — and only three — permitted roles of observed duration
+
+Amends **`context/feature_spec.md` leakage blocklist** by strengthening it.
+`tr_duration` / `tr_log_buildduration` may appear **only** as:
+
+| # | Role | Where | Constraint |
+| :- | :-- | :-- | :-- |
+| 1 | **Accounting** | simulator: energy (§8), latency (§6), TTFF (§6) | Post-hoc only; never reaches `decide()`. |
+| 2 | **Historical training label** | duration-control estimator (§A1.1) | Earlier builds, train-split projects only. |
+| 3 | **Oracle sensitivity bound** | §A1.10 | Must carry the label *"oracle — unrealizable in deployment"* wherever reported. |
+
+Any other use is a leakage defect, not a design choice.
+
+## A1.3 Feature families for ablation (the treatment, decomposed)
+
+The 28-feature contract is unchanged. For ablation it is partitioned into **six
+disjoint families** (assignment pinned in `context/feature_spec.md`; every feature
+belongs to exactly one, 7+6+5+5+2+3 = 28):
+
+| ID | Family | Features |
+| :-- | :-- | :-- |
+| **F1** | change size & diffusion | `src_churn`, `test_churn`, `files_added`, `files_deleted`, `files_modified`, `files_total`, `num_commits` |
+| **F2** | change purpose & composition | `src_files`, `doc_files`, `other_files`, `is_docs_only`, `description_complexity`, `test_density_ratio` |
+| **F3** | test activity & maturity | `tests_added`, `tests_deleted`, `test_lines_per_kloc`, `test_cases_per_kloc`, `asserts_per_kloc` |
+| **F4** | project history & maturity | `sloc`, `repo_age`, `repo_num_commits`, `commits_on_files_touched`, `lang` |
+| **F5** | developer & team | `team_size`, `by_core_member` |
+| **F6** | temporal & trigger context | `is_pr`, `hour_of_day`, `day_of_week` |
+
+Ablation is **incremental over the control**, not standalone: every arm contains
+`d̂`. Arms: `{d̂}` (null) · `{d̂ + Fᵢ}` for each family · `{d̂ + all}` (full) ·
+`{d̂ + admitted}` (parsimonious). Leave-one-family-out arms are reported for any
+family admitted under §A1.6, to expose redundancy between families.
+
+## A1.4 Model-level incremental value (RQ2, first altitude)
+
+- **Comparison:** nested — duration-control-only model vs duration-control **+**
+  family. Same algorithm, same tuning procedure (§3), same splits (§2), same
+  calibration rule (§5); the **only** difference is the feature set.
+- **Metrics:** Δ**PR-AUC** (primary, imbalanced positive = failure), ΔROC-AUC,
+  ΔBrier, ΔECE — each as a **paired** difference with a 95% bootstrap CI (§9),
+  resampling the shared test-build index so both arms see the same resample.
+- **Where computed:** P1-T7, on the **test** split, once (§2 use-discipline).
+- **Reported with:** the calibration quality of each arm — an uncalibrated gain in
+  discrimination cannot be consumed as a scheduling knob (DL-004 rationale).
+
+## A1.5 Decision-level incremental value (RQ2, second altitude — the one that counts)
+
+> **Revised to A1.1 by DL-013.** The original A1 text compared ④ and ⑤ at a single
+> operating point and required ⑤ to *reduce carbon*. That is unsatisfiable by
+> construction (see the box below) and would have forced a structural null. The
+> comparison is now between **swept frontiers**, at **matched operating points**.
+
+**⚠ Why single-point carbon comparison is invalid here (DL-013).** The energy model
+is `E = P_avg · duration` (§8), so carbon saved by deferring a build is
+**proportional to that build's duration**. "Which builds are worth deferring for
+carbon" is therefore nearly a pure duration question *by definition of the
+accounting model*. Strategy ⑤ additionally **shortens** windows for builds its SE
+signal flags, so over the same eligible set it defers less and scores **worse** on
+raw carbon — however good the signal is. Any SE value must therefore show up on the
+axis duration cannot reach: **failure-feedback safety (TTFF)**.
+
+- **Comparison:** strategy **④ duration-control-only** vs strategy **⑤ SE-informed**
+  on **byte-identical** replayed traces (§9 pairing applies).
+- **Each strategy is swept, not fixed.** ④ over `d_threshold` (and `W_max`); ⑤ over
+  its fitted policy scale. The sweep grids are recorded in `policy_spec.yaml` before
+  the run — never chosen after seeing a curve. Each sweep traces a **frontier** in
+  the **(carbon saved, TTFF p95)** plane.
+- **The test is frontier dominance at matched operating points:**
+  - at **matched carbon saved** — is ⑤'s TTFF p95 lower?
+  - at **matched TTFF p95** — is ⑤'s carbon saved higher?
+  Paired-bootstrap CIs (§9) are computed **at the matched points**, on the shared
+  trace. Matching is by interpolation onto a common grid, and the grid is reported.
+- **Headline scalar effect size:** the **area between the two frontiers** over the
+  overlapping carbon range, with a paired-bootstrap CI — so the result has one
+  reportable magnitude, not only a yes/no dominance verdict.
+- **Metrics recorded at every swept point (all paired, CIs + effect sizes):** gCO₂e
+  per 1,000 builds (abs + %), SCI per successful commit, latency mean/p95 (all and
+  deferred-only), **TTFF mean/p95 for failed builds**, number and proportion
+  deferred, gate-safety violations (must be 0), per-hour load concentration.
+- **Single-point carbon is still reported**, as descriptive context only, carrying
+  the explicit annotation that **④ is expected to lead on it by construction**. It
+  is never presented as a finding about SE characteristics.
+
+## A1.6 Strategy ④ — duration-control-only scheduling (the central null)
+
+Selective by construction, using **only** `d̂` and Stage 1:
+
+```text
+Stage 1 gate → if RUN_NOW: run immediately
+             → else: defer iff d̂ ≥ d_threshold, with window W_max;   otherwise run now
+```
+
+- `d_threshold` and `W_max` are **fitted on the calibration-split replay**
+  (§A1.7), never typed by hand and never fitted on test.
+- Rationale for the shape: deferring a short build pays the full latency cost for
+  a negligible carbon gain, so "which builds are worth deferring" is exactly a
+  duration-magnitude question — the strongest simple null RQ2 can face.
+- **④a** uses the estimator, **④b** the project prior (§A1.1). Both are run; **④b
+  is the project-identity control** (§A1.9).
+
+## A1.7 The predeclared admission / practical-materiality rule
+
+**Frozen here, before any test-split result is inspected** (DL-012 §5). An SE
+feature family is **admitted** into `policy_spec.yaml` only if **both** hold:
+
+| Altitude | Condition | Floor |
+| :-- | :-- | :-- |
+| **Model** (§A1.4) | ΔPR-AUC vs `{d̂}` — 95% CI excludes 0 | **and** point estimate ≥ **0.01** absolute *(unchanged by DL-013)* |
+| **Decision** (§A1.5, **revised by DL-013**) | ⑤'s frontier **dominates** ④'s at matched operating points, CI excluding 0 | **and** ≥ **5% relative reduction in TTFF p95 at matched carbon saved**, **or** ≥ **1% relative increase in carbon saved at matched TTFF p95** — holding at **≥ 3 matched points** spanning the swept range, not one cherry-picked point |
+
+- Both floors are **design parameters logged in DL-012**, not results (R1). Their
+  arbitrariness is handled honestly: **every admission decision is re-run at ×0.5
+  and ×2 of both floors** and the resulting policy differences are reported.
+- **Amends §2 (use-discipline).** Policy fitting — family admission, `d_threshold`,
+  `W_max`, functional form — runs on **train + calibration** projects only,
+  including a **calibration-split replay sweep**. `results/p1/splits.json`'s test
+  projects stay untouched until P3-T1, which runs against a **frozen**
+  `policy_spec.yaml`. Refitting after seeing test results is a DL entry, not a
+  routine step.
+- **The null path is a valid outcome.** If no family passes, `fit_policy.py` emits
+  a valid spec whose every path is the **duration-only fallback**, and that is
+  reported as the principal finding (DL-012 §5).
+
+## A1.8 Policy form — what §7 still governs
+
+§7's `w(p̂) = W_max·(1−p̂)`, `W_max = 24`, and the sweep `{6, 12, 24}` + banded
+variant are **retained in full** as the **default and fallback** window form
+wherever a calibrated risk score is admitted and SHAP confirms monotonicity. A
+richer fitted form (response surface, interactions) may replace it **only** when
+the evidence in `results/p1/` justifies it and `fit_policy.py` records which form
+was chosen and why. No window constant is ever hand-edited into
+`policy_spec.yaml`.
+
+## A1.9 Project-identity control (mandatory, not optional)
+
+Per-project failure rates in this dataset span roughly two orders of magnitude
+(`results/p0/data_profile.md`), so an apparent SE effect could be project identity
+in disguise. Therefore:
+
+- Strategy **④b** (per-project prior) is run **alongside** ④a, and ⑤ must beat
+  **both** to be reported as adding value;
+- the incremental-value analysis (§A1.4) reports a **variance decomposition**
+  (between-project vs within-project) for each admitted family;
+- results are additionally reported **stratified by project failure-rate band**,
+  and a family whose benefit exists only between bands is flagged.
+
+## A1.10 Oracle-duration sensitivity (clearly labelled, secondary)
+
+A single retrospective arm may substitute the **actual** `tr_duration` for `d̂` in
+strategy ④, quantifying how much of ⑤'s margin is an artefact of estimator error.
+It is reported **only** as *"oracle — unrealizable in deployment"*, never in a
+headline table, and never wired into `decide()`.
+
+## A1.11 Statistics — unchanged machinery, amended emphasis
+
+§9 (paired bootstrap, `B = 1000`, 95% percentile CIs, `seed = 42`) is unchanged and
+covers every comparison above. **Amended reporting rule:** at N ≈ 9.2×10⁵ builds a
+CI excluding 0 is nearly free, so every result leads with the **effect size and its
+CI**; "significant" is never reported without the accompanying magnitude, and
+"material" is reserved for results clearing §A1.7's floors.
+
+## A1.12 Coverage check for this amendment
+
+| Requirement (DL-012) | Locked in |
+| :-- | :-- |
+| Commit-time duration control: availability, cut-off, cold start, leakage tests | §A1.1 |
+| Three permitted roles of observed duration | §A1.2 |
+| Feature families for ablation (6, disjoint, 28 features) | §A1.3 |
+| Model-level incremental value (nested, paired) | §A1.4 |
+| Decision-level incremental value (④ vs ⑤, **frontier dominance at matched points** — DL-013) | §A1.5 |
+| Duration-only strategy definition | §A1.6 |
+| Predeclared materiality rule + ×0.5/×2 sweep + null path | §A1.7 |
+| Carbon channel is closed by the energy model; RQ2's power rests on TTFF (DL-013) | §A1.5 box, §A1.13 |
+| Policy fitting on calibration only; test touched once | §A1.7 |
+| DL-008 mapping retained as fallback form | §A1.8 |
+| Per-project-prior control + variance decomposition | §A1.9 |
+| Oracle-duration bound, labelled | §A1.10 |
+| Effect sizes lead significance | §A1.11 |
+
+## A1.13 Declared structural limitation on RQ2's power (DL-013)
+
+This must appear in the methodology and threats chapters, not only here.
+
+- Because §8 fixes `E = P_avg · duration`, **carbon saved is proportional to
+  duration by definition of the accounting model.** This study therefore *cannot*
+  detect SE value through the carbon channel — not because the value is absent, but
+  because the model leaves no room for it there.
+- RQ2's statistical power rests on the **failure-feedback (TTFF)** channel: duration
+  carries no information about whether a build will fail, so any SE contribution
+  must surface as better feedback safety at matched carbon.
+- A further deliberate conservatism: strategy **④a**'s estimator is fitted on the
+  same 28 commit-time features, so whatever SE characteristics contribute *through
+  predicting duration* is **absorbed into the control**. The test therefore asks
+  whether SE characteristics carry information **orthogonal to expected duration**
+  — the strictest reading of "beyond expected build duration". **④b** (project prior
+  only) is the looser reading and is run alongside; ⑤ must beat **both** (§A1.9).
+- Consequence for interpretation: a null verdict under this design means *"no SE
+  information orthogonal to predicted duration, detectable through feedback safety,
+  on this dataset and carbon model"* — a precise and defensible claim. It does
+  **not** mean "SE characteristics are irrelevant to CI scheduling", and must never
+  be written as though it did.
+
+**Provenance.** Author task: framework migration (DL-012), corrected by **DL-013**
+(§A1.5, §A1.7 revised; §A1.13 added — amendment version **A1.1**). Date: 2026-08-09.
+Sources: `governance/03_DECISION_LOG.md` DL-012; `governance/01_SOURCE_OF_TRUTH.md`
+Layer 0-A; `context/feature_spec.md`; `results/p0/data_profile.md` (population and
+per-project failure-rate spread). No numeric result is asserted in this amendment;
+the two floors in §A1.7 are declared design parameters, not measurements.

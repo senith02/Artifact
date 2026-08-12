@@ -17,31 +17,33 @@
 
 ```yaml
 state:
-  tasks_total: 22        # derived — recount ### headings in development_plan.md
+  tasks_total: 28        # derived — recounted 2026-08-09 (was 22 before DL-012)
   tasks_done: 4
-  current_task: P1-T1    # Feature extractor + human-reviewable feature audit
-  next_task: P1-T2       # Leakage-safe three-way split maker
+  current_task: P1-T1    # Duration-control design specification (design only, no code)
+  next_task: P1-T2       # Feature extractor + feature-family audit
   current_phase: P1
   blocked_on: null
-  last_gate_passed: P0-T4
-  last_updated: 2026-06-20
+  last_gate_passed: DL-012 framework migration (+ DL-013 correction)
+  last_updated: 2026-08-09
+  active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
 ```
 
 ```
-Overall   [████░░░░░░░░░░░░░░░░]  18%   (4 / 22 tasks)   Milestone: ✅ M0 reached — M1 next (36% at P1 complete)
-Phase 1   [░░░░░░░░░░░░░░░░░░░░]   0%   Build-Failure Risk Model   (0 / 4 tasks)
+Overall   [███░░░░░░░░░░░░░░░░░]  14%   (4 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
+Phase 1   [░░░░░░░░░░░░░░░░░░░░]   0%   Commit-Time Evidence   (0 / 7 tasks)
 
-► CURRENT : P1-T1 — Feature extractor + human-reviewable feature audit
-○ NEXT    : P1-T2 — Leakage-safe three-way split maker
+► CURRENT : P1-T1 — Duration-control design specification
+○ NEXT    : P1-T2 — Feature extractor + feature-family audit
 ⛔ BLOCKED : none
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*No task in progress (gate just passed for P0-T4 — Phase 0 complete, M0 reached). Record subtask state here when P1-T1 starts.*
+*No task in progress (the DL-012 framework migration gate just passed; the plan was renumbered
+22 → 28 tasks and Phase 1 was reorganised). Record subtask state here when P1-T1 starts.*
 
 ```
-P1-T1  S1 ⬜   S2 ⬜   S3 ⬜
+P1-T1  S1 ⬜   S2 ⬜   S3 ⬜   S4 ⬜
 notes: —
 ```
 
@@ -55,26 +57,32 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-- | :-: | :-- | :-: |
 | **P0 Setup** | P0-T1 Project skeleton & environment | ✅ | runnable empty project | infra |
 | | P0-T2 Data harness + quality funnel | ✅ | `data.py` + data profile | RQ1 |
-| | P0-T3 Carbon-intensity acquisition | ✅ | carbon series + `carbon.py` | RQ2/3 |
-| | P0-T4 Lock evaluation protocol | ✅ | `eval_protocol.md` (frozen at gate) | RQ1–4 |
-| **P1 Risk model** | P1-T1 Feature extractor + human audit | ► ⬜ | `features.py` + `feature_audit.md` | RQ1 |
-| | P1-T2 Three-way leakage-safe splits | ⬜ | `splits.py` + manifests | RQ1 |
-| | P1-T3 Train, tune & calibrate | ⬜ | models + calibration report | RQ1 |
-| | P1-T4 Test evaluation + SHAP | ⬜ | `model_report.md` | **RQ1** |
-| **P2 Core+Sim** | P2-T1 Eligibility gate + validator | ⬜ | `eligibility.py` + `validate_invariants.py` | RQ4 |
-| | P2-T2 ML deferral policy / `decide()` | ⬜ | `policy.py` | RQ2/3 |
-| | P2-T3 Energy & carbon accounting | ⬜ | `accounting.py` | RQ2/3 |
-| | P2-T4 Replay simulator | ⬜ | `simulator.py` + sample run | RQ2–4 |
-| **P3 Evaluation** | P3-T1 Full replay all strategies | ⬜ | `strategy_results.*` | **RQ2** |
-| | P3-T2 Trade-off curve & paired stats | ⬜ | trade-off figures + CIs | **RQ3** |
-| | P3-T3 Sensitivity sweeps + RQ4 test | ⬜ | `sensitivity.*` + RQ4 verdict | **RQ3/4** |
-| | P3-T4 Results synthesis | ⬜ | `evaluation_report.md` | RQ2–4 |
+| | P0-T3 Carbon-intensity acquisition | ✅ | carbon series + `carbon.py` | RQ4 |
+| | P0-T4 Lock evaluation protocol (+ Amendment A1) | ✅ | `eval_protocol.md` (frozen + A1) | RQ1–4 |
+| **P1 Commit-time evidence** | P1-T1 Duration-control design spec | ► ⬜ | `context/duration_control_spec.md` | RQ2 |
+| | P1-T2 Feature extractor + family audit | ⬜ | `features.py` + `feature_audit.md` | RQ1 |
+| | P1-T3 Three-way leakage-safe splits | ⬜ | `splits.py` + manifests | RQ1/2 |
+| | P1-T4 Commit-time duration estimator | ⬜ | `duration_estimator.py` + report | **RQ2** |
+| | P1-T5 Train, tune & calibrate (control + SE arms) | ⬜ | models + calibration report | RQ1/2 |
+| | P1-T6 Family ablation + SHAP (calibration split) | ⬜ | `results/p1/ablation/` + `shap/` | **RQ1** |
+| | P1-T7 Apply admission rule → model-level RQ2 | ⬜ | `incremental_value.md` + `admission.json` | **RQ2** |
+| **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ⬜ | `eligibility.py` + `validate_invariants.py` | RQ4 |
+| | P2-T2 Energy & carbon accounting | ⬜ | `accounting.py` | RQ4 |
+| | P2-T3 `decide()` over `policy_spec` | ⬜ | `policy.py` + spec loader | RQ3 |
+| | P2-T4 Replay simulator (6 strategies) | ⬜ | `simulator.py` + sample run | RQ4 |
+| | P2-T5 Fit + **freeze** `policy_spec.yaml` | ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
+| **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
+| | P3-T2 Full replay, all six strategies | ⬜ | `strategy_results.*` | **RQ4** |
+| | P3-T3 ④-vs-⑤ decision-level value | ⬜ | `incremental_value_decision.*` | **RQ2** |
+| | P3-T4 Sensitivity sweeps | ⬜ | `sensitivity.*` | RQ4 |
+| | P3-T5 Results synthesis + RQ verdicts | ⬜ | `evaluation_report.md` | RQ1–4 |
 | **P4 Prototype** | P4-T1 REST API service | ⬜ | `code/api/` (parity-tested) | artifact |
 | | P4-T2 GitHub Action + demo repo | ⬜ | `code/github-action/` | artifact |
 | | P4-T3 Monitoring dashboard | ⬜ | `code/dashboard/` | artifact |
-| **P5 Write-up** | P5-T1 Methods & implementation | ⬜ | methodology/artifact chapters | all |
-| | P5-T2 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
-| | P5-T3 Threats, assembly, reproduction check | ⬜ | final draft + repro checklist | all |
+| **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
+| | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
+| | P5-T3 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
+| | P5-T4 Threats, assembly, reproduction check | ⬜ | final draft + repro checklist | all |
 
 ---
 
@@ -83,11 +91,11 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
-| P1 Risk model | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
-| P2 Core + simulator | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
-| P3 Evaluation | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
+| P1 Commit-time evidence | 0 / 7 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
+| P2 Core + simulator + policy | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
+| P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
-| P5 Write-up | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
+| P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 
 ---
 
@@ -100,3 +108,5 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-06-18 | P0-T2 Data harness + quality funnel | `scheduler_core/data.py` (+23 pytest pass); `results/p0/data_profile.{json,md}` from real run — 3,881,992 job rows → 925,897 builds, 25.1% failure rate, 4 langs; grain/duration investigations | DL-009, DL-010 |
 | 2026-06-20 | P0-T3 Carbon-intensity acquisition | `scheduler_core/carbon.py` + `scripts/fetch_carbon.py` (+20 pytest pass); real fetch (stdlib urllib, 53 reqs) → `code/data/carbon/` hourly series (17,544 h) + 168-slot profile + `PROVENANCE.md`; coverage 2024=99.83%, 2025=100.0%; `results/p0/carbon_{profile.md,hour_of_week.png}` | none |
 | 2026-06-20 | P0-T4 Lock evaluation protocol | `results/p0/eval_protocol.md` (frozen) — RQ1 metrics + calibration, 3-way split, tuning, sim metrics (TTFF/missed-failure), window mapping, energy model, paired bootstrap; `make_splits`/`paired_bootstrap` signatures; no TBD; DL-004..010 cross-checked. **Phase 0 complete → M0.** | none |
+| 2026-08-09 | *(framework migration gate — not a numbered task)* | Reframed to *An Empirical Decision Model for Selective Carbon-Aware Scheduling…*: `01_SOURCE_OF_TRUTH.md` **Layer 0-A** (frozen Layer 1 untouched); `eval_protocol.md` **Amendment A1** (frozen body untouched); `feature_spec.md` (3 duration roles + 6 families); `development_plan.md` rewritten 22 → 28 tasks; inner/outer `CLAUDE.md`, `README.md`, `code/README.md`, `pyproject.toml` reframed. No code, no results regenerated; P0 evidence retained. | **DL-012** |
+| 2026-08-09 | *(same gate — decision-level test corrected)* | `eval_protocol.md` A1 → **A1.1**: §A1.5/§A1.7 revised to **frontier dominance at matched operating points** (single-point carbon comparison was unsatisfiable by construction — carbon ∝ duration under the energy model), §A1.13 added declaring the structural limit on RQ2's power; plan P2-T4/P2-T5/P3-T3/P5-T4 updated; Layer 0-A success criterion revised. Corrected before any code was written against it. | **DL-013** |
