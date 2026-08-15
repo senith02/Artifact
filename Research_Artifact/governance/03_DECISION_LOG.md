@@ -446,4 +446,149 @@ edit or delete past entries (supersede them with a new entry instead).
     itself part of the argument for the reading above.
   - No numbers are produced or implied by this entry (R1). Nothing is refitted; no P0 output changes.
 
-<!-- Append DL-015, DL-016, … below as the project progresses. -->
+### DL-015 — Feature-construction decisions: the `num_commits` source, four unbuildable §3.5 features, the missing-value policy, and a strengthened blocklist
+- **Date:** 2026-08-15
+- **Status:** Accepted (implementation-level; the **28-feature contract is unchanged**)
+- **Spec section affected:** §3.5 feature list as operationalised by `context/feature_spec.md`
+  (§Feature table #13, §"Spec features that need a derivation or proxy", §Leakage blocklist).
+  Required by `development_plan.md` P1-T2 S1: *"any feature that cannot be built faithfully gets a DL
+  entry (proxy or drop) before the matrix is finalised."*
+
+- **Context.** P1-T2 implements `scheduler_core/features.py` against the real header. Four kinds of gap
+  surfaced between what §3.5 describes and what the 2017 TravisTorrent release actually contains. None
+  changes *which* 28 features exist — the contract and the six-family partition (A1.3) are untouched —
+  but each is a construction choice that must be visible rather than buried in code.
+
+- **Decision 1 — `num_commits` (#13) is `git_num_all_built_commits`.**
+  `feature_spec.md` #13 offers `gh_num_commits_in_push` *or* `git_num_all_built_commits` and says
+  "pick one, document". The choice is **forced, not preferred**: `gh_num_commits_in_push` is
+  **100% null** in this release (`results/p0/data_profile.md` §Notable findings), while
+  `git_num_all_built_commits` is **0% null**. The feature therefore counts *commits built*, not
+  *commits pushed*; for a push build these coincide, and for a PR build the built set is the more
+  decision-relevant quantity anyway. Recorded in `FEATURE_SOURCES` and asserted by a test that every
+  declared source exists in the pinned header.
+
+- **Decision 2 — four §3.5 features cannot be built from this dataset.** Each is **dropped or proxied
+  by features already inside the 28**; none is invented, and no new feature is added.
+  | §3.5 feature | Verdict | Why, and what stands in |
+  | :-- | :-- | :-- |
+  | **Change entropy** | **Dropped** | Entropy needs the **per-file** churn distribution. The release carries only aggregates (`git_diff_src_churn`, `git_diff_test_churn`) and per-*category* file counts — never a per-file breakdown, so no distribution exists to take entropy over. `feature_spec.md`'s fallback ("approximate via `files_total` spread") is already covered by #3–#6 and the file-type mix #9–#11, which stay in F1/F2. No entropy-named feature is emitted. |
+  | **Fix-keyword flag** | **Dropped** | Needs commit **messages**; TravisTorrent has none (only commit SHAs). Joining an external message source is out of scope (spec §1.6). |
+  | **Developer total / recent experience** | **Proxied** | No per-author commit-count column. Stands in: `by_core_member` (#20) + `team_size` (#19) in F5, plus `commits_on_files_touched` (#14) in F4. This is a **team/tenure** proxy, not an individual-experience measure. |
+  | **Subsystems / directories touched** | **Proxied** | No directory-path column. Stands in: `files_total` (#6) and the file-type mix `src_files`/`doc_files`/`other_files` (#9–#11). This captures *breadth of change* but not *architectural* spread. |
+  - **Threat to validity (must appear in the threats chapter).** Two well-attested JIT-defect predictors
+    (change entropy, fix-keyword) are **absent from the treatment**, and developer experience enters only
+    as a coarse team-level proxy. The SE arm is therefore a **lower bound** on what commit-level
+    characteristics could contribute. The direction is conservative for RQ2: a null result may reflect a
+    weakened treatment rather than an absence of signal, and must be reported with that caveat. It cannot
+    manufacture a *positive* finding.
+
+- **Decision 3 — missing-value policy: impute only where the spec defines the meaning of missing.**
+  - `description_complexity` (#23) → **0 when absent**, exactly as `feature_spec.md` #23 states, because
+    the field exists only for PRs (79.2% null, `data_profile.md`) and "no PR description" is genuinely
+    zero description, not an unknown.
+  - **Every other feature keeps `NaN`.** Unparseable cells coerce to `NaN`, never silently to 0 (R1);
+    `is_docs_only` (#12) is `NaN` when either input is missing rather than defaulting to "not docs-only".
+  - Any *model-side* imputation is a **P1-T5 modelling choice** made inside the fitted pipeline (so it is
+    fitted on train only and cannot leak across splits), not a property of the matrix. The matrix reports
+    missingness; it does not conceal it.
+
+- **Decision 4 — the leakage blocklist is strengthened, never relaxed.** `features.py` blocks
+  everything `feature_spec.md` §Leakage blocklist names, **plus** the remaining post-run log fields
+  (`tr_log_lan`, `tr_log_setup_time`, `tr_log_analyzer`, `tr_log_frameworks`) **plus** a `tr_log_*`
+  **prefix rule** so a post-run column that nobody enumerated is blocked by default rather than by
+  vigilance. Enforcement is two-sided: every feature's *declared sources* are checked, and the produced
+  matrix's *columns* are checked. `tr_duration` is additionally excluded from the read path — it is not
+  in `READ_COLUMNS`, so it cannot travel with the features even by accident (§A1.2 role 1 keeps it in
+  the simulator's accounting path only).
+
+- **Rationale.** Each decision is forced by a measured property of the real file (R1/R2), and every one
+  of them either leaves the treatment unchanged or **weakens** it. Nothing here strengthens the SE arm
+  relative to the duration control, so none of it can bias RQ2 toward a positive answer.
+
+- **Consequences.**
+  - `code/scheduler_core/features.py` + `code/tests/test_features.py` implement and assert all four.
+  - `results/p1/feature_audit.md` reports the resulting null/zero rates per feature so the proxies'
+    coverage is inspectable.
+  - The threats chapter (P5-T4) must carry Decision 2's lower-bound caveat.
+  - **No change to** the 28-feature contract, the A1.3 family partition, the RQs, or any P0 output.
+
+### DL-016 — `git_diff_test_churn` is entirely zero in this release: two contracted features are constant, and F1/F2/F3 are weakened
+- **Date:** 2026-08-15
+- **Status:** Accepted (measured finding + handling decision; the **28-feature contract and the A1.3
+  family partition are unchanged**)
+- **Spec section affected:** none normatively — `context/feature_spec.md` #2/#28 and
+  `results/p0/eval_protocol.md` §A1.3 keep their definitions. This entry records a **property of the
+  data** and how the study reports it.
+
+- **Context — measured, twice, independently (R1).** Building the real matrix in P1-T2 showed feature
+  **#2 `test_churn`** with min = max = 0 over all 922,624 analytic builds. Because a bug in the
+  extractor would look identical, the source column was re-counted straight off the CSV with the stdlib
+  reader (no pandas, no NA coercion), over all **3,881,992 job rows**:
+  | Column | Distinct values | Zero share (job rows) |
+  | :-- | --: | --: |
+  | `git_diff_test_churn` | **1** (`'0'`) | **100%** |
+  | `git_diff_src_churn` | 505 | 94.69% |
+  | `gh_diff_src_files` | 72 | 94.67% |
+  | `gh_diff_tests_added` | 99 | 99.15% |
+  | `gh_diff_other_files` | 706 | 8.6% (modal value is `1`) |
+  `git_diff_test_churn` is therefore **not sparse — it is empty**: the 2017 release records no test
+  churn at all. `git_diff_src_churn` and `gh_diff_src_files` are populated for only ~5% of builds, and
+  the file-type classifier assigns almost everything to `gh_diff_other_files` (so "src vs other" is
+  largely uninformative here too).
+
+- **Consequences for the feature set (measured, not assumed).**
+  - **#2 `test_churn` is constant zero** → zero variance → it cannot change any model's prediction.
+  - **#28 `test_density_ratio` is constant zero** by construction: it is
+    `test_churn / (src_churn + 1)` and the numerator is identically 0. Two contracted features are dead.
+  - **#10 `doc_files` (99.97% zero) and #12 `is_docs_only` (99.98% zero)** are *near*-constant: alive in
+    principle, but they separate ~0.03% of builds.
+  - Family impact, as measured by `degeneracy_report()` over the analytic set — "effective" = members
+    that are neither constant nor near-constant:
+    | Family | Members | constant | near-constant | sparse | **Effective** |
+    | :-- | --: | --: | --: | --: | --: |
+    | F1 change size & diffusion | 7 | 1 | 0 | 2 | **6** |
+    | F2 change purpose & composition | 6 | 1 | 2 | 1 | **3** |
+    | F3 test activity & maturity | 5 | 0 | 1 | 1 | **4** |
+    | F4 project history & maturity | 5 | 0 | 0 | 0 | **5** |
+    | F5 developer & team | 2 | 0 | 0 | 0 | **2** |
+    | F6 temporal & trigger context | 3 | 0 | 0 | 0 | **3** |
+    **F2 is the worst hit — half its members are dead or near-dead.** F3 keeps 4 of 5, but
+    `tests_added` is near-constant (99.2% zero) and `tests_deleted` sparse (96.1% zero), so its
+    surviving strength sits in the three per-KLOC test-maturity ratios rather than in test *activity*.
+
+- **Decision 1 — keep all 28; do not drop the dead features.** A zero-variance column cannot influence
+  a linear, tree, or boosted model, so retaining it costs nothing statistically, while dropping it would
+  change the frozen 28-feature contract and the A1.3 family sizes (7+6+5+5+2+3) that P1-T6's ablation and
+  P2-T5's admission rule are defined over. The cheaper, more auditable action is to **report** the
+  degeneracy, not to renegotiate the contract. If a later task needs constant columns removed for a
+  numerical reason (e.g. a solver that rejects zero-variance inputs), that removal happens **inside the
+  fitted pipeline** and is noted there — it does not alter the contract.
+- **Decision 2 — degeneracy is emitted as data, not prose.** `features.degeneracy_report()` classifies
+  every feature as `constant` / `near-constant` / `sparse` / `ok`; `results/p1/feature_audit.md` leads
+  with it and gives the per-family effective-member count, and `feature_summary.json` carries the same
+  table. The thresholds (modal share ≥ 99%, zeros ≥ 90%) are **reporting-only** — they classify what the
+  audit prints and set no model, metric, or policy quantity, so they are not eval_protocol values and
+  need no predeclaration.
+- **Decision 3 — this binds the interpretation of the RQ1/RQ2 results.** Wherever an F1/F2/F3 arm shows
+  little or no incremental value, the write-up must state that the family was **evaluated with dead or
+  near-dead members** and that the dataset — not the hypothesis — is the reason. "Test-related change
+  characteristics do not help" is **not** a supportable reading of an F3 null on this release; the
+  supportable reading is "this release does not record test churn, so the claim could not be tested."
+
+- **Rationale.** The finding is adverse to the study's own treatment arm, and surfacing it now — before
+  any model is fitted (P1-T5) or any ablation is run (P1-T6) — is what stops it from being rationalised
+  later as a result. It also compounds DL-015: the SE arm was already a lower bound because change
+  entropy and the fix-keyword flag are unbuildable; it is now a **materially weaker** lower bound.
+  Direction of bias is unchanged and conservative — every one of these gaps can only *suppress* an SE
+  finding, never manufacture one, so a positive RQ1/RQ2 result remains trustworthy while a null result
+  carries a large, explicit caveat.
+
+- **Consequences.**
+  - `features.degeneracy_report()` + a test asserting a constant column is classified `constant`.
+  - `results/p1/feature_audit.md` §"⚠ Degenerate features" and `feature_summary.json.degeneracy`.
+  - **P1-T6** must report per-family effective member counts beside every ablation result.
+  - **P5-T3/P5-T4** must carry Decision 3 in both the results discussion and the threats chapter.
+  - No change to the RQs, the family partition, the eval protocol, or any P0 output.
+
+<!-- Append DL-017, DL-018, … below as the project progresses. -->

@@ -17,33 +17,35 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-08-12 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 5
-  current_task: P1-T2    # Feature extractor + feature-family audit
-  next_task: P1-T3       # Leakage-safe three-way split maker
+  tasks_total: 28        # derived — recounted 2026-08-15 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 6
+  current_task: P1-T3    # Leakage-safe three-way split maker
+  next_task: P1-T4       # Commit-time duration estimator
   current_phase: P1
   blocked_on: null
-  last_gate_passed: P1-T1 (duration-control design spec)
-  last_updated: 2026-08-12
+  last_gate_passed: P1-T2 (feature extractor + family audit)
+  last_updated: 2026-08-15
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
-  open_decisions: DL-014 proposed — awaiting author confirmation (duration_control_spec.md depends on it)
+  open_decisions: DL-014 proposed — awaiting author confirmation (duration_control_spec.md depends on it;
+                  gates P1-T4's implementation, not P1-T3)
 ```
 
 ```
-Overall   [████░░░░░░░░░░░░░░░░]  18%   (5 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
-Phase 1   [███░░░░░░░░░░░░░░░░░]  14%   Commit-Time Evidence   (1 / 7 tasks)
+Overall   [████░░░░░░░░░░░░░░░░]  21%   (6 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
+Phase 1   [██████░░░░░░░░░░░░░░]  29%   Commit-Time Evidence   (2 / 7 tasks)
 
-► CURRENT : P1-T2 — Feature extractor + feature-family audit
-○ NEXT    : P1-T3 — Leakage-safe three-way split maker
-⛔ BLOCKED : none  (DL-014 is proposed, not blocking — it gates P1-T4's implementation, not P1-T2/T3)
+► CURRENT : P1-T3 — Leakage-safe three-way split maker
+○ NEXT    : P1-T4 — Commit-time duration estimator
+⛔ BLOCKED : none  (DL-014 is proposed, not blocking — it gates P1-T4's implementation, not P1-T3)
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*No task in progress (P1-T1 gate just passed). Record subtask state here when P1-T2 starts.*
+*No task in progress (P1-T2 gate just passed). DL-014 remains **Proposed/unresolved** by author
+direction. Record subtask state here when P1-T3 starts.*
 
 ```
-P1-T2  S1 ⬜   S2 ⬜   S3 ⬜   S4 ⬜
+P1-T3  S1 ⬜   S2 ⬜   S3 ⬜   S4 ⬜
 notes: —
 ```
 
@@ -60,8 +62,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P0-T3 Carbon-intensity acquisition | ✅ | carbon series + `carbon.py` | RQ4 |
 | | P0-T4 Lock evaluation protocol (+ Amendment A1) | ✅ | `eval_protocol.md` (frozen + A1) | RQ1–4 |
 | **P1 Commit-time evidence** | P1-T1 Duration-control design spec | ✅ | `context/duration_control_spec.md` | RQ2 |
-| | P1-T2 Feature extractor + family audit | ► ⬜ | `features.py` + `feature_audit.md` | RQ1 |
-| | P1-T3 Three-way leakage-safe splits | ⬜ | `splits.py` + manifests | RQ1/2 |
+| | P1-T2 Feature extractor + family audit | ✅ | `features.py` + `feature_audit.md` | RQ1 |
+| | P1-T3 Three-way leakage-safe splits | ► ⬜ | `splits.py` + manifests | RQ1/2 |
 | | P1-T4 Commit-time duration estimator | ⬜ | `duration_estimator.py` + report | **RQ2** |
 | | P1-T5 Train, tune & calibrate (control + SE arms) | ⬜ | models + calibration report | RQ1/2 |
 | | P1-T6 Family ablation + SHAP (calibration split) | ⬜ | `results/p1/ablation/` + `shap/` | **RQ1** |
@@ -91,7 +93,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
-| P1 Commit-time evidence | 1 / 7 | `[███░░░░░░░░░░░░░░░░░]` 14% |
+| P1 Commit-time evidence | 2 / 7 | `[██████░░░░░░░░░░░░░░]` 29% |
 | P2 Core + simulator + policy | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -111,3 +113,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-08-09 | *(framework migration gate — not a numbered task)* | Reframed to *An Empirical Decision Model for Selective Carbon-Aware Scheduling…*: `01_SOURCE_OF_TRUTH.md` **Layer 0-A** (frozen Layer 1 untouched); `eval_protocol.md` **Amendment A1** (frozen body untouched); `feature_spec.md` (3 duration roles + 6 families); `development_plan.md` rewritten 22 → 28 tasks; inner/outer `CLAUDE.md`, `README.md`, `code/README.md`, `pyproject.toml` reframed. No code, no results regenerated; P0 evidence retained. | **DL-012** |
 | 2026-08-09 | *(same gate — decision-level test corrected)* | `eval_protocol.md` A1 → **A1.1**: §A1.5/§A1.7 revised to **frontier dominance at matched operating points** (single-point carbon comparison was unsatisfiable by construction — carbon ∝ duration under the energy model), §A1.13 added declaring the structural limit on RQ2's power; plan P2-T4/P2-T5/P3-T3/P5-T4 updated; Layer 0-A success criterion revised. Corrected before any code was written against it. | **DL-013** |
 | 2026-08-12 | P1-T1 Duration-control design spec | `context/duration_control_spec.md` (352 lines, design-only — no code, no numbers): `d̂` defined on `log(1+tr_duration)` at build grain; admissible information set I1–I3; cut-off split into fitted-parameter vs causal within-project mechanisms; both forms pinned (④b expanding project median; ④a XGBRegressor + Ridge reference, search space + `seed=42` fixed before code); primary chosen by calibration-split log1p MAE, ties → ④b; cold-start ladder + per-build provenance record; tests T1–T5; §9 clause-by-clause cross-check vs A1.1/A1.2 with 2 declared deviations, both routed to DL-014; no TBD | **DL-014 (proposed)** — A1.1's information rule binds fitted parameters and within-project online state differently; without it ④b (A1.6) and the §A1.9 project-identity control are unsatisfiable |
+| 2026-08-15 | P1-T2 Feature extractor + family audit | `scheduler_core/features.py` (28 features, `FAMILIES` as data, `FEATURE_SOURCES`, two-sided `assert_no_leakage` + `tr_log_*` prefix rule, `degeneracy_report`) + `tests/test_features.py` (28 tests; **71 passed** overall, verbatim in `results/p1/pytest_p1_t2.txt`); real run `python scripts/build_feature_audit.py` → **922,624** analytic builds × 28 features (matches the P0-T2 funnel exactly), failure rate 25.0871%, leakage/partition assertions PASS, 0 blocklisted columns, 10 traced builds verified against a second raw-CSV pass (240 cells, 0 job-row disagreements — independently confirms DL-009); `results/p1/feature_audit.md` + `feature_summary.json` + 6 histograms. **Adverse finding:** `git_diff_test_churn` is empty in the whole release → `test_churn` and `test_density_ratio` are constant; F2 drops to 3 effective members of 6 | **DL-015**, **DL-016** |

@@ -1,0 +1,2977 @@
+{
+  "provenance": {
+    "command": "python scripts/build_feature_audit.py",
+    "run_date": "2026-08-15",
+    "dataset_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Dataset\\19314170\\final-2017-01-25.csv\\final-2017-01-25.csv",
+    "chunksize": 300000,
+    "random_seed": 42,
+    "python": "3.11.1",
+    "pandas": "3.0.3",
+    "elapsed_s": 112.6
+  },
+  "counts": {
+    "builds": 922624,
+    "features": 28,
+    "families": 6,
+    "labelled": 922624,
+    "failures": 231460,
+    "failure_rate_pct": 25.0871
+  },
+  "checks": {
+    "leakage_assertion": "PASS",
+    "partition_assertion": "PASS",
+    "blocklisted_columns_in_matrix": 0,
+    "trace_verification": "PASS",
+    "trace_cells_compared": 240,
+    "trace_job_row_disagreements": 0,
+    "csv_field_size_limit": 2147483647,
+    "traced_build_job_counts": {
+      "4053250": 1,
+      "5111784": 3,
+      "11775246": 1,
+      "22678659": 8,
+      "51047501": 1,
+      "59372162": 1,
+      "65344844": 3,
+      "65637492": 2,
+      "82341370": 1,
+      "97101058": 4
+    }
+  },
+  "families": {
+    "F1": [
+      "src_churn",
+      "test_churn",
+      "files_added",
+      "files_deleted",
+      "files_modified",
+      "files_total",
+      "num_commits"
+    ],
+    "F2": [
+      "src_files",
+      "doc_files",
+      "other_files",
+      "is_docs_only",
+      "description_complexity",
+      "test_density_ratio"
+    ],
+    "F3": [
+      "tests_added",
+      "tests_deleted",
+      "test_lines_per_kloc",
+      "test_cases_per_kloc",
+      "asserts_per_kloc"
+    ],
+    "F4": [
+      "commits_on_files_touched",
+      "sloc",
+      "repo_age",
+      "repo_num_commits",
+      "lang"
+    ],
+    "F5": [
+      "team_size",
+      "by_core_member"
+    ],
+    "F6": [
+      "is_pr",
+      "hour_of_day",
+      "day_of_week"
+    ]
+  },
+  "thresholds": {
+    "near_constant_share": 0.99,
+    "sparse_zero_share": 0.9
+  },
+  "degeneracy": [
+    {
+      "#": 1,
+      "feature": "src_churn",
+      "family": "F1",
+      "n_unique": 504,
+      "modal_value": "0",
+      "modal_share_pct": 95.7845,
+      "zero_pct": 95.7845,
+      "verdict": "sparse"
+    },
+    {
+      "#": 2,
+      "feature": "test_churn",
+      "family": "F1",
+      "n_unique": 1,
+      "modal_value": "0",
+      "modal_share_pct": 100.0,
+      "zero_pct": 100.0,
+      "verdict": "constant"
+    },
+    {
+      "#": 3,
+      "feature": "files_added",
+      "family": "F1",
+      "n_unique": 419,
+      "modal_value": "0",
+      "modal_share_pct": 83.2863,
+      "zero_pct": 83.2863,
+      "verdict": "ok"
+    },
+    {
+      "#": 4,
+      "feature": "files_deleted",
+      "family": "F1",
+      "n_unique": 349,
+      "modal_value": "0",
+      "modal_share_pct": 94.6358,
+      "zero_pct": 94.6358,
+      "verdict": "sparse"
+    },
+    {
+      "#": 5,
+      "feature": "files_modified",
+      "family": "F1",
+      "n_unique": 519,
+      "modal_value": "1",
+      "modal_share_pct": 44.1743,
+      "zero_pct": 2.3885,
+      "verdict": "ok"
+    },
+    {
+      "#": 6,
+      "feature": "files_total",
+      "family": "F1",
+      "n_unique": 718,
+      "modal_value": "1",
+      "modal_share_pct": 43.0045,
+      "zero_pct": 0.4317,
+      "verdict": "ok"
+    },
+    {
+      "#": 7,
+      "feature": "tests_added",
+      "family": "F3",
+      "n_unique": 99,
+      "modal_value": "0",
+      "modal_share_pct": 99.1977,
+      "zero_pct": 99.1977,
+      "verdict": "near-constant"
+    },
+    {
+      "#": 8,
+      "feature": "tests_deleted",
+      "family": "F3",
+      "n_unique": 288,
+      "modal_value": "0",
+      "modal_share_pct": 96.1317,
+      "zero_pct": 96.1317,
+      "verdict": "sparse"
+    },
+    {
+      "#": 9,
+      "feature": "src_files",
+      "family": "F2",
+      "n_unique": 72,
+      "modal_value": "0",
+      "modal_share_pct": 95.7565,
+      "zero_pct": 95.7565,
+      "verdict": "sparse"
+    },
+    {
+      "#": 10,
+      "feature": "doc_files",
+      "family": "F2",
+      "n_unique": 9,
+      "modal_value": "0",
+      "modal_share_pct": 99.9705,
+      "zero_pct": 99.9705,
+      "verdict": "near-constant"
+    },
+    {
+      "#": 11,
+      "feature": "other_files",
+      "family": "F2",
+      "n_unique": 705,
+      "modal_value": "1",
+      "modal_share_pct": 42.7406,
+      "zero_pct": 1.2137,
+      "verdict": "ok"
+    },
+    {
+      "#": 12,
+      "feature": "is_docs_only",
+      "family": "F2",
+      "n_unique": 2,
+      "modal_value": "0.0",
+      "modal_share_pct": 99.9805,
+      "zero_pct": 99.9805,
+      "verdict": "near-constant"
+    },
+    {
+      "#": 13,
+      "feature": "num_commits",
+      "family": "F1",
+      "n_unique": 421,
+      "modal_value": "1",
+      "modal_share_pct": 84.0855,
+      "zero_pct": 0.0,
+      "verdict": "ok"
+    },
+    {
+      "#": 14,
+      "feature": "commits_on_files_touched",
+      "family": "F4",
+      "n_unique": 7498,
+      "modal_value": "1",
+      "modal_share_pct": 1.9349,
+      "zero_pct": 1.4206,
+      "verdict": "ok"
+    },
+    {
+      "#": 15,
+      "feature": "sloc",
+      "family": "F4",
+      "n_unique": 104506,
+      "modal_value": "928",
+      "modal_share_pct": 0.6498,
+      "zero_pct": 0.0,
+      "verdict": "ok"
+    },
+    {
+      "#": 16,
+      "feature": "test_lines_per_kloc",
+      "family": "F3",
+      "n_unique": 361507,
+      "modal_value": "0.0",
+      "modal_share_pct": 3.9188,
+      "zero_pct": 3.9188,
+      "verdict": "ok"
+    },
+    {
+      "#": 17,
+      "feature": "test_cases_per_kloc",
+      "family": "F3",
+      "n_unique": 264910,
+      "modal_value": "0.0",
+      "modal_share_pct": 17.7782,
+      "zero_pct": 17.7782,
+      "verdict": "ok"
+    },
+    {
+      "#": 18,
+      "feature": "asserts_per_kloc",
+      "family": "F3",
+      "n_unique": 320854,
+      "modal_value": "0.0",
+      "modal_share_pct": 6.494,
+      "zero_pct": 6.494,
+      "verdict": "ok"
+    },
+    {
+      "#": 19,
+      "feature": "team_size",
+      "family": "F5",
+      "n_unique": 197,
+      "modal_value": "8",
+      "modal_share_pct": 4.4614,
+      "zero_pct": 0.8142,
+      "verdict": "ok"
+    },
+    {
+      "#": 20,
+      "feature": "by_core_member",
+      "family": "F5",
+      "n_unique": 2,
+      "modal_value": "1.0",
+      "modal_share_pct": 87.4343,
+      "zero_pct": 12.5657,
+      "verdict": "ok"
+    },
+    {
+      "#": 21,
+      "feature": "repo_age",
+      "family": "F4",
+      "n_unique": 279895,
+      "modal_value": "2985.68",
+      "modal_share_pct": 0.0246,
+      "zero_pct": 0.0029,
+      "verdict": "ok"
+    },
+    {
+      "#": 22,
+      "feature": "repo_num_commits",
+      "family": "F4",
+      "n_unique": 32788,
+      "modal_value": "368",
+      "modal_share_pct": 0.0405,
+      "zero_pct": 0.0017,
+      "verdict": "ok"
+    },
+    {
+      "#": 23,
+      "feature": "description_complexity",
+      "family": "F2",
+      "n_unique": 693,
+      "modal_value": "0.0",
+      "modal_share_pct": 82.2747,
+      "zero_pct": 82.2747,
+      "verdict": "ok"
+    },
+    {
+      "#": 24,
+      "feature": "is_pr",
+      "family": "F6",
+      "n_unique": 2,
+      "modal_value": "0.0",
+      "modal_share_pct": 82.0165,
+      "zero_pct": 82.0165,
+      "verdict": "ok"
+    },
+    {
+      "#": 25,
+      "feature": "lang",
+      "family": "F4",
+      "n_unique": 4,
+      "modal_value": "python",
+      "modal_share_pct": 36.5062,
+      "zero_pct": null,
+      "verdict": "ok"
+    },
+    {
+      "#": 26,
+      "feature": "hour_of_day",
+      "family": "F6",
+      "n_unique": 24,
+      "modal_value": "17.0",
+      "modal_share_pct": 5.8569,
+      "zero_pct": 3.9118,
+      "verdict": "ok"
+    },
+    {
+      "#": 27,
+      "feature": "day_of_week",
+      "family": "F6",
+      "n_unique": 7,
+      "modal_value": "2.0",
+      "modal_share_pct": 17.7097,
+      "zero_pct": 15.7617,
+      "verdict": "ok"
+    },
+    {
+      "#": 28,
+      "feature": "test_density_ratio",
+      "family": "F2",
+      "n_unique": 1,
+      "modal_value": "0.0",
+      "modal_share_pct": 100.0,
+      "zero_pct": 100.0,
+      "verdict": "constant"
+    }
+  ],
+  "per_feature": [
+    {
+      "#": 1,
+      "feature": "src_churn",
+      "family": "F1",
+      "source": "git_diff_src_churn",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 1.2283,
+      "p95": 0.0,
+      "max": 13870.0,
+      "std": 32.8109,
+      "zero_pct": 95.78,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 2,
+      "feature": "test_churn",
+      "family": "F1",
+      "source": "git_diff_test_churn",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "max": 0.0,
+      "std": 0.0,
+      "zero_pct": 100.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 3,
+      "feature": "files_added",
+      "family": "F1",
+      "source": "gh_diff_files_added",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 1.178,
+      "p95": 3.0,
+      "max": 19892.0,
+      "std": 30.2294,
+      "zero_pct": 83.29,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 4,
+      "feature": "files_deleted",
+      "family": "F1",
+      "source": "gh_diff_files_deleted",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.5066,
+      "p95": 1.0,
+      "max": 8450.0,
+      "std": 13.6148,
+      "zero_pct": 94.64,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 5,
+      "feature": "files_modified",
+      "family": "F1",
+      "source": "gh_diff_files_modified",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 2.0,
+      "mean": 5.1587,
+      "p95": 17.0,
+      "max": 9233.0,
+      "std": 28.0615,
+      "zero_pct": 2.39,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 6,
+      "feature": "files_total",
+      "family": "F1",
+      "source": "gh_diff_files_added + gh_diff_files_deleted + gh_diff_files_modified",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 2.0,
+      "mean": 6.8433,
+      "p95": 22.0,
+      "max": 28591.0,
+      "std": 54.6637,
+      "zero_pct": 0.43,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 7,
+      "feature": "tests_added",
+      "family": "F3",
+      "source": "gh_diff_tests_added",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0375,
+      "p95": 0.0,
+      "max": 560.0,
+      "std": 1.6005,
+      "zero_pct": 99.2,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 8,
+      "feature": "tests_deleted",
+      "family": "F3",
+      "source": "gh_diff_tests_deleted",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.3113,
+      "p95": 0.0,
+      "max": 7150.0,
+      "std": 12.9973,
+      "zero_pct": 96.13,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 9,
+      "feature": "src_files",
+      "family": "F2",
+      "source": "gh_diff_src_files",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0681,
+      "p95": 0.0,
+      "max": 295.0,
+      "std": 0.8189,
+      "zero_pct": 95.76,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 10,
+      "feature": "doc_files",
+      "family": "F2",
+      "source": "gh_diff_doc_files",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0007,
+      "p95": 0.0,
+      "max": 59.0,
+      "std": 0.1267,
+      "zero_pct": 99.97,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 11,
+      "feature": "other_files",
+      "family": "F2",
+      "source": "gh_diff_other_files",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 2.0,
+      "mean": 7.03,
+      "p95": 22.0,
+      "max": 19908.0,
+      "std": 49.8227,
+      "zero_pct": 1.21,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 12,
+      "feature": "is_docs_only",
+      "family": "F2",
+      "source": "gh_diff_src_files + gh_diff_doc_files",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0002,
+      "p95": 0.0,
+      "max": 1.0,
+      "std": 0.014,
+      "zero_pct": 99.98,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 13,
+      "feature": "num_commits",
+      "family": "F1",
+      "source": "git_num_all_built_commits",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 1.0,
+      "p50": 1.0,
+      "mean": 1.6728,
+      "p95": 3.0,
+      "max": 9643.0,
+      "std": 19.3402,
+      "zero_pct": 0.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 14,
+      "feature": "commits_on_files_touched",
+      "family": "F4",
+      "source": "gh_num_commits_on_files_touched",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 67.0,
+      "mean": 255.6257,
+      "p95": 1044.0,
+      "max": 18733.0,
+      "std": 642.9041,
+      "zero_pct": 1.42,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 15,
+      "feature": "sloc",
+      "family": "F4",
+      "source": "gh_sloc",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 1.0,
+      "p50": 12392.0,
+      "mean": 39971.7402,
+      "p95": 157413.4499999996,
+      "max": 1247015.0,
+      "std": 90684.0067,
+      "zero_pct": 0.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 16,
+      "feature": "test_lines_per_kloc",
+      "family": "F3",
+      "source": "gh_test_lines_per_kloc",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 469.736243372,
+      "mean": 698.2519,
+      "p95": 2010.8923986618,
+      "max": 414076.923076923,
+      "std": 1293.9163,
+      "zero_pct": 3.92,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 17,
+      "feature": "test_cases_per_kloc",
+      "family": "F3",
+      "source": "gh_test_cases_per_kloc",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 13.7851295346,
+      "mean": 42.5293,
+      "p95": 169.3886724603,
+      "max": 6192.3076923077,
+      "std": 70.1527,
+      "zero_pct": 17.78,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 18,
+      "feature": "asserts_per_kloc",
+      "family": "F3",
+      "source": "gh_asserts_cases_per_kloc",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 51.3858611025,
+      "mean": 96.8173,
+      "p95": 341.8823168289,
+      "max": 62000.0,
+      "std": 160.5666,
+      "zero_pct": 6.49,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 19,
+      "feature": "team_size",
+      "family": "F5",
+      "source": "gh_team_size",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 15.0,
+      "mean": 22.9977,
+      "p95": 68.0,
+      "max": 248.0,
+      "std": 29.6505,
+      "zero_pct": 0.81,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 20,
+      "feature": "by_core_member",
+      "family": "F5",
+      "source": "gh_by_core_team_member",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 1.0,
+      "mean": 0.8743,
+      "p95": 1.0,
+      "max": 1.0,
+      "std": 0.3315,
+      "zero_pct": 12.57,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 21,
+      "feature": "repo_age",
+      "family": "F4",
+      "source": "gh_repo_age",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 1027.25,
+      "mean": 1271.2731,
+      "p95": 3186.18,
+      "max": 17015.49,
+      "std": 1002.7957,
+      "zero_pct": 0.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 22,
+      "feature": "repo_num_commits",
+      "family": "F4",
+      "source": "gh_repo_num_commits",
+      "dtype": "int64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 2797.0,
+      "mean": 4807.8645,
+      "p95": 15936.0,
+      "max": 44393.0,
+      "std": 6178.8146,
+      "zero_pct": 0.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 23,
+      "feature": "description_complexity",
+      "family": "F2",
+      "source": "gh_description_complexity",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 7.684,
+      "p95": 43.0,
+      "max": 7888.0,
+      "std": 47.0974,
+      "zero_pct": 82.27,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 24,
+      "feature": "is_pr",
+      "family": "F6",
+      "source": "gh_is_pr",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.1798,
+      "p95": 1.0,
+      "max": 1.0,
+      "std": 0.3841,
+      "zero_pct": 82.02,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 25,
+      "feature": "lang",
+      "family": "F4",
+      "source": "gh_lang",
+      "dtype": "string",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": null,
+      "p50": null,
+      "mean": null,
+      "p95": null,
+      "max": null,
+      "std": null,
+      "zero_pct": null,
+      "n_unique": 4.0,
+      "mode": "python",
+      "mode_pct": 36.51
+    },
+    {
+      "#": 26,
+      "feature": "hour_of_day",
+      "family": "F6",
+      "source": "gh_build_started_at",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 15.0,
+      "mean": 13.3179,
+      "p95": 22.0,
+      "max": 23.0,
+      "std": 6.6859,
+      "zero_pct": 3.91,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 27,
+      "feature": "day_of_week",
+      "family": "F6",
+      "source": "gh_build_started_at",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 2.0,
+      "mean": 2.5507,
+      "p95": 6.0,
+      "max": 6.0,
+      "std": 1.8104,
+      "zero_pct": 15.76,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    },
+    {
+      "#": 28,
+      "feature": "test_density_ratio",
+      "family": "F2",
+      "source": "git_diff_test_churn + git_diff_src_churn",
+      "dtype": "float64",
+      "n": 922624,
+      "null_pct": 0.0,
+      "min": 0.0,
+      "p50": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "max": 0.0,
+      "std": 0.0,
+      "zero_pct": 100.0,
+      "n_unique": null,
+      "mode": null,
+      "mode_pct": null
+    }
+  ],
+  "highest_variance": [
+    [
+      "sloc",
+      8223589071.903099
+    ],
+    [
+      "repo_num_commits",
+      38177749.55679159
+    ],
+    [
+      "test_lines_per_kloc",
+      1674219.4237979571
+    ],
+    [
+      "repo_age",
+      1005599.232765538
+    ],
+    [
+      "commits_on_files_touched",
+      413325.6703193044
+    ],
+    [
+      "asserts_per_kloc",
+      25781.62275268352
+    ]
+  ],
+  "lang_distribution": {
+    "python": 336815,
+    "ruby": 272081,
+    "java": 200026,
+    "go": 113702
+  },
+  "traced_builds": [
+    {
+      "tr_build_id": "4053250",
+      "gh_project_name": "GeoNode/geonode",
+      "gh_build_started_at": "2013-01-09 21:43:30",
+      "label": "failure",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=9",
+          "computed": "9",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=9",
+          "computed": "9",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=9",
+          "computed": "9",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=64",
+          "computed": "64",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=10138",
+          "computed": "10,138",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=49.8125863089367",
+          "computed": "49.81",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=1.47958177155257",
+          "computed": "1.48",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=4.63602288419807",
+          "computed": "4.636",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=40",
+          "computed": "40",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=1198.01",
+          "computed": "1,198",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=4797",
+          "computed": "4,797",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=python",
+          "computed": "`python`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2013-01-09 21:43:30",
+          "computed": "21",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2013-01-09 21:43:30",
+          "computed": "2",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "5111784",
+      "gh_project_name": "fog/fog",
+      "gh_build_started_at": "2013-02-27 18:49:12",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=20",
+          "computed": "20",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=103960",
+          "computed": "103,960",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=261.254328587918",
+          "computed": "261.3",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0.182762601000385",
+          "computed": "0.1828",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=2.11619853789919",
+          "computed": "2.116",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=88",
+          "computed": "88",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=1381.48",
+          "computed": "1,381",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=6300",
+          "computed": "6,300",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=ruby",
+          "computed": "`ruby`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2013-02-27 18:49:12",
+          "computed": "18",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2013-02-27 18:49:12",
+          "computed": "2",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "11775246",
+      "gh_project_name": "catarse/catarse",
+      "gh_build_started_at": "2013-09-25 12:16:41",
+      "label": "failure",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=37",
+          "computed": "37",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=6597",
+          "computed": "6,597",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=591.784144308019",
+          "computed": "591.8",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=8.18553888130969",
+          "computed": "8.186",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=95.4979536152797",
+          "computed": "95.5",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=12",
+          "computed": "12",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=1048.94",
+          "computed": "1,049",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=5050",
+          "computed": "5,050",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=ruby",
+          "computed": "`ruby`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2013-09-25 12:16:41",
+          "computed": "12",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2013-09-25 12:16:41",
+          "computed": "2",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "22678659",
+      "gh_project_name": "sparklemotion/nokogiri",
+      "gh_build_started_at": "2014-04-10 09:24:05",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=173",
+          "computed": "173",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=12037",
+          "computed": "12,037",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=17",
+          "computed": "17",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=2095.74",
+          "computed": "2,096",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=3263",
+          "computed": "3,263",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=java",
+          "computed": "`java`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2014-04-10 09:24:05",
+          "computed": "9",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2014-04-10 09:24:05",
+          "computed": "3",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "51047501",
+      "gh_project_name": "Homebrew/homebrew-science",
+      "gh_build_started_at": "2015-02-17 08:02:26",
+      "label": "failure",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=14538",
+          "computed": "14,538",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=59",
+          "computed": "59",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=1030.48",
+          "computed": "1,030",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=2841",
+          "computed": "2,841",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=ruby",
+          "computed": "`ruby`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-02-17 08:02:26",
+          "computed": "8",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-02-17 08:02:26",
+          "computed": "1",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "59372162",
+      "gh_project_name": "Guake/guake",
+      "gh_build_started_at": "2015-04-21 09:46:33",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=2",
+          "computed": "2",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=2",
+          "computed": "2",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=2",
+          "computed": "2",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=2",
+          "computed": "2",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=92",
+          "computed": "92",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=2889",
+          "computed": "2,889",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=7.26895119418484",
+          "computed": "7.269",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=7",
+          "computed": "7",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=2820.3",
+          "computed": "2,820",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=855",
+          "computed": "855",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=python",
+          "computed": "`python`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-04-21 09:46:33",
+          "computed": "9",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-04-21 09:46:33",
+          "computed": "1",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "65344844",
+      "gh_project_name": "gin-gonic/gin",
+      "gh_build_started_at": "2015-06-04 02:51:21",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=2",
+          "computed": "2",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=2",
+          "computed": "2",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=2",
+          "computed": "2",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=33",
+          "computed": "33",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=2531",
+          "computed": "2,531",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=836.033188463058",
+          "computed": "836",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=156.459897273805",
+          "computed": "156.5",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=9",
+          "computed": "9",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=351.13",
+          "computed": "351.1",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=553",
+          "computed": "553",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=go",
+          "computed": "`go`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-06-04 02:51:21",
+          "computed": "2",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-06-04 02:51:21",
+          "computed": "3",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "65637492",
+      "gh_project_name": "cloudfoundry/loggregator",
+      "gh_build_started_at": "2015-06-05 21:56:46",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=207",
+          "computed": "207",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=4898",
+          "computed": "4,898",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=1776.43936300531",
+          "computed": "1,776",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=8.98325847284606",
+          "computed": "8.983",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=27",
+          "computed": "27",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=716.19",
+          "computed": "716.2",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=1573",
+          "computed": "1,573",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=go",
+          "computed": "`go`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-06-05 21:56:46",
+          "computed": "21",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-06-05 21:56:46",
+          "computed": "4",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "82341370",
+      "gh_project_name": "DroidPlanner/Tower",
+      "gh_build_started_at": "2015-09-26 20:32:04",
+      "label": "pass",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=3",
+          "computed": "3",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=3",
+          "computed": "3",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=3",
+          "computed": "3",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=184",
+          "computed": "184",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=23105",
+          "computed": "23,105",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=7",
+          "computed": "7",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=949.32",
+          "computed": "949.3",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=4893",
+          "computed": "4,893",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=java",
+          "computed": "`java`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-09-26 20:32:04",
+          "computed": "20",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-09-26 20:32:04",
+          "computed": "5",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    },
+    {
+      "tr_build_id": "97101058",
+      "gh_project_name": "derekparker/delve",
+      "gh_build_started_at": "2015-12-15 23:14:39",
+      "label": "failure",
+      "rows": [
+        {
+          "#": 1,
+          "feature": "src_churn",
+          "raw": "`git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 2,
+          "feature": "test_churn",
+          "raw": "`git_diff_test_churn`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 3,
+          "feature": "files_added",
+          "raw": "`gh_diff_files_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 4,
+          "feature": "files_deleted",
+          "raw": "`gh_diff_files_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 5,
+          "feature": "files_modified",
+          "raw": "`gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 6,
+          "feature": "files_total",
+          "raw": "`gh_diff_files_added`=0 \u00b7 `gh_diff_files_deleted`=0 \u00b7 `gh_diff_files_modified`=1",
+          "computed": "1",
+          "derivation": "files_added + files_deleted + files_modified"
+        },
+        {
+          "#": 7,
+          "feature": "tests_added",
+          "raw": "`gh_diff_tests_added`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 8,
+          "feature": "tests_deleted",
+          "raw": "`gh_diff_tests_deleted`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 9,
+          "feature": "src_files",
+          "raw": "`gh_diff_src_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 10,
+          "feature": "doc_files",
+          "raw": "`gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 11,
+          "feature": "other_files",
+          "raw": "`gh_diff_other_files`=1",
+          "computed": "1",
+          "derivation": "direct"
+        },
+        {
+          "#": 12,
+          "feature": "is_docs_only",
+          "raw": "`gh_diff_src_files`=0 \u00b7 `gh_diff_doc_files`=0",
+          "computed": "0",
+          "derivation": "doc_files > 0 AND src_files == 0"
+        },
+        {
+          "#": 13,
+          "feature": "num_commits",
+          "raw": "`git_num_all_built_commits`=1",
+          "computed": "1",
+          "derivation": "direct (git_num_all_built_commits \u2014 DL-015)"
+        },
+        {
+          "#": 14,
+          "feature": "commits_on_files_touched",
+          "raw": "`gh_num_commits_on_files_touched`=52",
+          "computed": "52",
+          "derivation": "direct"
+        },
+        {
+          "#": 15,
+          "feature": "sloc",
+          "raw": "`gh_sloc`=105766",
+          "computed": "105,766",
+          "derivation": "direct"
+        },
+        {
+          "#": 16,
+          "feature": "test_lines_per_kloc",
+          "raw": "`gh_test_lines_per_kloc`=21.8406671331052",
+          "computed": "21.84",
+          "derivation": "direct"
+        },
+        {
+          "#": 17,
+          "feature": "test_cases_per_kloc",
+          "raw": "`gh_test_cases_per_kloc`=0",
+          "computed": "0",
+          "derivation": "direct"
+        },
+        {
+          "#": 18,
+          "feature": "asserts_per_kloc",
+          "raw": "`gh_asserts_cases_per_kloc`=3.50774350925628",
+          "computed": "3.508",
+          "derivation": "direct"
+        },
+        {
+          "#": 19,
+          "feature": "team_size",
+          "raw": "`gh_team_size`=4",
+          "computed": "4",
+          "derivation": "direct"
+        },
+        {
+          "#": 20,
+          "feature": "by_core_member",
+          "raw": "`gh_by_core_team_member`=TRUE",
+          "computed": "1",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 21,
+          "feature": "repo_age",
+          "raw": "`gh_repo_age`=590.75",
+          "computed": "590.8",
+          "derivation": "direct"
+        },
+        {
+          "#": 22,
+          "feature": "repo_num_commits",
+          "raw": "`gh_repo_num_commits`=787",
+          "computed": "787",
+          "derivation": "direct"
+        },
+        {
+          "#": 23,
+          "feature": "description_complexity",
+          "raw": "`gh_description_complexity`=NA",
+          "computed": "0",
+          "derivation": "direct; missing (non-PR) -> 0"
+        },
+        {
+          "#": 24,
+          "feature": "is_pr",
+          "raw": "`gh_is_pr`=FALSE",
+          "computed": "0",
+          "derivation": "true/false -> 1/0"
+        },
+        {
+          "#": 25,
+          "feature": "lang",
+          "raw": "`gh_lang`=go",
+          "computed": "`go`",
+          "derivation": "direct"
+        },
+        {
+          "#": 26,
+          "feature": "hour_of_day",
+          "raw": "`gh_build_started_at`=2015-12-15 23:14:39",
+          "computed": "23",
+          "derivation": "hour of gh_build_started_at (UTC)"
+        },
+        {
+          "#": 27,
+          "feature": "day_of_week",
+          "raw": "`gh_build_started_at`=2015-12-15 23:14:39",
+          "computed": "1",
+          "derivation": "weekday of gh_build_started_at (Mon=0)"
+        },
+        {
+          "#": 28,
+          "feature": "test_density_ratio",
+          "raw": "`git_diff_test_churn`=0 \u00b7 `git_diff_src_churn`=0",
+          "computed": "0",
+          "derivation": "test_churn / (src_churn + 1)"
+        }
+      ]
+    }
+  ]
+}
