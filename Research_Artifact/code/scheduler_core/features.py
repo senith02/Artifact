@@ -484,11 +484,23 @@ def load_builds(
     builds = builds.reset_index()
 
     if analytic_only:
-        cls = builds[data.LABEL_COL].map(data.classify_status)
-        builds = builds.loc[cls.isin(["failure", "pass"])]
-        started = parse_started_at(builds["gh_build_started_at"])
-        builds = builds.loc[started.notna()]
+        builds = builds.loc[analytic_mask(builds)]
     return builds.reset_index(drop=True)
+
+
+def analytic_mask(builds: pd.DataFrame) -> pd.Series:
+    """Boolean mask selecting the **analytic set** at build grain.
+
+    The P0-T2 funnel's build-level filters, in one place so that every consumer
+    (the feature matrix, the split maker) selects an identical population:
+    a recognised pass/failure label (drops ``canceled``, missing and unexpected
+    statuses) and a parseable ``gh_build_started_at``. Measured size on this
+    release: 922,624 builds (``results/p0/data_profile.md``).
+    """
+    labelled = builds[data.LABEL_COL].map(data.classify_status).isin(
+        ["failure", "pass"])
+    timed = parse_started_at(builds["gh_build_started_at"]).notna()
+    return labelled & timed
 
 
 def extract(

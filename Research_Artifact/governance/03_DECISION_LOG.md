@@ -506,6 +506,29 @@ edit or delete past entries (supersede them with a new entry instead).
   of them either leaves the treatment unchanged or **weakens** it. Nothing here strengthens the SE arm
   relative to the duration control, so none of it can bias RQ2 toward a positive answer.
 
+- **Correction (appended 2026-08-15, author-directed; original text above left unedited, R4
+  append-only).** The Rationale's closing sentence — that none of these decisions "can bias RQ2 toward a
+  positive answer" — is **too strong as a blanket claim**, and is withdrawn as stated. It holds for the
+  two **drops** (change entropy, fix-keyword): removing a predictor can only weaken the SE arm. It does
+  **not** follow automatically for the two **proxies**, because a proxy is not merely a weaker version of
+  the thing it replaces — it can carry different information:
+  - The developer-experience proxy leans on `commits_on_files_touched` (#14), which sits in **F4, the
+    project-identity–adjacent family** (feature_spec §Families). If F4 gains, part of that gain may be
+    project identity rather than developer experience — an **inflation** risk on that family, not a
+    suppression, and precisely the confound §A1.9's per-project control (④b) exists to expose.
+  - The subsystems/directories proxy (`files_total`, file-type mix) sits in F1/F2 and measures breadth of
+    change rather than architectural spread; whether it under- or over-states the intended construct is
+    not established here.
+  The correct statement is therefore the **specific** one, retained per-item for later evaluation rather
+  than collapsed into a single direction: *entropy and fix-keyword are absent, so the SE arm is a lower
+  bound on those constructs; the two proxies measure something adjacent to, not merely weaker than, the
+  §3.5 constructs, and F4's proxy carries a project-identity confound that P1-T6's variance decomposition
+  and strategy ④b must be read against.* No measured value, feature, or family assignment changes; this
+  corrects an over-general claim in the reasoning only. The same over-generalisation appears in
+  **DL-016**'s Rationale ("every one of these gaps can only *suppress* an SE finding") — there it is
+  accurate as written, because DL-016 concerns **empty and near-empty columns**, which genuinely can only
+  remove signal; it is not extended to DL-015's proxies.
+
 - **Consequences.**
   - `code/scheduler_core/features.py` + `code/tests/test_features.py` implement and assert all four.
   - `results/p1/feature_audit.md` reports the resulting null/zero rates per feature so the proxies'
@@ -591,4 +614,60 @@ edit or delete past entries (supersede them with a new entry instead).
   - **P5-T3/P5-T4** must carry Decision 3 in both the results discussion and the threats chapter.
   - No change to the RQs, the family partition, the eval protocol, or any P0 output.
 
-<!-- Append DL-017, DL-018, … below as the project progresses. -->
+### DL-017 — The frozen split is heterogeneous by construction: base rate and duration differ across splits
+- **Date:** 2026-08-15
+- **Status:** Accepted (measured finding recorded at the P1-T3 gate; **no protocol deviation** —
+  `eval_protocol.md` §2 is followed exactly, and the split is **not** adjusted in response)
+- **Spec section affected:** none normatively. Binds the *interpretation* of §5 (calibration metrics),
+  `context/duration_control_spec.md` §5 (primary-form selection), and P1-T4/P1-T5/P3-T1.
+
+- **Context — measured by `python scripts/make_splits.py` (R1), manifest `results/p1/splits.json`.**
+  The frozen split covers **922,624 analytic builds across 948 projects**, assigned
+  train 628 / calibration 150 / test 170 projects (69.94% / 15.03% / 15.03% of builds — within
+  0.06 pp of the §2 targets). Structurally it is exactly what §2 asks for. Distributionally it is not
+  uniform, and could not be:
+  | Split | Projects | Builds | Failure rate | Duration p95 (s) | Duration mean (s) |
+  | :-- | --: | --: | --: | --: | --: |
+  | train | 628 | 645,244 | 24.354% | 5,725 | 1,442.77 |
+  | calibration | 150 | 138,687 | **28.549%** | **11,638** | **2,558.04** |
+  | test | 170 | 138,693 | 25.036% | 5,643 | 1,848.01 |
+
+- **Finding 1 — failure-rate heterogeneity (4.20 pp spread).** The calibration split's base rate
+  (28.55%) exceeds both train (24.35%) and test (25.04%). Because §5 fits the probability calibrator and
+  selects the operating threshold **on calibration**, both are tuned at a prevalence the test population
+  does not share. Calibrated probabilities transfer across a base-rate shift only under assumptions that
+  do not hold automatically.
+- **Finding 2 — duration heterogeneity.** Calibration carries a markedly heavier duration tail
+  (p95 = 11,638s versus ~5,700s for train and test; mean 2,558s versus 1,443s / 1,848s).
+  `duration_control_spec.md` §5 selects the **primary `d̂` form** by calibration-split log1p MAE — i.e.
+  the control's form is chosen on a duration distribution unrepresentative of the test set. *(These are
+  descriptive statistics only — §A1.2 role 1, accounting; no value here reaches `decide()`.)*
+- **Finding 3 — the three splits' time ranges overlap end-to-end** (all span 2011-04 → 2016-08). This is
+  by design: the split is project-disjoint, **not** time-disjoint (§2, invariant 4).
+
+- **Decision.** **Record; do not re-split.** Specifically:
+  1. **The split is not adjusted, reseeded, or rebalanced.** Searching seeds for a distribution-matched
+     split would optimise the split against properties of the data (base rate, duration) that later
+     results depend on — a silent researcher degree of freedom, and the exact thing §2's fixed
+     seed-and-greedy rule exists to prevent. The split stays frozen at digest
+     `3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde`.
+  2. **P1-T5 must report calibration metrics against Finding 1** — Brier/ECE on test are read knowing the
+     calibrator was fitted at a higher base rate; the prevalence shift is stated beside them.
+  3. **P1-T4 must report Finding 2 beside the chosen primary `d̂` form**, since the selection criterion
+     is evaluated on the unrepresentative split. This does **not** change the selection rule, which was
+     pinned in P1-T1 before any data was seen.
+  4. **Finding 3 is recorded as a measurement only.** It is the empirical condition DL-014 reasons
+     about, and DL-014 remains **Proposed/unresolved** by author direction — nothing here resolves,
+     reinterprets, or implements it.
+
+- **Rationale.** Project-disjoint splitting and distribution matching are in direct tension: per-project
+  failure rates span roughly two orders of magnitude (`results/p0/data_profile.md` top-20 table: 1.33%
+  for `ros/rosdistro` to 98.9% for `apache/sling`), so any project-disjoint split of 948 projects is
+  heterogeneous. §2 chose project-disjointness because leakage is the graver threat; the price is this
+  heterogeneity, and the honest handling is to declare it before the models are fitted rather than to
+  discover it when a metric disappoints.
+- **Consequences.** `results/p1/splits_summary.md` §"Methodological threats"; P1-T4 §Finding 2,
+  P1-T5 §Finding 1; threats chapter (P5-T4). No change to §2, the split, the seed, the feature contract,
+  or any earlier decision.
+
+<!-- Append DL-018, DL-019, … below as the project progresses. -->
