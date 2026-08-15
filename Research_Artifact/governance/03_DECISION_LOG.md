@@ -370,4 +370,80 @@ edit or delete past entries (supersede them with a new entry instead).
     "④ leads on raw carbon by construction; the live question is TTFF at matched carbon." No magnitude is
     claimed until P3-T3 runs.
 
-<!-- Append DL-014, DL-015, … below as the project progresses. -->
+### DL-014 — What A1.1's information rule binds: fitted parameters vs. causal within-project state
+- **Date:** 2026-08-12
+- **Status:** **Proposed — awaiting author confirmation at the P1-T1 gate.** `context/duration_control_spec.md`
+  is written against this reading and names this entry inline wherever it relies on it. If the author
+  rejects it, the spec's §3 and §5 change and strategy ④b must be redefined (see Consequences).
+- **Spec section affected:** `results/p0/eval_protocol.md` §A1.1 (information-availability clause) —
+  interpretation, not amendment. Downstream: §A1.6 (④b), §A1.9 (project-identity control),
+  `planning/development_plan.md` P1-T1/P1-T4.
+
+- **Context — an internal tension found by the P1-T1 clause-by-clause cross-check (plan S4).**
+  A1.1's hard rule reads: *"`d̂(b)` … may depend only on (a) the commit-time features of `b`, and
+  (b) builds in **train-split projects** with `gh_build_started_at < t_b`. For a build in its own
+  project's history, only strictly-earlier builds of that project may contribute. Nothing from the
+  calibration or test projects, and nothing at or after `t_b`, may enter the fit."*
+  Read as one undifferentiated rule, it is **self-contradictory in application** and makes two other
+  A1 clauses unsatisfiable:
+  1. Sentence 2 explicitly contemplates a build's **own project history** contributing, while sentence 3
+     forbids calibration/test projects from entering *the fit*. Both can only be true if "the fit" and
+     "the project's own earlier builds" are different mechanisms.
+  2. Under the strict reading, ④b — the **per-project prior** — has no project history to read for any
+     calibration or test project, so it degenerates to the language prior. §2's use-discipline puts the
+     P3 replay on **test projects only**, so ④b would be a two-level language prior throughout the
+     evaluation. That defeats its declared purpose: §A1.9 makes ④b **mandatory** precisely because
+     per-project failure rates span ~two orders of magnitude and an apparent SE effect could be project
+     identity in disguise. A language prior over 2 languages cannot control for project identity.
+  3. Conversely, clause (b) taken literally per scored build would require the **fitted** control (the
+     ④a regressor, and the language/global priors) to be re-estimated at every distinct `t_b` against a
+     receding cut-off. With project-disjoint splits whose time ranges overlap end-to-end, no single
+     global cut-off leaves a usable training set.
+
+- **Decision.** A1.1's rule is read as binding **two different mechanisms differently**. Both readings
+  below are strictly *decision-time causal*; neither lets the scored build's own outcome, or anything
+  about its future, reach `d̂`.
+  1. **Fitted parameters** — the ④a regressor's weights and hyperparameters, and the **language** and
+     **global** fallback priors — are estimated from **train-split projects only**, over the whole
+     train period, **without** a per-scored-build temporal cut-off. Justification: the splits are
+     project-disjoint (§2), so no train build carries information about the scored build, its project,
+     or its outcome; what a train build can leak is only generic "how long do builds of this kind take".
+  2. **Within-project state** — ④b's rolling prior, and any per-project history statistic — is
+     **strictly causal and is permitted for calibration and test projects**: it may read only builds of
+     that same project with `gh_build_started_at < t_b`, and it is *online state*, not a fitted
+     parameter. This is information a deployed scheduler genuinely holds at commit time (the repository's
+     own build history to date), which is the standard A1.1 is trying to enforce.
+  3. **The A1.1(ii) temporal leakage test attaches to mechanism 2**, where a cut-off can actually bind:
+     injecting later builds of the *same project* into the history must change `d̂`. For mechanism 1 the
+     binding test is the split test — injecting a calibration/test project into the fit must be rejected.
+  4. **The residual is declared, not hidden.** Under mechanism 1 a train build that is *later in
+     wall-clock* than a scored calibration/test build can inform the fitted control. This is recorded as
+     a threat to validity in `duration_control_spec.md` §8 and must appear in the threats chapter.
+
+- **Rationale.**
+  - It is the only reading under which A1.1, A1.6 and A1.9 are simultaneously satisfiable, and it is the
+    reading sentence 2 of A1.1 already implies.
+  - **The deviation's direction is conservative for the study's own hypothesis.** Every allowance here
+    makes the **null** (strategy ④, the duration control) *stronger*, never the treatment (⑤). A stronger
+    null makes RQ2 **harder** to answer positively, so this reading cannot manufacture a positive SE
+    finding — it can only suppress one. That is the correct direction for a deviation to lean in a
+    value-of-information study.
+  - The alternative — refitting per timestamp — is not merely expensive; with overlapping split time
+    ranges it has no admissible training set, so it is not an option that was traded away for cost.
+
+- **Consequences.**
+  - `context/duration_control_spec.md` (P1-T1) defines `d̂` in two mechanisms accordingly, and P1-T4
+    implements a **split test** (mechanism 1) and a **temporal test** (mechanism 2) rather than one
+    combined test. A1.1's three required leakage tests are all still implemented; this entry only
+    determines *which mechanism each one binds*.
+  - ④b becomes a genuine per-project control on test projects, as §A1.9 requires; ④a remains fitted on
+    train only and is therefore the weaker-adapting of the two forms on held-out projects — an expected
+    asymmetry, not a defect, and the reason A1.1 requires **both** forms be reported.
+  - **If the author rejects this reading:** ④b must be redefined (the honest options are (a) drop it and
+    lose the §A1.9 project-identity control, or (b) re-derive the splits so that each project's early
+    history sits in train and its later builds in test — which breaks §2's project-disjointness,
+    invariant 4, and needs its own DL entry). Either is a larger change than this one; that asymmetry is
+    itself part of the argument for the reading above.
+  - No numbers are produced or implied by this entry (R1). Nothing is refitted; no P0 output changes.
+
+<!-- Append DL-015, DL-016, … below as the project progresses. -->
