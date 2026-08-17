@@ -1,0 +1,97 @@
+reading C:\Users\senit\Desktop\Projects\Research\Artifact\Dataset\19314170\final-2017-01-25.csv\final-2017-01-25.csv …
+  analytic builds: 922,624 across 948 projects (98s)
+  frozen split verified: 948 projects
+  test split closed: dropped 138,693 builds / 170 projects — not read again in this task
+
+fitting ④a on 645,244 train builds (40 candidates per family, seed 42) …
+    xgboost  1/40  val MAE 0.800233  best 0.800233
+    xgboost  2/40  val MAE 0.876577  best 0.800233
+    xgboost  3/40  val MAE 0.814947  best 0.800233
+    xgboost  4/40  val MAE 0.873801  best 0.800233
+    xgboost  5/40  val MAE 0.879083  best 0.800233
+    xgboost  6/40  val MAE 0.966052  best 0.800233
+    xgboost  7/40  val MAE 0.751650  best 0.751650
+    xgboost  8/40  val MAE 0.880644  best 0.751650
+    xgboost  9/40  val MAE 0.762333  best 0.751650
+    xgboost 10/40  val MAE 0.781806  best 0.751650
+    xgboost 11/40  val MAE 0.953964  best 0.751650
+    xgboost 12/40  val MAE 0.811714  best 0.751650
+    xgboost 13/40  val MAE 0.788038  best 0.751650
+    xgboost 14/40  val MAE 0.752851  best 0.751650
+    xgboost 15/40  val MAE 0.854003  best 0.751650
+    xgboost 16/40  val MAE 0.827839  best 0.751650
+    xgboost 17/40  val MAE 0.873784  best 0.751650
+    xgboost 18/40  val MAE 0.819099  best 0.751650
+    xgboost 19/40  val MAE 0.757313  best 0.751650
+    xgboost 20/40  val MAE 0.889143  best 0.751650
+    xgboost 21/40  val MAE 0.882600  best 0.751650
+    xgboost 22/40  val MAE 0.775195  best 0.751650
+    xgboost 23/40  val MAE 0.834177  best 0.751650
+    xgboost 24/40  val MAE 0.812147  best 0.751650
+    xgboost 25/40  val MAE 0.894555  best 0.751650
+    xgboost 26/40  val MAE 0.797555  best 0.751650
+    xgboost 27/40  val MAE 0.749581  best 0.749581
+    xgboost 28/40  val MAE 0.864938  best 0.749581
+    xgboost 29/40  val MAE 0.831557  best 0.749581
+    xgboost 30/40  val MAE 0.833797  best 0.749581
+    xgboost 31/40  val MAE 0.895842  best 0.749581
+    xgboost 32/40  val MAE 0.860164  best 0.749581
+    xgboost 33/40  val MAE 0.896670  best 0.749581
+    xgboost 34/40  val MAE 0.847973  best 0.749581
+    xgboost 35/40  val MAE 0.800789  best 0.749581
+    xgboost 36/40  val MAE 0.819465  best 0.749581
+    xgboost 37/40  val MAE 0.788970  best 0.749581
+    xgboost 38/40  val MAE 0.746774  best 0.746774
+    xgboost 39/40  val MAE 0.953531  best 0.746774
+    xgboost 40/40  val MAE 0.877291  best 0.746774
+    ridge    1/40  val MAE 1.183314  best 1.183314
+    ridge    2/40  val MAE 1.183346  best 1.183314
+    ridge    3/40  val MAE 1.183242  best 1.183242
+    ridge    4/40  val MAE 1.183335  best 1.183242
+    ridge    5/40  val MAE 1.183346  best 1.183242
+    ridge    6/40  val MAE 1.182822  best 1.182822
+    ridge    7/40  val MAE 1.183319  best 1.182822
+    ridge    8/40  val MAE 1.183308  best 1.182822
+    ridge    9/40  val MAE 1.183346  best 1.182822
+    ridge   10/40  val MAE 1.183346  best 1.182822
+    ridge   11/40  val MAE 1.183346  best 1.182822
+    ridge   12/40  val MAE 1.183079  best 1.182822
+    ridge   13/40  val MAE 1.183341  best 1.182822
+    ridge   14/40  val MAE 1.183282  best 1.182822
+    ridge   15/40  val MAE 1.183346  best 1.182822
+    ridge   16/40  val MAE 1.183346  best 1.182822
+    ridge   17/40  val MAE 1.183344  best 1.182822
+    ridge   18/40  val MAE 1.183346  best 1.182822
+    ridge   19/40  val MAE 1.183278  best 1.182822
+    ridge   20/40  val MAE 1.183341  best 1.182822
+    ridge   21/40  val MAE 1.183320  best 1.182822
+    ridge   22/40  val MAE 1.183346  best 1.182822
+    ridge   23/40  val MAE 1.182857  best 1.182822
+    ridge   24/40  val MAE 1.183178  best 1.182822
+    ridge   25/40  val MAE 1.183312  best 1.182822
+    ridge   26/40  val MAE 1.183346  best 1.182822
+    ridge   27/40  val MAE 1.183346  best 1.182822
+    ridge   28/40  val MAE 1.183346  best 1.182822
+    ridge   29/40  val MAE 1.183346  best 1.182822
+    ridge   30/40  val MAE 1.183337  best 1.182822
+    ridge   31/40  val MAE 1.183324  best 1.182822
+    ridge   32/40  val MAE 1.182878  best 1.182822
+    ridge   33/40  val MAE 1.183346  best 1.182822
+    ridge   34/40  val MAE 1.183346  best 1.182822
+    ridge   35/40  val MAE 1.183345  best 1.182822
+    ridge   36/40  val MAE 1.183346  best 1.182822
+    ridge   37/40  val MAE 1.183346  best 1.182822
+    ridge   38/40  val MAE 1.183345  best 1.182822
+    ridge   39/40  val MAE 1.183346  best 1.182822
+    ridge   40/40  val MAE 1.183338  best 1.182822
+  fit_id 1088d5546f47ff12  (934s elapsed)
+
+building causal history for 138,687 calibration builds …
+  causality guard: PASS
+
+  ④a log1p MAE 1.178319 · ④b log1p MAE 0.600958 → primary = 4b
+
+sensitivities …
+  persisted duration_estimator.joblib; round-trip identical: True
+
+wrote results/p1/duration_control.{md,json} in 948.4s
