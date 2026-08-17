@@ -372,9 +372,12 @@ edit or delete past entries (supersede them with a new entry instead).
 
 ### DL-014 — What A1.1's information rule binds: fitted parameters vs. causal within-project state
 - **Date:** 2026-08-12
-- **Status:** **Proposed — awaiting author confirmation at the P1-T1 gate.** `context/duration_control_spec.md`
-  is written against this reading and names this entry inline wherever it relies on it. If the author
-  rejects it, the spec's §3 and §5 change and strategy ④b must be redefined (see Consequences).
+- **Status:** **Accepted / Resolved — author confirmation recorded 2026-08-17**, *with one modification:
+  the conservative-direction claim in §Rationale bullet 2 is **struck** (see §Resolution at the end of
+  this entry, which governs). The two-mechanism reading itself is accepted as written.*
+  *(Originally: Proposed — awaiting author confirmation at the P1-T1 gate.)*
+  `context/duration_control_spec.md` is written against this reading and names this entry inline wherever
+  it relies on it.
 - **Spec section affected:** `results/p0/eval_protocol.md` §A1.1 (information-availability clause) —
   interpretation, not amendment. Downstream: §A1.6 (④b), §A1.9 (project-identity control),
   `planning/development_plan.md` P1-T1/P1-T4.
@@ -423,11 +426,14 @@ edit or delete past entries (supersede them with a new entry instead).
 - **Rationale.**
   - It is the only reading under which A1.1, A1.6 and A1.9 are simultaneously satisfiable, and it is the
     reading sentence 2 of A1.1 already implies.
-  - **The deviation's direction is conservative for the study's own hypothesis.** Every allowance here
+  - ~~**The deviation's direction is conservative for the study's own hypothesis.** Every allowance here
     makes the **null** (strategy ④, the duration control) *stronger*, never the treatment (⑤). A stronger
     null makes RQ2 **harder** to answer positively, so this reading cannot manufacture a positive SE
     finding — it can only suppress one. That is the correct direction for a deviation to lean in a
-    value-of-information study.
+    value-of-information study.~~
+    **STRUCK by the author at the 2026-08-17 resolution.** No directional-bias claim is made or relied
+    upon. The bias direction of this reading is **not established**, and nothing in the study may assert
+    that it "strengthens the null" or "guarantees a conservative bias". See §Resolution, which governs.
   - The alternative — refitting per timestamp — is not merely expensive; with overlapping split time
     ranges it has no admissible training set, so it is not an option that was traded away for cost.
 
@@ -445,6 +451,32 @@ edit or delete past entries (supersede them with a new entry instead).
     invariant 4, and needs its own DL entry). Either is a larger change than this one; that asymmetry is
     itself part of the argument for the reading above.
   - No numbers are produced or implied by this entry (R1). Nothing is refitted; no P0 output changes.
+
+- **Resolution — author decision, 2026-08-17 (this subsection governs).** The two-mechanism reading is
+  **accepted** and DL-014 moves to Resolved. The author's decision, as given:
+  1. **Fitted parameters** — the ④a XGBoost/Ridge regressor (weights *and* hyperparameters), the
+     **language** prior and the **global** prior — are fitted from **TRAIN-split projects only**.
+  2. **④b** may use **strictly causal history from the scored project's own earlier builds**, and this is
+     permitted **including for calibration and test projects**.
+  3. The admissible history window is **only** `gh_build_started_at < t_b`. The current build, any future
+     build, and any **timestamp-tied** build (`gh_build_started_at == t_b`) are **forbidden**.
+  4. **Framing.** This is to be described as the **intended deployment information regime** — the
+     information a deployed scheduler genuinely holds at commit time, namely its own repository's build
+     history to date. It is **not** to be described as training on test projects, and it is not a
+     concession or a relaxation: no parameter is estimated from any held-out project.
+  5. **No directional-bias claim.** It must **not** be asserted anywhere — decision log, specs, results,
+     or dissertation — that this reading automatically strengthens the null or guarantees a conservative
+     bias. §Rationale bullet 2 is struck accordingly. The **residual asymmetry of §4 remains a declared
+     threat of undetermined direction**: under mechanism 1 a train build later in wall-clock than a scored
+     held-out build can inform the fitted control, and the effect of that on RQ2 is **not measured and not
+     assumed**. It is reported as an open threat in `duration_control_spec.md` §8 and the threats chapter.
+  6. The "if the author rejects this reading" branch in §Consequences is now **moot** and retained only as
+     history.
+- **Consequence of the resolution.** `context/duration_control_spec.md` is updated in the same action to
+  (a) drop its "depends on a proposed DL entry" warning, and (b) remove the two conservative-direction
+  claims it inherited from the struck rationale (§3.1 final bullet, §8 threat 2). No other clause of the
+  spec changes: §2 I1–I3, §3.1/§3.2, §4, §5, §6 and the T1–T5 test contract were already written against
+  exactly the accepted reading. P1-T4 proceeds. Still no numbers (R1).
 
 ### DL-015 — Feature-construction decisions: the `num_commits` source, four unbuildable §3.5 features, the missing-value policy, and a strengthened blocklist
 - **Date:** 2026-08-15

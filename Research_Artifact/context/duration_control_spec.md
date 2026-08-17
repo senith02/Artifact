@@ -15,12 +15,16 @@ rather than a literal clause, it names **DL-014** inline. Nothing here amends A1
 > is an outcome of the very execution the scheduler is deciding when to start, and any path that lets it
 > reach `d̂` is a leakage defect, not a modelling choice** (§A1.2, `feature_spec.md` §Duration, DL-012 §2).
 
-> ### ⚠ This document depends on a *proposed* decision-log entry
+> ### The decision-log entry this document depends on is **resolved**
 >
-> **DL-014** (proposed 2026-08-12, awaiting author confirmation at the P1-T1 gate) resolves an internal
-> tension in A1.1's information-availability clause by binding **fitted parameters** and **within-project
-> online state** differently. §3, §4.1 and §7 are written against it and say so. If DL-014 is rejected,
-> strategy ④b must be redefined and those sections change — see DL-014 §Consequences.
+> **DL-014** — proposed 2026-08-12, **Accepted / Resolved by author decision 2026-08-17** — resolves an
+> internal tension in A1.1's information-availability clause by binding **fitted parameters** and
+> **within-project online state** differently. §3, §4.1 and §7 are written against it and say so.
+> The accepted reading is the **intended deployment information regime**: fitted parameters come from
+> **train projects only**, while a project's own strictly-earlier build history (`< t_b`, ties excluded)
+> is online state a deployed scheduler genuinely holds and is therefore available on calibration and test
+> projects too. This is *not* training on held-out projects — no parameter is estimated from them.
+> **No claim is made about the direction of any residual bias** (DL-014 §Resolution 5).
 
 ---
 
@@ -111,8 +115,8 @@ Two mechanisms, bound differently — this is the substance of **DL-014**.
   procedure the frozen protocol §3 fixes for the failure model, reused unchanged so the control and the
   treatment are tuned by the same machinery (§A1.4 "same tuning procedure").
 - The residual — a train build *later in wall-clock* than a scored calibration/test build may inform the
-  fit — is a **declared threat** (§8), and it leans conservative: it strengthens the **null**, making
-  RQ2 harder to answer positively (DL-014 §Rationale).
+  fit — is a **declared threat of undetermined direction** (§8). Its effect on RQ2 is **not measured and
+  not assumed**; no claim that it strengthens the null is made (DL-014 §Resolution 5).
 
 ### 3.2 Mechanism 2 — within-project online state (④b's prior; the cold-start ladder's first rung)
 
@@ -284,9 +288,10 @@ is not a passing claim (R1, R6).
    *"beyond **predictable** duration"* (§A1.1, DL-012 §Consequences). §A1.10's oracle-duration arm —
    labelled *"oracle — unrealizable in deployment"* — exists to bound how much of any ⑤ margin is
    estimator error rather than SE signal.
-2. **Fit-time wall-clock asymmetry** (DL-014 §4). Under mechanism 1, train builds later in wall-clock
-   than a scored held-out build may inform the fitted control. Direction: it **strengthens the null**,
-   so it cannot manufacture a positive SE result.
+2. **Fit-time wall-clock asymmetry** (DL-014 §4, §Resolution 5). Under mechanism 1, train builds later in
+   wall-clock than a scored held-out build may inform the fitted control. **The direction of this bias is
+   undetermined**: it is neither measured nor assumed, and no claim that it strengthens the null or is
+   otherwise conservative may be made on its basis. It is carried as an open threat.
 3. **Cold-start coarsening.** Early builds of a project fall to the language or global rung, where `d̂`
    is markedly less informative; §6.3(3) reports every headline number with and without them.
 4. **④a absorbs SE-through-duration by design** (§A1.13). Because ④a is fitted on the same 28 features,
