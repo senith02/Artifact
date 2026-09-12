@@ -1,0 +1,166 @@
+reading C:\Users\senit\Desktop\Projects\Research\Artifact\Dataset\19314170\final-2017-01-25.csv\final-2017-01-25.csv …
+  analytic builds: 922,624 across 948 projects (104s)
+  test split closed: 138,693 builds / 170 projects dropped unread
+
+attaching d̂ from the frozen control (fit id 1088d5546f47ff12, primary form 4b) …
+  train 645,244 builds (24.354% failure) · calibration 138,687 builds (28.549% failure)
+
+run fingerprint 18fa5af3ff73ca57 · per-arm checkpoints under code\artifacts\checkpoints
+
+[   141s] training xgboost:control (1 feature(s), 20 candidates) …
+    xgboost        control   1/20  val PR-AUC 0.253717  best 0.253717
+    xgboost        control   2/20  val PR-AUC 0.255414  best 0.255414
+    xgboost        control   3/20  val PR-AUC 0.268481  best 0.268481
+    xgboost        control   4/20  val PR-AUC 0.250436  best 0.268481
+    xgboost        control   5/20  val PR-AUC 0.253854  best 0.268481
+    xgboost        control   6/20  val PR-AUC 0.251278  best 0.268481
+    xgboost        control   7/20  val PR-AUC 0.250622  best 0.268481
+    xgboost        control   8/20  val PR-AUC 0.252566  best 0.268481
+    xgboost        control   9/20  val PR-AUC 0.252474  best 0.268481
+    xgboost        control  10/20  val PR-AUC 0.254644  best 0.268481
+    xgboost        control  11/20  val PR-AUC 0.252043  best 0.268481
+    xgboost        control  12/20  val PR-AUC 0.267124  best 0.268481
+    xgboost        control  13/20  val PR-AUC 0.254229  best 0.268481
+    xgboost        control  14/20  val PR-AUC 0.253614  best 0.268481
+    xgboost        control  15/20  val PR-AUC 0.251314  best 0.268481
+    xgboost        control  16/20  val PR-AUC 0.254464  best 0.268481
+    xgboost        control  17/20  val PR-AUC 0.268844  best 0.268844
+    xgboost        control  18/20  val PR-AUC 0.252672  best 0.268844
+    xgboost        control  19/20  val PR-AUC 0.259119  best 0.268844
+    xgboost        control  20/20  val PR-AUC 0.252664  best 0.268844
+  calibrating xgboost:control on 138,687 calibration builds …
+    xgboost:control          isotonic  Brier 0.192169  ECE 0.000000
+    xgboost:control          sigmoid   Brier 0.195312  ECE 0.027702
+  xgboost:control: PR-AUC 0.390357 · ROC-AUC 0.650712 · Brier 0.192169 · ECE 0.000000 · tau 0.266307 · round-trip PASS
+
+[   237s] training logreg:control (1 feature(s), 20 candidates) …
+    logreg         control   1/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   2/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   3/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   4/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   5/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   6/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   7/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   8/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control   9/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  10/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  11/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  12/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  13/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  14/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  15/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  16/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  17/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  18/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  19/20  val PR-AUC 0.245316  best 0.245316
+    logreg         control  20/20  val PR-AUC 0.245316  best 0.245316
+  calibrating logreg:control on 138,687 calibration builds …
+    logreg:control           isotonic  Brier 0.191529  ECE 0.000000
+    logreg:control           sigmoid   Brier 0.194581  ECE 0.020446
+  logreg:control: PR-AUC 0.388304 · ROC-AUC 0.654076 · Brier 0.191529 · ECE 0.000000 · tau 0.247358 · round-trip PASS
+
+[   247s] training random_forest:control (1 feature(s), 20 candidates) …
+    random_forest  control   1/20  val PR-AUC 0.243590  best 0.243590
+    random_forest  control   2/20  val PR-AUC 0.268044  best 0.268044
+    random_forest  control   3/20  val PR-AUC 0.242329  best 0.268044
+    random_forest  control   4/20  val PR-AUC 0.246174  best 0.268044
+    random_forest  control   5/20  val PR-AUC 0.251092  best 0.268044
+    random_forest  control   6/20  val PR-AUC 0.268169  best 0.268169
+    random_forest  control   7/20  val PR-AUC 0.258591  best 0.268169
+    random_forest  control   8/20  val PR-AUC 0.260531  best 0.268169
+    random_forest  control   9/20  val PR-AUC 0.242299  best 0.268169
+    random_forest  control  10/20  val PR-AUC 0.244269  best 0.268169
+    random_forest  control  11/20  val PR-AUC 0.250623  best 0.268169
+    random_forest  control  12/20  val PR-AUC 0.260505  best 0.268169
+    random_forest  control  13/20  val PR-AUC 0.243127  best 0.268169
+    random_forest  control  14/20  val PR-AUC 0.241244  best 0.268169
+    random_forest  control  15/20  val PR-AUC 0.267720  best 0.268169
+    random_forest  control  16/20  val PR-AUC 0.240880  best 0.268169
+    random_forest  control  17/20  val PR-AUC 0.243134  best 0.268169
+    random_forest  control  18/20  val PR-AUC 0.241618  best 0.268169
+    random_forest  control  19/20  val PR-AUC 0.258443  best 0.268169
+    random_forest  control  20/20  val PR-AUC 0.260805  best 0.268169
+  calibrating random_forest:control on 138,687 calibration builds …
+    random_forest:control    isotonic  Brier 0.193916  ECE 0.000000
+    random_forest:control    sigmoid   Brier 0.196052  ECE 0.030760
+  random_forest:control: PR-AUC 0.377358 · ROC-AUC 0.638725 · Brier 0.193916 · ECE 0.000000 · tau 0.242460 · round-trip PASS
+
+[  1224s] training xgboost:full (29 feature(s), 20 candidates) …
+    xgboost        full      1/20  val PR-AUC 0.453702  best 0.453702
+    xgboost        full      2/20  val PR-AUC 0.426525  best 0.453702
+    xgboost        full      3/20  val PR-AUC 0.387567  best 0.453702
+    xgboost        full      4/20  val PR-AUC 0.460700  best 0.460700
+    xgboost        full      5/20  val PR-AUC 0.443865  best 0.460700
+    xgboost        full      6/20  val PR-AUC 0.436467  best 0.460700
+    xgboost        full      7/20  val PR-AUC 0.455770  best 0.460700
+    xgboost        full      8/20  val PR-AUC 0.440864  best 0.460700
+    xgboost        full      9/20  val PR-AUC 0.445201  best 0.460700
+    xgboost        full     10/20  val PR-AUC 0.424013  best 0.460700
+    xgboost        full     11/20  val PR-AUC 0.444197  best 0.460700
+    xgboost        full     12/20  val PR-AUC 0.406523  best 0.460700
+    xgboost        full     13/20  val PR-AUC 0.425042  best 0.460700
+    xgboost        full     14/20  val PR-AUC 0.450703  best 0.460700
+    xgboost        full     15/20  val PR-AUC 0.446669  best 0.460700
+    xgboost        full     16/20  val PR-AUC 0.423806  best 0.460700
+    xgboost        full     17/20  val PR-AUC 0.400830  best 0.460700
+    xgboost        full     18/20  val PR-AUC 0.431593  best 0.460700
+    xgboost        full     19/20  val PR-AUC 0.416209  best 0.460700
+    xgboost        full     20/20  val PR-AUC 0.450293  best 0.460700
+  calibrating xgboost:full on 138,687 calibration builds …
+    xgboost:full             isotonic  Brier 0.201710  ECE 0.000000
+    xgboost:full             sigmoid   Brier 0.202956  ECE 0.005160
+  xgboost:full: PR-AUC 0.328552 · ROC-AUC 0.539508 · Brier 0.201710 · ECE 0.000000 · tau 0.241744 · round-trip PASS
+
+[  1450s] training logreg:full (29 feature(s), 20 candidates) …
+    logreg         full      1/20  val PR-AUC 0.307484  best 0.307484
+    logreg         full      2/20  val PR-AUC 0.307492  best 0.307492
+    logreg         full      3/20  val PR-AUC 0.307483  best 0.307492
+    logreg         full      4/20  val PR-AUC 0.307484  best 0.307492
+    logreg         full      5/20  val PR-AUC 0.307359  best 0.307492
+    logreg         full      6/20  val PR-AUC 0.307483  best 0.307492
+    logreg         full      7/20  val PR-AUC 0.307484  best 0.307492
+    logreg         full      8/20  val PR-AUC 0.307484  best 0.307492
+    logreg         full      9/20  val PR-AUC 0.307732  best 0.307732
+    logreg         full     10/20  val PR-AUC 0.307491  best 0.307732
+    logreg         full     11/20  val PR-AUC 0.307522  best 0.307732
+    logreg         full     12/20  val PR-AUC 0.307483  best 0.307732
+    logreg         full     13/20  val PR-AUC 0.307485  best 0.307732
+    logreg         full     14/20  val PR-AUC 0.307484  best 0.307732
+    logreg         full     15/20  val PR-AUC 0.307492  best 0.307732
+    logreg         full     16/20  val PR-AUC 0.307531  best 0.307732
+    logreg         full     17/20  val PR-AUC 0.307486  best 0.307732
+    logreg         full     18/20  val PR-AUC 0.307113  best 0.307732
+    logreg         full     19/20  val PR-AUC 0.307484  best 0.307732
+    logreg         full     20/20  val PR-AUC 0.307484  best 0.307732
+  calibrating logreg:full on 138,687 calibration builds …
+    logreg:full              isotonic  Brier 0.201943  ECE 0.000000
+    logreg:full              sigmoid   Brier 0.203204  ECE 0.016467
+  logreg:full: PR-AUC 0.307219 · ROC-AUC 0.544902 · Brier 0.201943 · ECE 0.000000 · tau 0.233533 · round-trip PASS
+
+[  1546s] training random_forest:full (29 feature(s), 20 candidates) …
+    random_forest  full      1/20  val PR-AUC 0.438011  best 0.438011
+    random_forest  full      2/20  val PR-AUC 0.407112  best 0.438011
+    random_forest  full      3/20  val PR-AUC 0.453177  best 0.453177
+    random_forest  full      4/20  val PR-AUC 0.428382  best 0.453177
+    random_forest  full      5/20  val PR-AUC 0.427540  best 0.453177
+    random_forest  full      6/20  val PR-AUC 0.399345  best 0.453177
+    random_forest  full      7/20  val PR-AUC 0.417348  best 0.453177
+    random_forest  full      8/20  val PR-AUC 0.380981  best 0.453177
+    random_forest  full      9/20  val PR-AUC 0.451411  best 0.453177
+    random_forest  full     10/20  val PR-AUC 0.434973  best 0.453177
+    random_forest  full     11/20  val PR-AUC 0.419016  best 0.453177
+    random_forest  full     12/20  val PR-AUC 0.381192  best 0.453177
+    random_forest  full     13/20  val PR-AUC 0.447427  best 0.453177
+    random_forest  full     14/20  val PR-AUC 0.448714  best 0.453177
+    random_forest  full     15/20  val PR-AUC 0.394866  best 0.453177
+    random_forest  full     16/20  val PR-AUC 0.458255  best 0.458255
+    random_forest  full     17/20  val PR-AUC 0.446331  best 0.458255
+    random_forest  full     18/20  val PR-AUC 0.451698  best 0.458255
+    random_forest  full     19/20  val PR-AUC 0.415308  best 0.458255
+    random_forest  full     20/20  val PR-AUC 0.380664  best 0.458255
+  calibrating random_forest:full on 138,687 calibration builds …
+    random_forest:full       isotonic  Brier 0.195790  ECE 0.000000
+    random_forest:full       sigmoid   Brier 0.197447  ECE 0.025974
+  random_forest:full: PR-AUC 0.378120 · ROC-AUC 0.612636 · Brier 0.195790 · ECE 0.000000 · tau 0.233907 · round-trip PASS
+
+wrote results/p1/model_training.{md,json} and calibration/ in 3113.6s

@@ -702,4 +702,71 @@ edit or delete past entries (supersede them with a new entry instead).
   P1-T5 §Finding 1; threats chapter (P5-T4). No change to §2, the split, the seed, the feature contract,
   or any earlier decision.
 
-<!-- Append DL-018, DL-019, … below as the project progresses. -->
+### DL-018 — P1-T5 training configuration: search spaces, imbalance handling, budget, and the two arms
+- **Date:** 2026-08-17
+- **Status:** Accepted (implementation-level; **written before any model was fitted**, per R4)
+- **Spec section affected:** `results/p0/eval_protocol.md` §3 (tuning), §4 (models compared),
+  §5 (calibrator choice), §A1.3 (arm structure). **No clause is amended.** §3 explicitly *delegates*
+  this: *"The concrete grid/seeded random search and its ranges are recorded in the … training config
+  and run log."* This entry is that record, made in advance so it cannot be tuned to a result.
+
+- **Context.** P1-T5 must train three algorithms (§4: XGBoost primary, Logistic Regression and Random
+  Forest baselines) across two arms (§A1.3: `{d̂}` control and `{d̂ + all 28}` full). §3 pins the
+  *procedure* (train-only tuning, temporally-latest 20% internal-validation fold, PR-AUC selection) and
+  the XGBoost parameter **names**, but not the ranges, not the search budget, and nothing at all for the
+  two baselines. Those must be fixed before fitting or they become post-hoc choices.
+
+- **Decision.**
+  1. **Arms.** `control = {d̂}` and `full = {d̂ + all 28 features}`, `d̂` being the **frozen** P1-T4
+     control (primary form ④b, fit id `1088d5546f47ff12`). `d̂` is **loaded, never refitted** —
+     `models.attach_d_hat` asserts the artifact's fit id against `results/p1/duration_control.json`.
+     Refitting it here would silently move the null that RQ2 is measured against.
+  2. **Search spaces** (seeded random search, `numpy.random.default_rng(42)`):
+     - **XGBoost** — the seven ranges already pinned for the duration control
+       (`duration_control_spec.md` §4.2: `n_estimators` 100–800 log-int, `max_depth` 3–10,
+       `learning_rate` 0.01–0.30 log, `subsample` 0.6–1.0, `colsample_bytree` 0.6–1.0,
+       `min_child_weight` 1–20 log-int, `gamma` 0–5), **plus** `scale_pos_weight` sampled log-uniformly
+       over `[0.5r, 2r]` where `r` = train-fold negatives/positives. §3 lists `scale_pos_weight` as part
+       of the search, so it is searched rather than fixed. Reusing the §4.2 ranges keeps one pinned
+       XGBoost space in the project instead of two that could drift apart.
+     - **Logistic Regression** — `C` log-uniform over `1e-4 … 1e2`; **L2** penalty, `solver="lbfgs"`,
+       `max_iter=1000`. (L2 is scikit-learn's default and the explicit `penalty=` kwarg is deprecated as
+       of 1.8, so the code relies on the default rather than passing it.)
+     - **Random Forest** — `n_estimators` 100–300 log-int, `max_depth` 4–16, `min_samples_leaf` 10–200
+       log-int, `max_features ∈ {sqrt, log2}`.
+  3. **Imbalance handling in all three** (spec §3.5). XGBoost uses `scale_pos_weight` (§3 names it); the
+     two scikit-learn baselines use `class_weight="balanced"`, the equivalent reweighting. Without it the
+     baselines would be handicapped by a configuration choice rather than by their inductive bias, and
+     §4's "so the model comparison is fair" would not hold.
+  4. **Preprocessing.** XGBoost consumes the matrix directly (native missing-direction learning). The two
+     baselines get `SimpleImputer(strategy="median")` — train medians, fitted **inside** the pipeline and
+     persisted with the model — and Logistic Regression additionally gets `StandardScaler`. Neither
+     accepts NaN, and the 28-feature contract contains them. This mirrors the Ridge reference already
+     pinned in `duration_control_spec.md` §4.2, so the project has one imputation convention, not two.
+     `lang` is one-hot encoded from **train-split levels**; an unseen level encodes as all-zeros.
+  5. **Budget.** `n_iter = 20` candidates, **identical for every algorithm and every arm**, because §4
+     requires the *identical* internal-validation procedure across algorithms — an unequal budget would
+     measure the budget rather than the family. Chosen for tractability at 645,244 × ~32 on CPU, from a
+     timing probe run on **synthetic noise** (no project data, no result involved).
+  6. **The 28-feature contract is unchanged.** No feature is added, dropped, or re-derived here; the only
+     new column any model sees is `d̂`, which §A1.3 requires in every arm.
+
+- **Rationale.** Every item above is either delegated by §3, required by §3.5/§4 for the comparison to
+  be fair, or forced by a library constraint. Fixing them in advance is what makes the P1-T5 numbers
+  interpretable: none of them can be revised after a metric is seen.
+
+- **Declared threats this configuration creates** (all carried into the P1-T5 report and P5-T4):
+  1. **The Random Forest space is smaller than XGBoost's** (depth ≤ 16, leaf ≥ 10, ≤ 300 trees), bounded
+     purely for compute. RF is therefore **not** given search parity, and any finding that XGBoost beats
+     RF must be read with that caveat rather than as a clean family comparison.
+  2. **`n_iter = 20` is a small random search** for an 8-dimensional XGBoost space. It is identical
+     across arms, so the *arm* comparison (the one RQ2 rests on) is unaffected; the *algorithm*
+     comparison is the weaker of the two claims.
+  3. **Median imputation for the baselines is itself a modelling choice** that XGBoost does not make, so
+     part of any XGBoost-vs-baseline gap may be missing-value handling rather than model family.
+- **Consequences.** `scheduler_core/models.py` (spaces as data), `scripts/train_models.py`,
+  `results/p1/model_training.md`, `results/p1/calibration/`. P1-T6 reuses this identical machinery for
+  the per-family arms, so the ablation inherits the same procedure by construction. No numbers are
+  produced or implied by this entry (R1).
+
+<!-- Append DL-019, DL-020, … below as the project progresses. -->

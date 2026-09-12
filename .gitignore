@@ -39,3 +39,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 .DS_Store
+
+# ── Per-arm training checkpoints (intermediate compute state) ────────
+# Written by scripts/train_models.py so an interrupted run resumes instead
+# of restarting. Machine state, not evidence — the reportable outputs are
+# results/p1/model_training.* and the persisted arms in artifacts/models/.
+Research_Artifact/code/artifacts/checkpoints/

@@ -17,14 +17,14 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-08-17 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 8
-  current_task: P1-T5    # Train, tune & calibrate (control + SE arms)
-  next_task: P1-T6       # Family ablation + SHAP (calibration split)
+  tasks_total: 28        # derived — recounted 2026-08-18 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 9
+  current_task: P1-T6    # Family ablation + SHAP (calibration split)
+  next_task: P1-T7       # Apply admission rule → model-level RQ2
   current_phase: P1
   blocked_on: null
-  last_gate_passed: P1-T4 (commit-time duration estimator)
-  last_updated: 2026-08-17
+  last_gate_passed: P1-T5 (train, tune & calibrate — control + SE arms)
+  last_updated: 2026-08-18
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   open_decisions: none — DL-014 Accepted/Resolved 2026-08-17 (author), with the conservative-direction
                   claim struck. **Author's attention invited (not blocking):** ④b's declared trailing-50
@@ -34,26 +34,22 @@ state:
   frozen_split: results/p1/split_assignment.csv — sha256 3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde
   frozen_duration_control: code/artifacts/duration_estimator.joblib — fit id 1088d5546f47ff12,
                   primary form ④b (expanding project prior), seed 42
+  trained_arms:   code/artifacts/models/ — 6 arms ({control, full} × {xgboost, logreg,
+                  random_forest}), all isotonic-calibrated, seed 42, round-trip PASS;
+                  metrics in results/p1/model_training.json
 ```
 
 ```
-Overall   [██████░░░░░░░░░░░░░░]  29%   (8 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
-Phase 1   [███████████░░░░░░░░░]  57%   Commit-Time Evidence   (4 / 7 tasks)
+Overall   [██████░░░░░░░░░░░░░░]  32%   (9 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
+Phase 1   [██████████████░░░░░░]  71%   Commit-Time Evidence   (5 / 7 tasks)
 
-► CURRENT : P1-T5 — Train, tune & calibrate (control + SE arms)
-○ NEXT    : P1-T6 — Family ablation + SHAP (calibration split)
+► CURRENT : P1-T6 — Family ablation + SHAP (calibration split)
+○ NEXT    : P1-T7 — Apply admission rule → model-level RQ2
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*No task in progress (P1-T4 gate just passed). The duration control is frozen: primary form **④b**
-(expanding project prior), fit id `1088d5546f47ff12`. P1-T5's `{d̂}` null arm and every ⑤ arm take
-their control term from that artifact — they must not refit it.*
-
-```
-P1-T5  S1 ⬜   S2 ⬜   S3 ⬜   S4 ⬜
-notes: —
-```
+*(empty — P1-T5 gated 2026-08-18; P1-T6 not started)*
 
 ---
 
@@ -71,8 +67,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P1-T2 Feature extractor + family audit | ✅ | `features.py` + `feature_audit.md` | RQ1 |
 | | P1-T3 Three-way leakage-safe splits | ✅ | `splits.py` + manifests | RQ1/2 |
 | | P1-T4 Commit-time duration estimator | ✅ | `duration_estimator.py` + report | **RQ2** |
-| | P1-T5 Train, tune & calibrate (control + SE arms) | ► ⬜ | models + calibration report | RQ1/2 |
-| | P1-T6 Family ablation + SHAP (calibration split) | ⬜ | `results/p1/ablation/` + `shap/` | **RQ1** |
+| | P1-T5 Train, tune & calibrate (control + SE arms) | ✅ | models + calibration report | RQ1/2 |
+| | P1-T6 Family ablation + SHAP (calibration split) | ► ⬜ | `results/p1/ablation/` + `shap/` | **RQ1** |
 | | P1-T7 Apply admission rule → model-level RQ2 | ⬜ | `incremental_value.md` + `admission.json` | **RQ2** |
 | **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ⬜ | `eligibility.py` + `validate_invariants.py` | RQ4 |
 | | P2-T2 Energy & carbon accounting | ⬜ | `accounting.py` | RQ4 |
@@ -99,7 +95,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
-| P1 Commit-time evidence | 4 / 7 | `[███████████░░░░░░░░░]` 57% |
+| P1 Commit-time evidence | 5 / 7 | `[██████████████░░░░░░]` 71% |
 | P2 Core + simulator + policy | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -123,3 +119,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-08-15 | P1-T3 Leakage-safe three-way split maker | `scheduler_core/splits.py` + `tests/test_splits.py` (27 tests; **98 passed** overall, verbatim in `results/p1/pytest_p1_t3.txt`); real run `python scripts/make_splits.py` → **922,624** analytic builds / **948** projects split train 628p/645,244b (69.94%) · calibration 150p/138,687b (15.03%) · test 170p/138,693b (15.03%), all within 0.06pp of the §2 targets; all three §2 checks PASS (project-disjoint · time-ordered · complete partition, builds-in = builds-out); **frozen** at sha256 `3d9a7947…5cde` with `--verify` reproducing exactly; `results/p1/{splits.json,split_assignment.csv,splits_summary.md}`. **Threats measured:** calibration failure rate 28.55% vs test 25.04% (4.20pp spread) and calibration duration p95 11,638s vs test 5,643s | **DL-017**; correction appended to **DL-015** |
 | 2026-08-17 | *(governance gate — not a numbered task)* | **DL-014 Accepted/Resolved** by author decision: fitted parameters (④a regressor + language/global priors) from **train projects only**; ④b may read the scored project's own builds with `gh_build_started_at < t_b` on **any** split, ties/current/future forbidden; framed as the **intended deployment information regime**, not test-project training. The conservative-direction claim in §Rationale bullet 2 is **struck** — the residual wall-clock asymmetry is a threat of **undetermined** direction, neither measured nor assumed. `duration_control_spec.md` §3.1 and §8(2) updated to match; no other clause changed. No numbers produced. | **DL-014** (Proposed → Accepted) |
 | 2026-08-17 | P1-T4 Commit-time duration estimator | `scheduler_core/duration_estimator.py` + `tests/test_duration_estimator.py` (35 tests; **133 passed** overall, verbatim in `results/p1/pytest_p1_t4.txt`); real run `PYTHONPATH=. python scripts/fit_duration_estimator.py` (948s) → fit on **645,244** train builds / 628 projects (628p/645,244b matches the frozen split exactly), 40+40 seeded candidates, fit id `1088d5546f47ff12`. Calibration-split log1p MAE: **④b 0.600958** vs **④a 1.178319** ⇒ **primary = ④b** (Spearman ρ 0.869 vs 0.526). Cold start negligible: 99.89% on the project rung, 152 builds with no history. All five leakage checks PASS; round-trip identical. **Test split closed:** 170 projects / 138,693 builds dropped unread. **Adverse finding:** the declared trailing-50 sensitivity (MAE 0.2886, ρ 0.930) beats the predeclared expanding primary — reported, primary unchanged per §4.1 | none (finding recorded in `duration_control.md`) |
+| 2026-08-18 | P1-T5 Train, tune & calibrate (control + SE arms) | `scheduler_core/models.py` + `scripts/train_models.py` + `tests/test_models.py` + `tests/test_train_checkpoint.py` (**188 passed** overall, verbatim in `results/p1/pytest_p1_t5.txt`); real run `PYTHONPATH=. python scripts/train_models.py` (**3,113.6s**, log in `results/p1/model_training_run.log`) → all **6 arms** ({control, full} × {xgboost, logreg, random_forest}) tuned on **645,244** train builds / 628 projects (24.354% failure), 20 seeded candidates each per DL-018, calibrated on **138,687** calibration builds / 150 projects (28.5492% failure). `d̂` **loaded not refitted** (fit id `1088d5546f47ff12`, form ④b). **Isotonic chosen for all 6 arms** by calibration-split Brier (§5). All five checks PASS incl. round-trip on every arm; **test split closed** — 138,693 builds / 170 projects dropped unread. Calibration-split PR-AUC — `control`: xgboost **0.390357**, logreg 0.388304, rf 0.377358; `full`: rf 0.378120, xgboost 0.328552, logreg 0.307219. **Adverse finding (central to RQ2):** the `full` arm does **not** beat the `{d̂}` control on any metric for any algorithm on the calibration split — ROC-AUC falls 0.650712→0.539508 (xgboost), 0.654076→0.544902 (logreg), 0.638725→0.612636 (rf). Not an RQ verdict: the calibrator is in-sample here and the feature set was not chosen here; decomposition is P1-T6's, the model-level RQ2 verdict P1-T7's, confirmation P3-T1's. In-sample isotonic ECE is 0.000000 **by construction** (flagged in the report); the meaningful signal is the project-grouped out-of-fold Brier, +0.005156 to +0.014274 over in-sample. **Process:** the 2026-08-17 abort was re-run from scratch; per-arm checkpoint/resume added to `train_models.py` (fingerprint + model-reproduction guard, `artifacts/checkpoints/`, gitignored) and verified result-identical by 25 new tests plus a scratchpad 3-run cold/warm/abort harness; hardcoded `run_date` replaced with the real run date | none (findings recorded in `model_training.md` + `calibration/brier_ece_table.md`) |
