@@ -769,4 +769,112 @@ edit or delete past entries (supersede them with a new entry instead).
   the per-family arms, so the ablation inherits the same procedure by construction. No numbers are
   produced or implied by this entry (R1).
 
-<!-- Append DL-019, DL-020, … below as the project progresses. -->
+### DL-019 — P1-T6 ablation configuration: arms, paired-bootstrap procedure, SHAP method, variance decomposition
+- **Date:** 2026-09-12
+- **Status:** Accepted (implementation-level; **written before any ablation arm was fitted**, per R4)
+- **Spec section affected:** `results/p0/eval_protocol.md` §A1.3 (families/arms), §A1.4 (model-level
+  incremental value), §A1.7 (the model-level floor, read here as a data-driven trigger only — not the
+  RQ2 verdict), §A1.8 (monotonicity), §A1.9 (variance decomposition), §9 (paired bootstrap conventions).
+  **No clause is amended.** Several of these leave the concrete procedure to the implementing task (§9's
+  `paired_bootstrap` signature is explicitly a *replay-trace* (build × strategy) function reserved for
+  P3; §A1.3–A1.9 name the comparisons and floors but not a build-level bootstrap procedure, a SHAP
+  method, or a variance-decomposition formula). This entry fixes all four, in advance, per DL-018's
+  precedent.
+
+- **Context.** `development_plan.md` P1-T6 requires: (S1) fit `{d̂}`, `{d̂+Fᵢ}` per family, `{d̂+all}`,
+  plus leave-one-family-out arms for any family clearing the model-level floor; (S2) paired ΔPR-AUC/
+  ΔROC-AUC/ΔBrier/ΔECE vs `{d̂}` with 95% paired-bootstrap CIs on the **calibration** split; (S3) SHAP
+  attributions + a monotonicity check; (S4) a between/within-project variance decomposition per family.
+  None of the four has a pinned procedure yet, and P1-T5's own `full`-vs-`control` finding (XGBoost
+  ROC-AUC 0.650712→0.539508) makes it likely no family clears the floor — the trigger for leave-one-out
+  arms must therefore be decided **before** looking, not after.
+
+- **Decision.**
+  1. **Algorithm and arms.** Per §A1.4 ("same algorithm, same tuning procedure, same splits, same
+     calibration rule — only the feature set differs"), the ablation runs **the predeclared primary
+     algorithm only (XGBoost, §4)** — the two baselines are not re-ablated. The `control` and `full`
+     arms are **the frozen P1-T5 XGBoost artifacts, loaded not refitted**
+     (`code/artifacts/models/xgboost__control.joblib`, `xgboost__full.joblib`; fit ids asserted against
+     `results/p1/model_training.json`), because they were already fit by the identical procedure this
+     task must use — refitting them would risk a silent procedural drift between "control" here and
+     "control" in the P1-T5 report. Six new arms are fit: `{d̂+F1}` … `{d̂+F6}`, using
+     `scheduler_core.models.train_arm`/`calibrate` unchanged (same train/internal-validation fold, same
+     `n_iter=20`, same seed 42, same isotonic-vs-Platt calibrator rule) — the feature set is the only
+     variable, per §A1.4.
+  2. **Leave-one-family-out trigger.** A family is fit as a leave-one-out arm (`{d̂+all−Fᵢ}`) **iff** its
+     `{d̂+Fᵢ}` arm's ΔPR-AUC vs `{d̂}` (this task's own bootstrap, step 3) has a point estimate **≥ 0.01**
+     absolute **and** a 95% CI excluding 0 — the literal §A1.7 model-level floor. This is **not** the
+     RQ2 admission verdict (that is P1-T7's, applying §A1.7 with the ×0.5/×2 sweep, "no discretion, no
+     post-hoc adjustment"); it is used here only to decide which extra arms are worth the compute, and
+     is reported as exactly that. If no family clears it, zero leave-one-out arms are fit and that is
+     recorded as a finding, not a shortfall.
+  3. **Paired bootstrap for model-level deltas (build-level, not the §9 replay-trace `paired_bootstrap`).**
+     A new function, `scheduler_core/ablation_stats.paired_metric_delta`, resamples the **calibration
+     build index** with replacement `B = 1000` times (seeded `numpy.random.default_rng(42)`, per §9's
+     conventions); on each resample it recomputes PR-AUC/ROC-AUC/Brier/ECE for the control's and the
+     treatment arm's calibrated probabilities **on the same resampled indices** (paired), and the
+     treatment-minus-control difference. The reported CI is the 2.5th/97.5th percentile of the resampled
+     differences (§9's method exactly); a difference is "significant" when that CI excludes 0. This is a
+     distinct function from §10's `paired_bootstrap` (which pairs *strategies* over a replay trace at
+     P3) — named differently so the two are never confused, but sharing every numeric convention
+     (`B`, seed, CI method) so the project has one bootstrap standard, not two.
+  4. **SHAP method.** `shap.TreeExplainer` (pinned `shap==0.51.0`) on the **frozen `full` XGBoost arm's
+     base (uncalibrated) model** — SHAP explains the model that produces the score, and calibration is a
+     monotone-in-aggregate post-hoc map that does not change per-feature attribution structure — over the
+     **calibration-split design matrix** (the split this task is scoped to). Per-family magnitude =
+     mean absolute SHAP value summed over the family's member features, per build; direction = mean
+     signed SHAP value per feature. `d̂`'s own SHAP column is reported separately (it is the control term,
+     not a family member).
+  5. **Monotonicity check (§A1.8).** For every feature (including `d̂`), the Spearman rank correlation
+     between the feature's raw calibration-split value and its per-build SHAP value, with a 95% CI from
+     the same bootstrap machinery (resample calibration builds, `B=1000`, seed 42). A feature is flagged
+     **monotone** iff the CI excludes 0 (a stable-signed relationship) — this is a necessary, not
+     sufficient, condition for using that score as a simple window knob (§A1.8's default form assumes
+     monotonicity); a feature whose CI contains 0, or whose sign flips across the range, is flagged
+     **non-monotone** and named as a caveat for any later use as a window knob.
+  6. **Variance decomposition (§A1.9).** For each family, a one-way decomposition of its per-build SHAP
+     contribution (the same summed quantity as step 4), grouped by `gh_project_name` on the calibration
+     split: `between = Σ_g n_g·(mean_g − mean)² `, `within = Σ_g Σ_i∈g (x_i − mean_g)²`, reported as each
+     share of `between + within` (the total sum of squares — algebraically the total variance to
+     numerical precision, checked as a test). A family whose between-project share dominates (declared
+     threshold: **≥ 0.8** of total, chosen before looking, symmetric with A1.7's "no discretion" spirit)
+     is flagged as **project-identity-coded** — its apparent signal may be encoding which project a
+     build belongs to rather than a within-project SE effect (§A1.9's stated purpose).
+
+- **Rationale.** Every choice reuses a convention already fixed elsewhere in the project (§9's B/seed/CI
+  triple, DL-018's training procedure, the frozen P1-T5 control/full artifacts) rather than inventing a
+  new one, so the only genuinely new numbers are the two declared thresholds (the 0.01/CI-excludes-0
+  leave-one-out trigger, which is §A1.7 verbatim, and the 0.8 project-identity-coded threshold for
+  variance decomposition, which has no protocol precedent and is therefore fixed here, in advance,
+  rather than chosen after seeing which families are project-coded).
+
+- **Declared threats this configuration creates** (carried into the P1-T6 report and P5-T4):
+  1. **The model-level floor check in step 2 is not the RQ2 verdict.** It reuses the same numeric rule
+     as §A1.7 but without the ×0.5/×2 sensitivity sweep that P1-T7 requires before any admission is
+     final. A family could clear this task's trigger and still fail P1-T7's full rule, or vice versa —
+     though the ×2 direction (a *stricter* floor) can only shrink, never grow, the admitted set from what
+     this task fits, so no leave-one-out arm P1-T7 needs will be missing.
+  2. **SHAP explains the `full` arm's base model, not the per-family arms.** A family's SHAP magnitude
+     therefore reflects its contribution *inside the full model* (where other families can absorb or
+     mask its signal), while the family's own ΔPR-AUC (step 3) is measured from its **standalone**
+     `{d̂+Fᵢ}` arm. The two can disagree — SHAP is a decomposition-inside-`full` diagnostic, not a
+     restatement of the incremental-value numbers, and the report must not conflate them.
+  3. **The 0.8 project-identity threshold is a declared convention, not a derived statistic**, exactly
+     like DL-012 §5's model/decision floors — its arbitrariness is handled the same way, by stating it
+     before any number exists and reporting the raw between/within split regardless of which side of 0.8
+     it falls on.
+  4. **A cross-reference to P1-T5's threat 8.** `eval_protocol.md` §A1.4 states "Where computed: P1-T7,
+     on the **test** split, once" — but `development_plan.md` P1-T6/P1-T7 (the post-DL-012, 28-task
+     breakdown that governs execution, per `CLAUDE.md`) unambiguously scope **both** tasks to the
+     **calibration** split, with P1-T7's DoD requiring the report to assert the test split is *still*
+     untouched. This is the same class of stale pre-DL-012 task-numbering artifact P1-T5 already flagged
+     (§8 of `model_training.md`) — Phase 1's confirmatory, test-split ablation is `development_plan.md`
+     P3-T1 ("confirmatory ablation"), not P1-T7. Recorded here so this ambiguity is not independently
+     rediscovered at P1-T7 or P3-T1; `development_plan.md` governs, and the test split stays closed
+     through P1-T6.
+- **Consequences.** `scheduler_core/ablation_stats.py` (new), `scheduler_core/models.py` (arm set
+  extended for family arms — no change to `control`/`full`), `scripts/run_ablation.py`,
+  `results/p1/ablation/`, `results/p1/shap/`. P1-T7 consumes `results/p1/ablation/deltas.json` to apply
+  the actual §A1.7 rule with its sweep; nothing here pre-empts that verdict.
+
+<!-- Append DL-020, DL-021, … below as the project progresses. -->

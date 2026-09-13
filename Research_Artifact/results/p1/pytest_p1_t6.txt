@@ -1,0 +1,19 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.1, pytest-9.1.0, pluggy-1.6.0
+rootdir: C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.14.0
+collected 200 items
+
+tests\test_ablation_stats.py ............                                [  6%]
+tests\test_carbon.py ....................                                [ 16%]
+tests\test_data.py .....................                                 [ 26%]
+tests\test_duration_estimator.py ...................................     [ 44%]
+tests\test_features.py ............................                      [ 58%]
+tests\test_models.py ..............................                      [ 73%]
+tests\test_smoke.py ..                                                   [ 74%]
+tests\test_splits.py ...........................                         [ 87%]
+tests\test_train_checkpoint.py .........................                 [100%]
+
+============================ 200 passed in 35.49s =============================

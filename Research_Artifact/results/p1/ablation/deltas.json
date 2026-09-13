@@ -1,0 +1,641 @@
+{
+  "provenance": {
+    "command": "PYTHONPATH=. python scripts/run_ablation.py",
+    "run_date": "2026-09-12",
+    "seed": 42,
+    "n_iter": 20,
+    "elapsed_s": 6532.1,
+    "algorithm": "xgboost",
+    "protocol": "eval_protocol \u00a7A1.3 (families), \u00a7A1.4 (model-level incremental value), \u00a7A1.7 (model floor, used here only as the leave-one-out trigger), \u00a7A1.8 (monotonicity), \u00a7A1.9 (variance decomposition); config DL-019",
+    "duration_control_fit_id": "1088d5546f47ff12",
+    "split_digest": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde",
+    "control_arm_fit_id": "5b6c9fd6e4762e25",
+    "full_arm_fit_id": "65fd81b1e952fd72",
+    "population": {
+      "train_builds": 645244,
+      "train_failure_rate_pct": 24.354,
+      "calibration_builds": 138687,
+      "calibration_failure_rate_pct": 28.5492,
+      "test_builds_dropped_unread": 138693,
+      "test_projects_dropped_unread": 170
+    }
+  },
+  "families": {
+    "F1": {
+      "n_features": 7,
+      "members": [
+        "src_churn",
+        "test_churn",
+        "files_added",
+        "files_deleted",
+        "files_modified",
+        "files_total",
+        "num_commits"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F1",
+        "n_features": 8,
+        "best_params": {
+          "n_estimators": 142,
+          "max_depth": 5,
+          "learning_rate": 0.010803102232883135,
+          "subsample": 0.6360191443102566,
+          "colsample_bytree": 0.88894374023858,
+          "min_child_weight": 4,
+          "gamma": 0.806358895168009,
+          "scale_pos_weight": 2.9744554978355415,
+          "internal_val_pr_auc": 0.2923246384294572
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.19263715953056104,
+              "ece": 1.0876342371739084e-08
+            },
+            "sigmoid": {
+              "brier": 0.19488324313621672,
+              "ece": 0.0301384875647613
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.24330617487430573,
+            "f1": 0.4854724283745162,
+            "precision": 0.35094632784264274,
+            "recall": 0.7872404909834824
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.3866791614540755,
+          "roc_auc": 0.6482360603949531,
+          "brier": 0.19263715953056104,
+          "ece": 1.0876342371739084e-08,
+          "tau": 0.24330617487430573,
+          "precision_at_tau": 0.35094632784264274,
+          "recall_at_tau": 0.7872404909834824,
+          "f1_at_tau": 0.4854724283745162
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F1.joblib",
+        "fit_id": "794f37e9bb3f37c0",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.3866791614540755,
+          "delta": -0.003678275280001919,
+          "ci_lo": -0.005309682494735371,
+          "ci_hi": -0.0019578700339908206,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.6482360603949531,
+          "delta": -0.002475812568014213,
+          "ci_lo": -0.003881108031357011,
+          "ci_hi": -0.0009601882076574199,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.19263715953056104,
+          "delta": 0.00046813773907578016,
+          "ci_lo": 0.00022607330091657318,
+          "ci_hi": 0.0006928524856530192,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 1.0876342371739084e-08,
+          "delta": 9.424659160929375e-09,
+          "ci_lo": -0.0014822276419290189,
+          "ci_hi": 0.0013818068570338445,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    },
+    "F2": {
+      "n_features": 6,
+      "members": [
+        "src_files",
+        "doc_files",
+        "other_files",
+        "is_docs_only",
+        "description_complexity",
+        "test_density_ratio"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F2",
+        "n_features": 7,
+        "best_params": {
+          "n_estimators": 142,
+          "max_depth": 5,
+          "learning_rate": 0.010803102232883135,
+          "subsample": 0.6360191443102566,
+          "colsample_bytree": 0.88894374023858,
+          "min_child_weight": 4,
+          "gamma": 0.806358895168009,
+          "scale_pos_weight": 2.9744554978355415,
+          "internal_val_pr_auc": 0.2843168704430443
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.1929802243355093,
+              "ece": 2.0963182254981986e-08
+            },
+            "sigmoid": {
+              "brier": 0.19504740857911235,
+              "ece": 0.021732946841689492
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.2529258728027344,
+            "f1": 0.4853898007033998,
+            "precision": 0.34187601923910577,
+            "recall": 0.8365661463858161
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.38483174248784546,
+          "roc_auc": 0.6436123244790904,
+          "brier": 0.1929802243355093,
+          "ece": 2.0963182254981986e-08,
+          "tau": 0.2529258728027344,
+          "precision_at_tau": 0.34187601923910577,
+          "recall_at_tau": 0.8365661463858161,
+          "f1_at_tau": 0.48538980070339977
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F2.joblib",
+        "fit_id": "6a66a8b335ab0773",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.38483174248784546,
+          "delta": -0.005525694246231949,
+          "ci_lo": -0.007217405075249012,
+          "ci_hi": -0.0038536109951977774,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.6436123244790904,
+          "delta": -0.007099548483876839,
+          "ci_lo": -0.008528457635977997,
+          "ci_hi": -0.0055568361606281045,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.1929802243355093,
+          "delta": 0.0008112025440240311,
+          "ci_lo": 0.0005721640786801402,
+          "ci_hi": 0.0010155498827327648,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 2.0963182254981986e-08,
+          "delta": 1.9511499044172277e-08,
+          "ci_lo": -0.0016261122166019099,
+          "ci_hi": 0.0012582780100855906,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    },
+    "F3": {
+      "n_features": 5,
+      "members": [
+        "tests_added",
+        "tests_deleted",
+        "test_lines_per_kloc",
+        "test_cases_per_kloc",
+        "asserts_per_kloc"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F3",
+        "n_features": 6,
+        "best_params": {
+          "n_estimators": 180,
+          "max_depth": 10,
+          "learning_rate": 0.09500160723894391,
+          "subsample": 0.8228128609365113,
+          "colsample_bytree": 0.9135592836425654,
+          "min_child_weight": 7,
+          "gamma": 2.031934307200353,
+          "scale_pos_weight": 4.590262991313185,
+          "internal_val_pr_auc": 0.37814728298036315
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.193314603087742,
+              "ece": 1.2057426365501099e-09
+            },
+            "sigmoid": {
+              "brier": 0.20011477702949612,
+              "ece": 0.044762619874404844
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.22906166315078735,
+            "f1": 0.4505771608338536,
+            "precision": 0.2973455473697816,
+            "recall": 0.9296610597565288
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.3670245690857095,
+          "roc_auc": 0.5858938609506861,
+          "brier": 0.193314603087742,
+          "ece": 1.2057426365501099e-09,
+          "tau": 0.22906166315078735,
+          "precision_at_tau": 0.2973455473697816,
+          "recall_at_tau": 0.9296610597565288,
+          "f1_at_tau": 0.4505771608338536
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F3.joblib",
+        "fit_id": "18be00d7b1974252",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.3670245690857095,
+          "delta": -0.023332867648367894,
+          "ci_lo": -0.02657499636602649,
+          "ci_hi": -0.019858511028183035,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.5858938609506861,
+          "delta": -0.06481801201228121,
+          "ci_lo": -0.06831613259066689,
+          "ci_hi": -0.06115237251251215,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.193314603087742,
+          "delta": 0.001145581296256748,
+          "ci_lo": 0.0005279522537261279,
+          "ci_hi": 0.0016829781815628725,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 1.2057426365501099e-09,
+          "delta": -2.459405742595996e-10,
+          "ci_lo": -0.002168168555076027,
+          "ci_hi": 0.001010047821704584,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    },
+    "F4": {
+      "n_features": 5,
+      "members": [
+        "commits_on_files_touched",
+        "sloc",
+        "repo_age",
+        "repo_num_commits",
+        "lang"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F4",
+        "n_features": 6,
+        "best_params": {
+          "n_estimators": 471,
+          "max_depth": 5,
+          "learning_rate": 0.03028890421647745,
+          "subsample": 0.7481838824139475,
+          "colsample_bytree": 0.7878223245103232,
+          "min_child_weight": 2,
+          "gamma": 0.6496075266773582,
+          "scale_pos_weight": 2.871781321356961,
+          "internal_val_pr_auc": 0.3910725604844143
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.19987618989454423,
+              "ece": 2.714398328087919e-09
+            },
+            "sigmoid": {
+              "brier": 0.2024659769925767,
+              "ece": 0.02414577339083505
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.23654866218566895,
+            "f1": 0.455947883217977,
+            "precision": 0.301564525465322,
+            "recall": 0.9342072031115826
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.32566372410386896,
+          "roc_auc": 0.5625192294127946,
+          "brier": 0.19987618989454423,
+          "ece": 2.714398328087919e-09,
+          "tau": 0.23654866218566895,
+          "precision_at_tau": 0.301564525465322,
+          "recall_at_tau": 0.9342072031115826,
+          "f1_at_tau": 0.4559478832179771
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F4.joblib",
+        "fit_id": "55cc8ec94e4c0e45",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.32566372410386896,
+          "delta": -0.06469371263020846,
+          "ci_lo": -0.06730397350535278,
+          "ci_hi": -0.06174682611105038,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.5625192294127946,
+          "delta": -0.08819264355017264,
+          "ci_lo": -0.09115147125762071,
+          "ci_hi": -0.08474818396880432,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.19987618989454423,
+          "delta": 0.0077071681030589645,
+          "ci_lo": 0.007213807389994298,
+          "ci_hi": 0.008125763428220726,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 2.714398328087919e-09,
+          "delta": 1.2627151172782095e-09,
+          "ci_lo": -0.0018964973091182445,
+          "ci_hi": 0.001263006937907315,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    },
+    "F5": {
+      "n_features": 2,
+      "members": [
+        "team_size",
+        "by_core_member"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F5",
+        "n_features": 3,
+        "best_params": {
+          "n_estimators": 107,
+          "max_depth": 6,
+          "learning_rate": 0.044165640996929656,
+          "subsample": 0.6858338691278116,
+          "colsample_bytree": 0.7634114574898545,
+          "min_child_weight": 13,
+          "gamma": 1.1696974293267037,
+          "scale_pos_weight": 1.610090215591977,
+          "internal_val_pr_auc": 0.3379910552548393
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.2002956607920041,
+              "ece": 5.297606876834307e-09
+            },
+            "sigmoid": {
+              "brier": 0.20313430898432303,
+              "ece": 0.008185256591200436
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.25869449973106384,
+            "f1": 0.45952933377527344,
+            "precision": 0.3017706049500954,
+            "recall": 0.9629236753043391
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.3240341149271667,
+          "roc_auc": 0.5705489671249537,
+          "brier": 0.2002956607920041,
+          "ece": 5.297606876834307e-09,
+          "tau": 0.25869449973106384,
+          "precision_at_tau": 0.3017706049500954,
+          "recall_at_tau": 0.9629236753043391,
+          "f1_at_tau": 0.45952933377527344
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F5.joblib",
+        "fit_id": "016ceab401036154",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.3240341149271667,
+          "delta": -0.0663233218069107,
+          "ci_lo": -0.06920472547893501,
+          "ci_hi": -0.06337702272572368,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.5705489671249537,
+          "delta": -0.08016290583801355,
+          "ci_lo": -0.0832783351719597,
+          "ci_hi": -0.07703644564880444,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.2002956607920041,
+          "delta": 0.008126639000518826,
+          "ci_lo": 0.007676296697062881,
+          "ci_hi": 0.00852694061135009,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 5.297606876834307e-09,
+          "delta": 3.8459236660245976e-09,
+          "ci_lo": -0.002136720824333366,
+          "ci_hi": 0.0012660945896494466,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    },
+    "F6": {
+      "n_features": 3,
+      "members": [
+        "is_pr",
+        "hour_of_day",
+        "day_of_week"
+      ],
+      "arm_result": {
+        "algorithm": "xgboost",
+        "arm": "F6",
+        "n_features": 4,
+        "best_params": {
+          "n_estimators": 142,
+          "max_depth": 5,
+          "learning_rate": 0.010803102232883135,
+          "subsample": 0.6360191443102566,
+          "colsample_bytree": 0.88894374023858,
+          "min_child_weight": 4,
+          "gamma": 0.806358895168009,
+          "scale_pos_weight": 2.9744554978355415,
+          "internal_val_pr_auc": 0.28060753966344276
+        },
+        "calibration_choice": {
+          "split": "calibration",
+          "n_calibration": 138687,
+          "calibration_base_rate": 0.28549179086720455,
+          "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
+          "comparison": {
+            "isotonic": {
+              "brier": 0.19373960104966856,
+              "ece": 1.944370154145252e-08
+            },
+            "sigmoid": {
+              "brier": 0.19534827579974695,
+              "ece": 0.012018062110618274
+            }
+          },
+          "chosen": "isotonic",
+          "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
+          "tau_selection": {
+            "tau": 0.24812030792236328,
+            "f1": 0.48017263808751287,
+            "precision": 0.34445127574546575,
+            "recall": 0.7923927867858767
+          }
+        },
+        "calibrated": {
+          "n": 138687,
+          "positives": 39594,
+          "base_rate": 0.28549179086720455,
+          "pr_auc": 0.38743775838454136,
+          "roc_auc": 0.6403438979644582,
+          "brier": 0.19373960104966856,
+          "ece": 1.944370154145252e-08,
+          "tau": 0.24812030792236328,
+          "precision_at_tau": 0.34445127574546575,
+          "recall_at_tau": 0.7923927867858767,
+          "f1_at_tau": 0.4801726380875128
+        },
+        "artifact": "code\\artifacts\\models\\xgboost__F6.joblib",
+        "fit_id": "679f18ed2809519e",
+        "round_trip": "PASS"
+      },
+      "delta_vs_control": {
+        "pr_auc": {
+          "control": 0.3903574367340774,
+          "treatment": 0.38743775838454136,
+          "delta": -0.002919678349536048,
+          "ci_lo": -0.004531434800921335,
+          "ci_hi": -0.0012633452869816226,
+          "significant": true
+        },
+        "roc_auc": {
+          "control": 0.6507118729629673,
+          "treatment": 0.6403438979644582,
+          "delta": -0.010367974998509055,
+          "ci_lo": -0.011662424977576502,
+          "ci_hi": -0.00893593996476858,
+          "significant": true
+        },
+        "brier": {
+          "control": 0.19216902179148526,
+          "treatment": 0.19373960104966856,
+          "delta": 0.0015705792581832967,
+          "ci_lo": 0.001349210549608138,
+          "ci_hi": 0.00177362895238303,
+          "significant": true
+        },
+        "ece": {
+          "control": 1.4516832108097094e-09,
+          "treatment": 1.944370154145252e-08,
+          "delta": 1.799201833064281e-08,
+          "ci_lo": -0.0015624233800373098,
+          "ci_hi": 0.0013695151003231185,
+          "significant": false
+        },
+        "loo_triggered": false
+      },
+      "loo_triggered": false
+    }
+  },
+  "leave_one_out": {},
+  "families_triggering_leave_one_out": [],
+  "model_floor_used_as_trigger": {
+    "rule": "\u0394PR-AUC point estimate >= 0.01 absolute AND its 95% CI excludes 0 in the positive direction (literal \u00a7A1.7 model floor) \u2014 DL-019 \u00a72. NOT the RQ2 admission verdict.",
+    "abs_floor": 0.01
+  }
+}
