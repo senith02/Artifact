@@ -17,14 +17,14 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-09-12 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 10
-  current_task: P1-T7    # Apply admission rule → model-level RQ2
-  next_task: P2-T1       # Stage 1 eligibility gate + independent validator
-  current_phase: P1
+  tasks_total: 28        # derived — recounted 2026-09-13 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 11
+  current_task: P2-T1    # Stage 1 eligibility gate + independent validator
+  next_task: P2-T2       # Energy & carbon accounting
+  current_phase: P2
   blocked_on: null
-  last_gate_passed: P1-T6 (feature-family ablation + SHAP, calibration split)
-  last_updated: 2026-09-12
+  last_gate_passed: P1-T7 (admission rule applied → model-level RQ2 answer)
+  last_updated: 2026-09-13
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   open_decisions: none — DL-019 Accepted 2026-09-12 (ablation config, written before any arm was
                   fitted). **Author's attention invited (not blocking, carried from P1-T5):** ④b's
@@ -40,21 +40,25 @@ state:
                   results/p1/model_training.json and results/p1/ablation/deltas.json
   ablation_result: no family's standalone {d̂+Fᵢ} arm clears the §A1.7 model-level floor vs {d̂}
                   (all 6 ΔPR-AUC point estimates negative, CIs excluding 0 in the negative
-                  direction) — zero leave-one-out arms triggered. This is a compute-trigger
-                  reading, not the RQ2 verdict (P1-T7's, with the ×0.5/×2 sweep).
+                  direction) — zero leave-one-out arms triggered.
+  rq2_model_level: **NULL PATH (P1-T7).** All six families REJECTED under §A1.7; admitted set is
+                  empty and stable across the mandatory ×0.5/×1/×2 floor sweep. `policy_path:
+                  duration_only_fallback` in results/p1/admission.json — P2-T5's fit_policy.py
+                  must emit a duration-only spec unless the decision altitude (P3-T3) says
+                  otherwise. Verdict is calibration-split; P3-T1 confirms it on test.
 ```
 
 ```
-Overall   [███████░░░░░░░░░░░░░]  36%   (10 / 28 tasks)   Milestone: ✅ M0 reached — M1 next (39% at P1 complete)
-Phase 1   [█████████████████░░░]  86%   Commit-Time Evidence   (6 / 7 tasks)
+Overall   [████████░░░░░░░░░░░░]  39%   (11 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
+Phase 2   [░░░░░░░░░░░░░░░░░░░░]   0%   Core + Simulator + Policy   (0 / 5 tasks)
 
-► CURRENT : P1-T7 — Apply the admission rule → model-level RQ2 answer
-○ NEXT    : P2-T1 — Stage 1 eligibility gate + independent validator
+► CURRENT : P2-T1 — Stage 1 eligibility gate + independent validator
+○ NEXT    : P2-T2 — Energy & carbon accounting
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P1-T6 gated 2026-09-12; P1-T7 not started)*
+*(empty — P1-T7 gated 2026-09-13, **Phase 1 complete → M1**; P2-T1 not started)*
 
 ---
 
@@ -74,8 +78,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P1-T4 Commit-time duration estimator | ✅ | `duration_estimator.py` + report | **RQ2** |
 | | P1-T5 Train, tune & calibrate (control + SE arms) | ✅ | models + calibration report | RQ1/2 |
 | | P1-T6 Family ablation + SHAP (calibration split) | ✅ | `results/p1/ablation/` + `shap/` | **RQ1** |
-| | P1-T7 Apply admission rule → model-level RQ2 | ► ⬜ | `incremental_value.md` + `admission.json` | **RQ2** |
-| **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ⬜ | `eligibility.py` + `validate_invariants.py` | RQ4 |
+| | P1-T7 Apply admission rule → model-level RQ2 | ✅ | `incremental_value.md` + `admission.json` | **RQ2** |
+| **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ► ⬜ | `eligibility.py` + `validate_invariants.py` | RQ4 |
 | | P2-T2 Energy & carbon accounting | ⬜ | `accounting.py` | RQ4 |
 | | P2-T3 `decide()` over `policy_spec` | ⬜ | `policy.py` + spec loader | RQ3 |
 | | P2-T4 Replay simulator (6 strategies) | ⬜ | `simulator.py` + sample run | RQ4 |
@@ -100,7 +104,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | Phase | Done / Total | Bar |
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
-| P1 Commit-time evidence | 6 / 7 | `[█████████████████░░░]` 86% |
+| P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
 | P2 Core + simulator + policy | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -126,3 +130,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-08-17 | P1-T4 Commit-time duration estimator | `scheduler_core/duration_estimator.py` + `tests/test_duration_estimator.py` (35 tests; **133 passed** overall, verbatim in `results/p1/pytest_p1_t4.txt`); real run `PYTHONPATH=. python scripts/fit_duration_estimator.py` (948s) → fit on **645,244** train builds / 628 projects (628p/645,244b matches the frozen split exactly), 40+40 seeded candidates, fit id `1088d5546f47ff12`. Calibration-split log1p MAE: **④b 0.600958** vs **④a 1.178319** ⇒ **primary = ④b** (Spearman ρ 0.869 vs 0.526). Cold start negligible: 99.89% on the project rung, 152 builds with no history. All five leakage checks PASS; round-trip identical. **Test split closed:** 170 projects / 138,693 builds dropped unread. **Adverse finding:** the declared trailing-50 sensitivity (MAE 0.2886, ρ 0.930) beats the predeclared expanding primary — reported, primary unchanged per §4.1 | none (finding recorded in `duration_control.md`) |
 | 2026-08-18 | P1-T5 Train, tune & calibrate (control + SE arms) | `scheduler_core/models.py` + `scripts/train_models.py` + `tests/test_models.py` + `tests/test_train_checkpoint.py` (**188 passed** overall, verbatim in `results/p1/pytest_p1_t5.txt`); real run `PYTHONPATH=. python scripts/train_models.py` (**3,113.6s**, log in `results/p1/model_training_run.log`) → all **6 arms** ({control, full} × {xgboost, logreg, random_forest}) tuned on **645,244** train builds / 628 projects (24.354% failure), 20 seeded candidates each per DL-018, calibrated on **138,687** calibration builds / 150 projects (28.5492% failure). `d̂` **loaded not refitted** (fit id `1088d5546f47ff12`, form ④b). **Isotonic chosen for all 6 arms** by calibration-split Brier (§5). All five checks PASS incl. round-trip on every arm; **test split closed** — 138,693 builds / 170 projects dropped unread. Calibration-split PR-AUC — `control`: xgboost **0.390357**, logreg 0.388304, rf 0.377358; `full`: rf 0.378120, xgboost 0.328552, logreg 0.307219. **Adverse finding (central to RQ2):** the `full` arm does **not** beat the `{d̂}` control on any metric for any algorithm on the calibration split — ROC-AUC falls 0.650712→0.539508 (xgboost), 0.654076→0.544902 (logreg), 0.638725→0.612636 (rf). Not an RQ verdict: the calibrator is in-sample here and the feature set was not chosen here; decomposition is P1-T6's, the model-level RQ2 verdict P1-T7's, confirmation P3-T1's. In-sample isotonic ECE is 0.000000 **by construction** (flagged in the report); the meaningful signal is the project-grouped out-of-fold Brier, +0.005156 to +0.014274 over in-sample. **Process:** the 2026-08-17 abort was re-run from scratch; per-arm checkpoint/resume added to `train_models.py` (fingerprint + model-reproduction guard, `artifacts/checkpoints/`, gitignored) and verified result-identical by 25 new tests plus a scratchpad 3-run cold/warm/abort harness; hardcoded `run_date` replaced with the real run date | none (findings recorded in `model_training.md` + `calibration/brier_ece_table.md`) |
 | 2026-09-12 | P1-T6 Feature-family ablation + SHAP (calibration split) | `scheduler_core/ablation_stats.py` + `scripts/run_ablation.py` + `tests/test_ablation_stats.py` (12 tests; **200 passed** overall, verbatim in `results/p1/pytest_p1_t6.txt`); real run `PYTHONPATH=. python scripts/run_ablation.py` (**6,532.1s**, log in `results/p1/ablation_run.log`) → the frozen P1-T5 `xgboost:control`/`xgboost:full` arms were loaded and re-verified (not refit) to reproduce their P1-T5 metrics exactly; **6 family arms** `{d̂+F1}`…`{d̂+F6}` trained/calibrated by the identical P1-T5 procedure on the same **645,244**-build train / **138,687**-build calibration split. **Every family's ΔPR-AUC vs `{d̂}` is negative** (F1 −0.003678, F2 −0.005526, F3 −0.023333, F4 −0.064694, F5 −0.066323, F6 −0.002920; all 95% CIs, B=1000, exclude 0 in the negative direction) — **zero families clear the §A1.7 model-level floor**, so **zero leave-one-out arms were triggered** (a predeclared, valid outcome, DL-019 §2 — not the RQ2 verdict itself, which is P1-T7's). Notable secondary finding: every single-family arm outperforms the `full` (all-28) arm's PR-AUC (0.3286), suggesting the families interfere when combined rather than each being independently harmful. SHAP (`results/p1/shap/`) on the frozen `full` arm: `d̂` itself is the strongest and only-clearly-useful monotone signal (Spearman ρ +0.588, CI excludes 0); `test_churn`/`test_density_ratio` SHAP is exactly 0 (confirms DL-016); no family clears the 0.8 project-identity-coded threshold, though F5 (team/developer) is close (between-project share 0.676). Test split closed throughout — 138,693 builds / 170 projects dropped unread. `results/p1/ablation/{ablation.md,deltas.json}` + `results/p1/shap/{shap_summary.md,shap_summary.json,family_importance.png}` are the gate evidence. | **DL-019** |
+| 2026-09-13 | P1-T7 Apply the admission rule → model-level RQ2 answer | `scheduler_core/admission.py` + `scripts/apply_admission.py` + `tests/test_admission.py` (12 tests; **212 passed** overall, verbatim in `results/p1/pytest_p1_t7.txt`); real run `PYTHONPATH=. python scripts/apply_admission.py` (log in `results/p1/admission_run.log`). **Nothing was fitted** — the task reads P1-T6's `deltas.json`/`shap_summary.json` and applies the frozen §A1.7 rule mechanically. **Model-level RQ2 answer: the NULL path.** All six families **rejected**; admitted set **empty**. Every family failed on the point estimate (ΔPR-AUC: F1 −0.003678, F2 −0.005526, F3 −0.023333, F4 −0.064694, F5 −0.066323, F6 −0.002920, all < the +0.01 floor), and all six additionally have a 95% CI lying **entirely below 0** — significantly *worse* than `{d̂}`, not merely short of the floor. **Floor sweep stable:** the admitted set is empty at ×0.5 (+0.005), ×1 (+0.01) and ×2 (+0.02) alike, which §A1.7 treats as the stronger finding. `results/p1/admission.json` records `policy_path: duration_only_fallback` for `fit_policy.py` (P2-T5). §A1.9 caveat reported for all six: F1/F2/F6 SHAP contributions are overwhelmingly **within**-project (between-shares 0.041/0.097/0.115) so their null cannot be explained away as redundancy with `d̂`'s project prior; F3/F4/F5 are mixed (0.604/0.353/0.676) where that redundancy stays a live explanation. Verdict bounded as a **lower bound** (DL-015/DL-016 weakened the SE side), calibration-split only, one algorithm/budget. **Test split still untouched** — this task reads no dataset at all. **Phase 1 complete → M1 (11/28, 39%).** | none (the directional reading of "≥ 0.01 absolute" was already fixed by **DL-019 §2**, before the deltas existed) |
