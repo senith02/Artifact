@@ -1,0 +1,8 @@
+gating 783,931 builds across 778 projects (test dropped unread: 138,693)
+  primary: 191,245 deferrable (24.3956%), 0 validator violations
+  primary: cross-check 55,228 distinct pairs, 0 disagreements
+  protected_includes_integration: 132,100 deferrable (16.8510%), 0 validator violations
+  protected_includes_integration: cross-check 55,228 distinct pairs, 0 disagreements
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\eligibility_gate.json
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\eligibility_gate.md
+done in 37.3s

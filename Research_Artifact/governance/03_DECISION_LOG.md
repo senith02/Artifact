@@ -877,4 +877,108 @@ edit or delete past entries (supersede them with a new entry instead).
   `results/p1/ablation/`, `results/p1/shap/`. P1-T7 consumes `results/p1/ablation/deltas.json` to apply
   the actual §A1.7 rule with its sweep; nothing here pre-empts that verdict.
 
-<!-- Append DL-020, DL-021, … below as the project progresses. -->
+### DL-020 — The Stage-1 eligibility gate is an experimental approximation of deferability, not a measurement of it
+- **Date:** 2026-09-17
+- **Status:** Accepted (implementation-level; **written before any line of `eligibility.py` existed**,
+  per R4 and `development_plan.md` P2-T1 S1)
+- **Spec section affected:** §3.4 (Stage 1's deferrable/non-deferrable classes), §4 (the
+  "eligibility-gate safety" metric and the deferrable-fraction sensitivity sweep), §6 (threats).
+  **No clause is amended** — §3.4 defines the classes in terms of build *trigger type*, and this entry
+  records that TravisTorrent does not carry trigger type, so the classes must be approximated from the
+  two columns it does carry. `context/dataset_reference.md` already flags this and routes it here.
+
+- **Context.** §3.4 partitions builds by trigger:
+  - *non-deferrable:* (a) pull-request-**blocking** builds, (b) release/tag builds, (c) hotfix-tagged or
+    production-branch builds, (d) manually-triggered builds;
+  - *deferrable:* (e) scheduled/nightly builds, (f) non-blocking pushes to non-protected branches.
+
+  The backbone dataset records **none of these six trigger types**. It carries `gh_is_pr` (a boolean)
+  and `git_branch` (a free-text name), and nothing else bearing on urgency. Measured on the 783,931
+  train + calibration builds (`results/p2/branch_profile.md`, run `python scripts/profile_branches.py`,
+  2026-09-17): both columns are **100% present** (0 missing), `gh_is_pr` is true for 140,506 builds
+  (17.9233%), and `git_branch` takes **54,512 distinct values**, led by `master` (500,226; 63.8100%),
+  `develop` (47,232; 6.0250%), `trunk` (18,697; 2.3850%) and `dev` (14,875; 1.8975%). Branch names that
+  *look* release-shaped are a small minority: semver-tag-like 28,297 (3.6096%), `release/…` 7,483
+  (0.9545%), `…stable` 1,560 (0.1990%), hotfix-like 754 (0.0962%).
+
+- **Decision.**
+
+  1. **The implemented gate.** A build is **deferrable** iff **both** hold, evaluated in this order:
+     `gh_is_pr` is falsey, **and** its `git_branch` matches **no** pattern in a frozen, named
+     protected/release pattern table. Every other build — including every build whose inputs are
+     missing, unparseable or unrecognised — is **non-deferrable**. The pattern table lives in
+     `scheduler_core/eligibility.py` as data, each entry carrying the §3.4 class it approximates and the
+     profile row that motivated it.
+
+  2. **Unresolvable direction: fail closed.** Missing `gh_is_pr`, missing/blank `git_branch`, or any
+     input the gate cannot interpret ⇒ **non-deferrable (run now)**. The gate's error is deliberately
+     one-sided: it may run a build that could safely have waited, and it must not defer a build it does
+     not understand. This is asserted by test, not merely documented.
+
+  3. **Two §3.4 classes are not approximated at all, and this is declared rather than papered over.**
+     - **(d) manually-triggered builds** have no marker in the data. They are silently pooled into
+       whichever class their PR/branch values imply. Size: **unmeasurable in this corpus**.
+     - **(e) scheduled/nightly builds** likewise have no marker (Travis cron postdates most of this
+       2011–2016 release). Consequence: the deferrable set produced by this gate consists **entirely**
+       of §3.4 class (f). **The single most obviously-deferrable category in the frozen design is
+       absent from the evidence base**, and every carbon/latency number in this study is therefore
+       computed over the *harder*, more marginal part of the deferrable population.
+
+  4. **PR builds are treated as blocking.** §3.4 says "pull-request-**blocking**"; whether a PR check
+     was a required status check is not recorded. All 140,506 PR builds are therefore treated as
+     blocking ⇒ non-deferrable. This is the conservative direction under (2). Note that `git_branch` on
+     a PR build appears to record the PR's **target** branch (81.4% of PR builds — 114,393 of 140,506 —
+     carry a `master`-like name), so the two inputs are not independent; the gate tests `gh_is_pr`
+     first, so this does not change any outcome, but it does mean branch-pattern statistics must not be
+     read as statistics about push builds.
+
+  5. **The one consequential judgement call, declared now and swept later.** `develop`/`dev`/`devel`/
+     `development` (62,408 builds, 7.9609% by the `^(develop|dev)$` pattern alone) are **not** treated
+     as protected in the primary rule, because §3.4's non-deferrable class is "**production**-branch",
+     and an integration branch is by construction not production. This is the choice most likely to be
+     challenged, so it does not stay a silent constant: it is registered as a named variant
+     (`protected_includes_integration`) in the §4 **deferrable-fraction sensitivity sweep** at P3-T4,
+     alongside the primary. No other pattern-table entry is swept individually.
+
+  6. **What the "eligibility-gate safety = 0 non-deferrable builds deferred" metric (§4) actually
+     proves.** `code/replay/validate_invariants.py` re-derives eligibility from the raw columns through
+     a **separate code path** that does not import `eligibility.py`. A pass therefore proves the
+     simulator never deferred a build **this rule** calls non-deferrable — i.e. **internal consistency
+     between the gate and its consumers**. It is *not*, and must never be reported as, evidence that
+     the rule identifies genuinely deferrable builds. The two claims are one word apart in English and
+     must be kept apart everywhere in the write-up.
+
+  7. **Naming discipline.** In code, results and the dissertation the gate's output is called
+     **`eligible` / `deferrable-by-rule`**, never "safe to defer" and never "non-urgent".
+
+- **Rationale.** The alternatives were: (i) drop Stage 1 — impossible, it is frozen invariant 1 and the
+  thing that keeps risk separate from urgency; (ii) *infer* deferability from data, e.g. by learning it
+  from outcomes — this is precisely the conflation §3.4 exists to prevent, and would make the ML score
+  its own eligibility gate; (iii) restrict the study to builds whose trigger is known — no such subset
+  exists here; (iv) approximate from the two available columns and declare the approximation's exact
+  shape and blind spots up front. Only (iv) is both executable and honest. Fail-closed (2) was chosen
+  over fail-open because the asymmetry of harm is real and asymmetric: wrongly running a deferrable
+  build costs some foregone carbon saving, while wrongly deferring an urgent build costs developer
+  feedback on a change someone is waiting for — and only the first of those is recoverable.
+
+- **Consequences.**
+  - **New:** `scheduler_core/eligibility.py`, `code/replay/validate_invariants.py`,
+    `tests/test_eligibility.py`, `scripts/profile_branches.py`, `results/p2/branch_profile.{json,md}`.
+  - **Threats to validity (§6) gains a first-order entry**, to be carried verbatim into P5-T4: *the
+    study's independent variable — deferability — is not observed. It is approximated by a rule over
+    two proxy columns, two of the six specified trigger classes cannot be approximated at all, and the
+    approximation's error rate is **unmeasurable in this corpus** because no ground-truth deferability,
+    developer-urgency or business-priority label exists in TravisTorrent. No result in this study should
+    be read as evidence about which builds are genuinely safe to delay.* This is the construct-validity
+    limit of the whole artifact, not a footnote about one module.
+  - **P3-T4** must carry the `protected_includes_integration` variant and the deferrable-fraction sweep;
+    a gate this approximate makes the sweep the load-bearing robustness result, not a nice-to-have.
+  - **P4** inherits the implication that a deployed artifact must take eligibility from **team
+    configuration**, not from this rule — the rule is an experimental stand-in for a policy input that a
+    real user would supply. Recorded here as a consequence; the P4 contract itself is **not** changed by
+    this entry and stays as specified until P3 resolves the null path.
+  - **Strategy ③ (eligibility-only)** is a baseline built on this approximation, so ③-vs-⑤ comparisons
+    inherit its error in **both** arms — which is the reason the comparison remains informative even
+    though the gate is approximate: the gate is held identical across strategies by construction.
+
+<!-- Append DL-021, DL-022, … below as the project progresses. -->

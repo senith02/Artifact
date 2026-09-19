@@ -1,0 +1,336 @@
+{
+  "command": "python scripts/profile_branches.py",
+  "run_date": "2026-09-17",
+  "splits_read": [
+    "calibration",
+    "train"
+  ],
+  "split_assignment": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p1\\split_assignment.csv",
+  "funnel": {
+    "job_rows_read": 3881992,
+    "builds_after_aggregation": 925897,
+    "analytic_builds": 922624,
+    "test_split_builds_dropped_unread": 138693,
+    "unassigned_builds_dropped": 0,
+    "builds_profiled_train_plus_calibration": 783931
+  },
+  "branch": {
+    "builds": 783931,
+    "branch_present": 783931,
+    "branch_missing": 0,
+    "branch_missing_share": 0.0,
+    "distinct_branch_names": 54512,
+    "top_branches": [
+      {
+        "branch": "master",
+        "builds": 500226,
+        "share": 0.6380995266165007
+      },
+      {
+        "branch": "develop",
+        "builds": 47232,
+        "share": 0.060250200591633704
+      },
+      {
+        "branch": "trunk",
+        "builds": 18697,
+        "share": 0.023850313356660217
+      },
+      {
+        "branch": "dev",
+        "builds": 14875,
+        "share": 0.01897488426915124
+      },
+      {
+        "branch": "devel",
+        "builds": 9864,
+        "share": 0.012582740062582039
+      },
+      {
+        "branch": "development",
+        "builds": 2372,
+        "share": 0.0030257765032891924
+      },
+      {
+        "branch": "NRPUIV2",
+        "builds": 1727,
+        "share": 0.0022030000089293574
+      },
+      {
+        "branch": "stable",
+        "builds": 1560,
+        "share": 0.001989971056126113
+      },
+      {
+        "branch": "3.0.x",
+        "builds": 1259,
+        "share": 0.0016060086920915233
+      },
+      {
+        "branch": "1.0",
+        "builds": 1221,
+        "share": 0.0015575350381602463
+      },
+      {
+        "branch": "redesign/react",
+        "builds": 1118,
+        "share": 0.0014261459235570477
+      },
+      {
+        "branch": "ng",
+        "builds": 1047,
+        "share": 0.0013355767280538722
+      },
+      {
+        "branch": "2.0",
+        "builds": 905,
+        "share": 0.0011544383370475208
+      },
+      {
+        "branch": "1.2",
+        "builds": 891,
+        "share": 0.0011365796224412608
+      },
+      {
+        "branch": "twerks",
+        "builds": 845,
+        "share": 0.001077900988734978
+      },
+      {
+        "branch": "release",
+        "builds": 832,
+        "share": 0.0010613178966005937
+      },
+      {
+        "branch": "candidate",
+        "builds": 799,
+        "share": 0.0010192223550286952
+      },
+      {
+        "branch": "qa",
+        "builds": 789,
+        "share": 0.0010064661303099379
+      },
+      {
+        "branch": "release/5.0",
+        "builds": 771,
+        "share": 0.000983504925816175
+      },
+      {
+        "branch": "feature/rails3",
+        "builds": 758,
+        "share": 0.0009669218336817908
+      },
+      {
+        "branch": "bleeding",
+        "builds": 706,
+        "share": 0.0009005894651442538
+      },
+      {
+        "branch": "1.8",
+        "builds": 642,
+        "share": 0.000818949626944208
+      },
+      {
+        "branch": "v5.0",
+        "builds": 611,
+        "share": 0.000779405330316061
+      },
+      {
+        "branch": "stable-2.0",
+        "builds": 608,
+        "share": 0.0007755784629004339
+      },
+      {
+        "branch": "020",
+        "builds": 595,
+        "share": 0.0007589953707660495
+      },
+      {
+        "branch": "CDB-2891",
+        "builds": 504,
+        "share": 0.0006429137258253596
+      },
+      {
+        "branch": "1.x-stable",
+        "builds": 492,
+        "share": 0.0006276062561628511
+      },
+      {
+        "branch": "global-net",
+        "builds": 473,
+        "share": 0.0006033694291972125
+      },
+      {
+        "branch": "bootstrap",
+        "builds": 471,
+        "share": 0.000600818184253461
+      },
+      {
+        "branch": "3.0.0-stable",
+        "builds": 463,
+        "share": 0.0005906132044784554
+      },
+      {
+        "branch": "1.9.x",
+        "builds": 450,
+        "share": 0.0005740301123440711
+      },
+      {
+        "branch": "develop_2.0",
+        "builds": 437,
+        "share": 0.0005574470202096869
+      },
+      {
+        "branch": "sis-master",
+        "builds": 437,
+        "share": 0.0005574470202096869
+      },
+      {
+        "branch": "python3",
+        "builds": 430,
+        "share": 0.0005485176629065568
+      },
+      {
+        "branch": "v1.0.0-alpha0",
+        "builds": 419,
+        "share": 0.000534485815715924
+      },
+      {
+        "branch": "1.5-branch",
+        "builds": 405,
+        "share": 0.000516627101109664
+      },
+      {
+        "branch": "release/3.0",
+        "builds": 391,
+        "share": 0.000498768386503404
+      },
+      {
+        "branch": "v1.3.x",
+        "builds": 384,
+        "share": 0.000489839029200274
+      },
+      {
+        "branch": "v1.5.x",
+        "builds": 384,
+        "share": 0.000489839029200274
+      },
+      {
+        "branch": "staging",
+        "builds": 379,
+        "share": 0.0004834609168408954
+      }
+    ],
+    "candidate_patterns": {
+      "master": {
+        "group": "protected_like",
+        "pattern": "^master$",
+        "builds": 500226,
+        "share_of_named": 0.6380995266165007,
+        "distinct_branch_names": 1
+      },
+      "main": {
+        "group": "protected_like",
+        "pattern": "^main$",
+        "builds": 2,
+        "share_of_named": 2.551244943751427e-06,
+        "distinct_branch_names": 1
+      },
+      "trunk": {
+        "group": "protected_like",
+        "pattern": "^trunk$",
+        "builds": 18697,
+        "share_of_named": 0.023850313356660217,
+        "distinct_branch_names": 1
+      },
+      "default": {
+        "group": "protected_like",
+        "pattern": "^default$",
+        "builds": 1,
+        "share_of_named": 1.2756224718757135e-06,
+        "distinct_branch_names": 1
+      },
+      "develop_or_dev": {
+        "group": "protected_like",
+        "pattern": "^(develop|dev)$",
+        "builds": 62408,
+        "share_of_named": 0.07960904722481953,
+        "distinct_branch_names": 3
+      },
+      "production_like": {
+        "group": "protected_like",
+        "pattern": "^(production|prod|live)$",
+        "builds": 358,
+        "share_of_named": 0.00045667284493150544,
+        "distinct_branch_names": 2
+      },
+      "release_branch": {
+        "group": "protected_like",
+        "pattern": "^release[/_-]",
+        "builds": 7483,
+        "share_of_named": 0.009545482957045964,
+        "distinct_branch_names": 808
+      },
+      "stable_suffix": {
+        "group": "protected_like",
+        "pattern": "(^|[/_-])stable$",
+        "builds": 1560,
+        "share_of_named": 0.001989971056126113,
+        "distinct_branch_names": 1
+      },
+      "maint_branch": {
+        "group": "protected_like",
+        "pattern": "^(maint|maintenance)([/_-]|$)",
+        "builds": 140,
+        "share_of_named": 0.00017858714606259988,
+        "distinct_branch_names": 36
+      },
+      "version_branch": {
+        "group": "protected_like",
+        "pattern": "^v?\\d+(\\.\\d+)+([/_-].*)?$",
+        "builds": 29187,
+        "share_of_named": 0.03723159308663645,
+        "distinct_branch_names": 6625
+      },
+      "hotfix_like": {
+        "group": "protected_like",
+        "pattern": "(^|[/_-])(hotfix|hotfixes)([/_-]|$)",
+        "builds": 754,
+        "share_of_named": 0.000961819343794288,
+        "distinct_branch_names": 177
+      },
+      "tag_like_semver": {
+        "group": "release_tag_like",
+        "pattern": "^v?\\d+\\.\\d+(\\.\\d+)?([-+].*)?$",
+        "builds": 28297,
+        "share_of_named": 0.036096289086667066,
+        "distinct_branch_names": 5891
+      },
+      "rc_like": {
+        "group": "release_tag_like",
+        "pattern": "(^|[/_-])(rc\\d*|beta|alpha)([/_-]|$)",
+        "builds": 265,
+        "share_of_named": 0.0003380399550470641,
+        "distinct_branch_names": 29
+      }
+    }
+  },
+  "is_pr": {
+    "is_pr_present": 783931,
+    "is_pr_missing": 0,
+    "raw_value_counts": {
+      "false": 643425,
+      "true": 140506
+    },
+    "pr_builds": 140506,
+    "pr_share": 0.17923261103336902,
+    "cross_tab": {
+      "pr_and_master_like": 114393,
+      "pr_and_other_branch": 26113,
+      "push_and_master_like": 404533,
+      "push_and_other_branch": 238892
+    }
+  },
+  "elapsed_s": 30.130417999986093
+}

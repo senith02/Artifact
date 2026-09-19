@@ -1,0 +1,39 @@
+........................................................................ [ 18%]
+........................................................................ [ 37%]
+........................................................................ [ 56%]
+........................................................................ [ 75%]
+........................................................................ [ 94%]
+......................                                                   [100%]
+382 passed in 25.89s
+
+=== Named evidence: the validator's negative test + independence checks (-v) ===
+============================= test session starts =============================
+platform win32 -- Python 3.11.1, pytest-9.1.0, pluggy-1.6.0
+rootdir: C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code
+configfile: pyproject.toml
+plugins: anyio-4.14.0
+collected 170 items / 108 deselected / 62 selected
+
+tests\test_eligibility.py .............................................. [ 74%]
+................                                                         [100%]
+
+===================== 62 passed, 108 deselected in 3.02s ======================
+
+=== CLI negative self-test ===
+      "action": "defer",
+      "why_non_deferrable": "git_branch='master' matches protected rule 'mainline'"
+    }
+  ]
+}
+self-test PASS: expected 2 violations, got 2
+
+=== Named evidence (-o addopts='' -v): the DoD's negative test + independence ===
+tests/test_eligibility.py::test_validator_does_not_import_the_gate_at_module_level PASSED [ 12%]
+tests/test_eligibility.py::test_validator_audit_path_works_without_importing_the_gate PASSED [ 25%]
+tests/test_eligibility.py::test_validator_catches_the_violating_fixture PASSED [ 37%]
+tests/test_eligibility.py::test_validator_passes_on_gate_output PASSED   [ 50%]
+tests/test_eligibility.py::test_validator_reports_missing_columns_instead_of_passing_silently PASSED [ 62%]
+tests/test_eligibility.py::test_validator_honours_the_swept_variant PASSED [ 75%]
+tests/test_eligibility.py::test_validator_cli_self_test_passes PASSED    [ 87%]
+tests/test_eligibility.py::test_validator_cli_fails_on_a_violating_file PASSED [100%]
+====================== 8 passed, 162 deselected in 3.34s ======================

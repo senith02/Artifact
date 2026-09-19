@@ -1,0 +1,168 @@
+{
+  "command": "python scripts/apply_eligibility.py",
+  "run_date": "2026-09-17",
+  "splits_read": [
+    "calibration",
+    "train"
+  ],
+  "funnel": {
+    "analytic_builds": 922624,
+    "test_split_builds_dropped_unread": 138693,
+    "builds_gated_train_plus_calibration": 783931,
+    "distinct_projects": 778
+  },
+  "variants": [
+    {
+      "variant": "primary",
+      "summary": {
+        "builds": 783931,
+        "eligible": 191245,
+        "non_eligible": 592686,
+        "eligible_fraction": 0.24395641963387082,
+        "by_rule": {
+          "protected:mainline": 404533,
+          "push_to_unprotected_branch": 191245,
+          "pr_blocking": 140506,
+          "protected:version_like": 26068,
+          "protected:stable": 6865,
+          "protected:version_x_suffix": 6145,
+          "protected:release_branch": 5848,
+          "protected:release_bare": 827,
+          "protected:hotfix": 715,
+          "protected:prerelease": 700,
+          "protected:production_named": 357,
+          "protected:maintenance": 122
+        }
+      },
+      "validator_audit": {
+        "path": "<gate output:primary>",
+        "rows": 783931,
+        "deferred": 191245,
+        "violations": 0,
+        "passed": true,
+        "missing_columns": [],
+        "violation_rows": []
+      }
+    },
+    {
+      "variant": "protected_includes_integration",
+      "summary": {
+        "builds": 783931,
+        "eligible": 132100,
+        "non_eligible": 651831,
+        "eligible_fraction": 0.16850972853478177,
+        "by_rule": {
+          "protected:mainline": 404533,
+          "pr_blocking": 140506,
+          "push_to_unprotected_branch": 132100,
+          "protected:integration": 59145,
+          "protected:version_like": 26068,
+          "protected:stable": 6865,
+          "protected:version_x_suffix": 6145,
+          "protected:release_branch": 5848,
+          "protected:release_bare": 827,
+          "protected:hotfix": 715,
+          "protected:prerelease": 700,
+          "protected:production_named": 357,
+          "protected:maintenance": 122
+        }
+      },
+      "validator_audit": {
+        "path": "<gate output:protected_includes_integration>",
+        "rows": 783931,
+        "deferred": 132100,
+        "violations": 0,
+        "passed": true,
+        "missing_columns": [],
+        "violation_rows": []
+      }
+    }
+  ],
+  "cross_checks": [
+    {
+      "pairs_checked": 55228,
+      "disagreements": 0,
+      "agree": true,
+      "examples": [],
+      "distinct_branch_names": 54512,
+      "variant": "primary"
+    },
+    {
+      "pairs_checked": 55228,
+      "disagreements": 0,
+      "agree": true,
+      "examples": [],
+      "distinct_branch_names": 54512,
+      "variant": "protected_includes_integration"
+    }
+  ],
+  "rule_table": [
+    {
+      "name": "mainline",
+      "pattern": "(?:master|main|trunk|default)",
+      "spec_class": "(c) production-branch",
+      "evidence": "master 500,226 builds (63.8100%); trunk 18,697; main 2; default 1"
+    },
+    {
+      "name": "production_named",
+      "pattern": "(?:production|prod|live)",
+      "spec_class": "(c) production-branch",
+      "evidence": "358 builds (0.0457%) across 2 distinct names"
+    },
+    {
+      "name": "release_branch",
+      "pattern": "release[/_-].*",
+      "spec_class": "(b) release/tag build",
+      "evidence": "7,483 builds (0.9545%) across 808 distinct names"
+    },
+    {
+      "name": "release_bare",
+      "pattern": "release",
+      "spec_class": "(b) release/tag build",
+      "evidence": "the bare name `release`, 832 builds (0.1061%)"
+    },
+    {
+      "name": "stable",
+      "pattern": ".*(?:^|[/_-])stable(?:[/_-].*)?",
+      "spec_class": "(c) production-branch",
+      "evidence": "`stable` 1,560 builds; matched as a delimited token anywhere in the name so that all three shapes the profile shows are covered \u2014 `1x-stable`-style suffixes (`1.x-stable` 492, `3.0.0-stable` 463) and prefixes alike (`stable-2.0` 608). `unstable` is not matched"
+    },
+    {
+      "name": "maintenance",
+      "pattern": "(?:maint|maintenance)(?:[/_-].*)?",
+      "spec_class": "(c) production-branch",
+      "evidence": "140 builds (0.0179%) across 36 distinct names"
+    },
+    {
+      "name": "hotfix",
+      "pattern": ".*(?:^|[/_-])(?:hotfix|hotfixes)(?:[/_-].*)?",
+      "spec_class": "(c) hotfix-tagged",
+      "evidence": "754 builds (0.0962%) across 177 distinct names"
+    },
+    {
+      "name": "version_like",
+      "pattern": "v?\\d+(?:\\.\\d+)+(?:[.\\d]*)?(?:[/_-].*)?",
+      "spec_class": "(b) release/tag build",
+      "evidence": "version-shaped names 29,187 builds (3.7232%) across 6,625 distinct names \u2014 Travis writes a tag build's tag into `git_branch`, so these are the corpus's only trace of \u00a73.4's release/tag class"
+    },
+    {
+      "name": "version_x_suffix",
+      "pattern": "v?\\d+(?:\\.\\d+)*\\.x",
+      "spec_class": "(b) release/tag build",
+      "evidence": "`3.0.x`, `1.9.x`, `v1.3.x` \u2014 version series that `version_like` does not reach because of the literal `x` component"
+    },
+    {
+      "name": "prerelease",
+      "pattern": ".*(?:^|[/_-])(?:rc\\d*|beta|alpha)(?:[/_-].*)?",
+      "spec_class": "(b) release/tag build",
+      "evidence": "265 builds (0.0338%) across 29 distinct names"
+    },
+    {
+      "name": "integration",
+      "pattern": "(?:develop|dev|devel|development)(?:[/_-].*)?",
+      "spec_class": "(c) production-branch \u2014 contested reading",
+      "evidence": "develop 47,232; dev 14,875; devel 9,864; development 2,372 builds"
+    }
+  ],
+  "elapsed_s": 37.33257580001373
+}
