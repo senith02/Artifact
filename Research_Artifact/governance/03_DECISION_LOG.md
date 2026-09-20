@@ -981,4 +981,92 @@ edit or delete past entries (supersede them with a new entry instead).
     inherit its error in **both** arms — which is the reason the comparison remains informative even
     though the gate is approximate: the gate is held identical across strategies by construction.
 
-<!-- Append DL-021, DL-022, … below as the project progresses. -->
+### DL-021 — `P_avg_W` is pinned at 42.5 W, cited from CodeCarbon's constant-mode CPU fallback (discharges DL-007's cite-or-log)
+
+- **Date:** 2026-09-20
+- **Status:** Accepted (implementation-level; **written before any line of `accounting.py` existed**,
+  per R4 and `development_plan.md` P2-T2 S1)
+- **Spec section affected:** §3.2 (the energy model's power constant). **No clause is amended.**
+  DL-007 deliberately left `P_avg_W` unset and instructed that it be *cited* at implementation time and
+  recorded "in config + a follow-up DL entry with the citation"; `results/p0/eval_protocol.md` §8 and
+  §11 repeat that this is *the only value the protocol defers by design*. This entry is that follow-up.
+
+- **Context.** DL-007 fixed the formula `E_kWh = (P_avg_W / 1000) · (duration_s / 3600)` and DL-010
+  fixed `duration_s = tr_duration`, but neither fixed the wattage — precisely so that no session would
+  invent one (R1). TravisTorrent records no hardware, no power draw and no machine type for the builds
+  it contains, so `P_avg_W` **cannot be measured from the backbone dataset**; it must come from an
+  external published source, which is what DL-007 anticipated. The named candidate sources are
+  CodeCarbon and Eco-CI (spec §3.2, "CodeCarbon/EcoCI software models").
+
+- **Decision.**
+
+  1. **`P_avg_W = 42.5`** watts — the average power CodeCarbon attributes to a CPU it cannot identify.
+     It is a **derived** figure, and both of its factors are quoted from the source rather than
+     restated from memory:
+
+     | Factor | Value | Where |
+     | :-- | :-- | :-- |
+     | Global fallback TDP | `POWER_CONSTANT = 85` (W) | `codecarbon/external/hardware.py` line 13, tag `v3.3.1` |
+     | Assumed mean utilisation of TDP | `CONSUMPTION_PERCENTAGE_CONSTANT = 0.5` | same file, line 15 |
+     | Constant-mode power law | `power = self._tdp * CONSUMPTION_PERCENTAGE_CONSTANT` | same file, line 256 (`_get_power_from_cpus`) |
+
+     ⇒ `P_avg_W = 85 × 0.5 = 42.5`.
+
+  2. **Citation of record** (recorded verbatim in `scheduler_core/config/energy.json` and reproduced in
+     the threats chapter):
+     - CodeCarbon, *Methodology — CPU power estimation*.
+       <https://docs.codecarbon.io/latest/explanation/methodology/> — "If the CPU is not found in the
+       data source, a global constant will be applied"; "CodeCarbon assumes that 50% of the TDP will be
+       the average power consumption to make this approximation." Accessed 2026-09-20.
+     - CodeCarbon source, **pinned at release tag `v3.3.1`** (published 2026-09-09), file
+       `codecarbon/external/hardware.py`:
+       <https://github.com/mlco2/codecarbon/blob/v3.3.1/codecarbon/external/hardware.py> — the two
+       constants and the constant-mode power law quoted in (1). Accessed 2026-09-20.
+
+     The tag is pinned rather than `master` so the citation stays checkable (R8): a later CodeCarbon
+     release that changes either constant does not silently change this study's energy model.
+
+  3. **Scope of the constant.** 42.5 W is CodeCarbon's **CPU-only** constant-mode figure. This artifact
+     applies it as the *whole-machine* `P_avg_W` and adds **no** RAM or GPU term. Travis's hosted Linux
+     builds are CPU-bound container/VM workloads with no attached GPU, and CodeCarbon's RAM model needs
+     an installed-memory figure that TravisTorrent does not record. The omission biases **absolute**
+     gCO₂e **downward** and is declared as such; it does not affect relative strategy comparisons,
+     which is the comparison this study actually rests on (DL-007 rationale).
+
+  4. **Eco-CI was considered and rejected as the source.** Eco-CI estimates power from a per-machine
+     regression over CPU utilisation and SPECpower-derived machine models. It yields no single published
+     constant that can be pinned and re-checked, and it needs a utilisation time series that this
+     replay — which knows only a build's wall-clock duration — cannot supply. CodeCarbon's constant mode
+     is the weaker model but the **citable and reproducible** one, which is what DL-007 asked for.
+
+- **Rationale.** DL-007's own rationale already records why this choice is tolerable: `P_avg` scales
+  every strategy identically, so the **relative** carbon comparisons that carry RQ4 are invariant to it,
+  while **absolute** gCO₂e claims are not — hence the mandatory ±50% band, which this entry leaves
+  untouched at `P_avg × {0.5, 1.0, 1.5}` = **{21.25, 42.5, 63.75} W**. Choosing a *documented default
+  for an unidentified CPU* is also the honest match to the epistemic situation: the hardware genuinely
+  is unidentified, and a sharper-looking figure would imply knowledge this dataset does not contain.
+
+- **Consequences.**
+  - **New:** `scheduler_core/accounting.py`, `scheduler_core/config/energy.json`,
+    `tests/test_accounting.py`.
+  - **The energy config is JSON, not YAML.** `pyproject.toml`/`requirements.lock.txt` pin no YAML
+    reader, and P2-T2's DoD does not need one; adding a runtime dependency belongs to the task that
+    actually requires it. **Carried forward:** P2-T3/P2-T5 must load
+    `scheduler_core/config/policy_spec.yaml` (named by Layer 0-A invariant 7 and by the plan), so one of
+    those tasks has to either add PyYAML to the §3.2 stack under its own DL entry or justify a different
+    reader. Flagged here so it is not discovered late.
+  - **Task-number drift, recorded not acted on.** `eval_protocol.md` §8/§11 assign the `P_avg` pinning to
+    "P2-T3" and §7 assigns the `W_max` config file to "P2-T2". Those IDs are from the **pre-DL-012**
+    22-task plan; under the current 28-task plan the accounting task is **P2-T2** and `decide()` is
+    **P2-T3**. This entry discharges the `P_avg` obligation at the task that now owns accounting. The
+    `W_max`/window constants are **not** placed in the energy config — they are policy thresholds and
+    belong to `policy_spec.yaml` under invariant 7 (evidence-derived, never hand-tuned), fitted in P2-T5.
+    No protocol clause is changed; only the task label it was written against has moved.
+  - **Threats chapter (§6), P5-T4** gains: *the power constant is a documented default for an
+    unidentified CPU, not a measurement of Travis build hardware; it carries no RAM or GPU term;
+    absolute gCO₂e figures are therefore indicative only and every one of them is reported inside the
+    ±50% band.*
+  - **P3-T4** sweeps the band; the DL-010 `n_jobs`-scaled variant hook is implemented in the same module
+    so the parallel-compute under-count can be bracketed alongside it.
+
+<!-- Append DL-022, DL-023, … below as the project progresses. -->

@@ -1,0 +1,63 @@
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 47%]
+........................................................................ [ 63%]
+........................................................................ [ 78%]
+........................................................................ [ 94%]
+........................                                                 [100%]
+456 passed in 24.81s
+
+===============================================================================
+P2-T2 DoD evidence — the hand-computed energy/carbon cases, the +/-50% P_avg
+band, the DL-010 n_jobs variant, and the A1.2 role-1 boundary, named verbosely.
+===============================================================================
+
+============================= test session starts =============================
+platform win32 -- Python 3.11.1, pytest-9.1.0, pluggy-1.6.0 -- C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\.venv\Scripts\python.exe
+rootdir: C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code
+configfile: pyproject.toml
+plugins: anyio-4.14.0
+collecting ... collected 74 items / 34 deselected / 40 selected
+
+tests/test_accounting.py::test_accounting_imports_no_decision_path_module PASSED [  2%]
+tests/test_accounting.py::test_no_decision_path_module_imports_accounting PASSED [  5%]
+tests/test_accounting.py::test_accounting_opens_no_dataset_and_no_build_rows PASSED [  7%]
+tests/test_accounting.py::test_every_energy_entry_point_requires_an_explicit_duration PASSED [ 10%]
+tests/test_accounting.py::test_p_avg_is_not_hard_coded_in_the_module PASSED [ 12%]
+tests/test_accounting.py::test_config_pins_p_avg_at_its_cited_derivation PASSED [ 15%]
+tests/test_accounting.py::test_config_carries_a_pinned_checkable_citation PASSED [ 17%]
+tests/test_accounting.py::test_config_rejects_a_wattage_that_contradicts_its_own_derivation PASSED [ 20%]
+tests/test_accounting.py::test_one_hour_at_p_avg_is_exactly_p_avg_over_1000_kwh PASSED [ 22%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[3600.0-100.0-0.1] PASSED [ 25%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[1800.0-100.0-0.05] PASSED [ 27%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[7200.0-42.5-0.085] PASSED [ 30%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[60.0-60.0-0.001] PASSED [ 32%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[0.0-42.5-0.0] PASSED [ 35%]
+tests/test_accounting.py::test_energy_matches_hand_computed_values[3600.0-1000.0-1.0] PASSED [ 37%]
+tests/test_accounting.py::test_p_avg_band_is_the_mandated_plus_minus_50_percent PASSED [ 40%]
+tests/test_accounting.py::test_energy_band_scales_exactly_with_the_multiplier PASSED [ 42%]
+tests/test_accounting.py::test_band_multipliers_come_from_the_config_not_the_module PASSED [ 45%]
+tests/test_accounting.py::test_n_jobs_variant_is_off_by_default_and_scales_when_enabled PASSED [ 47%]
+tests/test_accounting.py::test_n_jobs_variant_rejects_an_unusable_job_count[0] PASSED [ 50%]
+tests/test_accounting.py::test_n_jobs_variant_rejects_an_unusable_job_count[-3] PASSED [ 52%]
+tests/test_accounting.py::test_n_jobs_variant_rejects_an_unusable_job_count[1.5] PASSED [ 55%]
+tests/test_accounting.py::test_n_jobs_variant_rejects_an_unusable_job_count[4] PASSED [ 57%]
+tests/test_accounting.py::test_n_jobs_variant_rejects_an_unusable_job_count[True] PASSED [ 60%]
+tests/test_accounting.py::test_carbon_matches_hand_computed_values PASSED [ 62%]
+tests/test_accounting.py::test_carbon_for_slot_charges_the_scheduled_slot_not_the_arrival_slot PASSED [ 65%]
+tests/test_accounting.py::test_sci_divides_total_carbon_by_successful_builds_only PASSED [ 67%]
+tests/test_accounting.py::test_sci_charges_a_strategy_for_carbon_spent_on_failing_builds PASSED [ 70%]
+tests/test_accounting.py::test_sci_rejects_misaligned_carbon_and_labels PASSED [ 72%]
+tests/test_accounting.py::test_sci_is_undefined_with_no_successful_builds PASSED [ 75%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[2] PASSED [ 77%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[-1] PASSED [ 80%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[0] PASSED [ 82%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[None] PASSED [ 85%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[0.5] PASSED [ 87%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[True] PASSED [ 90%]
+tests/test_accounting.py::test_sci_rejects_labels_outside_the_frozen_convention[nan] PASSED [ 92%]
+tests/test_accounting.py::test_sci_accepts_integral_labels_from_a_dataframe PASSED [ 95%]
+tests/test_accounting.py::test_sci_and_carbon_per_1000_agree_when_every_build_passes PASSED [ 97%]
+tests/test_accounting.py::test_end_to_end_worked_example_on_the_real_config PASSED [100%]
+
+====================== 40 passed, 34 deselected in 0.98s ======================

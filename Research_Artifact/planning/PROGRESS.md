@@ -18,13 +18,13 @@
 ```yaml
 state:
   tasks_total: 28        # derived — recounted 2026-09-13 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 12
-  current_task: P2-T2    # Energy & carbon accounting
-  next_task: P2-T3       # decide() over policy_spec
+  tasks_done: 13
+  current_task: P2-T3    # decide() over policy_spec
+  next_task: P2-T4       # replay simulator (6 strategies)
   current_phase: P2
   blocked_on: null
-  last_gate_passed: P2-T1 (Stage-1 eligibility gate + independent validator)
-  last_updated: 2026-09-17
+  last_gate_passed: P2-T2 (energy & carbon accounting)
+  last_updated: 2026-09-20
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   open_decisions: none — DL-019 Accepted 2026-09-12 (ablation config, written before any arm was
                   fitted). **Author's attention invited (not blocking, carried from P1-T5):** ④b's
@@ -57,19 +57,36 @@ state:
                   **0 disagreements over 55,228 distinct input pairs**; validator audit of gate
                   output **0 violations**. A validator pass proves gate/consumer consistency,
                   never gate correctness (DL-020 §6).
+  energy_model:   **DL-021** — `P_avg_W` **= 42.5 W**, the one value the protocol deferred by
+                  design, now pinned and cited: CodeCarbon constant-mode CPU fallback
+                  (`POWER_CONSTANT = 85` W × `CONSUMPTION_PERCENTAGE_CONSTANT = 0.5`), source
+                  pinned at release `v3.3.1`. Lives in `scheduler_core/config/energy.json`;
+                  `accounting.py` hard-codes no wattage and re-multiplies the derivation on load.
+                  Mandatory ±50% band = {21.25, 42.5, 63.75} W; DL-010 `n_jobs` variant present
+                  and **off by default**. Real profile run (0 dataset rows read): greenest slot
+                  Sun 11:00 = 92.2400, dirtiest Wed 18:00 = 172.9140 gCO₂/kWh ⇒ a perfect
+                  hour-of-week shift is a **−46.66%** ceiling per build, before any gate, policy
+                  or delay bound. A1.2 role 1 is enforced on the AST in both directions — the
+                  reverse assertion is **forward-binding on P2-T3**: `policy.py` importing
+                  `accounting` will fail `tests/test_accounting.py`.
+  carried_forward: P2-T3/P2-T5 must load `scheduler_core/config/policy_spec.yaml`, but no YAML
+                  reader is pinned in `requirements.lock.txt` (the P2-T2 energy config is JSON to
+                  avoid a stack change the task did not need). Whichever task needs it must add
+                  PyYAML to the §3.2 stack under its own DL entry or justify another reader
+                  (DL-021 §Consequences).
 ```
 
 ```
-Overall   [█████████░░░░░░░░░░░]  43%   (12 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
-Phase 2   [████░░░░░░░░░░░░░░░░]  20%   Core + Simulator + Policy   (1 / 5 tasks)
+Overall   [█████████░░░░░░░░░░░]  46%   (13 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
+Phase 2   [████████░░░░░░░░░░░░]  40%   Core + Simulator + Policy   (2 / 5 tasks)
 
-► CURRENT : P2-T2 — Energy & carbon accounting
-○ NEXT    : P2-T3 — `decide()` over policy_spec
+► CURRENT : P2-T3 — `decide()` over policy_spec
+○ NEXT    : P2-T4 — replay simulator (six strategies)
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P2-T1 gated 2026-09-17; P2-T2 not started)*
+*(empty — P2-T2 gated 2026-09-20; P2-T3 not started)*
 
 ---
 
@@ -91,8 +108,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P1-T6 Family ablation + SHAP (calibration split) | ✅ | `results/p1/ablation/` + `shap/` | **RQ1** |
 | | P1-T7 Apply admission rule → model-level RQ2 | ✅ | `incremental_value.md` + `admission.json` | **RQ2** |
 | **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ✅ | `eligibility.py` + `validate_invariants.py` | RQ4 |
-| | P2-T2 Energy & carbon accounting | ► ⬜ | `accounting.py` | RQ4 |
-| | P2-T3 `decide()` over `policy_spec` | ⬜ | `policy.py` + spec loader | RQ3 |
+| | P2-T2 Energy & carbon accounting | ✅ | `accounting.py` | RQ4 |
+| | P2-T3 `decide()` over `policy_spec` | ► ⬜ | `policy.py` + spec loader | RQ3 |
 | | P2-T4 Replay simulator (6 strategies) | ⬜ | `simulator.py` + sample run | RQ4 |
 | | P2-T5 Fit + **freeze** `policy_spec.yaml` | ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
 | **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
@@ -116,7 +133,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
-| P2 Core + simulator + policy | 1 / 5 | `[████░░░░░░░░░░░░░░░░]` 20% |
+| P2 Core + simulator + policy | 2 / 5 | `[████████░░░░░░░░░░░░]` 40% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -143,3 +160,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-12 | P1-T6 Feature-family ablation + SHAP (calibration split) | `scheduler_core/ablation_stats.py` + `scripts/run_ablation.py` + `tests/test_ablation_stats.py` (12 tests; **200 passed** overall, verbatim in `results/p1/pytest_p1_t6.txt`); real run `PYTHONPATH=. python scripts/run_ablation.py` (**6,532.1s**, log in `results/p1/ablation_run.log`) → the frozen P1-T5 `xgboost:control`/`xgboost:full` arms were loaded and re-verified (not refit) to reproduce their P1-T5 metrics exactly; **6 family arms** `{d̂+F1}`…`{d̂+F6}` trained/calibrated by the identical P1-T5 procedure on the same **645,244**-build train / **138,687**-build calibration split. **Every family's ΔPR-AUC vs `{d̂}` is negative** (F1 −0.003678, F2 −0.005526, F3 −0.023333, F4 −0.064694, F5 −0.066323, F6 −0.002920; all 95% CIs, B=1000, exclude 0 in the negative direction) — **zero families clear the §A1.7 model-level floor**, so **zero leave-one-out arms were triggered** (a predeclared, valid outcome, DL-019 §2 — not the RQ2 verdict itself, which is P1-T7's). Notable secondary finding: every single-family arm outperforms the `full` (all-28) arm's PR-AUC (0.3286), suggesting the families interfere when combined rather than each being independently harmful. SHAP (`results/p1/shap/`) on the frozen `full` arm: `d̂` itself is the strongest and only-clearly-useful monotone signal (Spearman ρ +0.588, CI excludes 0); `test_churn`/`test_density_ratio` SHAP is exactly 0 (confirms DL-016); no family clears the 0.8 project-identity-coded threshold, though F5 (team/developer) is close (between-project share 0.676). Test split closed throughout — 138,693 builds / 170 projects dropped unread. `results/p1/ablation/{ablation.md,deltas.json}` + `results/p1/shap/{shap_summary.md,shap_summary.json,family_importance.png}` are the gate evidence. | **DL-019** |
 | 2026-09-13 | P1-T7 Apply the admission rule → model-level RQ2 answer | `scheduler_core/admission.py` + `scripts/apply_admission.py` + `tests/test_admission.py` (12 tests; **212 passed** overall, verbatim in `results/p1/pytest_p1_t7.txt`); real run `PYTHONPATH=. python scripts/apply_admission.py` (log in `results/p1/admission_run.log`). **Nothing was fitted** — the task reads P1-T6's `deltas.json`/`shap_summary.json` and applies the frozen §A1.7 rule mechanically. **Model-level RQ2 answer: the NULL path.** All six families **rejected**; admitted set **empty**. Every family failed on the point estimate (ΔPR-AUC: F1 −0.003678, F2 −0.005526, F3 −0.023333, F4 −0.064694, F5 −0.066323, F6 −0.002920, all < the +0.01 floor), and all six additionally have a 95% CI lying **entirely below 0** — significantly *worse* than `{d̂}`, not merely short of the floor. **Floor sweep stable:** the admitted set is empty at ×0.5 (+0.005), ×1 (+0.01) and ×2 (+0.02) alike, which §A1.7 treats as the stronger finding. `results/p1/admission.json` records `policy_path: duration_only_fallback` for `fit_policy.py` (P2-T5). §A1.9 caveat reported for all six: F1/F2/F6 SHAP contributions are overwhelmingly **within**-project (between-shares 0.041/0.097/0.115) so their null cannot be explained away as redundancy with `d̂`'s project prior; F3/F4/F5 are mixed (0.604/0.353/0.676) where that redundancy stays a live explanation. Verdict bounded as a **lower bound** (DL-015/DL-016 weakened the SE side), calibration-split only, one algorithm/budget. **Test split still untouched** — this task reads no dataset at all. **Phase 1 complete → M1 (11/28, 39%).** | none (the directional reading of "≥ 0.01 absolute" was already fixed by **DL-019 §2**, before the deltas existed) |
 | 2026-09-17 | P2-T1 Stage-1 eligibility gate + independent validator | `scheduler_core/eligibility.py` + `code/replay/validate_invariants.py` + `tests/test_eligibility.py` (170 tests; **382 passed** overall, verbatim in `results/p2/pytest_p2_t1.txt` with the DoD's named negative tests appended). **DL-020 was written before a single line of `eligibility.py` existed** and is the gate evidence: Stage 1 is an **experimental approximation** of §3.4's trigger classes from `gh_is_pr` + `git_branch`, never a measurement of deferability. Two of §3.4's six classes — **(d) manually-triggered** and **(e) scheduled/nightly** — have **no marker in this release** and are not approximated at all, so the deferrable set consists entirely of class (f); the approximation's error rate is **unmeasurable in this corpus** (no ground-truth deferability/urgency/business-priority label exists). Rule: deferrable ⟺ `gh_is_pr` falsey **and** `git_branch` matches no row of a frozen 10-row protected/release pattern table; everything uninterpretable **fails closed** to non-deferrable. Grounding run `PYTHONPATH=. python scripts/profile_branches.py` (30.1s) → `results/p2/branch_profile.{json,md}`: both inputs **100% present**, 54,512 distinct branch names, `master` 500,226 (63.8100%), PR builds 140,506 (17.9233%). Gate run `PYTHONPATH=. python scripts/apply_eligibility.py` (37.3s, log `results/p2/eligibility_run.log`) over **783,931** train+calibration builds / 778 projects → deferrable-by-rule **191,245 (24.3956%)**; largest non-deferrable rule `protected:mainline` 404,533 (51.6031%). **Independence is measured, not asserted:** the validator matches by delimiter tokens where the gate matches anchored regexes, imports it nowhere (asserted on the AST *and* in a clean subprocess), and the two agree on **0 disagreements across all 55,228 distinct `(gh_is_pr, git_branch)` pairs** under both variants; the validator's audit of the gate's own output returns **0 violations** (§4 eligibility-gate safety). **Finding during implementation:** an initial suffix-anchored `stable` pattern let `stable-2.0` (608 builds) through as deferrable — caught by a test, fixed in both implementations, pinned by a regression case. DL-020 §5's contested `develop`/`dev` reading is implemented as the named `protected_includes_integration` variant (deferrable falls to 132,100 / 16.8510%) and is registered for the P3-T4 deferrable-fraction sweep. **Test split untouched** — 138,693 builds / 170 projects dropped unread in both runs. | **DL-020** |
+| 2026-09-20 | P2-T2 Energy & carbon accounting | `scheduler_core/accounting.py` + `scheduler_core/config/energy.json` + `tests/test_accounting.py` (74 tests; **456 passed** overall, verbatim in `results/p2/pytest_p2_t2.txt` with the DoD's hand-computed cases appended by name). **DL-021 was written before a single line of `accounting.py` existed** and discharges the one value `eval_protocol.md` §11 deferred by design: **`P_avg_W` = 42.5 W**, *derived not asserted* from CodeCarbon's constant-mode CPU fallback — `POWER_CONSTANT = 85` W (hardware.py L13) × `CONSUMPTION_PERCENTAGE_CONSTANT = 0.5` (L15), law at L256 — cited to the methodology docs **and** to source **pinned at release `v3.3.1`** (not `master`, so a later CodeCarbon change cannot silently alter this study's energy model, R8). **No wattage is hard-coded**: it loads from a versioned JSON config, `load_energy_config()` re-multiplies the derivation and refuses a config that contradicts itself or carries no citation (both negative-tested), and an AST test fails if 42.5/85/0.5 ever appear as literals in the module. Model implemented per §8: `E_kWh = (P_avg_W/1000)·(duration_s/3600)` with `duration_s = tr_duration` (DL-009 max-agg, DL-010), `carbon_b = E_b · I(t_sched,b)` over the P0-T3 hour-of-week primitive, plus §6's `carbon_per_1000_builds`, `pct_change_vs_baseline` and GSF **SCI per successful commit** (numerator all builds, denominator passes only; embodied term `M` excluded and declared). **Both DoD hooks exist:** the mandatory ±50% band `{21.25, 42.5, 63.75}` W (multipliers read from config, not the module) and DL-010's `n_jobs` variant, **off by default** and asserted so. **A1.2 role 1 is enforced structurally, not by comment:** `accounting.py` imports no decision-path module and no pandas (so it cannot source a `tr_duration` itself), every energy entry point requires an explicit duration, and the reverse AST assertion — no `scheduler_core` module may import `accounting` — is **forward-binding on P2-T3**, failing the moment `policy.py` imports it. Real run `PYTHONPATH=. python scripts/report_energy_model.py` (log `results/p2/energy_model_run.log`) against the **real** 168/168-slot P0-T3 profile → `results/p2/energy_model.{json,md}`: greenest slot **Sun 11:00 = 92.2400**, dirtiest **Wed 18:00 = 172.9140** gCO₂/kWh, so perfect hour-of-week shifting is a **−46.66%** per-build ceiling (identical at every duration — carbon is exactly linear in duration, which is §A1.13's point restated in the arithmetic); a 1-hour build costs 0.042500 kWh ⇒ 7.3488 g dirtiest / 3.9202 g greenest. **0 dataset rows read** — no split opened, and the reference durations are fixed a priori, not sampled from the corpus. Seven estimation assumptions/threats documented for P5-T4 §6, incl. that 42.5 W is a documented default for an *unidentified* CPU with no RAM/GPU term (absolute gCO₂e biased **downward**) and that constant power is what makes carbon-saved proportional-to-duration by construction. | **DL-021** |

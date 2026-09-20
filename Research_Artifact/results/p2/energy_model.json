@@ -1,0 +1,119 @@
+{
+  "task": "P2-T2",
+  "generated_utc": "2026-09-20T09:05:32+00:00",
+  "energy_config": {
+    "p_avg_w": 42.5,
+    "duration_source_column": "tr_duration",
+    "pinned_by": "DL-021",
+    "schema_version": 1,
+    "config_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\code\\scheduler_core\\config\\energy.json",
+    "citations": [
+      {
+        "kind": "documentation",
+        "work": "CodeCarbon \u2014 Methodology (CPU power estimation)",
+        "url": "https://docs.codecarbon.io/latest/explanation/methodology/",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "If the CPU is not found in the data source, a global constant will be applied",
+          "CodeCarbon assumes that 50% of the TDP will be the average power consumption to make this approximation."
+        ]
+      },
+      {
+        "kind": "source",
+        "work": "CodeCarbon source, codecarbon/external/hardware.py",
+        "version_pinned": "v3.3.1",
+        "version_published": "2026-09-09",
+        "url": "https://github.com/mlco2/codecarbon/blob/v3.3.1/codecarbon/external/hardware.py",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "POWER_CONSTANT = 85  (line 13)",
+          "CONSUMPTION_PERCENTAGE_CONSTANT = 0.5  (line 15)",
+          "power = self._tdp * CONSUMPTION_PERCENTAGE_CONSTANT  (line 256, _get_power_from_cpus, constant-mode branch)"
+        ],
+        "why_pinned": "A release tag rather than master, so a later CodeCarbon change cannot silently alter this study's energy model (R8)."
+      }
+    ]
+  },
+  "p_avg_band_w": {
+    "0.5": 21.25,
+    "1.0": 42.5,
+    "1.5": 63.75
+  },
+  "carbon_profile_slots_observed": 168,
+  "extreme_slots": {
+    "greenest": {
+      "slot": 155,
+      "dow": 6,
+      "hour": 11,
+      "label": "Sun 11:00",
+      "gco2_per_kwh": 92.24
+    },
+    "dirtiest": {
+      "slot": 66,
+      "dow": 2,
+      "hour": 18,
+      "label": "Wed 18:00",
+      "gco2_per_kwh": 172.914
+    }
+  },
+  "dataset_rows_read": 0,
+  "worked_examples": [
+    {
+      "duration_label": "1 minute",
+      "duration_s": 60.0,
+      "energy_kwh": 0.0007083333333333334,
+      "carbon_g_greenest_slot": 0.06533666666666667,
+      "carbon_g_dirtiest_slot": 0.12248075,
+      "carbon_g_saved_if_shifted": 0.05714408333333333,
+      "pct_change_if_shifted": -46.65556288096973
+    },
+    {
+      "duration_label": "10 minutes",
+      "duration_s": 600.0,
+      "energy_kwh": 0.007083333333333334,
+      "carbon_g_greenest_slot": 0.6533666666666667,
+      "carbon_g_dirtiest_slot": 1.2248075,
+      "carbon_g_saved_if_shifted": 0.5714408333333334,
+      "pct_change_if_shifted": -46.65556288096974
+    },
+    {
+      "duration_label": "1 hour",
+      "duration_s": 3600.0,
+      "energy_kwh": 0.0425,
+      "carbon_g_greenest_slot": 3.9202,
+      "carbon_g_dirtiest_slot": 7.348845,
+      "carbon_g_saved_if_shifted": 3.428645,
+      "pct_change_if_shifted": -46.65556288096973
+    },
+    {
+      "duration_label": "2 hours",
+      "duration_s": 7200.0,
+      "energy_kwh": 0.085,
+      "carbon_g_greenest_slot": 7.8404,
+      "carbon_g_dirtiest_slot": 14.69769,
+      "carbon_g_saved_if_shifted": 6.85729,
+      "pct_change_if_shifted": -46.65556288096973
+    }
+  ],
+  "p_avg_band_example": {
+    "duration_s": 3600.0,
+    "slot": "Wed 18:00",
+    "gco2_per_kwh": 172.914,
+    "carbon_g_by_multiplier": {
+      "0.5": 3.6744225,
+      "1.0": 7.348845,
+      "1.5": 11.0232675
+    }
+  },
+  "n_jobs_variant_example": {
+    "duration_s": 3600.0,
+    "slot": "Wed 18:00",
+    "carbon_g_by_n_jobs": {
+      "1": 7.348845,
+      "2": 14.69769,
+      "4": 29.39538,
+      "8": 58.79076
+    },
+    "note": "DL-010 optional variant, OFF by default; brackets the wall-clock under-count."
+  }
+}

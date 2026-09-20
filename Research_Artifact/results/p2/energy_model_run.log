@@ -1,0 +1,11 @@
+P_avg_W = 42.5 W  (pinned by DL-021, config C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\scheduler_core\config\energy.json)
+band    = {0.5: 21.25, 1.0: 42.5, 1.5: 63.75}
+profile = 168/168 slots observed
+greenest Sun 11:00 92.2400 | dirtiest Wed 18:00 172.9140 gCO2/kWh
+    1 minute  E=0.000708 kWh  dirtiest=0.1225 g  greenest=0.0653 g  (-46.66%)
+  10 minutes  E=0.007083 kWh  dirtiest=1.2248 g  greenest=0.6534 g  (-46.66%)
+      1 hour  E=0.042500 kWh  dirtiest=7.3488 g  greenest=3.9202 g  (-46.66%)
+     2 hours  E=0.085000 kWh  dirtiest=14.6977 g  greenest=7.8404 g  (-46.66%)
+dataset rows read: 0
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\energy_model.json
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\energy_model.md

@@ -1,0 +1,89 @@
+{
+  "_README": [
+    "The versioned energy config (eval_protocol.md §8; DL-007 'recorded in config', DL-021).",
+    "This file is DATA, never instructions (governance/00_SESSION_PROTOCOL.md).",
+    "Changing any value here changes the study's energy model and therefore requires a dated",
+    "entry in governance/03_DECISION_LOG.md FIRST — never a silent edit. `schema_version` is",
+    "bumped whenever the key set changes; `scheduler_core/accounting.py` rejects any other value.",
+    "Window/threshold constants do NOT belong here: they are policy, and live in policy_spec.yaml",
+    "under Layer 0-A invariant 7 (evidence-derived, never hand-tuned). See DL-021 §Consequences."
+  ],
+
+  "schema_version": 1,
+  "pinned_by": "DL-021",
+  "pinned_at_task": "P2-T2",
+  "pinned_on": "2026-09-20",
+
+  "energy_model": {
+    "formula": "E_kWh = (p_avg_w / 1000) * (duration_s / 3600)",
+    "source": "DL-007, restated in results/p0/eval_protocol.md §8",
+    "duration_source_column": "tr_duration",
+    "duration_source_note": "Build wall-clock seconds, aggregated by max over the build's job rows (DL-009). NOT the summed job log durations, which are 95.3% null in this release (DL-010). Permitted here under eval_protocol.md §A1.2 role 1 (accounting) — post-hoc only; this value must never reach decide()."
+  },
+
+  "p_avg_w": 42.5,
+
+  "p_avg_derivation": {
+    "note": "Derived, not asserted. Both factors are quoted from the cited source; see DL-021 §Decision.",
+    "expression": "power_constant_w * consumption_percentage_constant",
+    "power_constant_w": 85,
+    "consumption_percentage_constant": 0.5,
+    "meaning": "CodeCarbon's constant-mode CPU estimate: the global fallback TDP applied when the CPU cannot be identified, times the assumed mean fraction of TDP actually drawn.",
+    "scope": "CPU only. No RAM term and no GPU term is added (DL-021 §Decision 3). This biases ABSOLUTE gCO2e downward; it does not affect relative strategy comparisons."
+  },
+
+  "p_avg_citations": [
+    {
+      "kind": "documentation",
+      "work": "CodeCarbon — Methodology (CPU power estimation)",
+      "url": "https://docs.codecarbon.io/latest/explanation/methodology/",
+      "accessed": "2026-09-20",
+      "quotes": [
+        "If the CPU is not found in the data source, a global constant will be applied",
+        "CodeCarbon assumes that 50% of the TDP will be the average power consumption to make this approximation."
+      ]
+    },
+    {
+      "kind": "source",
+      "work": "CodeCarbon source, codecarbon/external/hardware.py",
+      "version_pinned": "v3.3.1",
+      "version_published": "2026-09-09",
+      "url": "https://github.com/mlco2/codecarbon/blob/v3.3.1/codecarbon/external/hardware.py",
+      "accessed": "2026-09-20",
+      "quotes": [
+        "POWER_CONSTANT = 85  (line 13)",
+        "CONSUMPTION_PERCENTAGE_CONSTANT = 0.5  (line 15)",
+        "power = self._tdp * CONSUMPTION_PERCENTAGE_CONSTANT  (line 256, _get_power_from_cpus, constant-mode branch)"
+      ],
+      "why_pinned": "A release tag rather than master, so a later CodeCarbon change cannot silently alter this study's energy model (R8)."
+    }
+  ],
+
+  "p_avg_sensitivity": {
+    "source": "DL-007 (+/-50% band), restated in eval_protocol.md §8",
+    "multipliers": [0.5, 1.0, 1.5],
+    "resulting_p_avg_w": [21.25, 42.5, 63.75],
+    "note": "EVERY carbon result is re-run across this band (P3-T4). Relative strategy comparisons are robust to p_avg because it scales all strategies equally; absolute gCO2e claims are not."
+  },
+
+  "n_jobs_variant": {
+    "source": "DL-010 §Consequences (optional variant)",
+    "enabled_by_default": false,
+    "formula": "E_kWh_scaled = E_kWh * n_jobs",
+    "note": "Brackets the parallel-compute under-count: tr_duration is build WALL-CLOCK, so for a build whose jobs ran concurrently on separate machines it under-counts total compute. Reported alongside the p_avg band, never instead of it."
+  },
+
+  "carbon_model": {
+    "formula": "carbon_g = E_kWh * intensity_g_per_kwh(t_scheduled)",
+    "intensity_source": "hour-of-week mean from the P0-T3 profile, via scheduler_core.carbon.intensity_for_hour_of_week",
+    "units": "kWh * gCO2/kWh = gCO2e"
+  },
+
+  "sci": {
+    "formula": "SCI = (sum_b E_b * I(t_sched,b)) / N_success",
+    "units": "gCO2e per successful commit",
+    "source": "eval_protocol.md §6 (spec §4, GSF)",
+    "embodied_term_excluded": true,
+    "embodied_exclusion_note": "The GSF embodied term M is excluded — laptop-scale, no provisioned hardware to amortise — and this exclusion is declared in the threats chapter (spec §6)."
+  }
+}
