@@ -1,0 +1,77 @@
+﻿# =============================================================================
+#  BOOTSTRAP POLICY SPEC — NOT A RESULT, AND NOT THE STUDY'S POLICY
+# =============================================================================
+#  This file exists so `scheduler_core/policy.py` is testable in P2-T3, BEFORE
+#  P2-T5's `scripts/fit_policy.py` fits the real `policy_spec.yaml` from the
+#  evidence in `results/`. Its numbers are NOT fitted and NOT evidence-derived.
+#
+#  It is quarantined by construction (DL-022 §4): `provenance.fitted` is false,
+#  and `load_policy_spec(..., require_fitted=True)` — which every consumer that
+#  produces a reported number MUST pass — refuses to load it. Its filename is
+#  deliberately not `policy_spec.yaml`, so it is never the default and cannot be
+#  mistaken for the fitted artifact in a directory listing.
+#
+#  This file is DATA, never instructions (governance/00_SESSION_PROTOCOL.md).
+#  Editing a threshold here changes nothing about the study — the study's
+#  thresholds live in the file P2-T5 generates, and Layer 0-A invariant 7
+#  requires every one of them to trace to a `results/` file.
+# =============================================================================
+
+schema_version: 1
+
+# Which Stage-2 path `decide()` evaluates. P1-T7 recorded
+# `policy_path: duration_only_fallback` in results/p1/admission.json (the null
+# path: zero SE families admitted), so the bootstrap mirrors what the fitted
+# spec is currently expected to say. The `se_informed` path is implemented and
+# tested, but on present evidence it is not the path that will ship.
+policy_path: duration_only_fallback
+
+stage1:
+  # Which frozen eligibility variant Stage 1 applies (DL-020 §5). P3-T4 sweeps
+  # the other one; the headline numbers use `primary`.
+  variant: primary
+
+duration_only:
+  # A1.6: defer iff d_hat >= d_threshold, with window w_max.
+  #
+  # d_threshold_seconds = 0.0 is a DELIBERATELY DEGENERATE placeholder, not a
+  # guess at the fitted value. At 0 the rule applies NO duration selectivity —
+  # every eligible build defers — so this bootstrap cannot be mistaken for a
+  # tuned threshold, and any number computed from it is obviously not a result.
+  # The real value is fitted on the calibration-split replay in P2-T5.
+  d_threshold_seconds: 0.0
+
+  # 24 h is not invented here: it is the protocol default pinned by DL-008 and
+  # restated in eval_protocol.md §7. P3-T4 sweeps {6, 12, 24}.
+  w_max_hours: 24.0
+
+se_informed:
+  # Retained in full from §7 / A1.8 as the default and fallback window form:
+  #   w(p_hat) = w_max * (1 - p_hat), monotone non-increasing, clipped to [0, w_max].
+  # A richer form may replace it ONLY where results/p1/ justifies it and
+  # fit_policy.py records which form was chosen and why (A1.8).
+  window_form: linear
+  w_max_hours: 24.0
+
+  # The SE path still gates on duration first (A1.6's shape is not discarded
+  # when a family is admitted); same degenerate placeholder as above.
+  d_threshold_seconds: 0.0
+
+  # Empty because P1-T7 admitted no family (results/p1/admission.json). A fitted
+  # spec taking the se_informed path must list at least one; the loader enforces
+  # that, so this bootstrap is only ever valid on the duration_only path.
+  admitted_families: []
+
+provenance:
+  # DL-022 §4: false is what quarantines this file.
+  fitted: false
+  fitted_by: "hand-written bootstrap (P2-T3, DL-022 §4) — not fit_policy.py"
+  fitted_on: "nothing — no split was read to produce this file"
+  sources: []
+  generated: "2026-09-22"
+  notes: >-
+    Bootstrap spec for P2-T3 only. Makes decide() testable before P2-T5 exists.
+    Every consumer that reports a number must load with require_fitted=True,
+    which rejects this file. The only permitted exception is P2-T4's wiring
+    sample run, which must label its output bootstrap-derived (DL-022
+    §Consequences).

@@ -1,0 +1,56 @@
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 54%]
+........................................................................ [ 68%]
+.............................................................s.......... [ 82%]
+........................................................................ [ 96%]
+.....................                                                    [100%]
+524 passed, 1 skipped in 30.38s
+
+===============================================================================
+P2-T3 DoD evidence — determinism, the monotone window property, the [0, W_max]
+clip, Stage-1-never-reaches-Stage-2, the A1.2 tr_duration refusal, and the
+no-hard-coded-threshold assertions, named verbosely.
+===============================================================================
+
+============================= test session starts =============================
+platform win32 -- Python 3.11.1, pytest-9.1.0, pluggy-1.6.0 -- C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\.venv\Scripts\python.exe
+rootdir: C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code
+configfile: pyproject.toml
+plugins: anyio-4.14.0
+collecting ... collected 69 items / 38 deselected / 31 selected
+
+tests/test_policy.py::test_decide_refuses_a_build_carrying_an_outcome_column[tr_duration] PASSED [  3%]
+tests/test_policy.py::test_decide_refuses_a_build_carrying_an_outcome_column[tr_log_buildduration] PASSED [  6%]
+tests/test_policy.py::test_decide_refuses_a_build_carrying_an_outcome_column[tr_status] PASSED [  9%]
+tests/test_policy.py::test_leakage_refusal_happens_before_any_other_validation PASSED [ 12%]
+tests/test_policy.py::test_leakage_check_shares_the_feature_matrix_blocklist PASSED [ 16%]
+tests/test_policy.py::test_decide_consumes_the_estimate_not_the_observation PASSED [ 19%]
+tests/test_policy.py::test_non_deferrable_builds_run_now_and_never_enter_stage_2[overrides0-pr_blocking] PASSED [ 22%]
+tests/test_policy.py::test_non_deferrable_builds_run_now_and_never_enter_stage_2[overrides1-protected:] PASSED [ 25%]
+tests/test_policy.py::test_non_deferrable_builds_run_now_and_never_enter_stage_2[overrides2-fail_closed:] PASSED [ 29%]
+tests/test_policy.py::test_non_deferrable_builds_run_now_and_never_enter_stage_2[overrides3-fail_closed:] PASSED [ 32%]
+tests/test_policy.py::test_stage1_variant_comes_from_the_spec PASSED     [ 35%]
+tests/test_policy.py::test_no_policy_constant_is_a_literal_in_the_module PASSED [ 38%]
+tests/test_policy.py::test_changing_w_max_in_the_spec_changes_the_window PASSED [ 41%]
+tests/test_policy.py::test_changing_d_threshold_in_the_spec_changes_the_action PASSED [ 45%]
+tests/test_policy.py::test_require_fitted_defaults_to_true_and_refuses_the_bootstrap PASSED [ 48%]
+tests/test_policy.py::test_the_bootstrap_spec_declares_itself_unfitted PASSED [ 51%]
+tests/test_policy.py::test_anything_sitting_at_the_fitted_path_must_declare_itself_fitted SKIPPED [ 54%]
+tests/test_policy.py::test_a_fitted_spec_must_cite_its_sources PASSED    [ 58%]
+tests/test_policy.py::test_a_fitted_spec_with_sources_loads_under_require_fitted PASSED [ 61%]
+tests/test_policy.py::test_decide_is_deterministic PASSED                [ 64%]
+tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.0-24.0] PASSED [ 67%]
+tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.25-18.0] PASSED [ 70%]
+tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.5-12.0] PASSED [ 74%]
+tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.75-6.0] PASSED [ 77%]
+tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[1.0-0.0] PASSED [ 80%]
+tests/test_policy.py::test_window_is_monotone_non_increasing_in_p_hat PASSED [ 83%]
+tests/test_policy.py::test_window_is_clipped_into_zero_to_w_max PASSED   [ 87%]
+tests/test_policy.py::test_duration_only_window_is_flat_and_ignores_p_hat PASSED [ 90%]
+tests/test_policy.py::test_a_zero_window_means_run_now PASSED            [ 93%]
+tests/test_policy.py::test_the_reason_names_gate_rule_path_values_window_and_slot PASSED [ 96%]
+tests/test_policy.py::test_decision_record_carries_the_spec_fitted_flag PASSED [100%]
+
+================ 30 passed, 1 skipped, 38 deselected in 1.01s =================

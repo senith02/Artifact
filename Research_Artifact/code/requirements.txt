@@ -13,3 +13,4 @@ shap
 fastapi
 pytest
 matplotlib
+pyyaml          # reads scheduler_core/config/policy_spec.yaml (DL-022); safe_load only

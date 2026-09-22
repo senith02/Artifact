@@ -18,13 +18,13 @@
 ```yaml
 state:
   tasks_total: 28        # derived — recounted 2026-09-13 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 13
-  current_task: P2-T3    # decide() over policy_spec
-  next_task: P2-T4       # replay simulator (6 strategies)
+  tasks_done: 14
+  current_task: P2-T4    # replay simulator (6 strategies)
+  next_task: P2-T5       # fit + freeze policy_spec.yaml
   current_phase: P2
   blocked_on: null
-  last_gate_passed: P2-T2 (energy & carbon accounting)
-  last_updated: 2026-09-20
+  last_gate_passed: P2-T3 (decide() over policy_spec)
+  last_updated: 2026-09-22
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   open_decisions: none — DL-019 Accepted 2026-09-12 (ablation config, written before any arm was
                   fitted). **Author's attention invited (not blocking, carried from P1-T5):** ④b's
@@ -69,24 +69,40 @@ state:
                   or delay bound. A1.2 role 1 is enforced on the AST in both directions — the
                   reverse assertion is **forward-binding on P2-T3**: `policy.py` importing
                   `accounting` will fail `tests/test_accounting.py`.
-  carried_forward: P2-T3/P2-T5 must load `scheduler_core/config/policy_spec.yaml`, but no YAML
-                  reader is pinned in `requirements.lock.txt` (the P2-T2 energy config is JSON to
-                  avoid a stack change the task did not need). Whichever task needs it must add
-                  PyYAML to the §3.2 stack under its own DL entry or justify another reader
-                  (DL-021 §Consequences).
+  decision_core:  **DL-022** — `decide()` is a pure, deterministic evaluator of `policy_spec.yaml`
+                  holding **no threshold of its own** (asserted on the AST: the only float
+                  literals in `policy.py` are 0.0 and 1.0). Stage 1 runs first and **returns** —
+                  a non-deferrable build leaves without Stage 2 being consulted, proved by a test
+                  that omits Stage 2's inputs entirely. §A1.2 is enforced by *raising*:
+                  `decide()` refuses any build carrying `tr_duration`/`tr_log_buildduration`/
+                  `tr_status`, screened through `features.is_blocklisted` (shared blocklist, not
+                  a copy). `defer_until` is a **relative** hour-of-week offset — the function
+                  holds no clock. Schema is **closed** (unknown keys rejected), provenance
+                  mandatory, `yaml.safe_load` only. **Bootstrap quarantine:**
+                  `policy_spec.bootstrap.yaml` declares `fitted: false` and
+                  `load_policy_spec(require_fitted=True)` — the **default** — refuses it, so an
+                  unfitted spec cannot silently drive a number.
+  carried_forward: **Binding on P2-T5:** `fit_policy.py` writes `policy_spec.yaml` against the
+                  DL-022 schema with `provenance.fitted: true` and every value's `results/`
+                  source listed; a skipped test in `test_policy.py` activates the moment that
+                  file appears and fails if it does not load under `require_fitted=True`.
+                  **Binding on P2-T4/P4:** load with `require_fitted=True`; P2-T4's wiring sample
+                  run is the one permitted exception and must label its output bootstrap-derived.
+                  **Stack:** PyYAML 6.0.3 added to §3.2 (DL-022 §1), pinned in
+                  `requirements.lock.txt`, `pip check` clean.
 ```
 
 ```
-Overall   [█████████░░░░░░░░░░░]  46%   (13 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
-Phase 2   [████████░░░░░░░░░░░░]  40%   Core + Simulator + Policy   (2 / 5 tasks)
+Overall   [██████████░░░░░░░░░░]  50%   (14 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
+Phase 2   [████████████░░░░░░░░]  60%   Core + Simulator + Policy   (3 / 5 tasks)
 
-► CURRENT : P2-T3 — `decide()` over policy_spec
-○ NEXT    : P2-T4 — replay simulator (six strategies)
+► CURRENT : P2-T4 — replay simulator (six strategies)
+○ NEXT    : P2-T5 — fit + **freeze** `policy_spec.yaml`
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P2-T2 gated 2026-09-20; P2-T3 not started)*
+*(empty — P2-T3 gated 2026-09-22; P2-T4 not started)*
 
 ---
 
@@ -109,8 +125,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P1-T7 Apply admission rule → model-level RQ2 | ✅ | `incremental_value.md` + `admission.json` | **RQ2** |
 | **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ✅ | `eligibility.py` + `validate_invariants.py` | RQ4 |
 | | P2-T2 Energy & carbon accounting | ✅ | `accounting.py` | RQ4 |
-| | P2-T3 `decide()` over `policy_spec` | ► ⬜ | `policy.py` + spec loader | RQ3 |
-| | P2-T4 Replay simulator (6 strategies) | ⬜ | `simulator.py` + sample run | RQ4 |
+| | P2-T3 `decide()` over `policy_spec` | ✅ | `policy.py` + spec loader | RQ3 |
+| | P2-T4 Replay simulator (6 strategies) | ► ⬜ | `simulator.py` + sample run | RQ4 |
 | | P2-T5 Fit + **freeze** `policy_spec.yaml` | ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
 | **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
 | | P3-T2 Full replay, all six strategies | ⬜ | `strategy_results.*` | **RQ4** |
@@ -133,7 +149,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
-| P2 Core + simulator + policy | 2 / 5 | `[████████░░░░░░░░░░░░]` 40% |
+| P2 Core + simulator + policy | 3 / 5 | `[████████████░░░░░░░░]` 60% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -161,3 +177,5 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-13 | P1-T7 Apply the admission rule → model-level RQ2 answer | `scheduler_core/admission.py` + `scripts/apply_admission.py` + `tests/test_admission.py` (12 tests; **212 passed** overall, verbatim in `results/p1/pytest_p1_t7.txt`); real run `PYTHONPATH=. python scripts/apply_admission.py` (log in `results/p1/admission_run.log`). **Nothing was fitted** — the task reads P1-T6's `deltas.json`/`shap_summary.json` and applies the frozen §A1.7 rule mechanically. **Model-level RQ2 answer: the NULL path.** All six families **rejected**; admitted set **empty**. Every family failed on the point estimate (ΔPR-AUC: F1 −0.003678, F2 −0.005526, F3 −0.023333, F4 −0.064694, F5 −0.066323, F6 −0.002920, all < the +0.01 floor), and all six additionally have a 95% CI lying **entirely below 0** — significantly *worse* than `{d̂}`, not merely short of the floor. **Floor sweep stable:** the admitted set is empty at ×0.5 (+0.005), ×1 (+0.01) and ×2 (+0.02) alike, which §A1.7 treats as the stronger finding. `results/p1/admission.json` records `policy_path: duration_only_fallback` for `fit_policy.py` (P2-T5). §A1.9 caveat reported for all six: F1/F2/F6 SHAP contributions are overwhelmingly **within**-project (between-shares 0.041/0.097/0.115) so their null cannot be explained away as redundancy with `d̂`'s project prior; F3/F4/F5 are mixed (0.604/0.353/0.676) where that redundancy stays a live explanation. Verdict bounded as a **lower bound** (DL-015/DL-016 weakened the SE side), calibration-split only, one algorithm/budget. **Test split still untouched** — this task reads no dataset at all. **Phase 1 complete → M1 (11/28, 39%).** | none (the directional reading of "≥ 0.01 absolute" was already fixed by **DL-019 §2**, before the deltas existed) |
 | 2026-09-17 | P2-T1 Stage-1 eligibility gate + independent validator | `scheduler_core/eligibility.py` + `code/replay/validate_invariants.py` + `tests/test_eligibility.py` (170 tests; **382 passed** overall, verbatim in `results/p2/pytest_p2_t1.txt` with the DoD's named negative tests appended). **DL-020 was written before a single line of `eligibility.py` existed** and is the gate evidence: Stage 1 is an **experimental approximation** of §3.4's trigger classes from `gh_is_pr` + `git_branch`, never a measurement of deferability. Two of §3.4's six classes — **(d) manually-triggered** and **(e) scheduled/nightly** — have **no marker in this release** and are not approximated at all, so the deferrable set consists entirely of class (f); the approximation's error rate is **unmeasurable in this corpus** (no ground-truth deferability/urgency/business-priority label exists). Rule: deferrable ⟺ `gh_is_pr` falsey **and** `git_branch` matches no row of a frozen 10-row protected/release pattern table; everything uninterpretable **fails closed** to non-deferrable. Grounding run `PYTHONPATH=. python scripts/profile_branches.py` (30.1s) → `results/p2/branch_profile.{json,md}`: both inputs **100% present**, 54,512 distinct branch names, `master` 500,226 (63.8100%), PR builds 140,506 (17.9233%). Gate run `PYTHONPATH=. python scripts/apply_eligibility.py` (37.3s, log `results/p2/eligibility_run.log`) over **783,931** train+calibration builds / 778 projects → deferrable-by-rule **191,245 (24.3956%)**; largest non-deferrable rule `protected:mainline` 404,533 (51.6031%). **Independence is measured, not asserted:** the validator matches by delimiter tokens where the gate matches anchored regexes, imports it nowhere (asserted on the AST *and* in a clean subprocess), and the two agree on **0 disagreements across all 55,228 distinct `(gh_is_pr, git_branch)` pairs** under both variants; the validator's audit of the gate's own output returns **0 violations** (§4 eligibility-gate safety). **Finding during implementation:** an initial suffix-anchored `stable` pattern let `stable-2.0` (608 builds) through as deferrable — caught by a test, fixed in both implementations, pinned by a regression case. DL-020 §5's contested `develop`/`dev` reading is implemented as the named `protected_includes_integration` variant (deferrable falls to 132,100 / 16.8510%) and is registered for the P3-T4 deferrable-fraction sweep. **Test split untouched** — 138,693 builds / 170 projects dropped unread in both runs. | **DL-020** |
 | 2026-09-20 | P2-T2 Energy & carbon accounting | `scheduler_core/accounting.py` + `scheduler_core/config/energy.json` + `tests/test_accounting.py` (74 tests; **456 passed** overall, verbatim in `results/p2/pytest_p2_t2.txt` with the DoD's hand-computed cases appended by name). **DL-021 was written before a single line of `accounting.py` existed** and discharges the one value `eval_protocol.md` §11 deferred by design: **`P_avg_W` = 42.5 W**, *derived not asserted* from CodeCarbon's constant-mode CPU fallback — `POWER_CONSTANT = 85` W (hardware.py L13) × `CONSUMPTION_PERCENTAGE_CONSTANT = 0.5` (L15), law at L256 — cited to the methodology docs **and** to source **pinned at release `v3.3.1`** (not `master`, so a later CodeCarbon change cannot silently alter this study's energy model, R8). **No wattage is hard-coded**: it loads from a versioned JSON config, `load_energy_config()` re-multiplies the derivation and refuses a config that contradicts itself or carries no citation (both negative-tested), and an AST test fails if 42.5/85/0.5 ever appear as literals in the module. Model implemented per §8: `E_kWh = (P_avg_W/1000)·(duration_s/3600)` with `duration_s = tr_duration` (DL-009 max-agg, DL-010), `carbon_b = E_b · I(t_sched,b)` over the P0-T3 hour-of-week primitive, plus §6's `carbon_per_1000_builds`, `pct_change_vs_baseline` and GSF **SCI per successful commit** (numerator all builds, denominator passes only; embodied term `M` excluded and declared). **Both DoD hooks exist:** the mandatory ±50% band `{21.25, 42.5, 63.75}` W (multipliers read from config, not the module) and DL-010's `n_jobs` variant, **off by default** and asserted so. **A1.2 role 1 is enforced structurally, not by comment:** `accounting.py` imports no decision-path module and no pandas (so it cannot source a `tr_duration` itself), every energy entry point requires an explicit duration, and the reverse AST assertion — no `scheduler_core` module may import `accounting` — is **forward-binding on P2-T3**, failing the moment `policy.py` imports it. Real run `PYTHONPATH=. python scripts/report_energy_model.py` (log `results/p2/energy_model_run.log`) against the **real** 168/168-slot P0-T3 profile → `results/p2/energy_model.{json,md}`: greenest slot **Sun 11:00 = 92.2400**, dirtiest **Wed 18:00 = 172.9140** gCO₂/kWh, so perfect hour-of-week shifting is a **−46.66%** per-build ceiling (identical at every duration — carbon is exactly linear in duration, which is §A1.13's point restated in the arithmetic); a 1-hour build costs 0.042500 kWh ⇒ 7.3488 g dirtiest / 3.9202 g greenest. **0 dataset rows read** — no split opened, and the reference durations are fixed a priori, not sampled from the corpus. Seven estimation assumptions/threats documented for P5-T4 §6, incl. that 42.5 W is a documented default for an *unidentified* CPU with no RAM/GPU term (absolute gCO₂e biased **downward**) and that constant power is what makes carbon-saved proportional-to-duration by construction. | **DL-021** |
+
+| 2026-09-22 | P2-T3 Stage 2: `decide()` over `policy_spec` | `scheduler_core/policy.py` + `scheduler_core/config/policy_spec.bootstrap.yaml` + `tests/test_policy.py` (69 tests; **524 passed, 1 skipped** overall, verbatim in `results/p2/pytest_p2_t3.txt` with the DoD's named property tests appended). **DL-022 was written before a single line of `policy.py` existed** and carries three decisions: PyYAML **6.0.3** enters the §3.2 stack (`safe_load` only, pinned in `requirements.lock.txt`, `pip check` clean, lockfile dry-run resolves); the `policy_spec.yaml` **schema is closed**; and the bootstrap spec is **quarantined by construction**. `decide(build, carbon, config)` is pure, deterministic, clock-free and **holds no threshold of its own** — asserted on the AST (the only float literals in the module are `0.0` and `1.0`) *and* behaviourally (changing `w_max_hours` 24.0->2.0 flips defer->run_now; changing `d_threshold_seconds` flips run_now->defer at the inclusive `>=` boundary). **Stage 1 runs first and RETURNS**, not 'evaluate then override': the test proves it by deleting Stage 2's inputs entirely — reaching Stage 2 would raise, and it does not, across all four non-deferrable rules. **§A1.2 enforced by raising**, not by ignoring: a build carrying `tr_duration`/`tr_log_buildduration`/`tr_status` is refused *before any other validation*, screened through `features.is_blocklisted` (the shared blocklist, not a copy) so the two cannot drift. `defer_until` is a **relative** hour-of-week offset, never a timestamp. Loader rejects unknown keys at every level, missing/contradictory provenance, unsupported `schema_version`, unknown `policy_path`/`stage1.variant`/`window_form`, out-of-range thresholds, and an `se_informed` path admitting no family (the null path must be declared `duration_only_fallback`, not an empty SE path). **Bootstrap quarantine works:** `load_policy_spec` defaults `require_fitted=True` and refuses `policy_spec.bootstrap.yaml`; a skipped test activates the moment P2-T5 writes the fitted spec and fails if it does not load fitted. §7/A1.8 window `w(p̂) = W_max·(1−p̂)` verified by hand at p̂ = 0/.25/.5/.75/1 -> 24/18/12/6/0 h, monotone non-increasing over a 201-point grid, clipped to `[0, W_max]`. Real run `PYTHONPATH=. python scripts/report_decide_examples.py` (log `results/p2/decide_examples_run.log`) against the real 168/168-slot profile -> `results/p2/decide_examples.{json,md}`, five worked outputs from a Wed 18:00 arrival (172.9140 gCO₂/kWh): **E1** PR -> `run_now`, reason says `Stage 2 not consulted`, `d_hat` null; **E2** `master` -> `run_now` (`protected:mainline`); **E3** deferrable, duration-only -> **defer +8h** to 113.1730; **E4** `d_hat`=90s < threshold 7200s -> `run_now` (A1.6 selectivity); **E5** SE path, p̂=0.80 -> window 4.8h -> **defer +4h** to only 123.3620, showing a shorter window reaching a worse slot than E3's. **0 dataset rows read** — no split opened; the five builds are hand-constructed and every example is labelled bootstrap-derived, not a result. | **DL-022** |

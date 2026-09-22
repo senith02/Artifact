@@ -1,0 +1,10 @@
+bootstrap spec correctly REFUSED under require_fitted=True
+profile: 168/168 slots observed
+  E1  run_now  delay=  0.0h  window= 0.0000h  now=172.9140 -> sched=172.9140 gCO2/kWh  [pr_blocking]
+  E2  run_now  delay=  0.0h  window= 0.0000h  now=172.9140 -> sched=172.9140 gCO2/kWh  [protected:mainline]
+  E3  defer    delay=  8.0h  window=24.0000h  now=172.9140 -> sched=113.1730 gCO2/kWh  [push_to_unprotected_branch]
+  E4  run_now  delay=  0.0h  window= 0.0000h  now=172.9140 -> sched=172.9140 gCO2/kWh  [push_to_unprotected_branch]
+  E5  defer    delay=  4.0h  window= 4.8000h  now=172.9140 -> sched=123.3620 gCO2/kWh  [push_to_unprotected_branch]
+dataset rows read: 0
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\decide_examples.json
+wrote C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\results\p2\decide_examples.md

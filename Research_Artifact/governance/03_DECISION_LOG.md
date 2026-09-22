@@ -1069,4 +1069,91 @@ edit or delete past entries (supersede them with a new entry instead).
   - **P3-T4** sweeps the band; the DL-010 `n_jobs`-scaled variant hook is implemented in the same module
     so the parallel-compute under-count can be bracketed alongside it.
 
-<!-- Append DL-022, DL-023, … below as the project progresses. -->
+### DL-022 — PyYAML enters the §3.2 stack; the `policy_spec.yaml` schema contract; and the bootstrap spec may never produce a reported number
+
+- **Date:** 2026-09-22
+- **Status:** Accepted (implementation-level; **written before any line of `policy.py` existed**,
+  per R4 and `development_plan.md` P2-T3)
+- **Spec section affected:** §3.2 (the pinned CPU-only stack — one dependency added). **No research
+  clause is amended.** Layer 0-A invariant 7 already names `scheduler_core/config/policy_spec.yaml`
+  as the artifact every threshold must trace through, and the plan makes it P2-T5's deliverable; this
+  entry records how that file is *read*, *validated* and *prevented from being faked*.
+
+- **Context.** P2-T3 must load a YAML policy spec, but `requirements.txt` / `requirements.lock.txt`
+  pin no YAML reader — a gap carried forward explicitly at the P2-T2 gate (DL-021 §Consequences, and
+  `PROGRESS.md` `carried_forward`). P2-T2 sidestepped it by writing the energy config as JSON, which
+  was correct for a task that did not need YAML, but the policy spec's format is not a free choice:
+  it is named `.yaml` by Layer 0-A and by the plan.
+
+  There is a second, larger problem specific to this task. P2-T3 builds `decide()` **before** P2-T5
+  fits the real spec, so the DoD requires a *bootstrap* spec to make the module testable. A
+  hand-written spec file containing a `d_threshold` and a `W_max` is precisely the object invariant 7
+  exists to forbid. Without a guard, the bootstrap spec is indistinguishable at load time from a
+  fitted one, and nothing would stop a later task — or a later session — from producing headline
+  numbers on hand-typed constants.
+
+- **Decision.**
+
+  1. **PyYAML joins the stack.** Added to `requirements.txt` and pinned in `requirements.lock.txt`
+     at the version the environment resolves. Rationale for a dependency rather than a hand-rolled
+     reader: a restricted-subset parser written here would be unreviewed code sitting directly under
+     the project's most safety-critical file. PyYAML is loaded **only** via `yaml.safe_load` — never
+     `load`/`full_load` — so no spec file can construct a Python object.
+
+  2. **The spec schema is closed, and validation is strict.** `load_policy_spec()` rejects, as an
+     error and never a warning: an unknown top-level or nested key; a missing required key; a
+     `schema_version` it does not implement; a `policy_path` outside the declared set; a threshold
+     that is absent, non-numeric, non-finite or out of range; and a spec carrying **no `provenance`
+     block**. A closed schema is the mechanism that makes invariant 7 checkable: a threshold that is
+     not in the schema cannot be smuggled in, and a threshold that is in the schema must declare
+     where it came from.
+
+  3. **Every threshold carries its own source.** The `provenance` block must name `fitted`
+     (boolean), `fitted_by`, `fitted_on` (the splits it was fitted over) and `sources` (the
+     `results/` files the values trace to). P2-T5's `fit_policy.py` fills these; nothing else may.
+
+  4. **The bootstrap spec is quarantined by construction.** `policy_spec.bootstrap.yaml` declares
+     `provenance.fitted: false`. `load_policy_spec()` takes `require_fitted`, and **every consumer
+     that produces a reported number must pass `require_fitted=True`**, which refuses an unfitted
+     spec outright. The bootstrap spec is therefore usable for tests, examples and wiring, and
+     structurally unusable for results. Its filename is also distinct from `policy_spec.yaml`, so it
+     cannot be loaded by default or mistaken for the fitted artifact in a directory listing.
+
+  5. **`decide()` is a pure evaluator and holds no policy of its own.** It reads no file, keeps no
+     state, performs no I/O, and contains **no numeric threshold** — every constant it applies comes
+     from the loaded spec. A test asserts this on the module's AST. Where the spec is silent, the
+     correct behaviour is to raise, not to fall back on a built-in default: a silent default is a
+     hand-tuned threshold wearing a disguise.
+
+  6. **Stage 1 runs first and unconditionally.** `decide()` calls the P2-T1 gate before reading any
+     policy value, and a non-deferrable build returns `run_now` **without Stage 2 being consulted at
+     all** — not with Stage 2 consulted and overridden. This is frozen invariant 1 ("risk ≠ urgency")
+     expressed as control flow, and it is asserted by test rather than by comment.
+
+  7. **`decide()` never receives the current build's `tr_duration`.** The build mapping handed to
+     `decide()` is checked against the A1.2 blocklist on every call, and a build carrying
+     `tr_duration` / `tr_log_buildduration` raises rather than being silently ignored. Loud refusal
+     is the point: a leak that is quietly dropped is a leak that recurs.
+
+- **Rationale.** The costly failure mode for this project is not a bug in `decide()` — it is a
+  plausible-looking `policy_spec.yaml` whose numbers came from somewhere other than the evidence.
+  Decisions 2–4 make that failure loud at load time instead of invisible until the viva. Decision 1 is
+  the minor half of this entry and is recorded chiefly because the frozen stack is not edited silently.
+
+- **Consequences.**
+  - **New:** `scheduler_core/policy.py`, `scheduler_core/config/policy_spec.bootstrap.yaml`,
+    `tests/test_policy.py`; `requirements.txt` + `requirements.lock.txt` gain PyYAML.
+  - **Binding on P2-T5:** `fit_policy.py` writes `policy_spec.yaml` against this schema, sets
+    `provenance.fitted: true`, and lists in `provenance.sources` every `results/` file each value
+    traces to. It must also pass its own output through `load_policy_spec(require_fitted=True)`.
+  - **Binding on P2-T4 and P4:** the simulator and the REST API load with `require_fitted=True`. The
+    sample run in P2-T4 is the one permitted exception — it is a wiring check, not a result — and
+    must label its output as bootstrap-derived wherever it is shown.
+  - **Threats (§6), P5-T4:** the null path means the shipped policy is expected to be duration-only.
+    The SE-informed branch will therefore be implemented and *tested* but, if P3 confirms the null,
+    **never exercised on real evidence**. That asymmetry is declared here so the write-up does not
+    imply the SE branch was validated in use.
+  - `requirements.lock.txt` no longer matches a bare `pip freeze` of the pre-P2-T3 environment; the
+    lock is regenerated and the suite re-run as part of this task's evidence.
+
+<!-- Append DL-023, DL-024, … below as the project progresses. -->
