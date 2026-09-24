@@ -1,0 +1,21 @@
+{
+  "banner": "BOOTSTRAP-DERIVED \u2014 P2-T4 wiring check, driven by policy_spec.bootstrap.yaml (provenance.fitted: false). Not a result; no number here is a finding (DL-022, DL-023 \u00a74).",
+  "variant": "primary",
+  "gate_safety": {
+    "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\sample_run\\decisions.csv.gz",
+    "rows": 1224000,
+    "deferred": 117450,
+    "violations": 0,
+    "passed": true,
+    "missing_columns": [],
+    "violation_rows": []
+  },
+  "skip_audit": {
+    "skipped_rows": 2401,
+    "non_deferrable_skipped": 0,
+    "passed": true,
+    "examples": []
+  },
+  "self_test_catches_violating_fixture": true,
+  "note": "DL-020 \u00a76: a pass proves consistency with the eligibility RULE, not that the rule identifies genuinely deferrable builds."
+}

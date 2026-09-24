@@ -1,0 +1,128 @@
+{
+  "banner": "BOOTSTRAP-DERIVED \u2014 P2-T4 wiring check, driven by policy_spec.bootstrap.yaml (provenance.fitted: false). Not a result; no number here is a finding (DL-022, DL-023 \u00a74).",
+  "task": "P2-T4",
+  "decision_log": [
+    "DL-022",
+    "DL-023"
+  ],
+  "command": "PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/parts_b --compare-with C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/run_a",
+  "run_date": "2026-09-23",
+  "fingerprint": "6fa13fb9f31335998f262c80c8169405dde58d980ba1d745a0a15e200a70eb72",
+  "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
+  "spec": {
+    "policy_path": "duration_only_fallback",
+    "stage1_variant": "primary",
+    "fitted": false,
+    "fitted_by": "hand-written bootstrap (P2-T3, DL-022 \u00a74) \u2014 not fit_policy.py",
+    "fitted_on": "nothing \u2014 no split was read to produce this file",
+    "sources": [],
+    "spec_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\code\\scheduler_core\\config\\policy_spec.bootstrap.yaml",
+    "schema_version": 1
+  },
+  "energy": {
+    "p_avg_w": 42.5,
+    "duration_source_column": "tr_duration",
+    "pinned_by": "DL-021",
+    "schema_version": 1,
+    "config_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\code\\scheduler_core\\config\\energy.json",
+    "citations": [
+      {
+        "kind": "documentation",
+        "work": "CodeCarbon \u2014 Methodology (CPU power estimation)",
+        "url": "https://docs.codecarbon.io/latest/explanation/methodology/",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "If the CPU is not found in the data source, a global constant will be applied",
+          "CodeCarbon assumes that 50% of the TDP will be the average power consumption to make this approximation."
+        ]
+      },
+      {
+        "kind": "source",
+        "work": "CodeCarbon source, codecarbon/external/hardware.py",
+        "version_pinned": "v3.3.1",
+        "version_published": "2026-09-09",
+        "url": "https://github.com/mlco2/codecarbon/blob/v3.3.1/codecarbon/external/hardware.py",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "POWER_CONSTANT = 85  (line 13)",
+          "CONSUMPTION_PERCENTAGE_CONSTANT = 0.5  (line 15)",
+          "power = self._tdp * CONSUMPTION_PERCENTAGE_CONSTANT  (line 256, _get_power_from_cpus, constant-mode branch)"
+        ],
+        "why_pinned": "A release tag rather than master, so a later CodeCarbon change cannot silently alter this study's energy model (R8)."
+      }
+    ]
+  },
+  "split_assignment_sha256": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde",
+  "trace_provenance": {
+    "duration_control_fit_id": "1088d5546f47ff12",
+    "duration_control_primary_form": "4b",
+    "risk_arm": "xgboost:full",
+    "risk_arm_fit_id": "65fd81b1e952fd72",
+    "risk_arm_sha256": "315a31028401e356dc0b4e16a0f1d430402b44d5263e0fbd4400a8b4049df0b6",
+    "duration_estimator_sha256": "ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0",
+    "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014)"
+  },
+  "population": {
+    "split": "calibration",
+    "calibration_builds": 138687,
+    "calibration_projects": 150,
+    "n_sample": 12000,
+    "seed": 42,
+    "sample_projects": 144,
+    "first_arrival": "2011-06-13 16:44:42+00:00",
+    "last_arrival": "2016-08-31 23:32:31+00:00",
+    "sample_failure_rate": 0.2916666666666667,
+    "n_unaccountable": 6,
+    "d_hat_4b_fallback_levels": {
+      "project": 11984,
+      "language": 16
+    },
+    "job_rows_dropped_by_split": {
+      "train": 2475417,
+      "calibration": 0,
+      "test": 641607,
+      "unassigned": 0
+    },
+    "test_builds_dropped_unread": 139163
+  },
+  "n_settings": 102,
+  "n_records": 1224000,
+  "checks": {
+    "identical_build_sets": {
+      "settings_compared": 102,
+      "builds_per_setting": 12000,
+      "identical": true
+    },
+    "validator": {
+      "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\sample_run\\decisions.csv.gz",
+      "rows": 1224000,
+      "deferred": 117450,
+      "violations": 0,
+      "passed": true,
+      "missing_columns": [],
+      "violation_rows": []
+    },
+    "skip_audit": {
+      "skipped_rows": 2401,
+      "non_deferrable_skipped": 0,
+      "passed": true,
+      "examples": []
+    },
+    "validator_self_test": true,
+    "identities": {
+      "5_equals_4b_at_every_point": true,
+      "3_equals_4b_at_d0": true,
+      "6_at_tau0_equals_1_static_actions": true
+    }
+  },
+  "seed": 42,
+  "runtime_s": 437.1,
+  "sha256": {
+    "trace.csv": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+    "decisions.csv.gz": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
+    "summary.csv": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+    "herding.csv": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
+    "validator.json": "39b1f0e6816ef0d90192dca20e9b5e97dcd18a1e6121bda28d49c8871ff9caa1",
+    "worked_reasons.json": "20237a52cd54faa700653bde9cfd4f3a171b241e7ffae760a56d4a486efbd342"
+  }
+}

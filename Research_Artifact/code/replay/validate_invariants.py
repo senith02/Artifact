@@ -253,9 +253,9 @@ def _why(is_pr: object, branch: object, variant: str) -> str:
 
 
 def load_decisions(path: str | Path) -> pd.DataFrame:
-    """Read a decision file. `.csv`, `.json` (records) and `.parquet` supported."""
+    """Read a decision file. `.csv`, `.csv.gz`, `.json` (records) and `.parquet` supported."""
     path = Path(path)
-    if path.suffix == ".csv":
+    if path.suffix == ".csv" or path.name.endswith(".csv.gz"):
         return pd.read_csv(path, dtype=str, keep_default_na=False,
                            na_values=["NA", ""])
     if path.suffix == ".json":

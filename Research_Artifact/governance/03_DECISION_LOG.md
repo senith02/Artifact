@@ -1156,4 +1156,139 @@ edit or delete past entries (supersede them with a new entry instead).
   - `requirements.lock.txt` no longer matches a bare `pip freeze` of the pre-P2-T3 environment; the
     lock is regenerated and the suite re-run as part of this task's evidence.
 
-<!-- Append DL-023, DL-024, … below as the project progresses. -->
+### DL-023 — The six strategies, operationally; the predeclared sweep grids; and what a replay record is
+
+- **Date:** 2026-09-23
+- **Status:** Accepted. **Items 1② and 1⑥ are author decisions** (taken 2026-09-23 when the ambiguity
+  below was put to the author, before any simulator code existed). The rest is implementation-level,
+  **written before a single line of `replay/simulator.py` existed**, per R4 and `development_plan.md`
+  P2-T4.
+- **Spec section affected:** frozen §4 (the strategy list) and Layer 0-A (six strategies) are
+  **operationalised, not amended**; `eval_protocol.md` §6 (metrics) and §A1.5/DL-013 (swept
+  frontiers) are given a concrete record schema and concrete grids. No RQ, floor or invariant changes.
+
+- **Context.** Layer 0-A names six strategies and DL-013 requires every strategy to expose one
+  aggressiveness parameter swept over a grid "from config — never chosen after seeing a result". No
+  document yet says, operationally, what any strategy *does* to a build, and three gaps are real:
+  1. **② vs ③ collapse.** Frozen §4 defines ② as *"defer all **eligible** builds to the greenest
+     slot"* and ③ as *"Stage 1 gate + fixed window"*; Layer 0-A renames ② *"blanket carbon-aware"*.
+     If ② uses the same gate and the same window as ③, the two strategies are the same function and
+     RQ4 compares a baseline against itself.
+  2. **⑥'s scope** (frozen §4 ④, "prune low-likelihood builds, run kept builds immediately") does not
+     say whether a risk score may skip a build that Stage 1 calls urgent.
+  3. **No grid exists** for `d_threshold`, for ⑤'s "policy scale", or for ⑥'s skip threshold, and the
+     schema-v1 `policy_spec.yaml` (DL-022) has no key to hold one.
+
+- **Decision.**
+
+  1. **The six strategies.** Every strategy that schedules does so through the shared
+     `scheduler_core.policy.decide()` (invariant 5), under a spec *derived* from the loaded one and
+     re-validated by the same closed-schema validator — the simulator never re-implements Stage 1 or
+     Stage 2. `d̂` in every strategy comes from the **frozen** P1-T4 control (fit id
+     `1088d5546f47ff12`), never refitted.
+
+     | # | Strategy | Operational definition | Swept parameter |
+     | :-: | :-- | :-- | :-- |
+     | ① | static | every build `run_now` at arrival; `decide()` is not consulted | none — one point |
+     | ② | blanket carbon-aware, **gated, whole-week horizon** *(author decision)* | `decide()` with `d_threshold = 0`, `w_max = 167 h` — every Stage-1-eligible build goes to the greenest slot in the whole 168-slot profile; `d̂` plays no role. 167 is `carbon.N_SLOTS − 1`, the width of the profile, not a tuned value. The literal frozen-§4 reading; gate safety stays 0. | none — one point |
+     | ③ | eligibility-only | `decide()` with `d_threshold = 0`, `w_max ∈ W` | `w_max` |
+     | ④a / ④b | duration-control-only | `decide()` on the duration-only path, `(d_threshold, w_max) ∈ D × W`; `d̂` from `predict_4a` (XGBoost regressor) / `predict_4b` (expanding project prior) | `(d_threshold, w_max)` |
+     | ⑤ | SE-informed evidence-derived | `decide()` under the **loaded** spec (its own `policy_path`, window form and admitted families), with its active block's `d_threshold` and `w_max` set to each point of the **same** `D × W` grid — so ④ and ⑤ are evaluated at identical parameter points and P3-T3's matching is exact. `d̂` = the primary form (④b). On the `se_informed` path `p̂` is supplied and the §7 window `w_max·(1−p̂)` applies inside. | `(d_threshold, w_max)` |
+     | ⑥ | risk-only skip, **eligible builds only** *(author decision)* | Stage 1 via `eligibility.classify` (the function `decide()` calls, same variant as the spec). A non-deferrable build **always runs now**. A deferrable build with `p̂ < τ_skip` is **skipped** — never run, zero energy, no feedback; every other build runs now. Keeps invariant 1 true for all six strategies: a risk score never overrides urgency. | `τ_skip` |
+
+     Two consequences stated so they are never mistaken for findings: **③ is ④ at `d_threshold = 0`**
+     (deliberate — the only difference between them is duration selectivity), and **while the spec is
+     on the `duration_only_fallback` path, ⑤ is ④b by construction** (identical decisions at every
+     point). That second identity is what the null path *means* operationally.
+
+     `p̂` for ⑤ (when on the SE path) and ⑥ is the calibrated `xgboost:full` arm of P1-T5 — the
+     primary algorithm's all-features SE signal. An admitted-family arm, if P2-T5 ever needs one, is
+     P2-T5's to specify under its own entry.
+
+  2. **The grids — sweep resolution, not thresholds.** Held in `code/replay/sweep_grid.json`,
+     frozen by this entry:
+     - `W` = **{6, 12, 24} h** — `eval_protocol.md` §7 / §A1.8 / DL-008, verbatim.
+     - `D` = **{0, 60, 120, 240, 480, 960, 1920, 3840, 7680, 15360} s** — `0` plus a doubling ladder
+       from one minute. Doubling is uniform on the log scale `d̂` is modelled on. The ladder is placed
+       against *descriptive* split statistics already on file (`results/p1/splits_summary.md`, §A1.2
+       role 1): train median 588 s, train p95 5,725 s, calibration p95 11,638 s — so it runs from
+       "defer every eligible build" (0) past the heaviest recorded p95, where almost nothing defers.
+       No sweep result existed when it was chosen.
+     - `τ_skip` = **{0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30}** — from "skip nothing" (⑥ ≡ ①) up to
+       just above the train failure base rate (24.354%, `results/p1/splits_summary.md`).
+     - A grid point is **where a strategy is evaluated**, not a value any policy adopts: the fitted
+       `d_threshold`/`w_max` are P2-T5's, chosen on the calibration replay by its own rule. A change to
+       any grid after a sweep result has been seen is a **new DL entry**, never an edit to this file.
+     - **Forward-binding on P2-T5:** schema v1 of `policy_spec.yaml` has no key for a grid. Recording
+       the grids in the spec (DL-013 §1) therefore needs a schema-version bump, under P2-T5's own DL.
+
+  3. **Accounting (A1.2 role 1 only).** The observed `tr_duration` reaches the simulator's accounting
+     step **after** `decide()` has returned, and never the build mapping `decide()` sees (which
+     `decide()` itself refuses — DL-022 §7). `E = accounting.energy_kwh(tr_duration, P_avg)` from
+     `config/energy.json` (DL-021); `carbon = E · I(scheduled slot)`, the whole build charged at the
+     slot it was **scheduled into** (§8's definition — a build spanning slots is not split). Latency
+     = the deferral offset in whole hours (`decide()` works on hour-of-week slots; a deferred build
+     starts at arrival + offset). `TTFF = latency + tr_duration/3600` for failed builds that ran.
+     A **skipped** build has `E = carbon = 0`, no latency and no TTFF; if it failed it is a **missed
+     failure** (§6, DL-005), and the carbon table must be read beside that count.
+     **Unaccountable builds.** `results/p0/data_profile.md` records 426 analytic builds with no
+     `tr_duration` (and 610 with a non-positive one). They stay in the replay — `decide()` never reads
+     duration, and `duration_estimator.usable_label_mask` excludes such builds from *fitting only*,
+     never from the replay. A build whose observed duration is missing, non-finite or negative gets a
+     decision like any other, but its energy, carbon and TTFF are left **empty (not measured)**, never
+     zero-filled (R1). Because the set is a property of the build, not the strategy, it is identical
+     for every strategy at every grid point, so excluding it from carbon/TTFF aggregates preserves the
+     pairing; its size is reported beside every aggregate. A zero duration is accountable (`E = 0`).
+
+  4. **The P2-T4 sample (a wiring check, not a result).** A seeded (`RANDOM_SEED = 42`) uniform draw of
+     **12,000** builds, without replacement, from the **calibration** split (DoD: ≥ 10k). `d̂` is
+     computed *before* sampling over every calibration build, so each sampled build carries its
+     project's full causal history (DL-014) rather than a history thinned by the sample. Builds are
+     replayed in `gh_build_started_at` order, ties by `tr_build_id`. The P2-T4 run is driven by the
+     **bootstrap** spec — the one exception DL-022 permits — so every output file is labelled
+     *bootstrap-derived* and **no number from it is a result**. The test split is dropped unread;
+     train builds are not needed and are also dropped.
+
+  5. **What a record is.** One row per **build × strategy × grid point**, self-contained, carrying:
+     identity and Stage-1 inputs (so the independent validator can audit any row alone); the arrival
+     slot; eligibility and the gate rule; the action (`run_now` / `defer` / `skip`); a compact
+     `reason_code`; the policy path taken; `d̂` and its form; `p̂` where used; the swept parameters;
+     window, delay, scheduled slot and both intensities; the observed duration (labelled accounting
+     only), energy, carbon, the outcome `y_fail`, and TTFF. The full `decide()` reason string is not
+     repeated on 10⁶ rows: a record carries every input `decide()` saw, so re-calling it reproduces the
+     string exactly, and a worked sample of full strings is written beside the records.
+
+  6. **Determinism, resumability, identical inputs.** Every (strategy, grid point) is computed into its
+     own part file keyed by a **run fingerprint** (spec, grid, energy config, sample, fit ids). A
+     resumed run reuses a part only if its fingerprint matches, so resuming can save time but can never
+     change a byte. The final tidy file is assembled in a fixed order, gzip-compressed with its
+     timestamp zeroed, and is required to be **byte-identical** across two runs. The runner asserts,
+     and a test re-asserts, that **every strategy at every point saw the identical build set**.
+
+  7. **Safety audit.** The independent `replay/validate_invariants.py` audits **every row of every
+     strategy**; all six are gated, so the expected count is 0 throughout. A `skip` is not a deferral,
+     so the validator additionally checks, by its own independent re-derivation, that ⑥ never skipped
+     a non-deferrable build. As DL-020 §6 requires, a pass means *consistency with the rule*, never
+     correctness of the rule.
+
+- **Rationale.** The alternative for ② — ignore Stage 1 and defer every build — matches the word
+  "blanket" but departs from the frozen text and would make gate safety non-zero by design; the author
+  chose the literal frozen reading, which keeps ② distinct from ③ through its horizon rather than its
+  gate. Putting ④ and ⑤ on the same grid is what makes DL-013's "matched operating points" a
+  comparison between identical parameter settings rather than an interpolation between unrelated
+  sweeps. Fixing the grids before any curve exists is the only way their choice cannot be tuned.
+
+- **Consequences.**
+  - **New:** `code/replay/simulator.py`, `code/replay/sweep_grid.json`, `code/scripts/run_replay.py`,
+    `code/tests/test_simulator.py`; `scheduler_core/policy.py` gains `spec_from_mapping()` — the
+    existing validator exposed for an in-memory mapping, so derived sweep specs go through the *same*
+    closed-schema checks as a file (no new threshold, no default; the AST test still binds).
+  - **Binding on P2-T5:** its calibration sweep runs through this simulator unchanged; the grids above
+    are the ones it records (schema bump, own DL).
+  - **Binding on P3-T2/P3-T3:** the test replay uses this record schema; ⑤ must beat **both** ④a and
+    ④b (§A1.9) at matched points of this grid.
+  - **Threats (P5-T4):** latency is hour-granular; a build is charged one slot's mean intensity for its
+    whole duration; ⑥'s skipped failures are feedback *lost*, not delayed — its carbon is not
+    comparable to the others' without the missed-failure count beside it.
+
+<!-- Append DL-024, DL-025, … below as the project progresses. -->

@@ -1,0 +1,33 @@
+$ PYTHONPATH=. python replay/validate_invariants.py ../results/p2/sample_run/decisions.csv.gz
+[PASS] ../results/p2/sample_run/decisions.csv.gz: 1,224,000 rows, 117,450 deferred, 0 violations
+
+NOTE (DL-020 §6): a pass proves the audited decisions are consistent with the eligibility RULE. It is not evidence that the rule identifies genuinely deferrable builds — no such ground truth exists in this dataset.
+exit code: 0
+
+$ PYTHONPATH=. python replay/validate_invariants.py --self-test
+{
+  "path": "<self-test fixture>",
+  "rows": 3,
+  "deferred": 3,
+  "violations": 2,
+  "passed": false,
+  "missing_columns": [],
+  "violation_rows": [
+    {
+      "tr_build_id": "2",
+      "gh_is_pr": "true",
+      "git_branch": "feature/y",
+      "action": "defer",
+      "why_non_deferrable": "gh_is_pr is true (\u00a73.4 class (a), treated as blocking)"
+    },
+    {
+      "tr_build_id": "3",
+      "gh_is_pr": "false",
+      "git_branch": "master",
+      "action": "defer",
+      "why_non_deferrable": "git_branch='master' matches protected rule 'mainline'"
+    }
+  ]
+}
+self-test PASS: expected 2 violations, got 2
+exit code: 0

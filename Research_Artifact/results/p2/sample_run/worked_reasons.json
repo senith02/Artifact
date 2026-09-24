@@ -1,0 +1,65 @@
+{
+  "banner": "BOOTSTRAP-DERIVED \u2014 P2-T4 wiring check, driven by policy_spec.bootstrap.yaml (provenance.fitted: false). Not a result; no number here is a finding (DL-022, DL-023 \u00a74).",
+  "examples": [
+    {
+      "setting_id": "2_blanket_carbon_aware__d0__w167",
+      "tr_build_id": "24492",
+      "action": "run_now",
+      "reason": "stage1[primary]: NOT deferrable (protected:mainline) \u2014 git_branch='master' matches the frozen pattern 'mainline' ((?:master|main|trunk|default)), approximating \u00a73.4 class (c) production-branch. Stage 2 not consulted. Running now at slot 16 (Mon 16:00, 156.4140 gCO2/kWh)."
+    },
+    {
+      "setting_id": "2_blanket_carbon_aware__d0__w167",
+      "tr_build_id": "305741",
+      "action": "defer",
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=423.0s >= d_threshold=0.0s, window=167.0000h (flat w_max=167.0000). Greenest reachable slot is 155 (Sun 11:00, 92.2400 gCO2/kWh) at +139h, vs 156.4140 gCO2/kWh now -> deferring 139h."
+    },
+    {
+      "setting_id": "3_eligibility_only__d0__w24",
+      "tr_build_id": "24492",
+      "action": "run_now",
+      "reason": "stage1[primary]: NOT deferrable (protected:mainline) \u2014 git_branch='master' matches the frozen pattern 'mainline' ((?:master|main|trunk|default)), approximating \u00a73.4 class (c) production-branch. Stage 2 not consulted. Running now at slot 16 (Mon 16:00, 156.4140 gCO2/kWh)."
+    },
+    {
+      "setting_id": "3_eligibility_only__d0__w24",
+      "tr_build_id": "305741",
+      "action": "defer",
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=423.0s >= d_threshold=0.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 26 (Tue 02:00, 109.2000 gCO2/kWh) at +10h, vs 156.4140 gCO2/kWh now -> deferring 10h."
+    },
+    {
+      "setting_id": "4a_duration_estimator__d960__w24",
+      "tr_build_id": "24492",
+      "action": "run_now",
+      "reason": "stage1[primary]: NOT deferrable (protected:mainline) \u2014 git_branch='master' matches the frozen pattern 'mainline' ((?:master|main|trunk|default)), approximating \u00a73.4 class (c) production-branch. Stage 2 not consulted. Running now at slot 16 (Mon 16:00, 156.4140 gCO2/kWh)."
+    },
+    {
+      "setting_id": "4a_duration_estimator__d960__w24",
+      "tr_build_id": "510003",
+      "action": "defer",
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=1114.1s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +24h, vs 113.1730 gCO2/kWh now -> deferring 24h."
+    },
+    {
+      "setting_id": "4b_duration_prior__d960__w24",
+      "tr_build_id": "24492",
+      "action": "run_now",
+      "reason": "stage1[primary]: NOT deferrable (protected:mainline) \u2014 git_branch='master' matches the frozen pattern 'mainline' ((?:master|main|trunk|default)), approximating \u00a73.4 class (c) production-branch. Stage 2 not consulted. Running now at slot 16 (Mon 16:00, 156.4140 gCO2/kWh)."
+    },
+    {
+      "setting_id": "4b_duration_prior__d960__w24",
+      "tr_build_id": "338817",
+      "action": "defer",
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2122.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
+    },
+    {
+      "setting_id": "5_se_informed_policy__d960__w24",
+      "tr_build_id": "24492",
+      "action": "run_now",
+      "reason": "stage1[primary]: NOT deferrable (protected:mainline) \u2014 git_branch='master' matches the frozen pattern 'mainline' ((?:master|main|trunk|default)), approximating \u00a73.4 class (c) production-branch. Stage 2 not consulted. Running now at slot 16 (Mon 16:00, 156.4140 gCO2/kWh)."
+    },
+    {
+      "setting_id": "5_se_informed_policy__d960__w24",
+      "tr_build_id": "338817",
+      "action": "defer",
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2122.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
+    }
+  ]
+}

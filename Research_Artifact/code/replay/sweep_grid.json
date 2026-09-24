@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "frozen_by": "DL-023 §2 (2026-09-23) — fixed before any replay result existed; a change after a sweep result has been seen is a new decision-log entry, never an edit to this file",
+  "note": "Sweep RESOLUTION, not thresholds. A grid point is where a strategy is evaluated; no policy adopts a grid value because it is here. The fitted d_threshold / w_max are P2-T5's, chosen on the calibration replay by its own rule.",
+  "w_max_hours": {
+    "values": [6, 12, 24],
+    "source": "eval_protocol.md §7 / §A1.8, DL-008 — the protocol's W_max sweep, verbatim"
+  },
+  "d_threshold_seconds": {
+    "values": [0, 60, 120, 240, 480, 960, 1920, 3840, 7680, 15360],
+    "source": "DL-023 §2 — 0 plus a doubling ladder from 60 s (uniform on the log scale d_hat is modelled on), spanning past the heaviest recorded split p95 (calibration 11,638 s; results/p1/splits_summary.md, descriptive only)"
+  },
+  "tau_skip": {
+    "values": [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
+    "source": "DL-023 §2 — from skip-nothing (strategy 6 == strategy 1) to just above the train failure base rate 24.354% (results/p1/splits_summary.md)"
+  },
+  "blanket_w_max_hours": {
+    "value": 167,
+    "source": "DL-023 §1 (author decision) — strategy 2 uses the whole hour-of-week horizon, carbon.N_SLOTS - 1; the width of the profile, not a tuned value"
+  },
+  "sample": {
+    "split": "calibration",
+    "n_builds": 12000,
+    "seed": 42,
+    "source": "DL-023 §4 — P2-T4 wiring sample (DoD: >= 10k calibration builds); RANDOM_SEED from scheduler_core/config.py"
+  }
+}

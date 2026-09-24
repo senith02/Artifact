@@ -17,14 +17,14 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-09-13 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 14
-  current_task: P2-T4    # replay simulator (6 strategies)
-  next_task: P2-T5       # fit + freeze policy_spec.yaml
+  tasks_total: 28        # derived — recounted 2026-09-23 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 15
+  current_task: P2-T5    # fit + freeze policy_spec.yaml
+  next_task: P3-T1       # test-split model eval (opens the test split, once)
   current_phase: P2
   blocked_on: null
-  last_gate_passed: P2-T3 (decide() over policy_spec)
-  last_updated: 2026-09-22
+  last_gate_passed: P2-T4 (replay simulator, six strategies)
+  last_updated: 2026-09-23
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   open_decisions: none — DL-019 Accepted 2026-09-12 (ablation config, written before any arm was
                   fitted). **Author's attention invited (not blocking, carried from P1-T5):** ④b's
@@ -82,7 +82,20 @@ state:
                   `policy_spec.bootstrap.yaml` declares `fitted: false` and
                   `load_policy_spec(require_fitted=True)` — the **default** — refuses it, so an
                   unfitted spec cannot silently drive a number.
-  carried_forward: **Binding on P2-T5:** `fit_policy.py` writes `policy_spec.yaml` against the
+  simulator:      **DL-023** — six strategies operationalised; ② = gated, whole-week horizon
+                  (167 h) and ⑥ = skips eligible builds only (**author decisions 2026-09-23**).
+                  ②–⑤ all go through the shared `decide()` under derived specs re-validated by
+                  `policy.spec_from_mapping`; ③ ≡ ④ at d=0 and ⑤ ≡ ④b on the null path, by
+                  construction (both verified on the run). Grids frozen in
+                  `replay/sweep_grid.json`: W {6,12,24} h · D {0,60…15360} s (doubling) ·
+                  τ_skip {0…0.30} → 102 settings. Bootstrap-derived sample run (12,000
+                  calibration builds, seed 42): 1,224,000 records, identical build sets at
+                  every point, validator **0 violations / 117,450 deferrals**, 0 non-deferrable
+                  skips, **byte-identical** across two fresh end-to-end runs.
+  carried_forward: **Binding on P2-T5 (from DL-023):** the calibration sweep runs through
+                  `run_replay.py`/`simulator.py` unchanged; recording the sweep grids in
+                  `policy_spec.yaml` needs a **schema-version bump** under P2-T5's own DL.
+                  **Binding on P2-T5:** `fit_policy.py` writes `policy_spec.yaml` against the
                   DL-022 schema with `provenance.fitted: true` and every value's `results/`
                   source listed; a skipped test in `test_policy.py` activates the moment that
                   file appears and fails if it does not load under `require_fitted=True`.
@@ -93,16 +106,16 @@ state:
 ```
 
 ```
-Overall   [██████████░░░░░░░░░░]  50%   (14 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
-Phase 2   [████████████░░░░░░░░]  60%   Core + Simulator + Policy   (3 / 5 tasks)
+Overall   [███████████░░░░░░░░░]  54%   (15 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
+Phase 2   [████████████████░░░░]  80%   Core + Simulator + Policy   (4 / 5 tasks)
 
-► CURRENT : P2-T4 — replay simulator (six strategies)
-○ NEXT    : P2-T5 — fit + **freeze** `policy_spec.yaml`
+► CURRENT : P2-T5 — fit + **freeze** `policy_spec.yaml`
+○ NEXT    : P3-T1 — test-split model evaluation (opens the test split, once)
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P2-T3 gated 2026-09-22; P2-T4 not started)*
+*(empty — P2-T4 gated 2026-09-23; P2-T5 not started)*
 
 ---
 
@@ -126,8 +139,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | **P2 Core+Sim+Policy** | P2-T1 Eligibility gate + validator | ✅ | `eligibility.py` + `validate_invariants.py` | RQ4 |
 | | P2-T2 Energy & carbon accounting | ✅ | `accounting.py` | RQ4 |
 | | P2-T3 `decide()` over `policy_spec` | ✅ | `policy.py` + spec loader | RQ3 |
-| | P2-T4 Replay simulator (6 strategies) | ► ⬜ | `simulator.py` + sample run | RQ4 |
-| | P2-T5 Fit + **freeze** `policy_spec.yaml` | ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
+| | P2-T4 Replay simulator (6 strategies) | ✅ | `simulator.py` + sample run | RQ4 |
+| | P2-T5 Fit + **freeze** `policy_spec.yaml` | ► ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
 | **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
 | | P3-T2 Full replay, all six strategies | ⬜ | `strategy_results.*` | **RQ4** |
 | | P3-T3 ④-vs-⑤ decision-level value | ⬜ | `incremental_value_decision.*` | **RQ2** |
@@ -149,7 +162,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
-| P2 Core + simulator + policy | 3 / 5 | `[████████████░░░░░░░░]` 60% |
+| P2 Core + simulator + policy | 4 / 5 | `[████████████████░░░░]` 80% |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -179,3 +192,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-20 | P2-T2 Energy & carbon accounting | `scheduler_core/accounting.py` + `scheduler_core/config/energy.json` + `tests/test_accounting.py` (74 tests; **456 passed** overall, verbatim in `results/p2/pytest_p2_t2.txt` with the DoD's hand-computed cases appended by name). **DL-021 was written before a single line of `accounting.py` existed** and discharges the one value `eval_protocol.md` §11 deferred by design: **`P_avg_W` = 42.5 W**, *derived not asserted* from CodeCarbon's constant-mode CPU fallback — `POWER_CONSTANT = 85` W (hardware.py L13) × `CONSUMPTION_PERCENTAGE_CONSTANT = 0.5` (L15), law at L256 — cited to the methodology docs **and** to source **pinned at release `v3.3.1`** (not `master`, so a later CodeCarbon change cannot silently alter this study's energy model, R8). **No wattage is hard-coded**: it loads from a versioned JSON config, `load_energy_config()` re-multiplies the derivation and refuses a config that contradicts itself or carries no citation (both negative-tested), and an AST test fails if 42.5/85/0.5 ever appear as literals in the module. Model implemented per §8: `E_kWh = (P_avg_W/1000)·(duration_s/3600)` with `duration_s = tr_duration` (DL-009 max-agg, DL-010), `carbon_b = E_b · I(t_sched,b)` over the P0-T3 hour-of-week primitive, plus §6's `carbon_per_1000_builds`, `pct_change_vs_baseline` and GSF **SCI per successful commit** (numerator all builds, denominator passes only; embodied term `M` excluded and declared). **Both DoD hooks exist:** the mandatory ±50% band `{21.25, 42.5, 63.75}` W (multipliers read from config, not the module) and DL-010's `n_jobs` variant, **off by default** and asserted so. **A1.2 role 1 is enforced structurally, not by comment:** `accounting.py` imports no decision-path module and no pandas (so it cannot source a `tr_duration` itself), every energy entry point requires an explicit duration, and the reverse AST assertion — no `scheduler_core` module may import `accounting` — is **forward-binding on P2-T3**, failing the moment `policy.py` imports it. Real run `PYTHONPATH=. python scripts/report_energy_model.py` (log `results/p2/energy_model_run.log`) against the **real** 168/168-slot P0-T3 profile → `results/p2/energy_model.{json,md}`: greenest slot **Sun 11:00 = 92.2400**, dirtiest **Wed 18:00 = 172.9140** gCO₂/kWh, so perfect hour-of-week shifting is a **−46.66%** per-build ceiling (identical at every duration — carbon is exactly linear in duration, which is §A1.13's point restated in the arithmetic); a 1-hour build costs 0.042500 kWh ⇒ 7.3488 g dirtiest / 3.9202 g greenest. **0 dataset rows read** — no split opened, and the reference durations are fixed a priori, not sampled from the corpus. Seven estimation assumptions/threats documented for P5-T4 §6, incl. that 42.5 W is a documented default for an *unidentified* CPU with no RAM/GPU term (absolute gCO₂e biased **downward**) and that constant power is what makes carbon-saved proportional-to-duration by construction. | **DL-021** |
 
 | 2026-09-22 | P2-T3 Stage 2: `decide()` over `policy_spec` | `scheduler_core/policy.py` + `scheduler_core/config/policy_spec.bootstrap.yaml` + `tests/test_policy.py` (69 tests; **524 passed, 1 skipped** overall, verbatim in `results/p2/pytest_p2_t3.txt` with the DoD's named property tests appended). **DL-022 was written before a single line of `policy.py` existed** and carries three decisions: PyYAML **6.0.3** enters the §3.2 stack (`safe_load` only, pinned in `requirements.lock.txt`, `pip check` clean, lockfile dry-run resolves); the `policy_spec.yaml` **schema is closed**; and the bootstrap spec is **quarantined by construction**. `decide(build, carbon, config)` is pure, deterministic, clock-free and **holds no threshold of its own** — asserted on the AST (the only float literals in the module are `0.0` and `1.0`) *and* behaviourally (changing `w_max_hours` 24.0->2.0 flips defer->run_now; changing `d_threshold_seconds` flips run_now->defer at the inclusive `>=` boundary). **Stage 1 runs first and RETURNS**, not 'evaluate then override': the test proves it by deleting Stage 2's inputs entirely — reaching Stage 2 would raise, and it does not, across all four non-deferrable rules. **§A1.2 enforced by raising**, not by ignoring: a build carrying `tr_duration`/`tr_log_buildduration`/`tr_status` is refused *before any other validation*, screened through `features.is_blocklisted` (the shared blocklist, not a copy) so the two cannot drift. `defer_until` is a **relative** hour-of-week offset, never a timestamp. Loader rejects unknown keys at every level, missing/contradictory provenance, unsupported `schema_version`, unknown `policy_path`/`stage1.variant`/`window_form`, out-of-range thresholds, and an `se_informed` path admitting no family (the null path must be declared `duration_only_fallback`, not an empty SE path). **Bootstrap quarantine works:** `load_policy_spec` defaults `require_fitted=True` and refuses `policy_spec.bootstrap.yaml`; a skipped test activates the moment P2-T5 writes the fitted spec and fails if it does not load fitted. §7/A1.8 window `w(p̂) = W_max·(1−p̂)` verified by hand at p̂ = 0/.25/.5/.75/1 -> 24/18/12/6/0 h, monotone non-increasing over a 201-point grid, clipped to `[0, W_max]`. Real run `PYTHONPATH=. python scripts/report_decide_examples.py` (log `results/p2/decide_examples_run.log`) against the real 168/168-slot profile -> `results/p2/decide_examples.{json,md}`, five worked outputs from a Wed 18:00 arrival (172.9140 gCO₂/kWh): **E1** PR -> `run_now`, reason says `Stage 2 not consulted`, `d_hat` null; **E2** `master` -> `run_now` (`protected:mainline`); **E3** deferrable, duration-only -> **defer +8h** to 113.1730; **E4** `d_hat`=90s < threshold 7200s -> `run_now` (A1.6 selectivity); **E5** SE path, p̂=0.80 -> window 4.8h -> **defer +4h** to only 123.3620, showing a shorter window reaching a worse slot than E3's. **0 dataset rows read** — no split opened; the five builds are hand-constructed and every example is labelled bootstrap-derived, not a result. | **DL-022** |
+| 2026-09-23 | P2-T4 Trace-driven replay simulator (six strategies) | `code/replay/simulator.py` + `code/replay/sweep_grid.json` + `code/scripts/run_replay.py` + `tests/test_simulator.py` (31 tests; **555 passed, 1 skipped** overall, verbatim in `results/p2/pytest_p2_t4.txt`); `policy.spec_from_mapping()` exposes the existing closed-schema validator for in-memory derived specs (no new threshold; AST test still binds); `validate_invariants.load_decisions` reads `.csv.gz`. **DL-023 was written before a single line of `simulator.py` existed**; ② (gated, whole-week 167 h horizon) and ⑥ (skips eligible builds only) are **author decisions** taken 2026-09-23. ②–⑤ run through the shared `decide()` under grid-point specs derived from the loaded spec and re-validated in full; the observed `tr_duration`/`y_fail` reach accounting only, after `decide()` returns — proved by a spy test (decide() saw only whitelisted keys) and a metamorphic test (scrambling duration and outcome moves no decision). Grids frozen in `sweep_grid.json`: W {6,12,24} h (§7), D {0, 60…15360} s doubling, τ_skip {0…0.30} → **102 settings**. Real run `PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh …` (437.1 s, log `results/p2/sample_run/run.log`): **138,687** calibration builds / 150 projects loaded (matches the frozen split), d̂ from fit id `1088d5546f47ff12` (④a + ④b), p̂ from `xgboost:full` fit id `65fd81b1e952fd72`; seeded sample **12,000** builds / 144 projects, 6 unaccountable (no usable duration, kept and decided, excluded identically from carbon/TTFF). **1,224,000 records**; identical build set at all 102 points; independent validator CLI **0 violations / 117,450 deferrals / 1,224,000 rows** (`validator_cli.txt`, exit 0), 0 non-deferrable skips; DL-023 identities ⑤≡④b, ③≡④b@d0, ⑥@τ0≡① all hold; **byte-identical** across two fully fresh end-to-end runs (`determinism.json`: trace, decisions, summary, herding sha256 equal). **Every aggregate is bootstrap-derived and is not a result.** Test split closed: test job rows discarded per chunk before any aggregation (139,163 raw test build ids). | **DL-023** |

@@ -215,6 +215,25 @@ def load_policy_spec(
         raw = yaml.safe_load(path.read_text(encoding="utf-8-sig"))
     except yaml.YAMLError as exc:
         raise PolicyError(f"policy spec is not valid YAML: {path} ({exc})") from exc
+    return spec_from_mapping(raw, source_path=path, require_fitted=require_fitted)
+
+
+def spec_from_mapping(
+    raw: Any,
+    *,
+    source_path: str | Path,
+    require_fitted: bool = True,
+) -> PolicySpec:
+    """Validate an in-memory spec mapping with exactly the checks a file gets.
+
+    :func:`load_policy_spec` is this function plus a YAML read. It exists so the
+    replay simulator can evaluate a *derived* spec — the loaded one with a sweep
+    grid point substituted (DL-023 §1) — without a second validator: a derived
+    spec passes the same closed schema, the same range checks and the same
+    ``require_fitted`` quarantine as the file it came from. ``source_path`` names
+    the file the mapping was derived from, so provenance still points at it.
+    """
+    path = Path(source_path)
     if not isinstance(raw, Mapping):
         raise PolicyError(f"policy spec must be a YAML mapping, got {type(raw).__name__}: {path}")
 

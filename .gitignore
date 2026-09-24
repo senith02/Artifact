@@ -45,3 +45,14 @@ Desktop.ini
 # of restarting. Machine state, not evidence — the reportable outputs are
 # results/p1/model_training.* and the persisted arms in artifacts/models/.
 Research_Artifact/code/artifacts/checkpoints/
+
+# ── Replay part files (resumable intermediate state, DL-023 §6) ──────
+# Written by scripts/run_replay.py, one per (strategy, grid point). The
+# reportable output is the assembled results/p2/sample_run/decisions.csv.gz.
+Research_Artifact/code/artifacts/replay_parts/
+
+# ── Replay decision traces (large, deterministically regenerable) ────
+# 61 MB per run. Not tracked by author decision at the P2-T4 gate
+# (2026-09-24); the sha256, determinism check and validator result are
+# tracked beside it, and REGENERATE.md gives the command. Pinned, not stored.
+Research_Artifact/results/p2/sample_run/decisions.csv.gz
