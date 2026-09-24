@@ -70,8 +70,11 @@ _CONFIG_DIR = Path(__file__).resolve().parent / "config"
 DEFAULT_POLICY_SPEC_PATH = _CONFIG_DIR / "policy_spec.yaml"
 BOOTSTRAP_POLICY_SPEC_PATH = _CONFIG_DIR / "policy_spec.bootstrap.yaml"
 
-#: The only `schema_version` this module implements (DL-022 §2).
-SUPPORTED_SCHEMA_VERSION: int = 1
+#: The `schema_version`s this module implements. v1 is DL-022 §2's (the bootstrap
+#: spec); v2 is DL-024 §7's — v1 plus the recorded sweep grids and per-value
+#: provenance. A fitted spec must be v2.
+SUPPORTED_SCHEMA_VERSIONS: tuple[int, ...] = (1, 2)
+FITTED_SCHEMA_VERSION: int = 2
 
 #: The two Stage-2 paths. `duration_only_fallback` is A1.6's central null and, per
 #: results/p1/admission.json, the path the fitted spec is expected to take.
@@ -98,6 +101,30 @@ _SCHEMA: Mapping[str, Mapping[str, tuple[str, ...]]] = {
 }
 _TOP_LEVEL_REQUIRED: tuple[str, ...] = ("schema_version", "policy_path", "stage1", "provenance")
 _TOP_LEVEL_OPTIONAL: tuple[str, ...] = ("duration_only", "se_informed")
+
+#: Schema v2 (DL-024 §7): v1's blocks unchanged, plus a required `sweep` block and
+#: stricter provenance. Kept as a delta over v1 so the two cannot drift apart.
+_SCHEMA_V2: Mapping[str, Mapping[str, tuple[str, ...]]] = {
+    **_SCHEMA,
+    "provenance": {
+        "required": ("fitted", "fitted_by", "fitted_on", "sources", "values", "command",
+                     "seed", "generated", "test_split_read"),
+        "optional": ("notes",),
+    },
+    "sweep": {
+        "required": ("source", "grid_sha256", "frozen_by", "w_max_hours",
+                     "d_threshold_seconds", "tau_skip", "blanket_w_max_hours"),
+        "optional": (),
+    },
+}
+_TOP_LEVEL_REQUIRED_V2: tuple[str, ...] = _TOP_LEVEL_REQUIRED + ("sweep",)
+
+#: The sweep grids recorded in a v2 spec — resolution for P3, never read by decide().
+_SWEEP_GRIDS: tuple[str, ...] = ("w_max_hours", "d_threshold_seconds", "tau_skip")
+
+#: The blocks whose numeric fields are policy values and so need a provenance entry.
+_VALUE_BLOCKS: tuple[str, ...] = ("duration_only", "se_informed")
+_VALUE_ENTRY_KEYS: frozenset[str] = frozenset({"source", "rule"})
 
 #: The hour-of-week horizon. Not a policy threshold — it is the width of the
 #: carbon profile itself (`carbon.N_SLOTS`), so a window may never exceed one week.
@@ -169,10 +196,11 @@ def _require_number(block: str, key: str, value: Any, *, minimum: float, maximum
     return number
 
 
-def _validate_block(name: str, block: Any) -> Mapping[str, Any]:
+def _validate_block(name: str, block: Any,
+                    schema: Mapping[str, Mapping[str, tuple[str, ...]]] = _SCHEMA) -> Mapping[str, Any]:
     if not isinstance(block, Mapping):
         raise PolicyError(f"spec block {name!r} must be a mapping, got {type(block).__name__}")
-    spec = _SCHEMA[name]
+    spec = schema[name]
     allowed = set(spec["required"]) | set(spec["optional"])
     unknown = sorted(set(block) - allowed)
     if unknown:
@@ -184,6 +212,61 @@ def _validate_block(name: str, block: Any) -> Mapping[str, Any]:
     if missing:
         raise PolicyError(f"spec block {name!r} is missing required key(s) {missing}")
     return block
+
+
+def _validate_sweep(sweep: Mapping[str, Any], path: Path) -> None:
+    """v2's recorded grids: shape only. They are resolution for P3, not thresholds."""
+    for key in _SWEEP_GRIDS:
+        values = sweep[key]
+        if not isinstance(values, (list, tuple)) or not values:
+            raise PolicyError(f"sweep.{key} must be a non-empty list ({path})")
+        numbers = [_require_number("sweep", key, v, minimum=0.0, maximum=None) for v in values]
+        if numbers != sorted(set(numbers)):
+            raise PolicyError(f"sweep.{key} must be strictly increasing, got {list(values)} ({path})")
+    _require_number("sweep", "blanket_w_max_hours", sweep["blanket_w_max_hours"],
+                    minimum=0.0, maximum=float(_MAX_WINDOW_HOURS))
+    digest = sweep["grid_sha256"]
+    if not isinstance(digest, str) or len(digest) != 64 or set(digest) - set("0123456789abcdef"):
+        raise PolicyError(f"sweep.grid_sha256 must be a lowercase sha256 hex digest ({path})")
+    for key in ("source", "frozen_by"):
+        if not isinstance(sweep[key], str) or not sweep[key]:
+            raise PolicyError(f"sweep.{key} must be a non-empty string ({path})")
+
+
+def _validate_value_provenance(raw: Mapping[str, Any], values: Any, path: Path) -> None:
+    """Every numeric policy value has exactly one provenance entry, and no entry is orphaned.
+
+    Keys are ``"<block>.<field>"``. Each entry names the ``results/`` file(s) the
+    value came from (``source``) and the rule that turned them into it (``rule``)
+    — invariant 7, made checkable per value rather than per file (DL-024 §7).
+    """
+    if not isinstance(values, Mapping):
+        raise PolicyError(f"provenance.values must be a mapping of '<block>.<field>' entries ({path})")
+    numeric = {
+        f"{block}.{key}"
+        for block in _VALUE_BLOCKS if isinstance(raw.get(block), Mapping)
+        for key, value in raw[block].items()
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    }
+    missing = sorted(numeric - set(values))
+    if missing:
+        raise PolicyError(
+            f"numeric spec value(s) {missing} have no provenance.values entry — every value must "
+            f"name the results/ file it traces to (invariant 7, DL-024 §7) ({path})"
+        )
+    orphans = sorted(set(values) - numeric)
+    if orphans:
+        raise PolicyError(f"provenance.values entries {orphans} name no numeric spec value ({path})")
+    for key, entry in values.items():
+        if not isinstance(entry, Mapping) or set(entry) != _VALUE_ENTRY_KEYS:
+            raise PolicyError(
+                f"provenance.values[{key!r}] must carry exactly {sorted(_VALUE_ENTRY_KEYS)} ({path})")
+        sources = entry["source"]
+        if not isinstance(sources, (list, tuple)) or not sources or \
+                not all(isinstance(s, str) and s for s in sources):
+            raise PolicyError(f"provenance.values[{key!r}].source must be a non-empty list of paths ({path})")
+        if not isinstance(entry["rule"], str) or not entry["rule"]:
+            raise PolicyError(f"provenance.values[{key!r}].rule must be a non-empty string ({path})")
 
 
 def load_policy_spec(
@@ -237,20 +320,23 @@ def spec_from_mapping(
     if not isinstance(raw, Mapping):
         raise PolicyError(f"policy spec must be a YAML mapping, got {type(raw).__name__}: {path}")
 
-    unknown = sorted(set(raw) - set(_TOP_LEVEL_REQUIRED) - set(_TOP_LEVEL_OPTIONAL))
+    version = raw.get("schema_version")
+    if isinstance(version, bool) or version not in SUPPORTED_SCHEMA_VERSIONS:
+        raise PolicyError(
+            f"policy spec schema_version {version!r} is not one of the supported "
+            f"{SUPPORTED_SCHEMA_VERSIONS} — the key set changed; update policy.py under a "
+            f"decision-log entry rather than reading it blind ({path})"
+        )
+    v2 = version == FITTED_SCHEMA_VERSION
+    schema = _SCHEMA_V2 if v2 else _SCHEMA
+    top_required = _TOP_LEVEL_REQUIRED_V2 if v2 else _TOP_LEVEL_REQUIRED
+
+    unknown = sorted(set(raw) - set(top_required) - set(_TOP_LEVEL_OPTIONAL))
     if unknown:
         raise PolicyError(f"unknown top-level key(s) {unknown} in {path}; the schema is closed")
-    missing = sorted(set(_TOP_LEVEL_REQUIRED) - set(raw))
+    missing = sorted(set(top_required) - set(raw))
     if missing:
         raise PolicyError(f"policy spec is missing required key(s) {missing}: {path}")
-
-    version = raw["schema_version"]
-    if version != SUPPORTED_SCHEMA_VERSION:
-        raise PolicyError(
-            f"policy spec schema_version {version!r} != supported {SUPPORTED_SCHEMA_VERSION} "
-            f"— the key set changed; update policy.py under a decision-log entry "
-            f"rather than reading it blind ({path})"
-        )
 
     policy_path = raw["policy_path"]
     if policy_path not in POLICY_PATHS:
@@ -263,7 +349,7 @@ def spec_from_mapping(
             f"unknown stage1.variant {variant!r}; expected one of {eligibility_mod.VARIANTS} ({path})"
         )
 
-    provenance = _validate_block("provenance", raw["provenance"])
+    provenance = _validate_block("provenance", raw["provenance"], schema)
     if not isinstance(provenance["fitted"], bool):
         raise PolicyError(f"provenance.fitted must be a boolean, got {provenance['fitted']!r} ({path})")
     if not isinstance(provenance["sources"], (list, tuple)):
@@ -273,6 +359,18 @@ def spec_from_mapping(
             f"a fitted spec must list the results/ file(s) its values trace to in "
             f"provenance.sources — Layer 0-A invariant 7 ({path})"
         )
+    if provenance["fitted"] and not v2:
+        raise PolicyError(
+            f"a fitted spec must be schema_version {FITTED_SCHEMA_VERSION}: only v2 carries the "
+            f"per-value provenance and the recorded sweep grids (DL-024 §7) ({path})"
+        )
+    if v2:
+        if provenance["test_split_read"] is not False:
+            raise PolicyError(
+                f"provenance.test_split_read must be false — the policy is frozen before the test "
+                f"split is opened (DL-012, §A1.7) ({path})"
+            )
+        _validate_sweep(_validate_block("sweep", raw["sweep"], schema), path)
 
     # Validate whichever block(s) are present; the ACTIVE one must be present.
     duration_only: Mapping[str, Any] = {}
@@ -309,6 +407,9 @@ def spec_from_mapping(
                 f"admitted family is the duration-only fallback under another name; §A1.7's null "
                 f"path must be declared as duration_only_fallback ({path})"
             )
+
+    if v2:
+        _validate_value_provenance(raw, provenance["values"], path)
 
     spec = PolicySpec(
         schema_version=int(version),

@@ -1,0 +1,48 @@
+$ python -m pytest -rs   (2026-09-24T18:38:49Z, code/.venv, Python 3.11.1)
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 37%]
+........................................................................ [ 49%]
+........................................................................ [ 62%]
+........................................................................ [ 74%]
+........................................................................ [ 87%]
+........................................................................ [ 99%]
+...                                                                      [100%]
+579 passed in 38.65s
+
+# DoD-named tests (P2-T5), run separately with -rA:
+PASSED tests/test_fit_policy.py::test_rule_takes_the_lowest_ttff_among_points_retaining_rho_of_the_best_saving
+PASSED tests/test_fit_policy.py::test_rule_tie_breaks_larger_d_then_smaller_w
+PASSED tests/test_fit_policy.py::test_rule_fails_rather_than_defaulting_when_nothing_saves_carbon
+PASSED tests/test_fit_policy.py::test_rule_refuses_a_point_without_ttff_and_a_bad_rho
+PASSED tests/test_fit_policy.py::test_the_built_spec_sources_every_numeric_field_and_loads_fitted
+PASSED tests/test_fit_policy.py::test_dumping_the_spec_is_deterministic
+PASSED tests/test_fit_policy.py::test_the_recorded_sweep_is_the_frozen_grid
+PASSED tests/test_fit_policy.py::test_the_candidate_sweep_spec_is_unfitted_and_quarantined
+PASSED tests/test_fit_policy.py::test_calibration_only_assertion_fires_on_a_test_project
+PASSED tests/test_fit_policy.py::test_policy_path_is_rederived_from_p1_deltas_and_agrees_with_p1_t7
+PASSED tests/test_fit_policy.py::test_the_frozen_spec_is_fully_sourced_and_matches_its_recorded_selection
+PASSED tests/test_policy.py::test_require_fitted_defaults_to_true_and_refuses_the_bootstrap
+PASSED tests/test_policy.py::test_the_bootstrap_spec_declares_itself_unfitted
+PASSED tests/test_policy.py::test_anything_sitting_at_the_fitted_path_must_declare_itself_fitted
+PASSED tests/test_policy.py::test_a_fitted_spec_must_cite_its_sources
+PASSED tests/test_policy.py::test_a_fitted_spec_with_sources_loads_under_require_fitted
+PASSED tests/test_policy.py::test_a_fitted_v1_spec_is_refused
+PASSED tests/test_policy.py::test_the_v1_bootstrap_still_loads_unfitted
+PASSED tests/test_policy.py::test_v2_requires_a_provenance_entry_for_every_numeric_value
+PASSED tests/test_policy.py::test_v2_rejects_an_orphan_or_malformed_value_entry
+PASSED tests/test_policy.py::test_v2_refuses_a_spec_that_read_the_test_split
+PASSED tests/test_policy.py::test_v2_validates_the_recorded_sweep[patch0-strictly increasing]
+PASSED tests/test_policy.py::test_v2_validates_the_recorded_sweep[patch1-non-empty]
+PASSED tests/test_policy.py::test_v2_validates_the_recorded_sweep[patch2-sha256]
+PASSED tests/test_policy.py::test_v2_validates_the_recorded_sweep[patch3-unknown key]
+PASSED tests/test_policy.py::test_v2_requires_the_sweep_block
+PASSED tests/test_policy.py::test_decide_is_deterministic
+PASSED tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.0-24.0]
+PASSED tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.25-18.0]
+PASSED tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.5-12.0]
+PASSED tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[0.75-6.0]
+PASSED tests/test_policy.py::test_linear_window_matches_the_frozen_form_by_hand[1.0-0.0]
+PASSED tests/test_policy.py::test_the_reason_names_gate_rule_path_values_window_and_slot
+PASSED tests/test_policy.py::test_decision_record_carries_the_spec_fitted_flag
+34 passed, 58 deselected in 1.37s

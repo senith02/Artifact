@@ -56,3 +56,4 @@ Research_Artifact/code/artifacts/replay_parts/
 # (2026-09-24); the sha256, determinism check and validator result are
 # tracked beside it, and REGENERATE.md gives the command. Pinned, not stored.
 Research_Artifact/results/p2/sample_run/decisions.csv.gz
+Research_Artifact/results/p2/policy_fit/decisions.csv.gz

@@ -267,14 +267,97 @@ def test_a_fitted_spec_must_cite_its_sources(tmp_path):
         _load(tmp_path, provenance={"fitted": True, "sources": []})
 
 
-def test_a_fitted_spec_with_sources_loads_under_require_fitted(tmp_path):
-    path = _spec_file(tmp_path, provenance={
+def _v2_fitted_raw() -> dict:
+    """A minimal well-formed fitted v2 spec (DL-024 §7), built on the bootstrap."""
+    raw = copy.deepcopy(yaml.safe_load(
+        policy.BOOTSTRAP_POLICY_SPEC_PATH.read_text(encoding="utf-8-sig")))
+    raw["schema_version"] = 2
+    del raw["se_informed"]
+    raw["sweep"] = {
+        "source": "replay/sweep_grid.json", "grid_sha256": "a" * 64,
+        "frozen_by": "DL-023 §2", "w_max_hours": [6, 12, 24],
+        "d_threshold_seconds": [0, 60], "tau_skip": [0.0, 0.1], "blanket_w_max_hours": 167,
+    }
+    src = {"source": ["results/p2/policy_fit/summary.csv"], "rule": "DL-024 §1"}
+    raw["provenance"] = {
         "fitted": True, "sources": ["results/p1/admission.json"],
-        "fitted_by": "scripts/fit_policy.py", "fitted_on": "train+calibration",
-    })
-    spec = policy.load_policy_spec(path, require_fitted=True)
+        "fitted_by": "scripts/fit_policy.py", "fitted_on": "calibration",
+        "values": {"duration_only.d_threshold_seconds": dict(src),
+                   "duration_only.w_max_hours": dict(src)},
+        "command": "PYTHONPATH=. python scripts/fit_policy.py", "seed": 42,
+        "generated": "2026-09-24", "test_split_read": False,
+    }
+    return raw
+
+
+def _write(tmp_path: Path, raw: dict) -> Path:
+    path = tmp_path / "policy_spec.yaml"
+    path.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    return path
+
+
+def test_a_fitted_spec_with_sources_loads_under_require_fitted(tmp_path):
+    # DL-024 §7: a fitted spec is v2 (the P2-T3 version of this test built a fitted v1 spec,
+    # which the tightened loader now refuses — see the next test).
+    spec = policy.load_policy_spec(_write(tmp_path, _v2_fitted_raw()), require_fitted=True)
     assert spec.fitted is True
+    assert spec.schema_version == 2
     assert spec.provenance_record()["sources"] == ["results/p1/admission.json"]
+
+
+def test_a_fitted_v1_spec_is_refused(tmp_path):
+    with pytest.raises(policy.PolicyError, match="schema_version 2"):
+        _load(tmp_path, provenance={"fitted": True, "sources": ["results/p1/admission.json"]})
+
+
+def test_the_v1_bootstrap_still_loads_unfitted():
+    spec = policy.load_policy_spec(policy.BOOTSTRAP_POLICY_SPEC_PATH, require_fitted=False)
+    assert spec.schema_version == 1 and not spec.fitted
+
+
+def test_v2_requires_a_provenance_entry_for_every_numeric_value(tmp_path):
+    raw = _v2_fitted_raw()
+    del raw["provenance"]["values"]["duration_only.w_max_hours"]
+    with pytest.raises(policy.PolicyError, match="no provenance.values entry"):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
+
+
+def test_v2_rejects_an_orphan_or_malformed_value_entry(tmp_path):
+    raw = _v2_fitted_raw()
+    raw["provenance"]["values"]["duration_only.ghost"] = {"source": ["x"], "rule": "y"}
+    with pytest.raises(policy.PolicyError, match="name no numeric"):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
+    raw = _v2_fitted_raw()
+    raw["provenance"]["values"]["duration_only.w_max_hours"]["source"] = []
+    with pytest.raises(policy.PolicyError, match="non-empty list"):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
+
+
+def test_v2_refuses_a_spec_that_read_the_test_split(tmp_path):
+    raw = _v2_fitted_raw()
+    raw["provenance"]["test_split_read"] = True
+    with pytest.raises(policy.PolicyError, match="test_split_read"):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
+
+
+@pytest.mark.parametrize("patch, match", [
+    ({"w_max_hours": [24, 12]}, "strictly increasing"),
+    ({"tau_skip": []}, "non-empty"),
+    ({"grid_sha256": "not-a-digest"}, "sha256"),
+    ({"surprise": 1}, "unknown key"),
+])
+def test_v2_validates_the_recorded_sweep(tmp_path, patch, match):
+    raw = _v2_fitted_raw()
+    raw["sweep"].update(patch)
+    with pytest.raises(policy.PolicyError, match=match):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
+
+
+def test_v2_requires_the_sweep_block(tmp_path):
+    raw = _v2_fitted_raw()
+    del raw["sweep"]
+    with pytest.raises(policy.PolicyError, match="sweep"):
+        policy.load_policy_spec(_write(tmp_path, raw), require_fitted=True)
 
 
 def test_unknown_keys_are_rejected_at_every_level(tmp_path):

@@ -17,20 +17,24 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-09-23 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 15
-  current_task: P2-T5    # fit + freeze policy_spec.yaml
-  next_task: P3-T1       # test-split model eval (opens the test split, once)
-  current_phase: P2
+  tasks_total: 28        # derived — recounted 2026-09-25 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 16
+  current_task: P3-T1    # test-split model eval (opens the test split, once)
+  next_task: P3-T2       # full replay, all six strategies, test trace
+  current_phase: P3
   blocked_on: null
-  last_gate_passed: P2-T4 (replay simulator, six strategies)
-  last_updated: 2026-09-23
+  last_gate_passed: P2-T5 (policy_spec.yaml fitted + frozen)
+  last_updated: 2026-09-25
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
-  open_decisions: none — DL-019 Accepted 2026-09-12 (ablation config, written before any arm was
-                  fitted). **Author's attention invited (not blocking, carried from P1-T5):** ④b's
-                  declared trailing-50 sensitivity beat the predeclared expanding primary on
-                  calibration log1p MAE (0.2886 vs 0.6010); any change to the primary is a DL entry
-                  argued from principle, before P3 opens the test split.
+  open_decisions: none. ④b trailing-50 question **closed** by author decision 2026-09-24 (DL-024 §3):
+                  expanding primary kept; trailing-50 reported as a finding + P3-T4 sensitivity.
+                  **Not yet adopted (INDEPENDENT_REVIEW_REPORT.md addendum, untracked):** a temporal
+                  robustness sweep and a second grid profile — both need a DL entry *before* P3-T1
+                  if they are to be predeclared sensitivities.
+  frozen_policy:  code/scheduler_core/config/policy_spec.yaml — schema v2, sha256
+                  34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3; duration-only
+                  fallback, d_threshold 480 s, w_max 24 h (DL-024 §1, ρ = 0.90 on the ④b
+                  calibration sweep); fresh refit byte-identical (results/p2/policy_fit/verify.json)
   frozen_split: results/p1/split_assignment.csv — sha256 3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde
   frozen_duration_control: code/artifacts/duration_estimator.joblib — fit id 1088d5546f47ff12,
                   primary form ④b (expanding project prior), seed 42
@@ -92,30 +96,35 @@ state:
                   calibration builds, seed 42): 1,224,000 records, identical build sets at
                   every point, validator **0 violations / 117,450 deferrals**, 0 non-deferrable
                   skips, **byte-identical** across two fresh end-to-end runs.
-  carried_forward: **Binding on P2-T5 (from DL-023):** the calibration sweep runs through
-                  `run_replay.py`/`simulator.py` unchanged; recording the sweep grids in
-                  `policy_spec.yaml` needs a **schema-version bump** under P2-T5's own DL.
-                  **Binding on P2-T5:** `fit_policy.py` writes `policy_spec.yaml` against the
-                  DL-022 schema with `provenance.fitted: true` and every value's `results/`
-                  source listed; a skipped test in `test_policy.py` activates the moment that
-                  file appears and fails if it does not load under `require_fitted=True`.
-                  **Binding on P2-T4/P4:** load with `require_fitted=True`; P2-T4's wiring sample
-                  run is the one permitted exception and must label its output bootstrap-derived.
+  policy_fit:     **DL-024** — operating point by predeclared carbon retention (author decision):
+                  over the 30 ④b calibration-sweep points, S* = 3.7787% saving; 5 points save
+                  ≥ 0.9·S* (all at W = 24 h); lowest TTFF p95 among them = d480/w24 (saving
+                  3.4759%, TTFF p95 19.2027 h). **ρ-sensitive:** ρ = 0.80 → d240/w12 (TTFF p95
+                  11.3529 h), ρ = 0.95 → d240/w24. ×0.5/×2 floor sweep: no spec element changes.
+                  Decision-level §A1.7 test not applicable (no candidate family); ⑤ ≡ ④b verified
+                  on records. Fitting-sweep decisions sha256 = P2-T4's (`bc4defb6…`): thresholds
+                  are overridden per point, so the two sweeps are the same decisions.
+  carried_forward: **Binding on P3-T2/P3-T3 (DL-024):** load `policy_spec.yaml` with
+                  `require_fitted=True`, record its sha256, and assert `sweep.grid_sha256` equals
+                  `replay/sweep_grid.json`'s digest before replaying the test trace. ④a's frontier
+                  is reported over the points it spans (no ④a deferrals at D ≥ 3,840 s); ⑥'s coarse
+                  τ frontier is reported as a characteristic, the τ grid unchanged (DL-024 §5).
+                  **Binding on P4:** load with `require_fitted=True`.
                   **Stack:** PyYAML 6.0.3 added to §3.2 (DL-022 §1), pinned in
                   `requirements.lock.txt`, `pip check` clean.
 ```
 
 ```
-Overall   [███████████░░░░░░░░░]  54%   (15 / 28 tasks)   Milestone: ✅ M1 reached — M2 next (57% at P2 complete)
-Phase 2   [████████████████░░░░]  80%   Core + Simulator + Policy   (4 / 5 tasks)
+Overall   [███████████░░░░░░░░░]  57%   (16 / 28 tasks)   Milestone: ✅ M2 reached (P2 complete)
+Phase 3   [░░░░░░░░░░░░░░░░░░░░]   0%   Evaluation   (0 / 5 tasks)
 
-► CURRENT : P2-T5 — fit + **freeze** `policy_spec.yaml`
-○ NEXT    : P3-T1 — test-split model evaluation (opens the test split, once)
+► CURRENT : P3-T1 — test-split model evaluation + confirmatory ablation (opens the test split, once)
+○ NEXT    : P3-T2 — full replay, all six strategies, test trace
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P2-T4 gated 2026-09-23; P2-T5 not started)*
+*(empty — P2-T5 gated 2026-09-25; P3-T1 not started)*
 
 ---
 
@@ -140,8 +149,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P2-T2 Energy & carbon accounting | ✅ | `accounting.py` | RQ4 |
 | | P2-T3 `decide()` over `policy_spec` | ✅ | `policy.py` + spec loader | RQ3 |
 | | P2-T4 Replay simulator (6 strategies) | ✅ | `simulator.py` + sample run | RQ4 |
-| | P2-T5 Fit + **freeze** `policy_spec.yaml` | ► ⬜ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
-| **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
+| | P2-T5 Fit + **freeze** `policy_spec.yaml` | ✅ | `fit_policy.py` + `policy_spec.yaml` | **RQ3** |
+| **P3 Evaluation** | P3-T1 Test model eval + confirmatory ablation | ► ⬜ | `results/p3/model_report.md` | **RQ1**/2 |
 | | P3-T2 Full replay, all six strategies | ⬜ | `strategy_results.*` | **RQ4** |
 | | P3-T3 ④-vs-⑤ decision-level value | ⬜ | `incremental_value_decision.*` | **RQ2** |
 | | P3-T4 Sensitivity sweeps | ⬜ | `sensitivity.*` | RQ4 |
@@ -162,7 +171,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | :-- | :-: | :-- |
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
-| P2 Core + simulator + policy | 4 / 5 | `[████████████████░░░░]` 80% |
+| P2 Core + simulator + policy | 5 / 5 | `[████████████████████]` 100% ✅ |
 | P3 Evaluation | 0 / 5 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
@@ -193,3 +202,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 
 | 2026-09-22 | P2-T3 Stage 2: `decide()` over `policy_spec` | `scheduler_core/policy.py` + `scheduler_core/config/policy_spec.bootstrap.yaml` + `tests/test_policy.py` (69 tests; **524 passed, 1 skipped** overall, verbatim in `results/p2/pytest_p2_t3.txt` with the DoD's named property tests appended). **DL-022 was written before a single line of `policy.py` existed** and carries three decisions: PyYAML **6.0.3** enters the §3.2 stack (`safe_load` only, pinned in `requirements.lock.txt`, `pip check` clean, lockfile dry-run resolves); the `policy_spec.yaml` **schema is closed**; and the bootstrap spec is **quarantined by construction**. `decide(build, carbon, config)` is pure, deterministic, clock-free and **holds no threshold of its own** — asserted on the AST (the only float literals in the module are `0.0` and `1.0`) *and* behaviourally (changing `w_max_hours` 24.0->2.0 flips defer->run_now; changing `d_threshold_seconds` flips run_now->defer at the inclusive `>=` boundary). **Stage 1 runs first and RETURNS**, not 'evaluate then override': the test proves it by deleting Stage 2's inputs entirely — reaching Stage 2 would raise, and it does not, across all four non-deferrable rules. **§A1.2 enforced by raising**, not by ignoring: a build carrying `tr_duration`/`tr_log_buildduration`/`tr_status` is refused *before any other validation*, screened through `features.is_blocklisted` (the shared blocklist, not a copy) so the two cannot drift. `defer_until` is a **relative** hour-of-week offset, never a timestamp. Loader rejects unknown keys at every level, missing/contradictory provenance, unsupported `schema_version`, unknown `policy_path`/`stage1.variant`/`window_form`, out-of-range thresholds, and an `se_informed` path admitting no family (the null path must be declared `duration_only_fallback`, not an empty SE path). **Bootstrap quarantine works:** `load_policy_spec` defaults `require_fitted=True` and refuses `policy_spec.bootstrap.yaml`; a skipped test activates the moment P2-T5 writes the fitted spec and fails if it does not load fitted. §7/A1.8 window `w(p̂) = W_max·(1−p̂)` verified by hand at p̂ = 0/.25/.5/.75/1 -> 24/18/12/6/0 h, monotone non-increasing over a 201-point grid, clipped to `[0, W_max]`. Real run `PYTHONPATH=. python scripts/report_decide_examples.py` (log `results/p2/decide_examples_run.log`) against the real 168/168-slot profile -> `results/p2/decide_examples.{json,md}`, five worked outputs from a Wed 18:00 arrival (172.9140 gCO₂/kWh): **E1** PR -> `run_now`, reason says `Stage 2 not consulted`, `d_hat` null; **E2** `master` -> `run_now` (`protected:mainline`); **E3** deferrable, duration-only -> **defer +8h** to 113.1730; **E4** `d_hat`=90s < threshold 7200s -> `run_now` (A1.6 selectivity); **E5** SE path, p̂=0.80 -> window 4.8h -> **defer +4h** to only 123.3620, showing a shorter window reaching a worse slot than E3's. **0 dataset rows read** — no split opened; the five builds are hand-constructed and every example is labelled bootstrap-derived, not a result. | **DL-022** |
 | 2026-09-23 | P2-T4 Trace-driven replay simulator (six strategies) | `code/replay/simulator.py` + `code/replay/sweep_grid.json` + `code/scripts/run_replay.py` + `tests/test_simulator.py` (31 tests; **555 passed, 1 skipped** overall, verbatim in `results/p2/pytest_p2_t4.txt`); `policy.spec_from_mapping()` exposes the existing closed-schema validator for in-memory derived specs (no new threshold; AST test still binds); `validate_invariants.load_decisions` reads `.csv.gz`. **DL-023 was written before a single line of `simulator.py` existed**; ② (gated, whole-week 167 h horizon) and ⑥ (skips eligible builds only) are **author decisions** taken 2026-09-23. ②–⑤ run through the shared `decide()` under grid-point specs derived from the loaded spec and re-validated in full; the observed `tr_duration`/`y_fail` reach accounting only, after `decide()` returns — proved by a spy test (decide() saw only whitelisted keys) and a metamorphic test (scrambling duration and outcome moves no decision). Grids frozen in `sweep_grid.json`: W {6,12,24} h (§7), D {0, 60…15360} s doubling, τ_skip {0…0.30} → **102 settings**. Real run `PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh …` (437.1 s, log `results/p2/sample_run/run.log`): **138,687** calibration builds / 150 projects loaded (matches the frozen split), d̂ from fit id `1088d5546f47ff12` (④a + ④b), p̂ from `xgboost:full` fit id `65fd81b1e952fd72`; seeded sample **12,000** builds / 144 projects, 6 unaccountable (no usable duration, kept and decided, excluded identically from carbon/TTFF). **1,224,000 records**; identical build set at all 102 points; independent validator CLI **0 violations / 117,450 deferrals / 1,224,000 rows** (`validator_cli.txt`, exit 0), 0 non-deferrable skips; DL-023 identities ⑤≡④b, ③≡④b@d0, ⑥@τ0≡① all hold; **byte-identical** across two fully fresh end-to-end runs (`determinism.json`: trace, decisions, summary, herding sha256 equal). **Every aggregate is bootstrap-derived and is not a result.** Test split closed: test job rows discarded per chunk before any aggregation (139,163 raw test build ids). | **DL-023** |
+| 2026-09-25 | P2-T5 Fit + **freeze** `policy_spec.yaml` | `scripts/fit_policy.py` + `tests/test_fit_policy.py` (16 tests) + schema v2 in `scheduler_core/policy.py` (8 new tests in `tests/test_policy.py`; the P2-T3 fitted-fixture test moved to v2) — **579 passed, 0 skipped** overall, verbatim in `results/p2/pytest_p2_t5.txt`; the P2-T3 tripwire now runs and passes against the real spec. **DL-024 was written before `fit_policy.py` existed**; its three author decisions (carbon-retention rule ρ = 0.90; the frozen DL-023 §4 12k sample; ④b expanding primary kept) were taken before any rule was evaluated. Real run `PYTHONPATH=. python scripts/fit_policy.py` (log `results/p2/policy_fit/run.log`): model-level admission **re-derived** from `deltas.json` — empty at ×0.5/×1/×2, agrees with P1-T7 → `duration_only_fallback`; calibration sweep 102 settings × 12,000 builds (138,687 calibration builds / 150 projects loaded; 139,163 raw test build ids dropped unread; 144 trace projects, all calibration, asserted vs the frozen assignment); validator **0 violations / 117,450 deferrals / 1,224,000 rows**, 0 non-deferrable skips, ⑤ ≡ ④b verified. **Frozen spec (`code/scheduler_core/config/policy_spec.yaml`, v2, sha256 `34d689c9…07da3`): duration-only, `d_threshold_seconds` 480, `w_max_hours` 24** — S* = 3.7787% saving (④b d0/w24); 5 of 30 points save ≥ 0.9·S*, all at W = 24; lowest TTFF p95 among them d480/w24 (saving 3.4759%, TTFF p95 19.2027 h). Every numeric field carries a `provenance.values` source + rule; grids recorded with `sweep_grid.json`'s sha256 before P3; `test_split_read: false`. **ρ-sensitivity (reported, not shipped):** ρ 0.80 → d240/w12 (TTFF p95 11.3529 h); ρ 0.95 → d240/w24. ×0.5/×2 floor sweep: no spec element changes. Decision-level §A1.7 test **not applicable** (no candidate family). **Reproducible:** a fully fresh `--verify --fresh` refit into scratch is **byte-identical** (`results/p2/policy_fit/verify.json`: spec, trace, decisions, summary, selection). Replay characteristics documented, not corrected: ⑥'s τ frontier coarse (42 distinct p̂, 87.2% in (0.25, 0.30]); ④a defers nothing at D ≥ 3,840 s. Evidence: `results/p2/policy_derivation.md` + `results/p2/policy_fit/`. **Phase 2 complete → M2 (16/28, 57%).** **Test split still untouched.** | **DL-024** |

@@ -1,0 +1,20 @@
+{
+  "banner": "CALIBRATION-SPLIT FITTING EVIDENCE \u2014 P2-T5's policy-fitting sweep (DL-024). These aggregates fix the frozen operating point; they are not a result about any strategy and are never reported as RQ4 numbers (the test replay is P3-T2's).",
+  "variant": "primary",
+  "gate_safety": {
+    "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\policy_fit\\decisions.csv.gz",
+    "rows": 1224000,
+    "deferred": 117450,
+    "violations": 0,
+    "passed": true,
+    "missing_columns": [],
+    "violation_rows": []
+  },
+  "skip_audit": {
+    "skipped_rows": 2401,
+    "non_deferrable_skipped": 0,
+    "passed": true,
+    "examples": []
+  },
+  "note": "DL-020 \u00a76: a pass proves consistency with the eligibility RULE, not that the rule identifies genuinely deferrable builds."
+}

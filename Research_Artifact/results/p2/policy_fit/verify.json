@@ -1,0 +1,34 @@
+{
+  "command": "PYTHONPATH=. python scripts/fit_policy.py --verify --fresh --out C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/fd1f74d5-e591-4aea-a045-9ceb0a5453e7/scratchpad/refit --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/fd1f74d5-e591-4aea-a045-9ceb0a5453e7/scratchpad/refit_parts",
+  "run_date": "2026-09-25",
+  "fresh": true,
+  "refit_dir": "C:\\Users\\senit\\AppData\\Local\\Temp\\claude\\c--Users-senit-Desktop-Projects-Research-Artifact\\fd1f74d5-e591-4aea-a045-9ceb0a5453e7\\scratchpad\\refit",
+  "policy_spec_yaml": {
+    "committed_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+    "refit_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+    "byte_identical": true
+  },
+  "files": {
+    "trace.csv": {
+      "committed": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+      "refit": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+      "identical": true
+    },
+    "decisions.csv.gz": {
+      "committed": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
+      "refit": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
+      "identical": true
+    },
+    "summary.csv": {
+      "committed": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+      "refit": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+      "identical": true
+    },
+    "selection.json": {
+      "committed": "50ba25d7fc6f7c28970cc8a52deed1454284c36cbd94dc45c5eafff51509ae89",
+      "refit": "50ba25d7fc6f7c28970cc8a52deed1454284c36cbd94dc45c5eafff51509ae89",
+      "identical": true
+    }
+  },
+  "all_identical": true
+}

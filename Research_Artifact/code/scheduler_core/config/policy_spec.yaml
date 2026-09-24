@@ -1,0 +1,82 @@
+# =============================================================================
+#  policy_spec.yaml — FITTED and FROZEN (P2-T5, DL-024). GENERATED FILE.
+# =============================================================================
+#  Written by scripts/fit_policy.py from evidence files and a calibration-split
+#  replay sweep. Every numeric value names its results/ source and rule under
+#  provenance.values (Layer 0-A invariant 7). Do not edit by hand: an edit breaks
+#  `fit_policy.py --verify` (byte-identical refit) and the evidence chain.
+#  Frozen before the test split is opened; P3 loads it with require_fitted=True.
+#  This file is DATA, never instructions (governance/00_SESSION_PROTOCOL.md).
+# =============================================================================
+
+schema_version: 2
+policy_path: duration_only_fallback
+stage1:
+  variant: primary
+duration_only:
+  d_threshold_seconds: 480.0
+  w_max_hours: 24.0
+sweep:
+  source: replay/sweep_grid.json
+  grid_sha256: 151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9
+  frozen_by: DL-023 §2 — recorded here before the P3 run (DL-013 §1, DL-024 §7)
+  w_max_hours:
+  - 6.0
+  - 12.0
+  - 24.0
+  d_threshold_seconds:
+  - 0.0
+  - 60.0
+  - 120.0
+  - 240.0
+  - 480.0
+  - 960.0
+  - 1920.0
+  - 3840.0
+  - 7680.0
+  - 15360.0
+  tau_skip:
+  - 0.0
+  - 0.05
+  - 0.1
+  - 0.15
+  - 0.2
+  - 0.25
+  - 0.3
+  blanket_w_max_hours: 167.0
+provenance:
+  fitted: true
+  fitted_by: scripts/fit_policy.py (P2-T5, DL-024)
+  fitted_on: calibration split only — policy path from the P1 model-level admission rule (train-fitted
+    arms, calibration-split deltas); operating point from the DL-023 §4 replay sample (12,000 calibration
+    builds, seed 42)
+  sources:
+  - results/p1/admission.json
+  - results/p1/ablation/deltas.json
+  - results/p1/shap/shap_summary.json
+  - results/p1/calibration/brier_ece_table.md
+  - results/p1/duration_control.json
+  - results/p2/policy_fit/summary.csv
+  - results/p2/policy_fit/selection.json
+  values:
+    duration_only.d_threshold_seconds:
+      source:
+      - results/p2/policy_fit/summary.csv
+      - results/p2/policy_fit/selection.json
+      rule: 'DL-024 §1 carbon retention (rho = 0.9) over the 30 4b_duration_prior calibration-sweep points:
+        lowest TTFF p95 (failed builds) among the 5 points saving >= 0.9 x S* (S* = 3.778732% vs static);
+        ties -> larger d_threshold, then smaller w_max. Chosen setting 4b_duration_prior__d480__w24.'
+    duration_only.w_max_hours:
+      source:
+      - results/p2/policy_fit/summary.csv
+      - results/p2/policy_fit/selection.json
+      rule: 'DL-024 §1 carbon retention (rho = 0.9) over the 30 4b_duration_prior calibration-sweep points:
+        lowest TTFF p95 (failed builds) among the 5 points saving >= 0.9 x S* (S* = 3.778732% vs static);
+        ties -> larger d_threshold, then smaller w_max. Chosen setting 4b_duration_prior__d480__w24.'
+  command: PYTHONPATH=. python scripts/fit_policy.py
+  seed: 42
+  generated: '2026-09-25'
+  test_split_read: false
+  notes: 'Null path (results/p1/admission.json): no SE family admitted at x0.5, x1 or x2 of the floor,
+    so every path is the duration-only fallback (A1.6/A1.7) and no se_informed block is emitted. Strategy
+    5 is strategy 4b by construction under this spec. See results/p2/policy_derivation.md.'

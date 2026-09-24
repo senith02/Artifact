@@ -1291,4 +1291,130 @@ edit or delete past entries (supersede them with a new entry instead).
     whole duration; ⑥'s skipped failures are feedback *lost*, not delayed — its carbon is not
     comparable to the others' without the missed-failure count beside it.
 
-<!-- Append DL-024, DL-025, … below as the project progresses. -->
+### DL-024 — How `fit_policy.py` fixes the frozen operating point; `policy_spec.yaml` schema v2; replay characteristics carried into P3
+
+- **Date:** 2026-09-24
+- **Status:** Accepted. **Items 1, 2 and 3 are author decisions** taken 2026-09-24 at the start of
+  P2-T5, when the gap below was put to the author, **before `fit_policy.py` existed and before any
+  selection rule had been evaluated on any sweep**. Item 5 records author decisions taken at the
+  P2-T4 gate the same day. The rest is implementation-level, written before the code, per R4.
+- **Spec section affected:** `eval_protocol.md` §A1.6 ("`d_threshold` and `W_max` are fitted on the
+  calibration-split replay") is given the concrete rule it lacked; §A1.7 (decision-level half) is
+  applied as written; DL-022 §2's schema is versioned (v1 → v2) as DL-023 §2 required. No RQ, floor,
+  grid, strategy or invariant changes.
+
+- **Context.** §A1.6 says ④'s `d_threshold` and `W_max` are *fitted* on the calibration replay, and
+  DL-023 §2 says they are "P2-T5's, chosen on the calibration replay by its own rule" — but no
+  document says what that rule is. A swept frontier has no single best point without a declared
+  trade-off, so a rule has to be predeclared, or the operating point would be picked by eye (a
+  hand-tuned threshold, invariant 7). Two facts bound the stakes, and are stated so the rule is not
+  over-weighted:
+  1. On the null path (`results/p1/admission.json`: `policy_path: duration_only_fallback`), ⑤ ≡ ④b
+     at every grid point (DL-023 §1). P3-T3's RQ2 test compares **whole frontiers** at matched points,
+     so the RQ2 verdict does **not** depend on the operating point chosen here.
+  2. What the point does fix: the single frozen setting that P3-T2 reports ⑤ at (RQ4's headline row)
+     and that the P4 prototype runs.
+  The author had seen the P2-T4 **bootstrap-labelled** aggregates at `W = 24 h`
+  (`results/p2/sample_run/summary.md`) when choosing; no candidate rule had been computed.
+
+- **Decision.**
+
+  1. **Selection rule — carbon retention** *(author decision)*. Over the **④b** (primary form,
+     P1-T4) calibration sweep — all 30 `(d_threshold, w_max) ∈ D × W` points of the frozen grid:
+     - `saving(pt) = −carbon_pct_vs_static(pt)`, the % carbon reduction vs ① static, from the
+       simulator's own `summarise()` on the sweep records.
+     - `S* = max saving` over the 30 points. If `S* ≤ 0` the fit **fails** (no point saves carbon;
+       nothing to fit) — it never falls back to a default.
+     - **Admissible points:** `saving(pt) ≥ ρ · S*`, with **ρ = 0.90**.
+     - **Chosen point:** the admissible point with the **lowest TTFF p95 (failed builds)**; ties →
+       larger `d_threshold`, then smaller `w_max`.
+     - Rationale: A1.6's own reason for the shape — deferring a short build pays full latency for a
+       negligible carbon gain — is a retention statement: keep nearly all of the achievable saving,
+       spend as little failure-feedback delay as possible to get it. TTFF p95 is the axis §A1.13
+       names as RQ2's live channel.
+     - **ρ is a design parameter, not a result** (R1). It is reported at **ρ ∈ {0.80, 0.95}** beside
+       the primary 0.90, and `policy_derivation.md` states which spec values change. The spec ships
+       ρ = 0.90 only; the sensitivity points never enter it.
+     - `W_max` is fitted by the same rule (it is one of the two swept coordinates), exactly as §A1.6
+       says. §7's `W_max = 24 h` default is therefore **not** assumed; `{6, 12, 24}` remains P3-T4's
+       sensitivity sweep.
+  2. **Population** *(author decision)*. The fitting sweep replays the frozen DL-023 §4 sample —
+     12,000 calibration builds, seed 42, as fixed in `replay/sweep_grid.json` — through
+     `replay/simulator.py` **unchanged**, using `scripts/run_replay.py`'s loading and trace functions
+     unchanged. The grid file is not edited. Declared threat: the operating point is fitted on 12,000
+     of 138,687 calibration builds (8.65%); its sampling noise is not bootstrapped here.
+  3. **④b primary form kept** *(author decision)*. The predeclared expanding project prior stays the
+     primary `d̂` (P1-T4 fit id `1088d5546f47ff12`). The trailing-50 sensitivity that beat it on
+     calibration log1p MAE (0.2886 vs 0.6010, `results/p1/duration_control.md`) is reported as a
+     finding and belongs in P3-T4's sensitivities. Switching would have cascaded into every P1-T5/T6
+     arm (each uses the expanding `d̂` as a feature) and re-derived the P1 verdicts; it is not done.
+  4. **The sweep's input spec is a structural candidate, never a threshold source.** `fit_policy.py`
+     builds an in-memory candidate — `policy_path` read from `admission.json`, `stage1.variant:
+     primary` (DL-020 §5 headline), `provenance.fitted: false` — validated by `policy.spec_from_mapping`
+     with `require_fitted=False`. That is the one further exception to DL-022 §4's quarantine, and it
+     is safe for a stated reason: every setting that calls `decide()` substitutes its own grid-point
+     `(d_threshold, w_max)` (DL-023 §1), so no candidate threshold reaches a record. The candidate's
+     placeholder thresholds are the grid's own first `D` value and last `W` value, not new numbers.
+     Its sweep outputs are labelled *calibration-split fitting evidence* — not a result about any
+     strategy, and never reported as RQ4 numbers.
+  5. **Replay characteristics are documented, not corrected** *(author decision, P2-T4 gate)*. The
+     frozen primary grid and DL-023's strategy definitions stand. The primary τ grid is **not**
+     re-chosen from the observed p̂ distribution. Two observed properties are carried into P3 as
+     characteristics to report (`results/p2/sample_run/REGENERATE.md`): (a) ⑥'s τ frontier is coarse —
+     the isotonic `xgboost:full` p̂ takes 42 distinct values on the sample, 87.2% of them in
+     (0.25, 0.30], so the τ grid yields one non-trivial step; (b) ④a has limited prediction support
+     at the top of `D` — its estimate never exceeds 4,310.20 s on the sample, so ④a defers nothing at
+     `D ≥ 3,840 s` and its frontier is shorter than ④b's. P3-T3 reports the ④a frontier over the
+     points it actually spans; nothing is extrapolated. The 61 MB replay decision files are not
+     committed; their sha256, determinism and validator results are.
+  6. **Decision-level half of §A1.7 on the null path.** Admission needs **both** altitudes, and the
+     model-level admitted set is empty at ×0.5, ×1 and ×2. No family can be admitted, so there is no
+     ⑤-vs-④ frontier to test: ⑤ ≡ ④b identically. `fit_policy.py` records the decision-level test as
+     **not applicable (no candidate family)**, verifies the ⑤ ≡ ④b identity on the sweep records rather
+     than asserting it, and reports the area between frontiers as exactly 0 by construction. The
+     ×0.5/×2 sweep is re-run from `results/p1/ablation/deltas.json` through `scheduler_core.admission`
+     (not copied from `admission.json`), a spec is fitted at each multiplier, and the spec elements
+     that differ are listed. No `se_informed` block is emitted. On the null path, A1.8's window form
+     and S2's regime gating have nothing to act on, and that is stated rather than stubbed.
+  7. **Schema v2** (DL-023 §2's bump). `policy.py` implements schema versions **1 and 2**. v1 is
+     unchanged, so the bootstrap spec and the P2-T4 run fingerprint stay reproducible. v2 adds:
+     - a required top-level **`sweep`** block: the frozen grids `w_max_hours`, `d_threshold_seconds`,
+       `tau_skip` and `blanket_w_max_hours`, copied from `replay/sweep_grid.json`, plus its path and
+       its `grid_sha256`, recorded **before** the P3 run (DL-013 §1);
+     - required provenance keys **`values`** (one entry per numeric spec field, each naming its
+       `results/` source file(s) and the rule that produced it), **`command`**, **`seed`**,
+       **`generated`** (the fitting date) and **`test_split_read`** (must be `false`).
+     - **Tightening:** a spec with `provenance.fitted: true` must be v2, and every numeric field in
+       its blocks must have a `provenance.values` entry with a non-empty `source`. A fitted v1 spec is
+       now refused. The one P2-T3 test that built a fitted v1 spec is updated to v2, not deleted.
+     - `decide()` does not change; it reads the same two keys from the active block. The closed-schema
+       rule holds for v2 as well: unknown keys are rejected at every level.
+  8. **Reproducibility.** Re-running `fit_policy.py` must reproduce `policy_spec.yaml` byte for byte.
+     The only time-dependent field is `provenance.generated`. `--verify` refits into memory, reuses
+     the committed file's `generated` date, and fails unless the bytes are identical. The fitting
+     trace digest and the sweep summary sha256 are also recorded.
+  9. **Test split.** Nothing in P2-T5 reads a test project. `run_replay.load_split_builds` refuses
+     `split="test"` and discards test rows chunk by chunk. `fit_policy.py` additionally asserts,
+     against `results/p1/split_assignment.csv` (sha256 `3d9a7947…5cde`), that every project in the
+     fitting trace is a calibration project, and records `test_split_read: false`.
+
+- **Rationale.** A retention rule is the smallest predeclared commitment that turns a frontier into
+  an operating point. It carries one visible parameter, reported at two alternatives, instead of an
+  implicit one (a knee's axis normalisation) or a new absolute budget (a TTFF cap). Fitting on the
+  frozen sample keeps DL-023's "unchanged" binding literal. Keeping ④b's primary avoids redoing P1 on
+  the eve of the test split.
+
+- **Consequences.**
+  - **New:** `code/scripts/fit_policy.py`, `code/tests/test_fit_policy.py`,
+    `code/scheduler_core/config/policy_spec.yaml` (v2, fitted), `results/p2/policy_derivation.md`,
+    `results/p2/policy_fit/` (the fitting sweep's outputs; `decisions.csv.gz` not committed).
+    **Changed:** `scheduler_core/policy.py` (schema v2 support, fitted ⇒ v2), one test in
+    `tests/test_policy.py` (fitted fixture moved to v2).
+  - **Binding on P3-T2/P3-T3:** load `policy_spec.yaml` with `require_fitted=True`, record its sha256,
+    and assert that its `sweep.grid_sha256` equals `replay/sweep_grid.json`'s digest before replaying
+    the test trace.
+  - **Threats (P5-T4):** the operating point comes from a 12k sample and one declared ρ, and ρ's
+    sensitivity is reported. On the null path, RQ4's headline row for ⑤ is ④b at that point by
+    construction.
+
+<!-- Append DL-025, DL-026, … below as the project progresses. -->

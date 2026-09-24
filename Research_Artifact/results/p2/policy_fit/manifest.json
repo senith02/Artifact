@@ -1,0 +1,1328 @@
+{
+  "banner": "CALIBRATION-SPLIT FITTING EVIDENCE \u2014 P2-T5's policy-fitting sweep (DL-024). These aggregates fix the frozen operating point; they are not a result about any strategy and are never reported as RQ4 numbers (the test replay is P3-T2's).",
+  "task": "P2-T5",
+  "decision_log": [
+    "DL-022",
+    "DL-023",
+    "DL-024"
+  ],
+  "command": "PYTHONPATH=. python scripts/fit_policy.py",
+  "run_date": "2026-09-25",
+  "runtime_s": 77.2,
+  "fingerprint": "9f50bdd396ea8f7d6f07f54dab00aa0a33f0f065f1564f1067c3fcbc763617c2",
+  "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
+  "split_assignment_sha256": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde",
+  "evidence": {
+    "admission": {
+      "path": "results/p1/admission.json",
+      "sha256": "d74cb75f1b54a287df5ea99eb45235f715f323c8054b5e7e81f1cba25555228a"
+    },
+    "deltas": {
+      "path": "results/p1/ablation/deltas.json",
+      "sha256": "6457cf0bd78833a0c672d04ebdc5a450ab7bcdeae501e76b228ae1a110118f06"
+    },
+    "shap": {
+      "path": "results/p1/shap/shap_summary.json",
+      "sha256": "5b2aace20d1e42e4f2d9c73b599a3f870f108054d56574ae35207a67a286718e"
+    },
+    "calibration": {
+      "path": "results/p1/calibration/brier_ece_table.md",
+      "sha256": "88560b470ec7f53740faf836614bfd2aeb0aa6242102f0fa28e2e906f7a3562b"
+    },
+    "duration_control": {
+      "path": "results/p1/duration_control.json",
+      "sha256": "226ad3ef47b1ed45169159a6b2c09532e0119e8f7ba3f1741008723d213496e3"
+    },
+    "splits": {
+      "path": "results/p1/splits.json",
+      "sha256": "441a9ae8c27bf79246e3a0b4071504dbdc9ce5bed203ee0a4dfedf33a3615f38"
+    },
+    "split_assignment": {
+      "path": "results/p1/split_assignment.csv",
+      "sha256": "be1d175f138139df4eece6c10a04e05498fbdbf5daf8fd2c2f0d9af96ddf26d3"
+    }
+  },
+  "admission": {
+    "by_multiplier": {
+      "x0.5": {
+        "multiplier": 0.5,
+        "floor": 0.005,
+        "admitted": [],
+        "policy_path": "duration_only_fallback"
+      },
+      "x1": {
+        "multiplier": 1.0,
+        "floor": 0.01,
+        "admitted": [],
+        "policy_path": "duration_only_fallback"
+      },
+      "x2": {
+        "multiplier": 2.0,
+        "floor": 0.02,
+        "admitted": [],
+        "policy_path": "duration_only_fallback"
+      }
+    },
+    "policy_path": "duration_only_fallback",
+    "admitted": []
+  },
+  "trace_provenance": {
+    "duration_control_fit_id": "1088d5546f47ff12",
+    "duration_control_primary_form": "4b",
+    "risk_arm": "xgboost:full",
+    "risk_arm_fit_id": "65fd81b1e952fd72",
+    "risk_arm_sha256": "315a31028401e356dc0b4e16a0f1d430402b44d5263e0fbd4400a8b4049df0b6",
+    "duration_estimator_sha256": "ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0",
+    "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014)"
+  },
+  "population": {
+    "split": "calibration",
+    "calibration_builds": 138687,
+    "calibration_projects": 150,
+    "n_sample": 12000,
+    "seed": 42,
+    "sample_projects": 144,
+    "sample_failure_rate": 0.2916666666666667,
+    "n_unaccountable": 6,
+    "job_rows_dropped_by_split": {
+      "train": 2475417,
+      "calibration": 0,
+      "test": 641607,
+      "unassigned": 0
+    },
+    "test_builds_dropped_unread": 139163
+  },
+  "candidate_spec": {
+    "policy_path": "duration_only_fallback",
+    "stage1_variant": "primary",
+    "fitted": false,
+    "fitted_by": "scripts/fit_policy.py \u2014 structural candidate for the fitting sweep (DL-024 \u00a74)",
+    "fitted_on": "nothing \u2014 thresholds are overridden at every grid point",
+    "sources": [
+      "results/p1/admission.json"
+    ],
+    "spec_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\code\\scripts\\fit_policy.py",
+    "schema_version": 1
+  },
+  "selection": {
+    "primary": {
+      "rho": 0.9,
+      "strategy": "4b_duration_prior",
+      "best_saving_pct": 3.778732291378513,
+      "saving_floor_pct": 3.400859062240662,
+      "n_points": 30,
+      "n_admissible": 5,
+      "setting_id": "4b_duration_prior__d480__w24",
+      "d_threshold_seconds": 480.0,
+      "w_max_hours": 24.0,
+      "saving_pct": 3.475904722350901,
+      "ttff_p95_h_failed": 19.202708333333334,
+      "table": [
+        {
+          "setting_id": "4b_duration_prior__d0__w6",
+          "param_d_threshold_seconds": 0.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 2127,
+          "saving_pct": 2.6238702831247145,
+          "ttff_p95_h_failed": 6.586180555555556,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d60__w6",
+          "param_d_threshold_seconds": 60.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 2036,
+          "saving_pct": 2.619039318761187,
+          "ttff_p95_h_failed": 6.586180555555556,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d120__w6",
+          "param_d_threshold_seconds": 120.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 1960,
+          "saving_pct": 2.6105151954000716,
+          "ttff_p95_h_failed": 6.586180555555556,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d240__w6",
+          "param_d_threshold_seconds": 240.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 1529,
+          "saving_pct": 2.538812072121024,
+          "ttff_p95_h_failed": 6.576527777777778,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d480__w6",
+          "param_d_threshold_seconds": 480.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 1142,
+          "saving_pct": 2.4080503995555524,
+          "ttff_p95_h_failed": 6.557777777777778,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d960__w6",
+          "param_d_threshold_seconds": 960.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 743,
+          "saving_pct": 2.2008180933765895,
+          "ttff_p95_h_failed": 6.507500000000001,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d1920__w6",
+          "param_d_threshold_seconds": 1920.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 549,
+          "saving_pct": 1.9975755471646464,
+          "ttff_p95_h_failed": 6.437361111111111,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d3840__w6",
+          "param_d_threshold_seconds": 3840.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 425,
+          "saving_pct": 1.755391635743659,
+          "ttff_p95_h_failed": 6.337777777777778,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d7680__w6",
+          "param_d_threshold_seconds": 7680.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 278,
+          "saving_pct": 1.2393864292342511,
+          "ttff_p95_h_failed": 6.228194444444444,
+          "latency_p95_h_deferred": 6.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d15360__w6",
+          "param_d_threshold_seconds": 15360.0,
+          "param_w_max_hours": 6.0,
+          "n_deferred": 0,
+          "saving_pct": -0.0,
+          "ttff_p95_h_failed": 5.492152777777777,
+          "latency_p95_h_deferred": NaN,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d0__w12",
+          "param_d_threshold_seconds": 0.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 2505,
+          "saving_pct": 3.279702532932812,
+          "ttff_p95_h_failed": 12.017430555555556,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d60__w12",
+          "param_d_threshold_seconds": 60.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 2401,
+          "saving_pct": 3.2739143791243643,
+          "ttff_p95_h_failed": 12.006388888888889,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d120__w12",
+          "param_d_threshold_seconds": 120.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 2315,
+          "saving_pct": 3.264056702210606,
+          "ttff_p95_h_failed": 12.002847222222224,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d240__w12",
+          "param_d_threshold_seconds": 240.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 1792,
+          "saving_pct": 3.1745886055401527,
+          "ttff_p95_h_failed": 11.352916666666667,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d480__w12",
+          "param_d_threshold_seconds": 480.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 1348,
+          "saving_pct": 3.015075234394695,
+          "ttff_p95_h_failed": 10.333125,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d960__w12",
+          "param_d_threshold_seconds": 960.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 884,
+          "saving_pct": 2.7642708601077275,
+          "ttff_p95_h_failed": 8.632847222222221,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d1920__w12",
+          "param_d_threshold_seconds": 1920.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 649,
+          "saving_pct": 2.4970159621384855,
+          "ttff_p95_h_failed": 7.218055555555555,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d3840__w12",
+          "param_d_threshold_seconds": 3840.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 500,
+          "saving_pct": 2.2038965161147646,
+          "ttff_p95_h_failed": 6.805625,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d7680__w12",
+          "param_d_threshold_seconds": 7680.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 334,
+          "saving_pct": 1.5775393363417447,
+          "ttff_p95_h_failed": 6.463125,
+          "latency_p95_h_deferred": 12.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d15360__w12",
+          "param_d_threshold_seconds": 15360.0,
+          "param_w_max_hours": 12.0,
+          "n_deferred": 0,
+          "saving_pct": -0.0,
+          "ttff_p95_h_failed": 5.492152777777777,
+          "latency_p95_h_deferred": NaN,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d0__w24",
+          "param_d_threshold_seconds": 0.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 2581,
+          "saving_pct": 3.778732291378513,
+          "ttff_p95_h_failed": 21.11340277777778,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": true,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d60__w24",
+          "param_d_threshold_seconds": 60.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 2475,
+          "saving_pct": 3.772260027672848,
+          "ttff_p95_h_failed": 21.062222222222225,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": true,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d120__w24",
+          "param_d_threshold_seconds": 120.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 2387,
+          "saving_pct": 3.7609880908569044,
+          "ttff_p95_h_failed": 21.062222222222225,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": true,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d240__w24",
+          "param_d_threshold_seconds": 240.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 1842,
+          "saving_pct": 3.6585816254854584,
+          "ttff_p95_h_failed": 20.699375,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": true,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d480__w24",
+          "param_d_threshold_seconds": 480.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 1385,
+          "saving_pct": 3.475904722350901,
+          "ttff_p95_h_failed": 19.202708333333334,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": true,
+          "chosen": true
+        },
+        {
+          "setting_id": "4b_duration_prior__d960__w24",
+          "param_d_threshold_seconds": 960.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 905,
+          "saving_pct": 3.1983471753920396,
+          "ttff_p95_h_failed": 15.10465277777778,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d1920__w24",
+          "param_d_threshold_seconds": 1920.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 669,
+          "saving_pct": 2.908848230607626,
+          "ttff_p95_h_failed": 11.382708333333335,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d3840__w24",
+          "param_d_threshold_seconds": 3840.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 513,
+          "saving_pct": 2.5776304532697702,
+          "ttff_p95_h_failed": 7.910902777777777,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d7680__w24",
+          "param_d_threshold_seconds": 7680.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 343,
+          "saving_pct": 1.8951184938754178,
+          "ttff_p95_h_failed": 6.974097222222222,
+          "latency_p95_h_deferred": 24.0,
+          "admissible": false,
+          "chosen": false
+        },
+        {
+          "setting_id": "4b_duration_prior__d15360__w24",
+          "param_d_threshold_seconds": 15360.0,
+          "param_w_max_hours": 24.0,
+          "n_deferred": 0,
+          "saving_pct": -0.0,
+          "ttff_p95_h_failed": 5.492152777777777,
+          "latency_p95_h_deferred": NaN,
+          "admissible": false,
+          "chosen": false
+        }
+      ]
+    },
+    "sensitivity": [
+      {
+        "rho": 0.8,
+        "strategy": "4b_duration_prior",
+        "best_saving_pct": 3.778732291378513,
+        "saving_floor_pct": 3.0229858331028105,
+        "n_points": 30,
+        "n_admissible": 10,
+        "setting_id": "4b_duration_prior__d240__w12",
+        "d_threshold_seconds": 240.0,
+        "w_max_hours": 12.0,
+        "saving_pct": 3.1745886055401527,
+        "ttff_p95_h_failed": 11.352916666666667,
+        "table": [
+          {
+            "setting_id": "4b_duration_prior__d0__w6",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 2127,
+            "saving_pct": 2.6238702831247145,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w6",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 2036,
+            "saving_pct": 2.619039318761187,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w6",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1960,
+            "saving_pct": 2.6105151954000716,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w6",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1529,
+            "saving_pct": 2.538812072121024,
+            "ttff_p95_h_failed": 6.576527777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w6",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1142,
+            "saving_pct": 2.4080503995555524,
+            "ttff_p95_h_failed": 6.557777777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w6",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 743,
+            "saving_pct": 2.2008180933765895,
+            "ttff_p95_h_failed": 6.507500000000001,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w6",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 549,
+            "saving_pct": 1.9975755471646464,
+            "ttff_p95_h_failed": 6.437361111111111,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w6",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 425,
+            "saving_pct": 1.755391635743659,
+            "ttff_p95_h_failed": 6.337777777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w6",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 278,
+            "saving_pct": 1.2393864292342511,
+            "ttff_p95_h_failed": 6.228194444444444,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w6",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d0__w12",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2505,
+            "saving_pct": 3.279702532932812,
+            "ttff_p95_h_failed": 12.017430555555556,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w12",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2401,
+            "saving_pct": 3.2739143791243643,
+            "ttff_p95_h_failed": 12.006388888888889,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w12",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2315,
+            "saving_pct": 3.264056702210606,
+            "ttff_p95_h_failed": 12.002847222222224,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w12",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 1792,
+            "saving_pct": 3.1745886055401527,
+            "ttff_p95_h_failed": 11.352916666666667,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": true,
+            "chosen": true
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w12",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 1348,
+            "saving_pct": 3.015075234394695,
+            "ttff_p95_h_failed": 10.333125,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w12",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 884,
+            "saving_pct": 2.7642708601077275,
+            "ttff_p95_h_failed": 8.632847222222221,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w12",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 649,
+            "saving_pct": 2.4970159621384855,
+            "ttff_p95_h_failed": 7.218055555555555,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w12",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 500,
+            "saving_pct": 2.2038965161147646,
+            "ttff_p95_h_failed": 6.805625,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w12",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 334,
+            "saving_pct": 1.5775393363417447,
+            "ttff_p95_h_failed": 6.463125,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w12",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d0__w24",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2581,
+            "saving_pct": 3.778732291378513,
+            "ttff_p95_h_failed": 21.11340277777778,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w24",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2475,
+            "saving_pct": 3.772260027672848,
+            "ttff_p95_h_failed": 21.062222222222225,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w24",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2387,
+            "saving_pct": 3.7609880908569044,
+            "ttff_p95_h_failed": 21.062222222222225,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w24",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 1842,
+            "saving_pct": 3.6585816254854584,
+            "ttff_p95_h_failed": 20.699375,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w24",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 1385,
+            "saving_pct": 3.475904722350901,
+            "ttff_p95_h_failed": 19.202708333333334,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w24",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 905,
+            "saving_pct": 3.1983471753920396,
+            "ttff_p95_h_failed": 15.10465277777778,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w24",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 669,
+            "saving_pct": 2.908848230607626,
+            "ttff_p95_h_failed": 11.382708333333335,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w24",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 513,
+            "saving_pct": 2.5776304532697702,
+            "ttff_p95_h_failed": 7.910902777777777,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w24",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 343,
+            "saving_pct": 1.8951184938754178,
+            "ttff_p95_h_failed": 6.974097222222222,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w24",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          }
+        ]
+      },
+      {
+        "rho": 0.95,
+        "strategy": "4b_duration_prior",
+        "best_saving_pct": 3.778732291378513,
+        "saving_floor_pct": 3.589795676809587,
+        "n_points": 30,
+        "n_admissible": 4,
+        "setting_id": "4b_duration_prior__d240__w24",
+        "d_threshold_seconds": 240.0,
+        "w_max_hours": 24.0,
+        "saving_pct": 3.6585816254854584,
+        "ttff_p95_h_failed": 20.699375,
+        "table": [
+          {
+            "setting_id": "4b_duration_prior__d0__w6",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 2127,
+            "saving_pct": 2.6238702831247145,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w6",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 2036,
+            "saving_pct": 2.619039318761187,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w6",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1960,
+            "saving_pct": 2.6105151954000716,
+            "ttff_p95_h_failed": 6.586180555555556,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w6",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1529,
+            "saving_pct": 2.538812072121024,
+            "ttff_p95_h_failed": 6.576527777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w6",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 1142,
+            "saving_pct": 2.4080503995555524,
+            "ttff_p95_h_failed": 6.557777777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w6",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 743,
+            "saving_pct": 2.2008180933765895,
+            "ttff_p95_h_failed": 6.507500000000001,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w6",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 549,
+            "saving_pct": 1.9975755471646464,
+            "ttff_p95_h_failed": 6.437361111111111,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w6",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 425,
+            "saving_pct": 1.755391635743659,
+            "ttff_p95_h_failed": 6.337777777777778,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w6",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 278,
+            "saving_pct": 1.2393864292342511,
+            "ttff_p95_h_failed": 6.228194444444444,
+            "latency_p95_h_deferred": 6.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w6",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 6.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d0__w12",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2505,
+            "saving_pct": 3.279702532932812,
+            "ttff_p95_h_failed": 12.017430555555556,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w12",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2401,
+            "saving_pct": 3.2739143791243643,
+            "ttff_p95_h_failed": 12.006388888888889,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w12",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 2315,
+            "saving_pct": 3.264056702210606,
+            "ttff_p95_h_failed": 12.002847222222224,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w12",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 1792,
+            "saving_pct": 3.1745886055401527,
+            "ttff_p95_h_failed": 11.352916666666667,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w12",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 1348,
+            "saving_pct": 3.015075234394695,
+            "ttff_p95_h_failed": 10.333125,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w12",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 884,
+            "saving_pct": 2.7642708601077275,
+            "ttff_p95_h_failed": 8.632847222222221,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w12",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 649,
+            "saving_pct": 2.4970159621384855,
+            "ttff_p95_h_failed": 7.218055555555555,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w12",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 500,
+            "saving_pct": 2.2038965161147646,
+            "ttff_p95_h_failed": 6.805625,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w12",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 334,
+            "saving_pct": 1.5775393363417447,
+            "ttff_p95_h_failed": 6.463125,
+            "latency_p95_h_deferred": 12.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w12",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 12.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d0__w24",
+            "param_d_threshold_seconds": 0.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2581,
+            "saving_pct": 3.778732291378513,
+            "ttff_p95_h_failed": 21.11340277777778,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d60__w24",
+            "param_d_threshold_seconds": 60.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2475,
+            "saving_pct": 3.772260027672848,
+            "ttff_p95_h_failed": 21.062222222222225,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d120__w24",
+            "param_d_threshold_seconds": 120.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 2387,
+            "saving_pct": 3.7609880908569044,
+            "ttff_p95_h_failed": 21.062222222222225,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d240__w24",
+            "param_d_threshold_seconds": 240.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 1842,
+            "saving_pct": 3.6585816254854584,
+            "ttff_p95_h_failed": 20.699375,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": true,
+            "chosen": true
+          },
+          {
+            "setting_id": "4b_duration_prior__d480__w24",
+            "param_d_threshold_seconds": 480.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 1385,
+            "saving_pct": 3.475904722350901,
+            "ttff_p95_h_failed": 19.202708333333334,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d960__w24",
+            "param_d_threshold_seconds": 960.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 905,
+            "saving_pct": 3.1983471753920396,
+            "ttff_p95_h_failed": 15.10465277777778,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d1920__w24",
+            "param_d_threshold_seconds": 1920.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 669,
+            "saving_pct": 2.908848230607626,
+            "ttff_p95_h_failed": 11.382708333333335,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d3840__w24",
+            "param_d_threshold_seconds": 3840.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 513,
+            "saving_pct": 2.5776304532697702,
+            "ttff_p95_h_failed": 7.910902777777777,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d7680__w24",
+            "param_d_threshold_seconds": 7680.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 343,
+            "saving_pct": 1.8951184938754178,
+            "ttff_p95_h_failed": 6.974097222222222,
+            "latency_p95_h_deferred": 24.0,
+            "admissible": false,
+            "chosen": false
+          },
+          {
+            "setting_id": "4b_duration_prior__d15360__w24",
+            "param_d_threshold_seconds": 15360.0,
+            "param_w_max_hours": 24.0,
+            "n_deferred": 0,
+            "saving_pct": -0.0,
+            "ttff_p95_h_failed": 5.492152777777777,
+            "latency_p95_h_deferred": NaN,
+            "admissible": false,
+            "chosen": false
+          }
+        ]
+      }
+    ]
+  },
+  "floor_sweep_specs": {
+    "x0.5": {
+      "policy_path": "duration_only_fallback",
+      "d_threshold_seconds": 480.0,
+      "w_max_hours": 24.0,
+      "changes": []
+    },
+    "x1": {
+      "policy_path": "duration_only_fallback",
+      "d_threshold_seconds": 480.0,
+      "w_max_hours": 24.0,
+      "changes": []
+    },
+    "x2": {
+      "policy_path": "duration_only_fallback",
+      "d_threshold_seconds": 480.0,
+      "w_max_hours": 24.0,
+      "changes": []
+    }
+  },
+  "characteristics": {
+    "p_hat_distinct": 42,
+    "p_hat_in_025_030": 10461,
+    "skips_by_tau": [
+      [
+        0.0,
+        0
+      ],
+      [
+        0.05,
+        0
+      ],
+      [
+        0.1,
+        4
+      ],
+      [
+        0.15,
+        8
+      ],
+      [
+        0.2,
+        19
+      ],
+      [
+        0.25,
+        48
+      ],
+      [
+        0.3,
+        2322
+      ]
+    ],
+    "d4a_min": 24.98391056107172,
+    "d4a_max": 4310.197000925079,
+    "d4a_p99": 2788.5208401570526,
+    "d4b_max": 9469.000000000002,
+    "d4a_first_empty_d": 3840.0
+  },
+  "checks": {
+    "calibration_only": {
+      "trace_projects": 144,
+      "splits_seen": [
+        "calibration"
+      ],
+      "test_projects_in_trace": 0,
+      "test_projects_in_assignment": 170
+    },
+    "identical_build_sets": {
+      "settings_compared": 102,
+      "builds_per_setting": 12000,
+      "identical": true
+    },
+    "validator": {
+      "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\policy_fit\\decisions.csv.gz",
+      "rows": 1224000,
+      "deferred": 117450,
+      "violations": 0,
+      "passed": true,
+      "missing_columns": [],
+      "violation_rows": []
+    },
+    "skip_audit": {
+      "skipped_rows": 2401,
+      "non_deferrable_skipped": 0,
+      "passed": true,
+      "examples": []
+    },
+    "identities": {
+      "5_equals_4b_at_every_point": true,
+      "3_equals_4b_at_d0": true,
+      "6_at_tau0_equals_1_static_actions": true
+    },
+    "spec_loads_fitted": true
+  },
+  "spec": {
+    "schema_version": 2,
+    "policy_path": "duration_only_fallback",
+    "stage1": {
+      "variant": "primary"
+    },
+    "duration_only": {
+      "d_threshold_seconds": 480.0,
+      "w_max_hours": 24.0
+    },
+    "sweep": {
+      "source": "replay/sweep_grid.json",
+      "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
+      "frozen_by": "DL-023 \u00a72 \u2014 recorded here before the P3 run (DL-013 \u00a71, DL-024 \u00a77)",
+      "w_max_hours": [
+        6.0,
+        12.0,
+        24.0
+      ],
+      "d_threshold_seconds": [
+        0.0,
+        60.0,
+        120.0,
+        240.0,
+        480.0,
+        960.0,
+        1920.0,
+        3840.0,
+        7680.0,
+        15360.0
+      ],
+      "tau_skip": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "blanket_w_max_hours": 167.0
+    },
+    "provenance": {
+      "fitted": true,
+      "fitted_by": "scripts/fit_policy.py (P2-T5, DL-024)",
+      "fitted_on": "calibration split only \u2014 policy path from the P1 model-level admission rule (train-fitted arms, calibration-split deltas); operating point from the DL-023 \u00a74 replay sample (12,000 calibration builds, seed 42)",
+      "sources": [
+        "results/p1/admission.json",
+        "results/p1/ablation/deltas.json",
+        "results/p1/shap/shap_summary.json",
+        "results/p1/calibration/brier_ece_table.md",
+        "results/p1/duration_control.json",
+        "results/p2/policy_fit/summary.csv",
+        "results/p2/policy_fit/selection.json"
+      ],
+      "values": {
+        "duration_only.d_threshold_seconds": {
+          "source": [
+            "results/p2/policy_fit/summary.csv",
+            "results/p2/policy_fit/selection.json"
+          ],
+          "rule": "DL-024 \u00a71 carbon retention (rho = 0.9) over the 30 4b_duration_prior calibration-sweep points: lowest TTFF p95 (failed builds) among the 5 points saving >= 0.9 x S* (S* = 3.778732% vs static); ties -> larger d_threshold, then smaller w_max. Chosen setting 4b_duration_prior__d480__w24."
+        },
+        "duration_only.w_max_hours": {
+          "source": [
+            "results/p2/policy_fit/summary.csv",
+            "results/p2/policy_fit/selection.json"
+          ],
+          "rule": "DL-024 \u00a71 carbon retention (rho = 0.9) over the 30 4b_duration_prior calibration-sweep points: lowest TTFF p95 (failed builds) among the 5 points saving >= 0.9 x S* (S* = 3.778732% vs static); ties -> larger d_threshold, then smaller w_max. Chosen setting 4b_duration_prior__d480__w24."
+        }
+      },
+      "command": "PYTHONPATH=. python scripts/fit_policy.py",
+      "seed": 42,
+      "generated": "2026-09-25",
+      "test_split_read": false,
+      "notes": "Null path (results/p1/admission.json): no SE family admitted at x0.5, x1 or x2 of the floor, so every path is the duration-only fallback (A1.6/A1.7) and no se_informed block is emitted. Strategy 5 is strategy 4b by construction under this spec. See results/p2/policy_derivation.md."
+    }
+  },
+  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "sha256": {
+    "trace.csv": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+    "decisions.csv.gz": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
+    "summary.csv": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+    "herding.csv": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
+    "selection.json": "50ba25d7fc6f7c28970cc8a52deed1454284c36cbd94dc45c5eafff51509ae89",
+    "validator.json": "e6048f5400ed6833aabc4f98b00ba50a36aeac68719ffc26dd36063065f05254"
+  }
+}
