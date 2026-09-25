@@ -37,6 +37,7 @@ If you are a human:
 | `code/` | The software artifact (`scheduler-core`, `replay` simulator, `api`, GitHub Action). |
 | `results/` | Model reports, figures, trade-off curves — produced by real runs only. |
 | `dissertation/` | The written report, chapter by chapter. |
+| `docs/` | `research_guide.html`: the living research map, generated from `results/` by `code/scripts/update_research_guide.py` (DL-025). Documentation only; PROGRESS.md wins. |
 
 ## The golden rule
 

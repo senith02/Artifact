@@ -64,6 +64,9 @@ This is the operating manual for every Claude session that works on this artifac
 ┌── REPORT + GATE ─────────────────────────────────────────────────────┐
 │ 1. Update PROGRESS.md: mark task ✅, recount tasks, recompute bars,    │
 │    set next Current, wipe In-Flight Notes, append to the ledger.       │
+│ 1b. (DL-025) Refresh the research guide: update the task's narrative   │
+│    + one change-history row in docs/research_state.json, then run      │
+│    code/scripts/update_research_guide.py (--check, then build).        │
 │ 2. If per-task commits are ENABLED (opt-in, see "Version control"),    │
 │    commit this task's work as ONE commit. Else leave it for the user.  │
 │ 3. Render the End-of-Task Report (template below) in chat.             │

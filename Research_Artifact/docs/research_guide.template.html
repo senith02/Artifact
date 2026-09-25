@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Selective Carbon-Aware CI Research Map</title>
+<!--
+  GENERATED FILE. Edit docs/research_guide.template.html and docs/research_state.json,
+  then run:  cd Research_Artifact/code && python scripts/update_research_guide.py
+  This page is documentation, never instructions. PROGRESS.md and the decision log win.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --page:#f3f5f4; --surface:#fcfcfb; --surface-2:#eef2f0; --ink:#14201b; --ink-2:#44544d; --muted:#7a8781;
+  --hair:#dde3e0; --axis:#c3cac6; --accent:#0e6b66; --accent-soft:#dcecea;
+  --done:#0a7f0a; --done-bg:#e3f2e3; --current:#9a6a00; --current-bg:#fdf1d6; --pending:#6d7873; --pending-bg:#eceeed;
+  --warn-bg:#fff4e5; --warn-ink:#7a4a00; --crit:#b3261e; --crit-bg:#fbe9e7;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s7:#4a3aa7;
+  --seq0:#cde2fb; --seq1:#86b6ef; --seq2:#3987e5; --seq3:#1c5cab; --seq4:#0d366b;
+  --calib:#eda100; --calib-bg:#fff6de; --final:#2a78d6; --final-bg:#e6f0fb;
+  --font-sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif:"IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --side:17rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --page:#0e1311; --surface:#161c19; --surface-2:#1d2522; --ink:#eaf0ed; --ink-2:#b9c6bf; --muted:#8a9791;
+    --hair:#2a332f; --axis:#3a4540; --accent:#4fbdb4; --accent-soft:#17312e;
+    --done:#3fcf3f; --done-bg:#16301a; --current:#f0b53a; --current-bg:#33290f; --pending:#9aa6a0; --pending-bg:#222a27;
+    --warn-bg:#33270f; --warn-ink:#f3c56b; --crit:#f08a80; --crit-bg:#3a1a17;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s7:#9085e9;
+    --seq0:#1a2c44; --seq1:#184f95; --seq2:#2a78d6; --seq3:#6da7ec; --seq4:#cde2fb;
+    --calib:#e0a52a; --calib-bg:#2f2610; --final:#5598e7; --final-bg:#132338;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0e1311; --surface:#161c19; --surface-2:#1d2522; --ink:#eaf0ed; --ink-2:#b9c6bf; --muted:#8a9791;
+  --hair:#2a332f; --axis:#3a4540; --accent:#4fbdb4; --accent-soft:#17312e;
+  --done:#3fcf3f; --done-bg:#16301a; --current:#f0b53a; --current-bg:#33290f; --pending:#9aa6a0; --pending-bg:#222a27;
+  --warn-bg:#33270f; --warn-ink:#f3c56b; --crit:#f08a80; --crit-bg:#3a1a17;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s7:#9085e9;
+  --seq0:#1a2c44; --seq1:#184f95; --seq2:#2a78d6; --seq3:#6da7ec; --seq4:#cde2fb;
+  --calib:#e0a52a; --calib-bg:#2f2610; --final:#5598e7; --final-bg:#132338;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.6 var(--font-sans)}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,summary:focus-visible,.node:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+code,.mono{font-family:var(--font-mono);font-size:.86em}
+code{background:var(--surface-2);padding:.08em .35em;border-radius:4px;word-break:break-word}
+h1,h2,h3{text-wrap:balance;line-height:1.25}
+h1{font:600 clamp(1.5rem,2.6vw,2.1rem)/1.2 var(--font-serif);margin:.2rem 0 .6rem;letter-spacing:-.01em}
+h2{font:600 1.5rem/1.25 var(--font-serif);margin:0 0 .75rem}
+h3{font:600 1.05rem/1.35 var(--font-sans);margin:1.4rem 0 .5rem}
+p{margin:.5rem 0 .9rem;max-width:70ch}
+ul,ol{max-width:70ch;padding-left:1.25rem}
+li{margin:.25rem 0}
+.eyebrow{font:500 .72rem/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- layout ---- */
+.shell{display:grid;grid-template-columns:var(--side) minmax(0,1fr);min-height:100vh}
+aside.side{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--hair);background:var(--surface);padding:1.1rem 1rem 2rem}
+.side .brand{font:600 .98rem/1.3 var(--font-serif);margin:0 0 .2rem}
+.side .sub{font-size:.78rem;color:var(--muted);margin:0 0 1rem}
+.side nav a{display:flex;gap:.55rem;align-items:baseline;padding:.28rem .5rem;border-radius:6px;color:var(--ink-2);text-decoration:none;font-size:.87rem}
+.side nav a .n{font:500 .72rem var(--font-mono);color:var(--muted);min-width:1.4rem}
+.side nav a:hover{background:var(--surface-2);color:var(--ink)}
+.side nav a.on{background:var(--accent-soft);color:var(--ink)}
+.side .group{font:500 .68rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:1rem .5rem .3rem}
+main{min-width:0;padding-inline:clamp(16px,3.5vw,3rem);padding-block:0 5rem}
+.statusbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--page) 88%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--hair);margin-inline:calc(-1*clamp(16px,3.5vw,3rem));padding:.55rem clamp(16px,3.5vw,3rem);display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;align-items:center;font-size:.83rem;color:var(--ink-2)}
+.statusbar b{color:var(--ink);font-weight:600}
+.statusbar .grow{flex:1}
+.theme{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:.2rem .7rem;font:inherit;cursor:pointer}
+.menu{display:none}
+section{padding-top:2.6rem;max-width:62rem}
+section+section{border-top:1px solid var(--hair);margin-top:2.6rem}
+.lead{font-size:1.08rem;color:var(--ink-2);max-width:66ch}
+
+/* ---- hero / carbon strip ---- */
+.hero{padding-top:1.6rem;max-width:62rem}
+.strip{display:grid;grid-template-columns:repeat(168,1fr);height:1.1rem;border-radius:4px;overflow:hidden;margin:.9rem 0 .35rem}
+.strip span{display:block}
+.strip-cap{display:flex;justify-content:space-between;font:400 .72rem var(--font-mono);color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr));gap:.75rem;margin:1.3rem 0 .5rem}
+.kpi{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:.8rem .9rem}
+.kpi .v{font:600 1.35rem/1.2 var(--font-sans)}
+.kpi .l{font-size:.78rem;color:var(--muted)}
+
+/* ---- callouts, badges ---- */
+.callout{border:1px solid var(--hair);background:var(--surface);border-radius:10px;padding:.8rem 1rem;margin:1rem 0;max-width:70ch}
+.callout .h{font:600 .8rem var(--font-mono);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.25rem}
+.callout.why{border-left:4px solid var(--accent)} .callout.why .h{color:var(--accent)}
+.callout.confuse{border-left:4px solid var(--s7)} .callout.confuse .h{color:var(--s7)}
+.callout.warn{background:var(--warn-bg);border-color:transparent;border-left:4px solid var(--calib)} .callout.warn .h{color:var(--warn-ink)}
+.callout.crit{background:var(--crit-bg);border-color:transparent;border-left:4px solid var(--crit)} .callout.crit .h{color:var(--crit)}
+.callout p{margin:.25rem 0}
+.badge{display:inline-flex;align-items:center;gap:.3rem;font:500 .72rem/1 var(--font-mono);padding:.28rem .5rem;border-radius:999px;white-space:nowrap;vertical-align:middle}
+.badge::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:currentColor}
+.b-done{background:var(--done-bg);color:var(--done)} .b-done::before{content:"✓";width:auto;height:auto;background:none}
+.b-current{background:var(--current-bg);color:var(--current)} .b-current::before{content:"►";width:auto;height:auto;background:none;font-size:.6rem}
+.b-pending{background:var(--pending-bg);color:var(--pending)}
+.b-impl{background:var(--done-bg);color:var(--done)} .b-sim{background:var(--final-bg);color:var(--final)} .b-exp{background:var(--calib-bg);color:var(--warn-ink)} .b-plan{background:var(--pending-bg);color:var(--pending)} .b-no{background:var(--crit-bg);color:var(--crit)}
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.obs,.pend{border-radius:12px;padding:1rem 1.1rem}
+.obs{background:var(--calib-bg);border:1px solid color-mix(in srgb,var(--calib) 45%,transparent)}
+.pend{background:var(--final-bg);border:1px dashed color-mix(in srgb,var(--final) 60%,transparent)}
+.obs h3,.pend h3{margin-top:0}
+.tag-calib{display:inline-block;font:500 .7rem var(--font-mono);letter-spacing:.04em;background:var(--calib-bg);color:var(--warn-ink);border:1px solid color-mix(in srgb,var(--calib) 50%,transparent);padding:.15rem .45rem;border-radius:4px}
+.tag-pend{display:inline-block;font:500 .7rem var(--font-mono);background:var(--final-bg);color:var(--final);border:1px dashed var(--final);padding:.15rem .45rem;border-radius:4px}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;margin:.8rem 0 1.2rem;border:1px solid var(--hair);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--hair);vertical-align:top}
+th{font:500 .74rem var(--font-mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- figures ---- */
+figure{margin:1.2rem 0 1.6rem;background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:1rem 1rem .8rem}
+figure .ft{display:flex;flex-wrap:wrap;gap:.4rem .8rem;align-items:baseline;justify-content:space-between;margin-bottom:.4rem}
+figure .ft b{font-weight:600}
+figcaption{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;max-width:100%;height:auto}
+.chart text{fill:var(--ink-2);font:11px var(--font-sans)}
+.chart .ax{stroke:var(--axis);stroke-width:1}
+.chart .grid{stroke:var(--hair);stroke-width:1}
+.chart .lbl{fill:var(--ink);font-weight:500}
+.chart .mut{fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:.35rem 1rem;font-size:.8rem;color:var(--ink-2);margin:.2rem 0 .3rem}
+.legend i{display:inline-block;width:.75rem;height:.75rem;border-radius:3px;margin-right:.35rem;vertical-align:-1px}
+.figs2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.figs2 figure{margin:0}
+details.data{margin-top:.5rem;font-size:.82rem}
+details.data summary{cursor:pointer;color:var(--muted)}
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--page);font:12px/1.4 var(--font-sans);padding:.45rem .6rem;border-radius:6px;max-width:18rem;opacity:0;transition:opacity .08s}
+@media (prefers-reduced-motion: reduce){#tip{transition:none}}
+
+/* ---- research map ---- */
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(13.5rem,1fr));gap:.6rem;counter-reset:step;margin:1rem 0}
+.node{position:relative;display:block;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:.65rem .75rem .6rem 2.4rem;font-size:.86rem;line-height:1.35;cursor:pointer}
+.node::before{counter-increment:step;content:counter(step,decimal-leading-zero);position:absolute;left:.6rem;top:.68rem;font:500 .72rem var(--font-mono);color:var(--muted)}
+.node .st{display:block;margin-top:.35rem}
+.node.done{border-color:color-mix(in srgb,var(--done) 35%,var(--hair))}
+.node.current{border:2px solid var(--current);box-shadow:0 0 0 3px var(--current-bg)}
+.node.pending{background:transparent;border-style:dashed}
+.node.drafted{border-style:dotted}
+.node:hover{border-color:var(--accent)}
+.node .gate{position:absolute;right:.55rem;top:.55rem;font:500 .64rem var(--font-mono);color:var(--crit)}
+.frozen-line{grid-column:1/-1;display:flex;align-items:center;gap:.7rem;font:500 .72rem var(--font-mono);color:var(--crit);letter-spacing:.05em;text-transform:uppercase}
+.frozen-line::before,.frozen-line::after{content:"";flex:1;border-top:2px dashed var(--crit)}
+
+/* ---- blocks, concepts ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:.8rem;margin:1rem 0}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:.85rem 1rem}
+.card h3{margin:.1rem 0 .35rem;font-size:.98rem}
+.card .k{font:500 .7rem var(--font-mono);color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:.55rem}
+.card p{margin:.2rem 0;font-size:.9rem}
+.io{display:grid;grid-template-columns:1fr auto 1fr;gap:.5rem;align-items:center;margin:.5rem 0;font-size:.84rem}
+.io div{background:var(--surface-2);border-radius:8px;padding:.45rem .6rem}
+.io .arr{background:none;color:var(--muted);font-family:var(--font-mono)}
+
+/* ---- phases / tasks ---- */
+.phase{margin:1.4rem 0}
+.phase-h{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center}
+.phase-h h3{margin:0}
+.pbar{height:.45rem;background:var(--surface-2);border-radius:999px;overflow:hidden;flex:1;min-width:8rem}
+.pbar i{display:block;height:100%;background:var(--done)}
+details.task{background:var(--surface);border:1px solid var(--hair);border-radius:10px;margin:.5rem 0}
+details.task[open]{border-color:var(--accent)}
+details.task>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:4.2rem 1fr auto;gap:.6rem;align-items:center;padding:.6rem .8rem}
+details.task>summary::-webkit-details-marker{display:none}
+details.task>summary .id{font:500 .8rem var(--font-mono);color:var(--ink-2)}
+details.task>summary .nm{font-weight:500}
+details.task>summary .nm small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+.tbody{padding:.1rem 1rem 1rem;border-top:1px solid var(--hair)}
+.kv{display:grid;grid-template-columns:8.5rem 1fr;gap:.35rem 1rem;font-size:.88rem;margin-top:.7rem}
+.kv dt{font:500 .72rem var(--font-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding-top:.15rem}
+.kv dd{margin:0}
+.files{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.2rem}
+.files code{font-size:.76rem}
+
+/* ---- architecture ---- */
+.arch{display:flex;flex-direction:column;align-items:stretch;gap:0;max-width:40rem;margin:1rem 0}
+.arch .box{display:grid;grid-template-columns:1fr auto;gap:.3rem .8rem;align-items:center;background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:.6rem .85rem}
+.arch .box.planned,.arch .box.not_planned{border-style:dashed;background:transparent}
+.arch .box small{grid-column:1/-1;color:var(--muted);font-size:.78rem;line-height:1.35}
+.arch .box .w{font:400 .74rem var(--font-mono);color:var(--ink-2)}
+.arch .down{align-self:center;color:var(--muted);font-family:var(--font-mono);line-height:1;padding:.2rem 0}
+.arch .fork{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+
+/* ---- viva ---- */
+details.qa{border-bottom:1px solid var(--hair);padding:.55rem 0}
+details.qa summary{cursor:pointer;font-weight:500}
+details.qa p{margin:.45rem 0 .2rem}
+
+@media (max-width: 64rem){
+  .shell{grid-template-columns:1fr}
+  aside.side{position:fixed;inset:0 auto 0 0;width:min(18rem,85vw);z-index:20;transform:translateX(-100%);transition:transform .15s;box-shadow:0 0 40px rgba(0,0,0,.25);padding-top:calc(1.1rem + env(safe-area-inset-top,0px))}
+  aside.side.open{transform:none}
+  .menu{display:inline-block}
+  .split2,.figs2{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr}
+  .io{grid-template-columns:1fr}
+  .io .arr{transform:rotate(90deg);justify-self:center}
+}
+@media (prefers-reduced-motion: reduce){aside.side{transition:none}}
+@media (forced-colors: active){.badge,.node,.callout{border:1px solid CanvasText}}
+</style>
+</head>
+<body>
+<div id="tip" role="tooltip"></div>
+<div class="shell">
+<aside class="side" id="side" aria-label="Sections">
+  <p class="brand">Selective Carbon-Aware CI</p>
+  <p class="sub">Research map · {{meta.author}}</p>
+  <nav id="nav">
+    <div class="group">Orientation</div>
+    <a href="#overview"><span class="n">01</span>In one minute</a>
+    <a href="#map"><span class="n">02</span>Research map</a>
+    <a href="#problem"><span class="n">03</span>Problem and gap</a>
+    <a href="#questions"><span class="n">04</span>Questions and what is tested</a>
+    <a href="#blocks"><span class="n">05</span>Seven building blocks</a>
+    <div class="group">Method</div>
+    <a href="#data"><span class="n">06</span>Data</a>
+    <a href="#leakage"><span class="n">07</span>Leakage control</a>
+    <a href="#design"><span class="n">08</span>Experimental design</a>
+    <a href="#science"><span class="n">09</span>How it is done scientifically</a>
+    <div class="group">Evidence</div>
+    <a href="#evidence"><span class="n">10</span>Evidence so far</a>
+    <a href="#phases"><span class="n">11</span>Phase by phase</a>
+    <a href="#next"><span class="n">12</span>What happens next</a>
+    <div class="group">Artifact and limits</div>
+    <a href="#architecture"><span class="n">13</span>Architecture</a>
+    <a href="#artifact"><span class="n">14</span>Research vs artifact</a>
+    <a href="#deferability"><span class="n">15</span>Deferability</a>
+    <a href="#notproven"><span class="n">16</span>What is not proven</a>
+    <a href="#threats"><span class="n">17</span>Threats to validity</a>
+    <div class="group">Reference</div>
+    <a href="#viva"><span class="n">18</span>Viva guide</a>
+    <a href="#decisions"><span class="n">19</span>Decision log</a>
+    <a href="#audit"><span class="n">20</span>Source audit</a>
+    <a href="#history"><span class="n">21</span>Change history</a>
+    <a href="#maintain"><span class="n">22</span>Keeping it current</a>
+  </nav>
+</aside>
+
+<main id="top">
+<div class="statusbar" role="status">
+  <button class="theme menu" id="menuBtn" type="button" aria-controls="side" aria-expanded="false">Sections</button>
+  <span>Last updated <b>{{meta.last_updated}}</b></span>
+  <span>Research progress <b>{{progress.tasks_done}}/{{progress.tasks_total}}</b> ({{progress.pct}}%)</span>
+  <span>Current task <b>{{progress.current_task}}</b></span>
+  <span>Test split <b>not yet opened</b></span>
+  <span class="grow"></span>
+  <button class="theme" id="themeBtn" type="button" aria-label="Switch colour theme">Theme: system</button>
+</div>
+
+<!-- ============================ 01 OVERVIEW ============================ -->
+<section class="hero" id="overview">
+  <div class="eyebrow">BSc research artifact · research map</div>
+  <h1>Which CI builds are worth delaying for a cleaner grid, and does knowing more about the commit help choose them?</h1>
+  <p class="lead">{{meta.title}}. This page explains the whole project from the research problem to the planned developer tool, using only what the repository actually contains.</p>
+  <div class="strip" id="strip" aria-label="UK grid carbon intensity by hour of week"></div>
+  <div class="strip-cap"><span>Mon 00:00</span><span>UK grid, mean gCO₂/kWh per hour of the week, 2024–2025 (the replay's carbon input)</span><span>Sun 23:00</span></div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">{{progress.tasks_done}} / {{progress.tasks_total}}</div><div class="l">tasks complete · M2 reached</div></div>
+    <div class="kpi"><div class="v">{{evidence.data.analytic_builds|int}}</div><div class="l">analytic builds · {{evidence.splits.n_projects}} projects</div></div>
+    <div class="kpi"><div class="v">0 of 6</div><div class="l">SE families admitted (calibration)</div></div>
+    <div class="kpi"><div class="v">{{evidence.policy.d_threshold_s|int}} s · {{evidence.policy.w_max_h|int}} h</div><div class="l">frozen policy: d_threshold · W_max</div></div>
+  </div>
+
+  <h3>The question in plain language</h3>
+  <p>{{cq.plain}}</p>
+  <h3>The same question, technically</h3>
+  <p>{{cq.technical}}</p>
+
+  <div class="callout crit"><div class="h">Read this first</div>
+    <p>This project is <b>not</b> simply building an ML model, and it is <b>not</b> a build-duration prediction study. The comparison that matters is whether extra SE information gives <b>meaningful incremental value over a duration-only control</b>. A null answer ("it does not") is a legitimate, predeclared outcome. It would <b>not</b> mean SE characteristics are useless everywhere: conclusions are limited to this dataset, these 28 features, and this protocol.</p>
+  </div>
+</section>
+
+<!-- ============================ 02 MAP ============================ -->
+<section id="map">
+  <div class="eyebrow">02 · research flow</div>
+  <h2>Research map</h2>
+  <p>Each step feeds the next. Click a step to jump to its explanation. Green steps are complete, the amber step is current, and dashed steps are still to come. The red line marks where the untouched test split is opened, exactly once.</p>
+  <div class="map" id="flow"></div>
+</section>
+
+<!-- ============================ 03 PROBLEM ============================ -->
+<section id="problem">
+  <div class="eyebrow">03 · motivation</div>
+  <h2>The problem, why it matters, and the gap</h2>
+  <h3>The problem</h3>
+  <p>Every push to a CI system starts builds and tests. Carbon-aware computing moves flexible work to hours when grid electricity is cleaner. CI feedback is supposed to be fast, though, so delaying every build to save carbon slows developers down. A selective scheduler has to decide <b>which</b> builds should wait.</p>
+  <h3>Why it matters</h3>
+  <p>The accounting model used here makes energy proportional to build duration: a long build run at a dirty hour wastes the most carbon. Expected duration is therefore the natural, cheap selection signal, and the one any practitioner would try first. Adding a commit-level SE model costs data plumbing, training, calibration, monitoring and explanation. The practical question is whether that extra complexity is justified.</p>
+  <h3>The research gap</h3>
+  <p>The thesis draft (Chapter 2) states the gap as an integration gap. Carbon-aware scheduling work mostly asks <i>when</i> to run already-selected workloads. Empirical SE work shows commit characteristics predict build failure and duration. Few studies combine the two to ask whether commit-level SE characteristics carry decision value <b>beyond expected duration</b> for <i>selecting</i> builds. Layer 0-A frames the contribution the same way: a value-of-information study and an evidence-derived policy, not a new scheduling algorithm.</p>
+  <div class="callout warn"><div class="h">Not yet verified</div>
+    <p>Literature claims and inherited figures in the thesis draft have not been checked against their original sources. That is task P5-T1 (<code>dissertation/reference_audit.md</code>). Until then this guide repeats no literature numbers.</p>
+  </div>
+</section>
+
+<!-- ============================ 04 QUESTIONS ============================ -->
+<section id="questions">
+  <div class="eyebrow">04 · research questions</div>
+  <h2>Research questions and what is being tested</h2>
+  <p>These are the <b>active</b> questions (Layer 0-A, DL-012). They replaced the frozen Layer 1 questions of the earlier "risk-aware scheduling" framing. The earlier failure model survives as one candidate SE signal.</p>
+  <div class="tw"><table id="rqTable"><thead><tr><th>RQ</th><th>Question</th><th>Answered by</th><th>Status now</th></tr></thead><tbody></tbody></table></div>
+  <h3>What is being tested, stated as hypotheses</h3>
+  <div class="cards" id="props"></div>
+  <div class="callout why"><div class="h">Why the rule is fixed in advance</div>
+    <p>With nearly a million builds, almost any difference is statistically significant. The protocol therefore requires a <b>practical floor</b> (ΔPR-AUC ≥ +0.01 at model level; ≥ 5% TTFF p95 or ≥ 1% carbon at matched points at decision level), and it was written before any model was trained. The floors cannot be relaxed after a result is seen (eval_protocol.md §A1.7).</p>
+  </div>
+</section>
+
+<!-- ============================ 05 BLOCKS ============================ -->
+<section id="blocks">
+  <div class="eyebrow">05 · components of the study</div>
+  <h2>The seven building blocks</h2>
+  <p>These are easy to confuse. Each does one job, and several are deliberately kept apart.</p>
+  <div class="cards">
+    <div class="card"><h3>A · Duration-history control (d̂)</h3><p>A commit-time estimate of how long the build will take, from the project's own earlier builds (④b, primary) or a regressor (④a). The <b>null</b> every SE signal must beat.</p><div class="k">Do not confuse with</div><p>The build's actual duration. That is unknown at decision time and is never an input.</p></div>
+    <div class="card"><h3>B · SE-aware modelling</h3><p>Calibrated failure-probability models using d̂ plus 28 commit features in six families. They are the <b>treatment</b>, tested for incremental value.</p><div class="k">Do not confuse with</div><p>The contribution itself. The model is a candidate signal. The contribution is the value-of-information finding.</p></div>
+    <div class="card"><h3>C · Eligibility (Stage 1)</h3><p>Deterministic rules on PR status and branch name decide which builds may wait at all. There is no ML here, ever.</p><div class="k">Do not confuse with</div><p>Deferability. The rules approximate it; the data has no "safe to delay" label (§15).</p></div>
+    <div class="card"><h3>D · Carbon accounting</h3><p>E = 42.5 W × duration; carbon = E × the grid intensity of the scheduled hour. Applied after the decision, for scoring only.</p><div class="k">Do not confuse with</div><p>Measured emissions. These are estimates.</p></div>
+    <div class="card"><h3>E · Scheduling policy</h3><p><code>decide()</code> runs Stage 1, then Stage 2 under <code>policy_spec.yaml</code>: defer if d̂ ≥ d_threshold, to the greenest hour within W_max.</p><div class="k">Do not confuse with</div><p>A scheduling algorithm contribution. The policy is deliberately simple and evidence-derived.</p></div>
+    <div class="card"><h3>F · Replay evaluation</h3><p>Historical builds replayed through six strategies on identical inputs, sweeping each strategy's aggressiveness to trace a frontier.</p><div class="k">Do not confuse with</div><p>A live deployment. Arrivals are from 2011–2016 and carbon is a 2024–2025 profile.</p></div>
+    <div class="card"><h3>G · Final held-out evaluation</h3><p>Phase 3 opens the 170 test projects once, against the frozen policy, to confirm or overturn the calibration findings.</p><div class="k">Do not confuse with</div><p>Calibration results. Everything on this page before P3 is calibration evidence.</p></div>
+  </div>
+</section>
+
+<!-- ============================ 06 DATA ============================ -->
+<section id="data">
+  <div class="eyebrow">06 · data</div>
+  <h2>Data: what is used and how it is prepared</h2>
+  <p><b>TravisTorrent</b>, release <code>final-2017-01-25</code>: Travis CI builds joined with GitHub metadata, one row per build <i>job</i>, 66 columns, four languages. It is the single backbone dataset (invariant 2): it trains the models <b>and</b> drives the replay. Builds span 2011-04-16 to 2016-08-31. The label is <code>tr_status</code> (failure = failed or errored; canceled builds excluded).</p>
+  <figure><div class="ft"><b>Data funnel: job rows to analytic builds</b><span class="tag-calib" style="background:var(--done-bg);color:var(--done);border-color:transparent">measured · P0-T2</span></div><div class="chart" id="chFunnel"></div><figcaption>Source: {{evidence.data.source}} (run {{evidence.data.run_date}}). Job rows are aggregated to builds by <code>tr_build_id</code> (DL-009); {{evidence.data.canceled|int}} canceled builds and {{evidence.data.other_label}} unlabelled build are excluded.</figcaption></figure>
+  <div class="figs2">
+    <figure><div class="ft"><b>Builds per language</b></div><div class="chart" id="chLang"></div><figcaption>Failure rate over analytic builds: {{evidence.data.failure_rate_pct|f2}}% ({{evidence.data.failures|int}} failures).</figcaption></figure>
+    <figure><div class="ft"><b>Build duration percentiles (s)</b></div><div class="chart" id="chDur"></div><figcaption>Heavy-tailed: median {{evidence.data.duration.percentiles.p50|int}} s, p99 {{evidence.data.duration.percentiles.p99|int}} s. {{evidence.data.duration.missing|int}} builds have no duration. Descriptive only.</figcaption></figure>
+  </div>
+  <h3>Preparation steps, in order</h3>
+  <ol>
+    <li><b>Header check.</b> The loader validates the CSV header verbatim against <code>context/dataset_reference.md</code>. The paper's Table 1 uses different names and is never trusted (DL-002).</li>
+    <li><b>Grain.</b> Aggregate job rows to builds. Duration uses the max over jobs (DL-009, DL-010).</li>
+    <li><b>Cleaning funnel.</b> Drop builds without a usable label, exclude canceled builds, reject unparseable timestamps, and record rows in and out at each step.</li>
+    <li><b>Features.</b> 28 commit-time features in six families, with outcome columns blocklisted. {{evidence.features.verdict_counts.constant}} features turned out constant and {{evidence.features.verdict_counts.near-constant}} near-constant (DL-016); they are kept and reported, not silently dropped.</li>
+    <li><b>Split.</b> Whole projects are assigned to train, calibration or test (§07).</li>
+  </ol>
+  <div class="callout warn"><div class="h">Data-quality findings that limit conclusions</div>
+    <p>Fully-null columns: <code>{{evidence.data.fully_null_columns|join}}</code>. <code>git_diff_test_churn</code> is zero in every build, so <code>test_churn</code> and <code>test_density_ratio</code> are constant. F2 keeps only {{evidence.features.family_effective.F2.effective}} of {{evidence.features.family_effective.F2.members}} effective members. There are no commit messages, so no fix-keyword feature (DL-015). A null for a weakened family is partly a data limitation, which is why the result is read as a lower bound.</p>
+  </div>
+</section>
+
+<!-- ============================ 07 LEAKAGE ============================ -->
+<section id="leakage">
+  <div class="eyebrow">07 · validity guard</div>
+  <h2>How leakage is prevented</h2>
+  <p>Leakage means a model sees information it could not have at decision time, so it looks better on paper than it would in real use. This project blocks it in four independent ways.</p>
+  <div class="cards">
+    <div class="card"><h3>1 · The current build's duration never reaches a decision</h3><p><code>tr_duration</code> is an outcome. It has exactly three permitted roles: simulator accounting, historical labels for d̂ (earlier builds only), and a labelled oracle bound. <code>decide()</code> <b>raises an error</b> if handed it.</p><div class="k">Why</div><p>Otherwise "beyond expected duration" would secretly mean "beyond the real duration", which no deployment can know.</p></div>
+    <div class="card"><h3>2 · Outcome columns are blocklisted in code</h3><p><code>tr_status</code>, test counts, log durations and <code>tr_prev_build</code> fail an assertion if they reach any feature matrix, with negative tests that inject them on purpose.</p><div class="k">Why</div><p>A human rule can be forgotten; a failing test cannot.</p></div>
+    <div class="card"><h3>3 · History is strictly causal</h3><p>④b uses only the project's builds that started <b>strictly before</b> the one being scored. Ties and the future are excluded. Fitted parameters come from train projects only (DL-014).</p><div class="k">Why</div><p>That is the information a deployed scheduler would really hold: its own repository's history to date.</p></div>
+    <div class="card"><h3>4 · Projects are split, not builds</h3><p>{{evidence.splits.train.projects}} / {{evidence.splits.calibration.projects}} / {{evidence.splits.test.projects}} projects, disjoint, frozen at sha256 <code>{{evidence.splits.sha256|short}}…</code>. The test split has been dropped unread by every script so far.</p><div class="k">Why</div><p>A model that has seen a project's builds can memorise its habits. Held-out projects measure generalisation to new repositories.</p></div>
+  </div>
+  <figure><div class="ft"><b>The frozen three-way split</b></div><div class="chart" id="chSplit"></div>
+    <figcaption>Source: {{evidence.splits.source}}. The splits differ by construction (DL-017): calibration failure rate {{evidence.splits.calibration.failure_rate_pct}}% vs test {{evidence.splits.test.failure_rate_pct}}%; calibration p95 duration {{evidence.splits.calibration.p95_duration_s|int}} s vs test {{evidence.splits.test.p95_duration_s|int}} s. The split is project-disjoint, not time-disjoint.</figcaption></figure>
+  <div class="callout confuse"><div class="h">Do not confuse</div><p><b>Calibration</b> projects are used to fit calibrators, choose forms and fit the policy. <b>Test</b> projects are used once, in Phase 3, and nothing is re-fitted afterwards. Using calibration is not "peeking"; using test before P3 would be.</p></div>
+</section>
+
+<!-- ============================ 08 DESIGN ============================ -->
+<section id="design">
+  <div class="eyebrow">08 · experiment</div>
+  <h2>How the experiments are designed</h2>
+  <h3>Altitude 1: model level (done on calibration)</h3>
+  <div class="io"><div><b>In</b><br>train split, d̂, 28 features in F1–F6</div><div class="arr">→</div><div><b>Out</b><br>ΔPR-AUC of {d̂+Fᵢ} vs {d̂}, 95% paired-bootstrap CI (B = 1000)</div></div>
+  <p>Six arms were trained, one per family, each identical except for its feature set, plus the {d̂} control and the {d̂ + all 28} full arm. A family passes model level only if its CI excludes 0 <b>and</b> its gain is at least +0.01.</p>
+  <h3>Altitude 2: decision level (P3-T3, on test)</h3>
+  <div class="io"><div><b>In</b><br>identical replay trace, strategies ④a, ④b, ⑤ swept over d_threshold × W_max</div><div class="arr">→</div><div><b>Out</b><br>frontiers in (carbon saved, TTFF p95); matched-point deltas; area between frontiers with CI</div></div>
+  <p>Carbon saved is proportional to duration by construction (§A1.13), so strategy ④ always leads on raw carbon. SE value could only show up as better <b>failure-feedback time (TTFF)</b> at the same carbon. The two strategies are therefore compared along their whole trade-off curves, never at a single point (DL-013).</p>
+  <h3>The six strategies (identical traces)</h3>
+  <div class="tw"><table><thead><tr><th>#</th><th>Strategy</th><th>What it does</th><th>Swept</th></tr></thead><tbody>
+    <tr><td>①</td><td>Static</td><td>Every build runs at arrival.</td><td>none</td></tr>
+    <tr><td>②</td><td>Blanket carbon-aware</td><td>Every eligible build goes to the greenest hour in the whole week (167 h horizon).</td><td>none</td></tr>
+    <tr><td>③</td><td>Eligibility-only</td><td>Eligible builds wait up to W_max for the greenest hour; no duration selectivity.</td><td>W_max</td></tr>
+    <tr><td>④a / ④b</td><td>Duration-control-only (the central null)</td><td>Defer only if d̂ ≥ d_threshold; ④a uses the regressor, ④b the project prior.</td><td>d_threshold × W_max</td></tr>
+    <tr><td>⑤</td><td>SE-informed, evidence-derived</td><td>Whatever the frozen spec says. On the null path it is identical to ④b by construction.</td><td>d_threshold × W_max</td></tr>
+    <tr><td>⑥</td><td>Risk-only skip (secondary)</td><td>Skips eligible builds whose failure probability is below τ. Always read beside missed failures.</td><td>τ</td></tr>
+  </tbody></table></div>
+  <p>Frozen grids (DL-023): W ∈ {6, 12, 24} h · d_threshold ∈ {0, 60, 120 … 15,360} s (doubling) · τ ∈ {0 … 0.30} → 102 settings.</p>
+</section>
+
+<!-- ============================ 09 SCIENCE ============================ -->
+<section id="science">
+  <div class="eyebrow">09 · method</div>
+  <h2>How the research is being done scientifically</h2>
+  <p>Each concept below is explained by what it means <b>in this project</b> and why it matters. Where a concept comes from the thesis draft rather than the governed repository, that is stated.</p>
+  <div class="cards" id="concepts"></div>
+</section>
+
+<!-- ============================ 10 EVIDENCE ============================ -->
+<section id="evidence">
+  <div class="eyebrow">10 · results to date</div>
+  <h2>Evidence so far</h2>
+  <div class="split2">
+    <div class="obs"><h3>Observed so far <span class="tag-calib">calibration split</span></h3>
+      <ul>
+        <li>The causal project-history estimate ④b predicts duration far better than the commit-feature regressor ④a.</li>
+        <li>Adding SE families to d̂ made failure prediction <b>worse</b> for all six families, with every CI below zero.</li>
+        <li>No family is admitted at ×0.5, ×1 or ×2 of the floor, so the model-level answer is the <b>null path</b>.</li>
+        <li>The frozen policy is therefore duration-only: defer if d̂ ≥ {{evidence.policy.d_threshold_s|int}} s, within {{evidence.policy.w_max_h|int}} h.</li>
+      </ul></div>
+    <div class="pend"><h3>Final conclusion pending P3 <span class="tag-pend">test split unopened</span></h3>
+      <ul>
+        <li>Whether the null replicates on 170 unseen projects (P3-T1).</li>
+        <li>Carbon, latency and TTFF of all six strategies on test (P3-T2).</li>
+        <li>The headline decision-level RQ2 verdict (P3-T3).</li>
+        <li>Whether any sensitivity sweep flips a verdict (P3-T4).</li>
+      </ul></div>
+  </div>
+
+  <h3>Duration control</h3>
+  <div class="figs2">
+    <figure><div class="ft"><b>MAE, log1p scale (lower is better)</b><span class="tag-calib">calibration</span></div><div class="chart" id="chDurMae"></div><figcaption>Primary chosen by this metric before test: ④b {{evidence.duration.f4b.mae_log1p|f4}} vs ④a {{evidence.duration.f4a.mae_log1p|f4}}. The trailing-50 variant is a declared sensitivity and was kept as a sensitivity (DL-024 §3).</figcaption></figure>
+    <figure><div class="ft"><b>Spearman ρ with actual duration</b><span class="tag-calib">calibration</span></div><div class="chart" id="chDurRho"></div><figcaption>Rank quality matters most, because ④ applies a threshold to d̂. Source: {{evidence.duration.source}}.</figcaption></figure>
+  </div>
+
+  <h3>Six model arms (P1-T5)</h3>
+  <div class="figs2">
+    <figure><div class="ft"><b>PR-AUC: {d̂} control vs full arm</b><span class="tag-calib">calibration</span></div><div class="legend"><span><i style="background:var(--s1)"></i>{d̂} control</span><span><i style="background:var(--s2)"></i>{d̂ + 28 features}</span></div><div class="chart" id="chArmsPr"></div><figcaption>Base rate {{evidence.splits.calibration.failure_rate_pct}}%. Random forest full edges its control by 0.0008 PR-AUC with no CI computed; see the source audit.</figcaption></figure>
+    <figure><div class="ft"><b>ROC-AUC: {d̂} control vs full arm</b><span class="tag-calib">calibration</span></div><div class="legend"><span><i style="background:var(--s1)"></i>{d̂} control</span><span><i style="background:var(--s2)"></i>{d̂ + 28 features}</span></div><div class="chart" id="chArmsRoc"></div><figcaption>Isotonic calibration chosen for all six by calibration Brier. In-sample isotonic ECE is 0 by construction and is never quoted as a result.</figcaption></figure>
+  </div>
+
+  <h3>Feature-family ablation (P1-T6) and admission (P1-T7)</h3>
+  <figure><div class="ft"><b>ΔPR-AUC of {d̂ + family} vs {d̂}, with 95% CI</b><span class="tag-calib">calibration</span></div><div class="chart" id="chAbl"></div><figcaption>A family is admitted only if its whole CI is above 0 and its point is at least the +0.01 floor (dashed). All six sit to the left of zero. Source: {{evidence.ablation.source}}; verdicts in {{evidence.admission.source}}.</figcaption></figure>
+  <div class="figs2">
+    <figure><div class="ft"><b>Mean |SHAP| per family (full arm)</b><span class="tag-calib">calibration</span></div><div class="chart" id="chShap"></div><figcaption>How much each family moves the full model's predictions. Magnitude is not incremental value: F4 is large here yet has the worst standalone delta.</figcaption></figure>
+    <figure><div class="ft"><b>Between-project share of SHAP variance</b><span class="tag-calib">calibration</span></div><div class="chart" id="chBetween"></div><figcaption>Near 1 means a family mostly encodes <i>which project</i> a build is from. Threshold for "project-identity-coded": {{evidence.shap.threshold}} (none reach it).</figcaption></figure>
+  </div>
+
+  <h3>Eligibility (P2-T1)</h3>
+  <figure><div class="ft"><b>Why builds were classed non-deferrable, train + calibration</b><span class="tag-calib">train + calibration</span></div><div class="chart" id="chElig"></div><figcaption>{{evidence.eligibility.gated|int}} builds gated; {{evidence.eligibility.eligible|int}} ({{evidence.eligibility.eligible_pct|f2}}%) deferrable by rule. Under the <code>{{evidence.eligibility.alt_variant}}</code> variant, {{evidence.eligibility.alt_pct|f2}}%. The gate and the independent validator disagree on 0 of {{evidence.eligibility.pairs_checked|int}} input pairs.</figcaption></figure>
+
+  <h3>Carbon input and accounting (P0-T3, P2-T2)</h3>
+  <figure><div class="ft"><b>UK grid carbon intensity, hour of week (gCO₂/kWh)</b><span class="tag-calib" style="background:var(--done-bg);color:var(--done);border-color:transparent">measured input</span></div><div class="chart" id="chHeat"></div><figcaption>{{evidence.carbon.provider}}. Greenest {{evidence.energy.greenest.label}} = {{evidence.energy.greenest.gco2_per_kwh|f2}}; dirtiest {{evidence.energy.dirtiest.label}} = {{evidence.energy.dirtiest.gco2_per_kwh|f2}}. Moving a build from the dirtiest to the greenest hour cuts its carbon by at most {{evidence.energy.ceiling_saving_pct|f2}}%.</figcaption></figure>
+  <figure><div class="ft"><b>Worked example: one build at the dirtiest vs greenest hour (gCO₂e)</b></div><div class="legend"><span><i style="background:var(--s2)"></i>{{evidence.energy.dirtiest.label}}</span><span><i style="background:var(--s3)"></i>{{evidence.energy.greenest.label}}</span></div><div class="chart" id="chImpact"></div><figcaption>E = {{evidence.energy.p_avg_w}} W × duration. Pure arithmetic from {{evidence.energy.source}}: no gate, policy or delay bound applied. The ±50% power band scales every strategy equally.</figcaption></figure>
+
+  <h3>Replay and the frozen policy (P2-T4, P2-T5)</h3>
+  <div class="callout warn"><div class="h">Calibration fitting evidence, not an RQ4 result</div><p>These replay figures come from the 12,000-build calibration sample used to <b>fit</b> the operating point (DL-024). They are not the strategy comparison RQ4 asks for; that is P3-T2 on the test trace.</p></div>
+  <figure><div class="ft"><b>Duration-only frontiers: carbon saved vs TTFF p95 of failed builds</b><span class="tag-calib">calibration fitting sweep</span></div><div class="legend"><span><i style="background:var(--s1)"></i>④b project prior (⑤ is identical)</span><span><i style="background:var(--s2)"></i>④a regressor</span><span><i style="background:var(--ink-2)"></i>① ② ③ reference points</span></div><div class="chart" id="chFront"></div><figcaption>Each line sweeps d_threshold from 0 (top right) to 15,360 s (bottom left) at one W_max. The ringed point is the frozen choice d = {{evidence.policy.d_threshold_s|int}} s, W = {{evidence.policy.w_max_h|int}} h: the lowest TTFF p95 among points keeping ≥ 90% of the best saving ({{evidence.policy.best_saving_pct|f2}}%). ④a stops deferring at d ≥ 3,840 s because its estimate never exceeds {{evidence.replay.characteristics.d4a_max|int}} s. <span class="tag-pend">Test frontier pending P3-T3</span></figcaption></figure>
+  <div class="figs2">
+    <figure><div class="ft"><b>Carbon saved vs static (%)</b><span class="tag-calib">calibration</span></div><div class="chart" id="chStratC"></div><figcaption>Selected settings. ⑥'s saving comes from never running skipped builds.</figcaption></figure>
+    <figure><div class="ft"><b>TTFF p95, failed builds (h)</b><span class="tag-calib">calibration</span></div><div class="chart" id="chStratT"></div><figcaption>Failure-feedback delay: the cost side of deferral. ⑥ missed {{evidence.replay.rows.101.missed}} failures at τ = 0.30.</figcaption></figure>
+  </div>
+  <div class="tw"><table><thead><tr><th>ρ (retention)</th><th>Chosen point</th><th class="num">Saving %</th><th class="num">TTFF p95 h</th><th>Shipped?</th></tr></thead><tbody id="rhoRows"></tbody></table></div>
+  <p>The operating point is sensitive to ρ. It was fixed at 0.90 before any rule was evaluated, and only 0.90 is shipped; the other two rows are reported sensitivities.</p>
+</section>
+
+<!-- ============================ 11 PHASES ============================ -->
+<section id="phases">
+  <div class="eyebrow">11 · timeline</div>
+  <h2>Phase by phase</h2>
+  <figure><div class="ft"><b>Progress by phase</b></div><div class="chart" id="chPhase"></div><figcaption>Counts are recounted from <code>development_plan.md</code> task headings at every rebuild. Milestones: M0 4/28 · M1 11/28 · M2 16/28 (reached) · M3 21/28 · M4 24/28 · M5 28/28.</figcaption></figure>
+  <figure><div class="ft"><b>Gate dates and tests passing at each gate</b></div><div class="chart" id="chTimeline"></div><figcaption>Dates from the PROGRESS.md ledger. Test counts from each gate's captured pytest output (P1-T2 onward). The gap from late June to mid-August is the DL-012 reframing.</figcaption></figure>
+  <div id="phaseList"></div>
+</section>
+
+<!-- ============================ 12 NEXT ============================ -->
+<section id="next">
+  <div class="eyebrow">12 · remaining work</div>
+  <h2>What happens next</h2>
+  <div class="callout crit"><div class="h">P3-T1 opens the untouched test split</div><p>The 170 test projects ({{evidence.splits.test.builds|int}} builds) have never been read by any script. From P3-T1 onward every number is final. Re-running a model after seeing test results is a decision-log entry, not a routine fix. Any predeclared sensitivity not yet in the plan (for example the review report's temporal-robustness sweep or a second carbon profile) must be logged <b>before</b> P3-T1, or it becomes post-hoc.</p></div>
+  <div class="tw"><table id="nextTable"><thead><tr><th>Task</th><th>Purpose</th><th>Evidence it will produce</th><th>RQ</th><th>Currently unknown</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<!-- ============================ 13 ARCHITECTURE ============================ -->
+<section id="architecture">
+  <div class="eyebrow">13 · system</div>
+  <h2>Technical architecture</h2>
+  <p>One decision core serves both the replay and the future prototype (invariant 5). Status badges show what exists today.</p>
+  <div class="legend"><span class="badge b-impl">implemented</span><span class="badge b-sim">simulated</span><span class="badge b-exp">experimental</span><span class="badge b-plan">planned</span><span class="badge b-no">not planned</span></div>
+  <div class="arch" id="arch"></div>
+</section>
+
+<!-- ============================ 14 ARTIFACT ============================ -->
+<section id="artifact">
+  <div class="eyebrow">14 · two different things</div>
+  <h2>Research experiment vs practical artifact</h2>
+  <div class="split2">
+    <div class="card"><h3>The research experiment</h3><p>Evaluates the duration control, the SE-aware models, the six feature families, the model arms, six replay strategies, decision outcomes (TTFF, latency) and estimated carbon, all on historical traces with a frozen protocol. <b>This is where the findings come from.</b></p></div>
+    <div class="card"><h3>The practical artifact</h3><p>A developer-facing GitHub Actions decision-support tool (Phase 4) that runs the <b>same</b> <code>decide()</code> and the <b>same</b> frozen spec. It demonstrates the finding end to end. <b>It is not evidence of real-world carbon savings.</b> None of it exists yet.</p></div>
+  </div>
+  <h3>The intended artifact concept</h3>
+  <p>As described by the author on 2026-09-25. Steps marked "not in plan" are not in <code>development_plan.md</code> today.</p>
+  <div class="map" id="artFlow" style="counter-reset:step"></div>
+  <div class="callout warn"><div class="h">Region detection is an estimate</div><p>If region inference by IP address is added, it gives an <b>estimated</b> region for the runner, never data-centre ground truth. The current plan instead uses the UK national carbon series with a cached fallback. Adding region inference changes the P4 contract and needs a decision-log entry.</p></div>
+  <div class="callout confuse"><div class="h">Not redesigned yet</div><p>The review report recommends narrowing P4 if the null survives (no 28-feature request schema, no SHAP panel, team-declared urgency). The plan says that decision is taken after P3-T5 and before P4-T1. This guide shows the plan as it stands.</p></div>
+</section>
+
+<!-- ============================ 15 DEFERABILITY ============================ -->
+<section id="deferability">
+  <div class="eyebrow">15 · construct validity</div>
+  <h2>Deferability: the most important limitation</h2>
+  <p>TravisTorrent records what happened to each build. It does <b>not</b> record whether a build was acceptable to delay. There is no column saying "this build could safely have waited". Everything about "which builds may wait" is therefore an experimental definition, not a measurement.</p>
+  <div class="cards">
+    <div class="card"><h3>Eligibility is an approximation</h3><p>Stage 1 marks PR builds and pushes to mainline, release, stable, hotfix or version-like branches as non-deferrable, and everything else as deferrable. Manual and scheduled/nightly builds have no marker at all (DL-020), so the deferrable set is entirely "pushes to unprotected branches".</p></div>
+    <div class="card"><h3>Failure is not urgency</h3><p>A passing build can be release-critical. A failing build is not automatically safe to postpone; delaying it delays exactly the feedback CI exists to give. The failure model predicts outcomes, not business priority.</p></div>
+    <div class="card"><h3>The validator proves consistency, not correctness</h3><p>0 violations means no rule-non-deferrable build was deferred. It does not mean the rule identifies genuinely safe builds. The approximation's error rate is unmeasurable in this corpus.</p></div>
+    <div class="card"><h3>What a real tool should do</h3><p>Treat urgency as an <b>explicit team policy</b>: branches, workflows, labels, environments and a maximum delay declared by the team. Do not infer it from historical failure data.</p></div>
+  </div>
+</section>
+
+<!-- ============================ 16 NOT PROVEN ============================ -->
+<section id="notproven">
+  <div class="eyebrow">16 · boundaries</div>
+  <h2>What this research does not prove</h2>
+  <p>Three different situations, kept apart. <b>Tested and found null</b> means the experiment was run and the effect was not there. <b>Not tested</b> means no evidence either way yet. <b>Known limitation</b> means the design cannot answer it.</p>
+  <div id="limits"></div>
+</section>
+
+<!-- ============================ 17 THREATS ============================ -->
+<section id="threats">
+  <div class="eyebrow">17 · validity</div>
+  <h2>Threats to validity</h2>
+  <div class="tw"><table><thead><tr><th>Type</th><th>Threat in this project</th><th>What is done about it</th></tr></thead><tbody>
+    <tr><td>Internal</td><td>Leakage of outcome or future information into features or d̂.</td><td>Blocklist assertions, causal-history tests, project-disjoint split, test split unread (§07).</td></tr>
+    <tr><td>Internal</td><td>Estimator error: the control is a <i>predicted</i> duration, so RQ2 answers "beyond predictable duration".</td><td>Both ④a and ④b are run; a labelled oracle-duration arm bounds it (A1.10, P3-T3).</td></tr>
+    <tr><td>Internal</td><td>Project identity masquerading as SE signal.</td><td>④b is the project-identity control; between/within variance decomposition; ⑤ must beat both ④a and ④b (A1.9).</td></tr>
+    <tr><td>Construct</td><td>No ground-truth deferability; TTFF is a proxy for delay harm.</td><td>DL-020 declares the gate an approximation; §15.</td></tr>
+    <tr><td>Construct</td><td>Degenerate features weaken F1–F3 (DL-016); commit messages are absent (DL-015).</td><td>Reported per family; the null is read as a lower bound.</td></tr>
+    <tr><td>Conclusion</td><td>With n ≈ 10⁶, significance is nearly free.</td><td>Predeclared practical floors; effect sizes lead every claim (A1.11).</td></tr>
+    <tr><td>Conclusion</td><td>Carbon ∝ duration by the energy model, so carbon cannot show SE value.</td><td>RQ2 is judged on TTFF at matched carbon (A1.13).</td></tr>
+    <tr><td>Conclusion</td><td>Split heterogeneity: calibration base rate and duration tail differ from test (DL-017).</td><td>Reported against every calibration-fitted choice.</td></tr>
+    <tr><td>External</td><td>Travis CI 2011–2016, four languages; UK grid only, a low-variance profile.</td><td>Declared (spec §6). A second grid profile is recommended by the review, not yet planned.</td></tr>
+    <tr><td>External</td><td>Carbon profile is 2024–2025, not contemporaneous with arrivals.</td><td>Stated as a scenario about today's grid; the arrival-time distribution shift has undetermined direction.</td></tr>
+    <tr><td>Measurement</td><td>Constant 42.5 W, no RAM/GPU term; wall-clock under-counts parallel jobs (DL-010).</td><td>±50% band; n_jobs variant available; absolute gCO₂e not claimed.</td></tr>
+    <tr><td>Reliability</td><td>The operating point comes from a 12k sample and one declared ρ.</td><td>ρ sensitivity reported (§10); byte-identical refit verified.</td></tr>
+    <tr><td>Reproducibility</td><td>Environment drift; the review found the venv interpreter missing on another checkout.</td><td>Lockfile, pinned versions, seed 42, recorded commands; fresh-clone check is P5-T4.</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ============================ 18 VIVA ============================ -->
+<section id="viva">
+  <div class="eyebrow">18 · speaking about it</div>
+  <h2>How to explain this research in a viva</h2>
+  <p>Short answers based only on the design and the evidence recorded so far. Where P3 will change the answer, that is said.</p>
+  <div id="vivaList"></div>
+</section>
+
+<!-- ============================ 19 DECISIONS ============================ -->
+<section id="decisions">
+  <div class="eyebrow">19 · amendments</div>
+  <h2>Decision log index</h2>
+  <p>Every deviation from the frozen design is a dated entry in <code>governance/03_DECISION_LOG.md</code>, written before acting on it. Titles and dates are read from the log; one-line summaries are this guide's.</p>
+  <div class="tw"><table id="dlTable"><thead><tr><th>ID</th><th>Date</th><th>Decision</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<!-- ============================ 20 AUDIT ============================ -->
+<section id="audit">
+  <div class="eyebrow">20 · source audit</div>
+  <h2>Inconsistencies found while building this guide</h2>
+  <p>Where two sources disagree, the governing source is named and nothing has been silently corrected.</p>
+  <div class="tw"><table id="discTable"><thead><tr><th>Where</th><th>Says</th><th>Actually</th><th>Which source governs</th><th>Action</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<!-- ============================ 21 HISTORY ============================ -->
+<section id="history">
+  <div class="eyebrow">21 · living document</div>
+  <h2>Change history</h2>
+  <div class="tw"><table id="histTable"><thead><tr><th>Date</th><th>What changed</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<!-- ============================ 22 MAINTAIN ============================ -->
+<section id="maintain">
+  <div class="eyebrow">22 · maintenance</div>
+  <h2>Keeping this guide current</h2>
+  <p>The page is generated. Numbers are never typed into it: they are read from <code>results/</code> by <code>code/scripts/update_research_guide.py</code>, which also checks task statuses against PROGRESS.md, recounts the plan and verifies every referenced file.</p>
+  <ol>
+    <li>At each gate, after PROGRESS.md is updated, edit <code>docs/research_state.json</code>: the finished task's narrative, any new limitation or discrepancy, and one change-history row. Earlier rows are never rewritten.</li>
+    <li>Point new numbers at result files with <code>{{</code>evidence.…<code>}}</code> tokens. If a new result file is needed, add it to <code>collect_evidence()</code>.</li>
+    <li>Run <code>python scripts/update_research_guide.py --check</code>, then without <code>--check</code>. It fails on an unresolved token, a missing file or a status mismatch.</li>
+    <li>Keep calibration and test evidence visibly separate. Nothing is labelled final before P3 produces it.</li>
+  </ol>
+  <p class="mono" style="color:var(--muted)">Generated by {{meta.generated_by}} · state as of PROGRESS.md {{progress.progress_md_updated}} · frozen spec sha256 {{evidence.policy.sha256|short}}…</p>
+</section>
+</main>
+</div>
+
+<script>
+const S = /*__RESEARCH_STATE__*/null;
+(function(){
+"use strict";
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e=document.createElement(tag); for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v); if (html) e.innerHTML=html; return e; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nf = (v,d=0) => Number(v).toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const E = S.evidence, P = S.progress;
+
+/* ---------- theme ---------- */
+const modes=["system","light","dark"]; let mi=0;
+try{ const saved=localStorage.getItem("rg-theme"); if(saved&&modes.includes(saved)) mi=modes.indexOf(saved);}catch(e){}
+function applyTheme(){ const m=modes[mi]; if(m==="system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme",m); $("#themeBtn").textContent="Theme: "+m; try{localStorage.setItem("rg-theme",m);}catch(e){} drawAll(); }
+$("#themeBtn").addEventListener("click",()=>{mi=(mi+1)%3;applyTheme();});
+const side=$("#side"), mb=$("#menuBtn");
+mb.addEventListener("click",()=>{const o=side.classList.toggle("open");mb.setAttribute("aria-expanded",o);});
+side.addEventListener("click",e=>{if(e.target.closest("a")){side.classList.remove("open");mb.setAttribute("aria-expanded","false");}});
+
+/* ---------- tooltip ---------- */
+const tip=$("#tip");
+document.addEventListener("pointermove",e=>{const t=e.target.closest("[data-tip]"); if(!t){tip.style.opacity=0;return;} tip.innerHTML=t.getAttribute("data-tip"); const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8), y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8); tip.style.left=x+"px"; tip.style.top=y+"px"; tip.style.opacity=1;});
+
+/* ---------- svg helpers ---------- */
+const NS="http://www.w3.org/2000/svg";
+function svg(w,h){const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox",`0 0 ${w} ${h}`);s.setAttribute("width",w);s.setAttribute("role","img");return s;}
+function add(p,tag,a,txt){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);if(txt!==undefined)e.textContent=txt;p.appendChild(e);return e;}
+function niceTicks(lo,hi,n=5){const span=hi-lo||1;const step0=span/n;const mag=Math.pow(10,Math.floor(Math.log10(step0)));const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=step0);const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(10));return out;}
+function extras(host){let x=host.nextElementSibling;if(!x||!x.classList.contains("extras")){x=el("div",{class:"extras"});host.after(x);}x.innerHTML="";return x;}
+function dataTable(box,cols,rows){const d=el("details",{class:"data"});d.innerHTML=`<summary>Show data table</summary><div class="tw"><table><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;box.appendChild(d);}
+
+/* horizontal bar chart: items [{label,value,color,tip,note}] */
+function hbar(id,items,{fmt=v=>nf(v),max=null,w=640,labelW=170,row=26,unit=""}={}){
+  const host=$("#"+id); if(!host) return; host.innerHTML="";
+  const h=items.length*row+26, s=svg(w,h), plotW=w-labelW-70;
+  const mx=max??Math.max(...items.map(i=>i.value));
+  niceTicks(0,mx,4).forEach(t=>{const x=labelW+t/mx*plotW; add(s,"line",{x1:x,x2:x,y1:4,y2:h-20,class:"grid"}); add(s,"text",{x,y:h-6,"text-anchor":"middle",class:"mut"},fmt(t)+unit);});
+  items.forEach((it,i)=>{const y=6+i*row, bw=Math.max(2,it.value/mx*plotW);
+    add(s,"text",{x:labelW-8,y:y+row/2+1,"text-anchor":"end","dominant-baseline":"middle"},it.label);
+    const r=add(s,"rect",{x:labelW,y:y+4,width:bw,height:row-10,rx:4,fill:it.color||css("--s1")}); r.setAttribute("data-tip",it.tip||`${esc(it.label)}: ${fmt(it.value)}${unit}`);
+    add(s,"text",{x:labelW+bw+6,y:y+row/2+1,"dominant-baseline":"middle",class:"lbl"},fmt(it.value)+unit+(it.note?"  "+it.note:""));});
+  add(s,"line",{x1:labelW,x2:labelW,y1:4,y2:h-20,class:"ax"});
+  host.appendChild(s);
+}
+/* grouped horizontal bars: groups [{label, bars:[{name,value,color}]}] */
+function gbar(id,groups,{fmt=v=>nf(v,3),lo=0,hi=null,w=640,labelW=120}={}){
+  const host=$("#"+id); if(!host) return; host.innerHTML="";
+  const nb=groups[0].bars.length, bh=13, gh=nb*(bh+3)+14, h=groups.length*gh+26, s=svg(w,h), plotW=w-labelW-60;
+  const mx=hi??Math.max(...groups.flatMap(g=>g.bars.map(b=>b.value)));
+  const X=v=>labelW+(v-lo)/(mx-lo)*plotW;
+  niceTicks(lo,mx,4).forEach(t=>{add(s,"line",{x1:X(t),x2:X(t),y1:4,y2:h-20,class:"grid"});add(s,"text",{x:X(t),y:h-6,"text-anchor":"middle",class:"mut"},fmt(t));});
+  groups.forEach((g,i)=>{const y0=6+i*gh; add(s,"text",{x:labelW-8,y:y0+gh/2-4,"text-anchor":"end","dominant-baseline":"middle"},g.label);
+    g.bars.forEach((b,j)=>{const y=y0+j*(bh+3); const r=add(s,"rect",{x:labelW,y,width:Math.max(2,X(b.value)-labelW),height:bh,rx:3,fill:b.color}); r.setAttribute("data-tip",`${esc(g.label)} · ${esc(b.name)}: ${fmt(b.value)}`); add(s,"text",{x:X(b.value)+5,y:y+bh/2+1,"dominant-baseline":"middle",class:"lbl"},fmt(b.value));});});
+  add(s,"line",{x1:labelW,x2:labelW,y1:4,y2:h-20,class:"ax"});
+  host.appendChild(s);
+}
+
+/* ---------- charts ---------- */
+function chFunnel(){const d=E.data,sp=E.splits;
+  hbar("chFunnel",[
+    {label:"Job rows (raw CSV)",value:d.job_rows,color:css("--seq1")},
+    {label:"Builds (by tr_build_id)",value:d.builds,color:css("--seq2")},
+    {label:"Analytic builds",value:d.analytic_builds,color:css("--seq3")},
+    {label:"Train",value:sp.train.builds,color:css("--s1")},
+    {label:"Calibration",value:sp.calibration.builds,color:css("--s4")},
+    {label:"Test (unopened)",value:sp.test.builds,color:css("--pending")}],{fmt:v=>nf(v)});
+  dataTable(extras($("#chFunnel")),["Step","Rows in","Rows out","Dropped"],d.funnel.map(f=>[f.step??f.name??"",nf(f.rows_in??f.in??0),nf(f.rows_out??f.out??0),nf(f.dropped??0)]));}
+function chLang(){const L=E.data.languages; hbar("chLang",Object.entries(L).map(([k,v])=>({label:k,value:v,color:css("--s1")})),{w:420,labelW:70});}
+function chDur(){const p=E.data.duration.percentiles; hbar("chDur",Object.entries(p).map(([k,v])=>({label:k,value:v,color:css("--seq3")})),{w:420,labelW:50,fmt:v=>nf(v)});}
+function chSplit(){const sp=E.splits;
+  gbar("chSplit",["train","calibration","test"].map(k=>({label:k,bars:[{name:"share of builds %",value:sp[k].share_pct,color:css("--s1")},{name:"share of projects %",value:100*sp[k].projects/sp.n_projects,color:css("--s3")},{name:"failure rate %",value:sp[k].failure_rate_pct,color:css("--s2")}]})),{fmt:v=>nf(v,1),hi:75});
+  const ex=extras($("#chSplit")); ex.appendChild(el("div",{class:"legend"},`<span><i style="background:${css("--s1")}"></i>share of builds %</span><span><i style="background:${css("--s3")}"></i>share of projects %</span><span><i style="background:${css("--s2")}"></i>failure rate %</span>`));
+  dataTable(ex,["split","projects","builds","failure %","median dur s","p95 dur s"],["train","calibration","test"].map(k=>[k,sp[k].projects,nf(sp[k].builds),sp[k].failure_rate_pct,sp[k].median_duration_s,nf(sp[k].p95_duration_s)]));}
+function chDuration(){const d=E.duration;
+  const items=[["④b expanding prior (primary)",d.f4b,css("--s1")],["④a XGBoost regressor",d.f4a,css("--s2")],["④a Ridge (reference)",d.ridge,css("--axis")],["④b trailing-50 (sensitivity)",d.trailing50,css("--s3")]].filter(x=>x[1]);
+  hbar("chDurMae",items.map(([l,q,c])=>({label:l,value:q.mae_log1p,color:c})),{w:460,labelW:190,fmt:v=>nf(v,3)});
+  hbar("chDurRho",items.map(([l,q,c])=>({label:l,value:q.rho,color:c})),{w:460,labelW:190,fmt:v=>nf(v,3),max:1});}
+function chArms(){const A=E.models.arms; const algs=[["xgboost","XGBoost"],["logreg","Logistic reg."],["random_forest","Random forest"]];
+  gbar("chArmsPr",algs.map(([k,l])=>({label:l,bars:[{name:"{d̂} control",value:A[k+"_control"].pr_auc,color:css("--s1")},{name:"full",value:A[k+"_full"].pr_auc,color:css("--s2")}]})),{w:460,labelW:100,lo:0.25,hi:0.42,fmt:v=>nf(v,3)});
+  gbar("chArmsRoc",algs.map(([k,l])=>({label:l,bars:[{name:"{d̂} control",value:A[k+"_control"].roc_auc,color:css("--s1")},{name:"full",value:A[k+"_full"].roc_auc,color:css("--s2")}]})),{w:460,labelW:100,lo:0.5,hi:0.68,fmt:v=>nf(v,3)});
+  dataTable(extras($("#chArmsRoc")),["arm","algorithm","features","calibrator","PR-AUC","ROC-AUC","Brier","F1@τ"],Object.values(A).map(a=>[a.arm,a.algorithm,a.n_features,a.calibrator,nf(a.pr_auc,6),nf(a.roc_auc,6),nf(a.brier,6),nf(a.f1,4)]));}
+function chAbl(){const host=$("#chAbl"); host.innerHTML=""; const F=E.ablation.families, fam=Object.keys(F);
+  const names={F1:"F1 change size & diffusion",F2:"F2 change purpose",F3:"F3 test activity",F4:"F4 project history",F5:"F5 developer & team",F6:"F6 temporal & trigger"};
+  const w=660,labelW=180,row=30,h=fam.length*row+40,s=svg(w,h),lo=-0.075,hi=0.02,plotW=w-labelW-30,X=v=>labelW+(v-lo)/(hi-lo)*plotW;
+  niceTicks(lo,hi,6).forEach(t=>{add(s,"line",{x1:X(t),x2:X(t),y1:4,y2:h-24,class:"grid"});add(s,"text",{x:X(t),y:h-8,"text-anchor":"middle",class:"mut"},(t>0?"+":"")+t.toFixed(2));});
+  add(s,"line",{x1:X(0),x2:X(0),y1:2,y2:h-24,stroke:css("--ink-2"),"stroke-width":1.5});
+  add(s,"line",{x1:X(E.admission.floor),x2:X(E.admission.floor),y1:2,y2:h-24,stroke:css("--done"),"stroke-width":1.5,"stroke-dasharray":"4 3"});
+  add(s,"text",{x:X(E.admission.floor)+4,y:12,class:"mut"},"floor +0.01");
+  fam.forEach((f,i)=>{const r=F[f],y=10+i*row+row/2;
+    add(s,"text",{x:labelW-8,y,"text-anchor":"end","dominant-baseline":"middle"},names[f]||f);
+    add(s,"line",{x1:X(r.lo),x2:X(r.hi),y1:y,y2:y,stroke:css("--s2"),"stroke-width":2});
+    [r.lo,r.hi].forEach(v=>add(s,"line",{x1:X(v),x2:X(v),y1:y-5,y2:y+5,stroke:css("--s2"),"stroke-width":2}));
+    const c=add(s,"circle",{cx:X(r.delta),cy:y,r:5,fill:css("--s2"),stroke:css("--surface"),"stroke-width":2});
+    c.setAttribute("data-tip",`${esc(names[f])}<br>ΔPR-AUC ${r.delta.toFixed(6)}<br>95% CI [${r.lo.toFixed(6)}, ${r.hi.toFixed(6)}]<br>members: ${r.n} · verdict: rejected`);
+    const hit=add(s,"rect",{x:X(r.lo)-6,y:y-10,width:X(r.hi)-X(r.lo)+12,height:20,fill:"transparent"}); hit.setAttribute("data-tip",c.getAttribute("data-tip"));});
+  host.appendChild(s);
+  dataTable(extras(host),["family","members","ΔPR-AUC","CI low","CI high","ΔROC-AUC","ΔBrier"],fam.map(f=>[f,F[f].n,F[f].delta.toFixed(6),F[f].lo.toFixed(6),F[f].hi.toFixed(6),F[f].d_roc.toFixed(6),F[f].d_brier.toFixed(6)]));}
+function chShap(){const F=E.shap.families,keys=["control","F1","F2","F3","F4","F5","F6"],lab={control:"d̂ (control)"};
+  hbar("chShap",keys.map(k=>({label:lab[k]||k,value:F[k].abs,color:k==="control"?css("--s1"):css("--s7")})),{w:460,labelW:100,fmt:v=>nf(v,3)});
+  hbar("chBetween",keys.map(k=>({label:lab[k]||k,value:F[k].between,color:k==="control"?css("--s1"):css("--s7")})),{w:460,labelW:100,fmt:v=>nf(v,2),max:1});}
+function chElig(){const R=E.eligibility.by_rule; const def=R["push_to_unprotected_branch"]; const groups=[["Deferrable: push to unprotected branch",def,css("--done")],["protected: mainline",R["protected:mainline"],css("--s1")],["PR build (blocking)",R["pr_blocking"],css("--s2")]];
+  const other=Object.entries(R).filter(([k])=>!["push_to_unprotected_branch","protected:mainline","pr_blocking"].includes(k)).reduce((a,[,v])=>a+v,0); groups.push(["other protected (release, stable, version…)",other,css("--s4")]);
+  const host=$("#chElig"); host.innerHTML=""; const tot=E.eligibility.gated,w=660,h=64,s=svg(w,h); let x=0;
+  groups.forEach(([l,v,c])=>{const bw=v/tot*w; const r=add(s,"rect",{x:x+1,y:6,width:Math.max(1,bw-2),height:26,rx:3,fill:c}); r.setAttribute("data-tip",`${esc(l)}<br>${nf(v)} builds (${(100*v/tot).toFixed(2)}%)`); if(bw>70) add(s,"text",{x:x+6,y:48,class:"lbl"},(100*v/tot).toFixed(1)+"%"); x+=bw;});
+  host.appendChild(s); const ex=extras(host); ex.appendChild(el("div",{class:"legend"},groups.map(([l,,c])=>`<span><i style="background:${c}"></i>${esc(l)}</span>`).join("")));
+  dataTable(ex,["rule","builds","share %"],Object.entries(R).map(([k,v])=>[k,nf(v),(100*v/tot).toFixed(4)]));}
+function chHeat(){const host=$("#chHeat"); host.innerHTML=""; const prof=E.carbon.profile,lo=E.carbon.min,hi=E.carbon.max; const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const steps=["--seq0","--seq1","--seq2","--seq3","--seq4"].map(css); const col=v=>steps[Math.min(4,Math.floor((v-lo)/(hi-lo)*5))];
+  const cw=24,ch=20,lw=40,w=lw+24*cw+10,h=7*ch+40,s=svg(w,h);
+  prof.forEach(p=>{const r=add(s,"rect",{x:lw+p.hour*cw+1,y:4+p.dow*ch+1,width:cw-2,height:ch-2,rx:2,fill:col(p.mean)}); r.setAttribute("data-tip",`${days[p.dow]} ${String(p.hour).padStart(2,"0")}:00<br>${p.mean.toFixed(1)} gCO₂/kWh`);});
+  days.forEach((d,i)=>add(s,"text",{x:lw-6,y:4+i*ch+ch/2+1,"text-anchor":"end","dominant-baseline":"middle"},d));
+  for(let hr=0;hr<24;hr+=3) add(s,"text",{x:lw+hr*cw+cw/2,y:7*ch+18,"text-anchor":"middle",class:"mut"},String(hr).padStart(2,"0"));
+  host.appendChild(s);
+  const ex=extras(host); ex.appendChild(el("div",{class:"legend"},steps.map((c,i)=>`<span><i style="background:${c}"></i>${nf(lo+i*(hi-lo)/5,0)}–${nf(lo+(i+1)*(hi-lo)/5,0)}</span>`).join("")));
+  dataTable(ex,["day","hour","mean gCO₂/kWh"],prof.map(p=>[days[p.dow],p.hour,p.mean]));}
+function strip(){const host=$("#strip"); host.innerHTML=""; const lo=E.carbon.min,hi=E.carbon.max; const steps=["--seq0","--seq1","--seq2","--seq3","--seq4"].map(css);
+  E.carbon.profile.forEach(p=>{const sp=document.createElement("span"); sp.style.background=steps[Math.min(4,Math.floor((p.mean-lo)/(hi-lo)*5))]; sp.setAttribute("data-tip",`${["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][p.dow]} ${String(p.hour).padStart(2,"0")}:00 · ${p.mean.toFixed(1)} gCO₂/kWh`); host.appendChild(sp);});}
+function chImpact(){const W=E.energy.worked; gbar("chImpact",W.map(x=>({label:x.duration_label,bars:[{name:"dirtiest",value:x.carbon_g_dirtiest_slot,color:css("--s2")},{name:"greenest",value:x.carbon_g_greenest_slot,color:css("--s3")}]})),{fmt:v=>nf(v,v<1?4:2)});}
+function chFront(){const host=$("#chFront"); host.innerHTML=""; const R=E.replay.rows;
+  const w=680,h=380,m={l:56,r:18,t:14,b:44},s=svg(w,h),xmax=26,ymax=4.2,X=v=>m.l+v/xmax*(w-m.l-m.r),Y=v=>h-m.b-v/ymax*(h-m.t-m.b);
+  niceTicks(0,xmax,6).forEach(t=>{add(s,"line",{x1:X(t),x2:X(t),y1:m.t,y2:h-m.b,class:"grid"});add(s,"text",{x:X(t),y:h-m.b+16,"text-anchor":"middle",class:"mut"},t);});
+  niceTicks(0,ymax,5).forEach(t=>{add(s,"line",{x1:m.l,x2:w-m.r,y1:Y(t),y2:Y(t),class:"grid"});add(s,"text",{x:m.l-8,y:Y(t)+4,"text-anchor":"end",class:"mut"},t.toFixed(1)+"%");});
+  add(s,"text",{x:(m.l+w-m.r)/2,y:h-6,"text-anchor":"middle"},"TTFF p95 of failed builds (hours) → lower is better");
+  add(s,"text",{x:14,y:(m.t+h-m.b)/2,transform:`rotate(-90 14 ${(m.t+h-m.b)/2})`,"text-anchor":"middle"},"carbon saved vs static ↑");
+  const series=[["4b_duration_prior",css("--s1")],["4a_duration_estimator",css("--s2")]], dash={6:"2 3",12:"6 3",24:""};
+  series.forEach(([st,c])=>[6,12,24].forEach(wm=>{const pts=R.filter(r=>r.strategy===st&&r.w===wm).sort((a,b)=>a.d-b.d);
+    add(s,"polyline",{points:pts.map(p=>`${X(p.ttff_p95_h)},${Y(p.saving_pct)}`).join(" "),fill:"none",stroke:c,"stroke-width":2,"stroke-dasharray":dash[wm]});
+    pts.forEach(p=>{const ci=add(s,"circle",{cx:X(p.ttff_p95_h),cy:Y(p.saving_pct),r:4,fill:c,stroke:css("--surface"),"stroke-width":1.5}); ci.setAttribute("data-tip",`${st.startsWith("4b")?"④b":"④a"} · d=${p.d} s · W=${p.w} h<br>saving ${p.saving_pct.toFixed(3)}% · TTFF p95 ${p.ttff_p95_h.toFixed(2)} h<br>deferred ${nf(p.deferred)}`);});
+    const last=pts[0]; add(s,"text",{x:X(last.ttff_p95_h)+6,y:Y(last.saving_pct)-6,class:"mut"},`${st.startsWith("4b")?"④b":"④a"} W${wm}`);}));
+  const refs=[["1_static","①"],["2_blanket_carbon_aware","②"]].map(([k,l])=>[R.find(r=>r.strategy===k),l]);
+  R.filter(r=>r.strategy==="3_eligibility_only").forEach(r=>refs.push([r,"③ W"+r.w]));
+  refs.forEach(([r,l])=>{ if(!r||r.ttff_p95_h>xmax){ if(r){const c=add(s,"text",{x:w-m.r-4,y:Y(r.saving_pct)-4,"text-anchor":"end",class:"lbl"},`${l} → TTFF ${r.ttff_p95_h.toFixed(0)} h, saving ${r.saving_pct.toFixed(2)}%`); c.setAttribute("data-tip",`${l}: off-scale, TTFF p95 ${r.ttff_p95_h.toFixed(1)} h`);} return;}
+    const q=add(s,"rect",{x:X(r.ttff_p95_h)-4,y:Y(r.saving_pct)-4,width:8,height:8,fill:css("--ink-2")}); q.setAttribute("data-tip",`${l}<br>saving ${r.saving_pct.toFixed(3)}% · TTFF p95 ${r.ttff_p95_h.toFixed(2)} h`); add(s,"text",{x:X(r.ttff_p95_h)+7,y:Y(r.saving_pct)+12,class:"mut"},l);});
+  const ch=R.find(r=>r.strategy==="4b_duration_prior"&&r.d===E.policy.d_threshold_s&&r.w===E.policy.w_max_h);
+  if(ch){add(s,"circle",{cx:X(ch.ttff_p95_h),cy:Y(ch.saving_pct),r:9,fill:"none",stroke:css("--ink"),"stroke-width":2}); add(s,"text",{x:X(ch.ttff_p95_h)-12,y:Y(ch.saving_pct)-14,"text-anchor":"end",class:"lbl"},"frozen choice");}
+  add(s,"line",{x1:m.l,x2:m.l,y1:m.t,y2:h-m.b,class:"ax"}); add(s,"line",{x1:m.l,x2:w-m.r,y1:h-m.b,y2:h-m.b,class:"ax"});
+  host.appendChild(s);
+  const ex=extras(host); ex.appendChild(el("div",{class:"legend"},`<span>line style: dotted W = 6 h · dashed W = 12 h · solid W = 24 h</span>`));
+  dataTable(ex,["strategy","d s","W h","deferred","saving %","TTFF p95 h"],R.filter(r=>r.strategy.startsWith("4")).map(r=>[r.strategy,r.d,r.w,nf(r.deferred),r.saving_pct.toFixed(4),r.ttff_p95_h.toFixed(4)]));}
+function chStrat(){const R=E.replay.rows; const pick=[["1_static",null,"① static"],["2_blanket_carbon_aware",null,"② blanket (167 h)"],["3_eligibility_only",24,"③ eligibility-only W24"],["4b",1,"④b = ⑤ frozen (d480 W24)"],["6_risk_only_skip",0.3,"⑥ risk skip τ=0.30"]];
+  const rows=pick.map(([k,p,l])=>{let r; if(k==="4b") r=R.find(x=>x.strategy==="4b_duration_prior"&&x.d===E.policy.d_threshold_s&&x.w===E.policy.w_max_h); else if(k.startsWith("3")) r=R.find(x=>x.strategy===k&&x.w===p); else if(k.startsWith("6")) r=R.find(x=>x.strategy===k&&Math.abs(x.tau-p)<1e-9); else r=R.find(x=>x.strategy===k); return [l,r];}).filter(x=>x[1]);
+  hbar("chStratC",rows.map(([l,r])=>({label:l.startsWith("⑥")?`${l} · ${r.missed} missed`:l,value:Math.max(0,r.saving_pct),color:l.startsWith("⑥")?css("--s4"):css("--s1")})),{w:520,labelW:220,fmt:v=>nf(v,2),unit:"%"});
+  hbar("chStratT",rows.map(([l,r])=>({label:l,value:r.ttff_p95_h,color:css("--s2")})),{w:520,labelW:190,fmt:v=>nf(v,1),unit:" h"});}
+function chPhase(){const names=["P0 Setup","P1 Commit-time evidence","P2 Core, simulator, policy","P3 Evaluation","P4 Prototype","P5 Write-up"];
+  const host=$("#chPhase"); host.innerHTML=""; const w=640,row=28,labelW=190,h=6*row+30,s=svg(w,h),pw=w-labelW-70;
+  names.forEach((n,i)=>{const k="P"+i,tot=P.per_phase_total[k],dn=P.per_phase_done[k],y=6+i*row; add(s,"text",{x:labelW-8,y:y+row/2,"text-anchor":"end","dominant-baseline":"middle"},n);
+    add(s,"rect",{x:labelW,y:y+6,width:pw,height:row-12,rx:5,fill:css("--surface-2")});
+    const r=add(s,"rect",{x:labelW,y:y+6,width:Math.max(0,dn/tot*pw),height:row-12,rx:5,fill:dn===tot?css("--done"):css("--current")}); r.setAttribute("data-tip",`${n}: ${dn}/${tot}`);
+    add(s,"text",{x:labelW+pw+8,y:y+row/2,"dominant-baseline":"middle",class:"lbl"},`${dn}/${tot}`);});
+  add(s,"text",{x:labelW,y:h-6,class:"mut"},`Overall ${P.tasks_done}/${P.tasks_total} = ${P.pct}%`); host.appendChild(s);}
+function chTimeline(){const host=$("#chTimeline"); host.innerHTML=""; const T=S.tasks.filter(t=>t.completed_on); const d0=new Date("2026-06-10"),d1=new Date("2026-10-01"),w=680,h=220,m={l:50,r:20,t:26,b:36},s=svg(w,h);
+  const X=d=>m.l+(new Date(d)-d0)/(d1-d0)*(w-m.l-m.r), maxT=600, Y=v=>h-m.b-v/maxT*(h-m.t-m.b);
+  ["2026-06-15","2026-07-01","2026-07-15","2026-08-01","2026-08-15","2026-09-01","2026-09-15","2026-10-01"].forEach(d=>{add(s,"line",{x1:X(d),x2:X(d),y1:m.t,y2:h-m.b,class:"grid"});add(s,"text",{x:X(d),y:h-m.b+16,"text-anchor":"middle",class:"mut"},d.slice(5));});
+  [0,200,400,600].forEach(v=>{add(s,"text",{x:m.l-8,y:Y(v)+4,"text-anchor":"end",class:"mut"},v);});
+  add(s,"text",{x:m.l,y:12,class:"mut"},"tests passing at gate");
+  const pts=T.filter(t=>t.tests).map(t=>[X(t.completed_on),Y(t.tests.passed),t]);
+  add(s,"polyline",{points:pts.map(p=>p[0]+","+p[1]).join(" "),fill:"none",stroke:css("--s1"),"stroke-width":2});
+  T.forEach(t=>{const x=X(t.completed_on); const y=t.tests?Y(t.tests.passed):h-m.b-6; const c=add(s,"circle",{cx:x,cy:y,r:t.tests?4.5:4,fill:t.tests?css("--s1"):css("--s3"),stroke:css("--surface"),"stroke-width":1.5}); c.setAttribute("data-tip",`${t.id} · ${esc(t.name)}<br>gate ${t.completed_on}${t.tests?`<br>${t.tests.passed} passed${t.tests.skipped?`, ${t.tests.skipped} skipped`:""}`:""}`);});
+  add(s,"line",{x1:m.l,x2:w-m.r,y1:h-m.b,y2:h-m.b,class:"ax"}); host.appendChild(s);}
+function drawAll(){try{strip();chFunnel();chLang();chDur();chSplit();chDuration();chArms();chAbl();chShap();chElig();chHeat();chImpact();chFront();chStrat();chPhase();chTimeline();}catch(e){console.error(e);}}
+
+/* ---------- content blocks ---------- */
+const statusBadge=s=>s==="done"?'<span class="badge b-done">done</span>':(s==="in_progress"?'<span class="badge b-current">in progress</span>':'<span class="badge b-pending">not started</span>');
+const isCurrent=id=>id===P.current_task;
+
+$("#rqTable tbody").innerHTML=S.rqs.map(r=>`<tr><td><b>${r.id}</b></td><td>${esc(r.text)}</td><td class="mono">${esc(r.answered_by.join(", "))}</td><td>${esc(r.status)}</td></tr>`).join("");
+$("#props").innerHTML=S.propositions.map(p=>`<div class="card"><h3>${esc(p.id)}</h3><p>${esc(p.text)}</p><div class="k">Note</div><p>${esc(p.note)}</p></div>`).join("");
+
+/* research map */
+const flow=[["Research problem","problem",["P5-T1"]],["Literature review and gap","problem",["P5-T1"]],["Research questions and objectives","questions",["P0-T4"]],["Dataset and feature contract","data",["P0-T2","P1-T2"]],["Leakage-safe experimental design","leakage",["P0-T4","P1-T1"]],["Project-disjoint train / calibration / test split","leakage",["P1-T3"]],["Expected build-duration control","evidence",["P1-T4"]],["SE-aware models","evidence",["P1-T5"]],["Model comparison","evidence",["P1-T5"]],["Feature-family ablation + SHAP","evidence",["P1-T6","P1-T7"]],["Eligibility gate","deferability",["P2-T1"]],["Energy + carbon accounting","evidence",["P2-T2"]],["Deterministic scheduling policy","blocks",["P2-T3"]],["Trace-driven replay","evidence",["P2-T4"]],["Policy fitting and freezing","evidence",["P2-T5"]],["FROZEN"],["Held-out test evaluation","next",["P3-T1"]],["Decision-level evaluation","next",["P3-T3"]],["Carbon-aware scheduling evaluation","next",["P3-T2","P3-T4"]],["Final research conclusion","next",["P3-T5"]],["Practical developer artifact","artifact",["P4-T1","P4-T2","P4-T3"]]];
+const tstat=Object.fromEntries(S.tasks.map(t=>[t.id,t.status]));
+$("#flow").innerHTML=flow.map(f=>{ if(f[0]==="FROZEN") return '<div class="frozen-line">policy frozen · test split opened once below this line</div>';
+  const [label,sec,ids]=f; let st=ids.every(i=>tstat[i]==="done")?"done":(ids.some(i=>isCurrent(i))?"current":"pending");
+  if(sec==="problem") st="drafted";
+  const note=sec==="problem"?"drafted in thesis · verification P5-T1":ids.join(" · ");
+  return `<a class="node ${st}" href="#${sec}" data-tip="${esc(note)}">${esc(label)}<span class="st">${st==="done"?'<span class="badge b-done">done</span>':st==="current"?'<span class="badge b-current">current</span>':st==="drafted"?'<span class="badge b-exp">drafted</span>':'<span class="badge b-pending">pending</span>'} <span class="mono" style="color:var(--muted);font-size:.72rem">${esc(note)}</span></span></a>`;}).join("");
+
+/* concepts */
+const concepts=[
+ ["Design Science Research","Thesis Ch.3 (not named in the repo)","The project builds an artifact (decision core, policy, simulator, planned tool) and evaluates it empirically: problem → objectives → design → demonstration → evaluation → communication (Peffers et al. 2007).","The artifact is the vehicle for the evaluation. The contribution is what the evaluation shows, not the artifact existing."],
+ ["Pragmatism","Thesis Ch.3 (not named in the repo)","Methods are chosen because they can answer the practical question (is the extra SE layer worth it?), combining empirical analysis with building a working tool.","It justifies mixing modelling, simulation and engineering in one study without claiming a single universal truth."],
+ ["Deductive reasoning","Thesis Ch.3; practised by the repo's predeclaration","The proposition (SE adds value beyond d̂) and the rule for judging it were fixed before any model ran; the data then support or fail to support it.","Conclusions follow from a pre-stated test, not from patterns noticed afterwards."],
+ ["Predeclared decisions","eval_protocol.md §A1.7; DL-012/013","Floors (+0.01 ΔPR-AUC; 5% TTFF / 1% carbon), the frontier test, grids and the ρ = 0.90 retention rule were written down before the numbers they judge.","A predeclared null is evidence. A rule chosen after seeing the result is not."],
+ ["Decision log","governance/03_DECISION_LOG.md","__NDL__ dated entries record every deviation from the frozen spec, written before acting on it. Author decisions are marked as such.","An examiner can audit why the method is the way it is and when each choice was made."],
+ ["Leakage prevention","§07; features.py blocklist; DL-014","tr_duration is blocklisted; d̂ uses strictly earlier builds; decide() raises on outcome columns.","Otherwise the model would look far more accurate than it could be in deployment."],
+ ["Project-disjoint splitting","P1-T3; DL-006","Whole projects go to one split: {{evidence.splits.train.projects}} / {{evidence.splits.calibration.projects}} / {{evidence.splits.test.projects}}.","Random build-level splits would let a model memorise project habits and overstate generalisation."],
+ ["Calibration vs test data","DL-006; §A1.7","Calibration projects fit calibrators, choose forms and fit the policy. Test projects are touched once in P3.","It keeps the final numbers confirmatory."],
+ ["Frozen protocol","01_SOURCE_OF_TRUTH.md; eval_protocol.md","Layer 1 and the protocol body are immutable. Changes go into Layer 0-A or dated amendments.","The design cannot drift towards a preferred answer."],
+ ["Outcome-neutral evaluation","Layer 0-A; thesis §3.3","Both outcomes are reportable. The current evidence points to the null, and that is reported as the finding.","It removes the incentive to tune until SE features 'win'."],
+ ["Ablation","P1-T6; DL-019","Each family is added to d̂ on its own, in an otherwise identical arm, and compared with the {d̂} arm.","It shows which group, if any, carries value; the full set alone cannot."],
+ ["Confidence intervals","§9; paired bootstrap B = 1000, seed 42","Every family delta carries a 95% paired-bootstrap CI; the frontier test will too.","Effect size plus uncertainty, not a bare p-value, decides materiality."],
+ ["Sensitivity analysis","P3-T4; ρ, P_avg ±50%, floors ×0.5/×2","Key arbitrary choices are varied to see whether conclusions move.","A conclusion that flips under a reasonable alternative must be reported prominently."],
+ ["Reproducibility","R8; lockfile; seed 42; --verify","Pinned environment and recorded commands; the policy fit refits byte-identically; the replay is byte-identical across runs.","A result that cannot be regenerated is not a result."],
+ ["Independent validation","replay/validate_invariants.py","A second implementation of the eligibility rule, importing none of the gate's code, audits every decision.","Two independent implementations agreeing is evidence; one checking itself is not."],
+ ["Deterministic replay","replay/simulator.py; DL-023","Every strategy sees the identical build set in the same order, with fixed seeds.","Differences between strategies can only come from the strategies."],
+ ["Threats to validity","§17","Internal, construct, conclusion and external threats are listed with what is done about each.","Knowing a study's limits is part of its result."],
+ ["Construct validity","§15; DL-020","'Deferrable' is defined by rules because no ground-truth label exists; TTFF is a proxy for delay harm.","The findings are about these operational definitions, and are stated that way."],
+ ["External validity","spec §6","Travis CI 2011–2016, four languages, UK grid profile.","Generalisation to GitHub Actions or other grids is not claimed."]];
+$("#concepts").innerHTML=concepts.map(([n,src,here,why])=>`<div class="card"><h3>${esc(n)}</h3><div class="k">In this research</div><p>${esc(here.replace("__NDL__",S.decisions.length))}</p><div class="k">Why it matters</div><p>${esc(why)}</p><div class="k">Source</div><p class="mono" style="font-size:.76rem">${esc(src)}</p></div>`).join("");
+
+/* phases */
+const phaseNames={0:"Phase 0 · Setup & data harness",1:"Phase 1 · Commit-time evidence",2:"Phase 2 · Decision core, simulator & frozen policy",3:"Phase 3 · Evaluation on held-out test projects",4:"Phase 4 · Live prototype",5:"Phase 5 · Write-up"};
+$("#phaseList").innerHTML=[0,1,2,3,4,5].map(p=>{const ts=S.tasks.filter(t=>t.id.startsWith("P"+p+"-")),dn=ts.filter(t=>t.status==="done").length;
+  return `<div class="phase"><div class="phase-h"><h3>${phaseNames[p]}</h3><span class="mono" style="color:var(--muted)">${dn}/${ts.length}</span><div class="pbar"><i style="width:${100*dn/ts.length}%"></i></div></div>${ts.map(taskCard).join("")}</div>`;}).join("");
+function taskCard(t){const cur=isCurrent(t.id); const badge=cur?'<span class="badge b-current">current</span>':statusBadge(t.status);
+  const body=t.status==="done"?`<dl class="kv"><dt>Purpose</dt><dd>${esc(t.purpose)}</dd><dt>Inputs</dt><dd>${esc(t.inputs)}</dd><dt>Outputs</dt><dd>${esc(t.outputs)}</dd><dt>Decisions</dt><dd>${esc(t.decisions)}</dd><dt>Tests / evidence</dt><dd>${esc(t.evidence)}${t.tests?` <span class="mono" style="color:var(--muted)">(${t.tests.file})</span>`:""}</dd><dt>Why it matters</dt><dd>${esc(t.why)}</dd><dt>RQ</dt><dd>${esc(t.rq)}</dd><dt>Files</dt><dd class="files">${(t.files||[]).map(f=>`<code>${esc(f)}</code>`).join("")}</dd></dl>`
+   :`<dl class="kv"><dt>Purpose</dt><dd>${esc(t.purpose)}</dd><dt>Will produce</dt><dd>${esc(t.will_produce)}</dd><dt>RQ</dt><dd>${esc(t.rq)}</dd><dt>Unknown now</dt><dd>${esc(t.unknown)}</dd></dl>`;
+  return `<details class="task" id="task-${t.id}"${cur?" open":""}><summary><span class="id">${t.id}</span><span class="nm">${esc(t.name)}<small>${t.completed_on?"gate "+t.completed_on:"plan: "+esc(t.plan_heading)}</small></span>${badge}</summary><div class="tbody">${body}</div></details>`;}
+
+/* next */
+$("#nextTable tbody").innerHTML=S.tasks.filter(t=>t.status!=="done").map(t=>`<tr><td class="mono"><a href="#task-${t.id}">${t.id}</a>${isCurrent(t.id)?' <span class="badge b-current">next</span>':""}<br>${esc(t.name)}</td><td>${esc(t.purpose)}</td><td>${esc(t.will_produce)}</td><td>${esc(t.rq)}</td><td>${esc(t.unknown)}</td></tr>`).join("");
+
+/* architecture */
+const bmap={implemented:["b-impl","implemented"],simulated:["b-sim","simulated"],experimental:["b-exp","experimental"],planned:["b-plan","planned"],not_planned:["b-no","not in plan"]};
+const C=Object.fromEntries(S.artifact_components.map(c=>[c.name,c]));
+const box=n=>{const c=C[n]; if(!c) return ""; const [cls,lab]=bmap[c.status]; return `<div class="box ${c.status}"><div><b>${esc(c.name)}</b><div class="w">${esc(c.where)}</div></div><span class="badge ${cls}">${lab}</span><small>${esc(c.note)}</small></div>`;};
+const down='<div class="down" aria-hidden="true">↓</div>';
+$("#arch").innerHTML=[box("Commit / workflow event"),down,box("Commit-time feature extraction"),down,box("Stage-1 eligibility gate"),down,`<div class="fork">${box("Duration estimate d-hat (4a/4b)")}${box("SE-aware risk model")}</div>`,down,`<div class="fork">${box("Carbon-intensity input")}${box("Region inference (IP-based)")}</div>`,down,box("Decision policy decide() + policy_spec.yaml"),down,`<div class="fork">${box("Replay simulator (6 strategies)")}${box("RUN NOW / DEFER via REST API")}</div>`,down,`<div class="fork">${box("Energy / carbon accounting")}${box("GitHub workflow summary / re-dispatch")}</div>`,down,`<div class="fork">${box("Independent invariant validator")}${box("Monitoring dashboard")}</div>`].join("");
+const artSteps=[["Commit or workflow event","planned (P4-T2)"],["Extract pre-execution information","implemented for replay · live P4-T2"],["Estimate duration (d̂)","implemented"],["Determine / infer region","not in plan"],["Retrieve current or forecast carbon intensity","planned (P4-T1, UK series)"],["Estimate carbon impact","implemented (estimate)"],["RUN / DEFER recommendation via decide()","core implemented · API planned"],["GitHub Step Summary","not in plan · plan says check/annotation"]];
+$("#artFlow").innerHTML=artSteps.map(([l,s])=>`<div class="node ${s.startsWith("implemented")?"done":"pending"}">${esc(l)}<span class="st mono" style="color:var(--muted);font-size:.72rem">${esc(s)}</span></div>`).join("");
+
+/* limitations */
+const cats=[["tested_null","Tested and found null (calibration so far)","b-exp"],["not_tested","Not tested yet","b-plan"],["known_limitation","Known limitation of the design","b-no"],["not_supported","Would be an unsupported claim","b-no"]];
+$("#limits").innerHTML=cats.map(([k,l,b])=>{const items=S.limitations.filter(x=>x.category===k); if(!items.length) return ""; return `<h3><span class="badge ${b}">${l}</span></h3><div class="tw"><table><thead><tr><th style="width:38%">Claim</th><th>Why</th></tr></thead><tbody>${items.map(i=>`<tr><td>${esc(i.claim)}</td><td>${esc(i.detail)}</td></tr>`).join("")}</tbody></table></div>`;}).join("");
+
+/* viva */
+const viva=[
+ ["What is your research problem?","Selective carbon-aware CI must decide which builds may wait for a cleaner grid without harming developer feedback. The open question is whether commit-level SE information improves that choice beyond a simple expected-duration rule."],
+ ["What is your research gap?","Carbon-aware scheduling work mostly optimises when to run workloads already selected. SE prediction work shows commit features predict build outcomes. Few studies test whether SE features add decision value beyond expected duration for selecting builds. The gap is integrative and empirical; it does not claim that no related work exists."],
+ ["What is your contribution?","A predeclared value-of-information test of SE characteristics against a causal duration control, plus an evidence-derived, frozen policy that one shared decision core runs in replay and (planned) in a live tool. It is not a new scheduling algorithm."],
+ ["Why use project history?","A deployed scheduler already holds its repository's past build durations. The expanding per-project prior (④b) uses only builds strictly earlier than the one being decided, so it is realisable in deployment. It also predicted duration much better than the feature regressor on calibration (log1p MAE {{evidence.duration.f4b.mae_log1p|f3}} vs {{evidence.duration.f4a.mae_log1p|f3}})."],
+ ["Why use commit-level SE characteristics?","They are available before the build runs and the literature links them to build failure and duration. If any signal could improve selection beyond duration, these are the obvious candidates, which is exactly why they need testing rather than assuming."],
+ ["Why not use the actual build duration?","It is only known after the build runs. Using it would leak the outcome into the decision. The decision uses d̂, a commit-time estimate; actual duration appears only in accounting and in a labelled oracle bound."],
+ ["How did you prevent leakage?","Outcome columns are blocklisted with failing tests, decide() raises if handed tr_duration, history is strictly causal, fitted parameters come from train projects only, and the test split has been dropped unread by every script so far."],
+ ["Why split by project rather than randomly by build?","Builds from one project share habits, durations and failure rates. A random split would let the model recognise the project rather than learn anything general. Project-disjoint splits test generalisation to unseen repositories."],
+ ["What does the null result mean?","On the calibration split, no SE family improved failure prediction beyond d̂ by the predeclared floor. Every family made it worse, with CIs below zero, and the verdict is stable at ×0.5 and ×2 of the floor. The frozen policy is therefore duration-only. It is not final until P3 confirms it on test."],
+ ["Does it mean SE characteristics are useless?","No. It means the tested operationalisation (28 features, some degenerate, no commit messages, one algorithm budget) showed no material incremental value on this dataset and protocol. It is a lower bound, not a universal claim."],
+ ["How do you know a build is safe to defer?","From this dataset, I don't. There is no ground-truth deferability label. Eligibility is a deterministic approximation from PR status and branch names, and the validator proves consistency with that rule, not its correctness. A real tool should let the team declare what may wait."],
+ ["What is the difference between eligibility and deferability?","Eligibility is what my rule says may wait. Deferability is whether waiting is actually acceptable to the team. The study measures the first and cannot measure the second."],
+ ["How is carbon calculated?","Energy = 42.5 W (CodeCarbon's constant-mode CPU fallback, 85 W × 0.5) × build duration; carbon = energy × the mean UK grid intensity of the hour the build is scheduled into. Every result is rerun at ±50% power."],
+ ["Why is carbon an estimate rather than measured emissions?","No energy was metered. Durations are from 2011–2016 Travis builds and intensity from a 2024–2025 UK hour-of-week profile, so the result is a comparative scenario about today's grid, not a reconstruction of historical emissions."],
+ ["What is your practical artifact?","A planned GitHub Actions decision-support tool that calls the same decide() with the same frozen spec and returns RUN NOW or DEFER with a reason. Today the decision core, policy and simulator exist; the API, Action and dashboard do not."],
+ ["Why is the artifact useful if the SE model fails to improve?","It embodies the finding: a simple, auditable duration-history guardrail with no SE model to maintain, and a reason string that says so. It demonstrates the evidence → policy → decision chain end to end."],
+ ["What happens if P3 disagrees with calibration?","It is reported as a finding. Nothing is re-fitted on test. A family that looked null on calibration but positive on test cannot be admitted after the fact, because the policy is frozen; the disagreement itself is the result, with its CIs."]];
+$("#vivaList").innerHTML=viva.map(([q,a])=>`<details class="qa"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
+
+/* decisions, audit, history, rho */
+$("#dlTable tbody").innerHTML=S.decisions.map(d=>`<tr><td class="mono">${d.id}</td><td class="mono">${esc(d.date)}</td><td><b>${esc(d.title)}</b><br><span style="color:var(--ink-2)">${esc(d.summary)}</span></td></tr>`).join("");
+$("#discTable tbody").innerHTML=S.discrepancies.map(d=>`<tr><td>${esc(d.where)}</td><td>${esc(d.says)}</td><td>${esc(d.actual)}</td><td>${esc(d.authoritative)}</td><td>${esc(d.action)}</td></tr>`).join("");
+$("#histTable tbody").innerHTML=S.change_history.map(h=>`<tr><td class="mono">${esc(h.date)}</td><td>${esc(h.event)}</td></tr>`).join("");
+const pol=E.policy; $("#rhoRows").innerHTML=[{rho:pol.rho,d:pol.d_threshold_s,w:pol.w_max_h,saving_pct:pol.chosen_saving_pct,ttff_p95_h:pol.chosen_ttff_p95_h,ship:true},...pol.sensitivity].map(r=>`<tr><td class="num">${r.rho.toFixed(2)}</td><td class="mono">d = ${r.d} s, W = ${r.w} h</td><td class="num">${r.saving_pct.toFixed(4)}</td><td class="num">${r.ttff_p95_h.toFixed(4)}</td><td>${r.ship?'<span class="badge b-done">shipped</span>':"sensitivity only"}</td></tr>`).join("");
+
+/* nav highlight */
+const links=[...document.querySelectorAll("#nav a")]; const secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}});},{rootMargin:"-30% 0px -60% 0px"});
+secs.forEach(s=>s&&io.observe(s));
+applyTheme();
+if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(modes[mi]==="system") drawAll();});
+})();
+</script>
+</body>
+</html>

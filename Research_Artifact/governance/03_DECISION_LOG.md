@@ -1417,4 +1417,44 @@ edit or delete past entries (supersede them with a new entry instead).
     sensitivity is reported. On the null path, RQ4's headline row for ⑤ is ④b at that point by
     construction.
 
-<!-- Append DL-025, DL-026, … below as the project progresses. -->
+### DL-025 — A living research guide is regenerated at every gate; it is documentation, never governance
+
+- **Date:** 2026-09-25
+- **Status:** Accepted (process/documentation; **author directive** of 2026-09-25, given at the M2 gate
+  before P3-T1 started). No research design, RQ, floor, grid, invariant or result changes.
+- **Spec section affected:** none in the frozen spec. `governance/00_SESSION_PROTOCOL.md` gains one
+  gate step (REPORT + GATE, step 1b).
+
+- **Context.** The author asked for a single, browser-openable research guide that explains the whole
+  project to a reader with no prior knowledge, reflects the actual repository state, and is kept up
+  to date after every completed task. Without a rule, such a page drifts. A hand-typed number in it
+  would also breach R1, and a page that looked authoritative could compete with `PROGRESS.md`.
+
+- **Decision.**
+  1. **Files.** `docs/research_guide.html` is **generated** from `docs/research_guide.template.html`
+     and `docs/research_state.json` by `code/scripts/update_research_guide.py`. The state file holds the
+     curated narrative (task write-ups, limitations, discrepancies, change history). Its `progress` and
+     `evidence` sections are regenerated on every run.
+  2. **No hand-typed numbers.** Numbers are read from `results/` (and the frozen spec) by
+     `collect_evidence()`, or referenced in the curated text as `{{evidence.…}}` tokens that the script
+     resolves. An unresolved token, a referenced file that does not exist, a task list that differs from
+     `development_plan.md`, or a status that disagrees with `PROGRESS.md` fails the build.
+  3. **Authority.** The guide is documentation. If it disagrees with `PROGRESS.md` or this log, those win,
+     and the disagreement is fixed in the guide. It carries no instructions (like every state file).
+  4. **Gate step.** At every gate, after `PROGRESS.md` is updated: update the finished task's narrative and
+     the change history in `research_state.json`, then run the script (`--check`, then a build). The change
+     history is append-only; earlier states are never rewritten. Calibration and test evidence stay
+     visibly separate, and nothing is labelled final before P3 produces it.
+  5. **Discrepancies are reported, not silently fixed.** Inconsistencies found between governed documents
+     while building the guide are listed in its source-audit section with the governing source named.
+     Correcting a governed file remains a separate act under R3/R4.
+
+- **Rationale.** Generating the guide from result files keeps R1 intact, and the consistency checks make
+  drift fail loudly instead of accumulating. Putting the step in the protocol makes the maintenance
+  durable across sessions.
+
+- **Consequences.** New: `docs/research_guide.html`, `docs/research_guide.template.html`,
+  `docs/research_state.json`, `code/scripts/update_research_guide.py`. Changed:
+  `governance/00_SESSION_PROTOCOL.md` (gate step 1b).
+
+<!-- Append DL-026, DL-027, … below as the project progresses. -->
