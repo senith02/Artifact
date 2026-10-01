@@ -197,7 +197,14 @@ completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
       all CIs below 0, no LOO arm triggered)
 - [x] P1-T7 apply_admission (exit 0): admitted set **empty** at ×0.5/×1/×2 (stable) →
       `duration_only_fallback`, unchanged. **P1 phase paused for author review 2026-10-01.**
-- [ ] P2-T4 sample run · [ ] P2-T5 fit_policy
+- [x] P1 checkpoint commit `6c050bb`
+- [x] P2-T4 sample run `--fresh` ×2 (byte-identical, `determinism.json`); validator 0 violations / 117,440
+      deferrals (was 117,450); identities hold; validator CLI re-run; REGENERATE.md identifiers updated
+- [x] P2-T5 fit_policy `--fresh` + `--verify --fresh` (byte-identical refit): operating point **d480/w24
+      unchanged**; S* 3.778732% unchanged; chosen saving 3.475905% → 3.475751%, TTFF p95 19.2027 h
+      unchanged; ρ 0.80/0.95 alternatives unchanged; floor sweep duration-only at ×0.5/×1/×2. New spec
+      sha256 `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8` (only `command`/`generated`
+      lines differ). **P2 phase paused for author review 2026-10-01.**
 - [ ] P3-T1 rehearse + test `--rerun-under DL-034` · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
 - [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md
 

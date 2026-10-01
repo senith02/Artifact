@@ -47,7 +47,7 @@
       "setting_id": "4b_duration_prior__d960__w24",
       "tr_build_id": "338817",
       "action": "defer",
-      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2122.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2115.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
     },
     {
       "setting_id": "5_se_informed_policy__d960__w24",
@@ -59,7 +59,7 @@
       "setting_id": "5_se_informed_policy__d960__w24",
       "tr_build_id": "338817",
       "action": "defer",
-      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2122.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
+      "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=2115.0s >= d_threshold=960.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +7h, vs 157.2310 gCO2/kWh now -> deferring 7h."
     }
   ]
 }

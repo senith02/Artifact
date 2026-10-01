@@ -33,7 +33,7 @@ Re-applied here through `scheduler_core.admission` from P1-T6's ΔPR-AUC records
 
 Rule (DL-024 §1): over the 30 ④b points, `saving = −(carbon % vs ① static)`; S* = **3.7787%**; admissible if saving ≥ ρ·S* = 3.4009% (ρ = 0.9); choose the lowest TTFF p95 (failed builds), ties → larger `d_threshold`, then smaller `w_max`.
 
-**Chosen: `4b_duration_prior__d480__w24`** — d_threshold = 480 s, w_max = 24 h, saving 3.4759%, TTFF p95 19.2027 h (5 of 30 points admissible).
+**Chosen: `4b_duration_prior__d480__w24`** — d_threshold = 480 s, w_max = 24 h, saving 3.4758%, TTFF p95 19.2027 h (5 of 30 points admissible).
 
 | setting | D (s) | W (h) | deferred | saving % | TTFF p95 h (failed) | latency p95 h (deferred) | admissible | chosen |
 | :-- | --: | --: | --: | --: | --: | --: | :-: | :-: |
@@ -41,38 +41,38 @@ Rule (DL-024 §1): over the 30 ④b points, `saving = −(carbon % vs ① static
 | `4b_duration_prior__d60__w6` | 60 | 6 | 2,036 | 2.6190 | 6.5862 | 6.0000 |  |  |
 | `4b_duration_prior__d120__w6` | 120 | 6 | 1,960 | 2.6105 | 6.5862 | 6.0000 |  |  |
 | `4b_duration_prior__d240__w6` | 240 | 6 | 1,529 | 2.5388 | 6.5765 | 6.0000 |  |  |
-| `4b_duration_prior__d480__w6` | 480 | 6 | 1,142 | 2.4081 | 6.5578 | 6.0000 |  |  |
-| `4b_duration_prior__d960__w6` | 960 | 6 | 743 | 2.2008 | 6.5075 | 6.0000 |  |  |
-| `4b_duration_prior__d1920__w6` | 1920 | 6 | 549 | 1.9976 | 6.4374 | 6.0000 |  |  |
+| `4b_duration_prior__d480__w6` | 480 | 6 | 1,141 | 2.4079 | 6.5578 | 6.0000 |  |  |
+| `4b_duration_prior__d960__w6` | 960 | 6 | 742 | 2.2008 | 6.5075 | 6.0000 |  |  |
+| `4b_duration_prior__d1920__w6` | 1920 | 6 | 550 | 1.9993 | 6.4374 | 6.0000 |  |  |
 | `4b_duration_prior__d3840__w6` | 3840 | 6 | 425 | 1.7554 | 6.3378 | 6.0000 |  |  |
-| `4b_duration_prior__d7680__w6` | 7680 | 6 | 278 | 1.2394 | 6.2282 | 6.0000 |  |  |
+| `4b_duration_prior__d7680__w6` | 7680 | 6 | 277 | 1.2347 | 6.2486 | 6.0000 |  |  |
 | `4b_duration_prior__d15360__w6` | 15360 | 6 | 0 | 0.0000 | 5.4922 | — |  |  |
 | `4b_duration_prior__d0__w12` | 0 | 12 | 2,505 | 3.2797 | 12.0174 | 12.0000 |  |  |
 | `4b_duration_prior__d60__w12` | 60 | 12 | 2,401 | 3.2739 | 12.0064 | 12.0000 |  |  |
 | `4b_duration_prior__d120__w12` | 120 | 12 | 2,315 | 3.2641 | 12.0028 | 12.0000 |  |  |
 | `4b_duration_prior__d240__w12` | 240 | 12 | 1,792 | 3.1746 | 11.3529 | 12.0000 |  |  |
-| `4b_duration_prior__d480__w12` | 480 | 12 | 1,348 | 3.0151 | 10.3331 | 12.0000 |  |  |
-| `4b_duration_prior__d960__w12` | 960 | 12 | 884 | 2.7643 | 8.6328 | 12.0000 |  |  |
-| `4b_duration_prior__d1920__w12` | 1920 | 12 | 649 | 2.4970 | 7.2181 | 12.0000 |  |  |
+| `4b_duration_prior__d480__w12` | 480 | 12 | 1,347 | 3.0149 | 10.3331 | 12.0000 |  |  |
+| `4b_duration_prior__d960__w12` | 960 | 12 | 883 | 2.7642 | 8.6328 | 12.0000 |  |  |
+| `4b_duration_prior__d1920__w12` | 1920 | 12 | 650 | 2.4992 | 7.2181 | 12.0000 |  |  |
 | `4b_duration_prior__d3840__w12` | 3840 | 12 | 500 | 2.2039 | 6.8056 | 12.0000 |  |  |
-| `4b_duration_prior__d7680__w12` | 7680 | 12 | 334 | 1.5775 | 6.4631 | 12.0000 |  |  |
+| `4b_duration_prior__d7680__w12` | 7680 | 12 | 333 | 1.5728 | 6.4631 | 12.0000 |  |  |
 | `4b_duration_prior__d15360__w12` | 15360 | 12 | 0 | 0.0000 | 5.4922 | — |  |  |
 | `4b_duration_prior__d0__w24` | 0 | 24 | 2,581 | 3.7787 | 21.1134 | 24.0000 | ✓ |  |
 | `4b_duration_prior__d60__w24` | 60 | 24 | 2,475 | 3.7723 | 21.0622 | 24.0000 | ✓ |  |
-| `4b_duration_prior__d120__w24` | 120 | 24 | 2,387 | 3.7610 | 21.0622 | 24.0000 | ✓ |  |
+| `4b_duration_prior__d120__w24` | 120 | 24 | 2,388 | 3.7610 | 21.0622 | 24.0000 | ✓ |  |
 | `4b_duration_prior__d240__w24` | 240 | 24 | 1,842 | 3.6586 | 20.6994 | 24.0000 | ✓ |  |
-| `4b_duration_prior__d480__w24` | 480 | 24 | 1,385 | 3.4759 | 19.2027 | 24.0000 | ✓ | **◄** |
-| `4b_duration_prior__d960__w24` | 960 | 24 | 905 | 3.1983 | 15.1047 | 24.0000 |  |  |
-| `4b_duration_prior__d1920__w24` | 1920 | 24 | 669 | 2.9088 | 11.3827 | 24.0000 |  |  |
+| `4b_duration_prior__d480__w24` | 480 | 24 | 1,384 | 3.4758 | 19.2027 | 24.0000 | ✓ | **◄** |
+| `4b_duration_prior__d960__w24` | 960 | 24 | 904 | 3.1983 | 15.1047 | 24.0000 |  |  |
+| `4b_duration_prior__d1920__w24` | 1920 | 24 | 670 | 2.9110 | 11.3827 | 24.0000 |  |  |
 | `4b_duration_prior__d3840__w24` | 3840 | 24 | 513 | 2.5776 | 7.9109 | 24.0000 |  |  |
-| `4b_duration_prior__d7680__w24` | 7680 | 24 | 343 | 1.8951 | 6.9741 | 24.0000 |  |  |
+| `4b_duration_prior__d7680__w24` | 7680 | 24 | 342 | 1.8918 | 6.9741 | 24.0000 |  |  |
 | `4b_duration_prior__d15360__w24` | 15360 | 24 | 0 | 0.0000 | 5.4922 | — |  |  |
 
 ## 4. Sensitivity of the operating point to ρ (reported, not shipped)
 
 | ρ | chosen setting | d_threshold (s) | w_max (h) | saving % | TTFF p95 h | spec elements that change vs ρ = 0.90 |
 | --: | :-- | --: | --: | --: | --: | :-- |
-| 0.9 | `4b_duration_prior__d480__w24` | 480 | 24 | 3.4759 | 19.2027 | — (primary, shipped) |
+| 0.9 | `4b_duration_prior__d480__w24` | 480 | 24 | 3.4758 | 19.2027 | — (primary, shipped) |
 | 0.8 | `4b_duration_prior__d240__w12` | 240 | 12 | 3.1746 | 11.3529 | `duration_only.d_threshold_seconds`, `duration_only.w_max_hours` |
 | 0.95 | `4b_duration_prior__d240__w24` | 240 | 24 | 3.6586 | 20.6994 | `duration_only.d_threshold_seconds` |
 
@@ -90,8 +90,8 @@ The decision-level floors (5% TTFF p95 / 1% carbon, ×0.5/×2) have no candidate
 
 ## 6. Replay characteristics carried into P3 (DL-024 §5 — documented, not corrected)
 
-- **⑥'s τ frontier is coarse.** p̂ takes **42** distinct values on the fitting sample; **10,461** of 12,000 (87.2%) lie in (0.25, 0.30]. Skips by τ: τ=0: 0, τ=0.05: 0, τ=0.1: 4, τ=0.15: 8, τ=0.2: 19, τ=0.25: 48, τ=0.3: 2,322. The frozen τ grid stands; P3 reports this as a property of a step-function calibrator on a weak score.
-- **④a has limited prediction support at the top of D.** ④a's estimate spans 24.98–4310.20 s (p99 2788.52 s) vs ④b's max 9469.00 s; ④a defers nothing at D ≥ 3840 s at any W. P3-T3 reports ④a's frontier over the points it spans; nothing is extrapolated.
+- **⑥'s τ frontier is coarse.** p̂ takes **34** distinct values on the fitting sample; **9,210** of 12,000 (76.8%) lie in (0.25, 0.30]. Skips by τ: τ=0: 0, τ=0.05: 1, τ=0.1: 20, τ=0.15: 64, τ=0.2: 248, τ=0.25: 389, τ=0.3: 2,413. The frozen τ grid stands; P3 reports this as a property of a step-function calibrator on a weak score.
+- **④a has limited prediction support at the top of D.** ④a's estimate spans 24.98–4310.20 s (p99 2788.52 s) vs ④b's max 9481.00 s; ④a defers nothing at D ≥ 3840 s at any W. P3-T3 reports ④a's frontier over the points it spans; nothing is extrapolated.
 
 ## 7. Checks
 
@@ -100,7 +100,7 @@ The decision-level floors (5% TTFF p95 / 1% carbon, ×0.5/×2) have no candidate
 | every trace project is a calibration project (vs frozen `split_assignment.csv`) | PASS — 144 projects, 0 test projects |
 | test split rows discarded unread by the loader | 139,163 raw test build ids |
 | every setting saw the identical build set | PASS (102 × 12,000) |
-| independent validator — non-deferrable builds deferred | **0** of 117,450 deferrals / 1,224,000 rows — PASS |
+| independent validator — non-deferrable builds deferred | **0** of 117,440 deferrals / 1,224,000 rows — PASS |
 | independent validator — non-deferrable builds skipped by ⑥ | **0** — PASS |
 | DL-023 §1 identity `5_equals_4b_at_every_point` | holds |
 | DL-023 §1 identity `3_equals_4b_at_d0` | holds |
@@ -111,11 +111,11 @@ The decision-level floors (5% TTFF p95 / 1% carbon, ×0.5/×2) have no candidate
 
 | role | file | sha256 |
 | :-- | :-- | :-- |
-| admission | `results/p1/admission.json` | `d74cb75f1b54a287df5ea99eb45235f715f323c8054b5e7e81f1cba25555228a` |
-| deltas | `results/p1/ablation/deltas.json` | `6457cf0bd78833a0c672d04ebdc5a450ab7bcdeae501e76b228ae1a110118f06` |
-| shap | `results/p1/shap/shap_summary.json` | `5b2aace20d1e42e4f2d9c73b599a3f870f108054d56574ae35207a67a286718e` |
-| calibration | `results/p1/calibration/brier_ece_table.md` | `88560b470ec7f53740faf836614bfd2aeb0aa6242102f0fa28e2e906f7a3562b` |
-| duration_control | `results/p1/duration_control.json` | `226ad3ef47b1ed45169159a6b2c09532e0119e8f7ba3f1741008723d213496e3` |
+| admission | `results/p1/admission.json` | `f07e2e0f7114138d41f8e4207bfa689bcf1785374e31b5df6d96efb1e5954b65` |
+| deltas | `results/p1/ablation/deltas.json` | `90aaa4372b5b2319c813e72e4b91e1109ce9ac8d70ff8b7b4eb3a868db5fe804` |
+| shap | `results/p1/shap/shap_summary.json` | `9ff4445f65dda03c18813fea9973c12d9c5ef03f2f37f23b687968c9786fbbc4` |
+| calibration | `results/p1/calibration/brier_ece_table.md` | `0d946543d9c9cfcbb59077972fff08baaa0ada90f7571a2afb9655f6500fd95d` |
+| duration_control | `results/p1/duration_control.json` | `a21a09d82e6023d0bff079063d7e7764ae5b8fa38f250b0881df34b6e011c56f` |
 | splits | `results/p1/splits.json` | `441a9ae8c27bf79246e3a0b4071504dbdc9ce5bed203ee0a4dfedf33a3615f38` |
 | split_assignment | `results/p1/split_assignment.csv` | `be1d175f138139df4eece6c10a04e05498fbdbf5daf8fd2c2f0d9af96ddf26d3` |
 
@@ -128,7 +128,7 @@ The decision-level floors (5% TTFF p95 / 1% carbon, ×0.5/×2) have no candidate
 
 ## Provenance
 
-- Command: `PYTHONPATH=. python scripts/fit_policy.py`  (run 2026-09-25, 77.2 s)
-- Spec: `code/scheduler_core/config/policy_spec.yaml` sha256 `34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3`
-- Sweep: fingerprint `9f50bdd396ea8f7d…`; `summary.csv` sha256 `064eac0380239484…`; `decisions.csv.gz` sha256 `bc4defb62613ded8…` (untracked; regenerate with the command above)
-- d̂: frozen fit id `1088d5546f47ff12` (primary 4b); p̂: `xgboost:full` fit id `65fd81b1e952fd72`
+- Command: `PYTHONPATH=. python scripts/fit_policy.py --fresh`  (run 2026-10-01, 290.6 s)
+- Spec: `code/scheduler_core/config/policy_spec.yaml` sha256 `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8`
+- Sweep: fingerprint `4d2debfd356e3dbe…`; `summary.csv` sha256 `60349537f6fe4978…`; `decisions.csv.gz` sha256 `2929114e63131402…` (untracked; regenerate with the command above)
+- d̂: frozen fit id `1088d5546f47ff12` (primary 4b); p̂: `xgboost:full` fit id `a09cc750e9db41b8`

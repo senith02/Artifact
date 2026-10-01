@@ -4,14 +4,14 @@
   "gate_safety": {
     "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\sample_run\\decisions.csv.gz",
     "rows": 1224000,
-    "deferred": 117450,
+    "deferred": 117440,
     "violations": 0,
     "passed": true,
     "missing_columns": [],
     "violation_rows": []
   },
   "skip_audit": {
-    "skipped_rows": 2401,
+    "skipped_rows": 3135,
     "non_deferrable_skipped": 0,
     "passed": true,
     "examples": []

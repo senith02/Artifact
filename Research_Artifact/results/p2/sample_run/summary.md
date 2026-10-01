@@ -16,8 +16,8 @@
 | check | result |
 | :-- | :-- |
 | every strategy × grid point saw the identical build set, in order | PASS (102 settings × 12,000 builds) |
-| independent validator: non-deferrable builds deferred (all rows, all strategies) | **0** of 117,450 deferrals over 1,224,000 rows — PASS |
-| independent validator: non-deferrable builds skipped by ⑥ | **0** of 2,401 skips — PASS |
+| independent validator: non-deferrable builds deferred (all rows, all strategies) | **0** of 117,440 deferrals over 1,224,000 rows — PASS |
+| independent validator: non-deferrable builds skipped by ⑥ | **0** of 3,135 skips — PASS |
 | validator self-test (hand-crafted violating fixture must be caught) | PASS |
 | DL-023 §1 identity `5_equals_4b_at_every_point` | holds |
 | DL-023 §1 identity `3_equals_4b_at_d0` | holds |
@@ -48,39 +48,39 @@ Rows shown: every setting of ①②③⑥, and ④a/④b/⑤ at `w_max = 24 h` (
 | `4a_duration_estimator__d15360__w24` | 0 | 0 | 4,013.2856 | 0.00% | — | 5.49 | 0 | 0.0559 |
 | `4b_duration_prior__d0__w24` | 2,581 | 0 | 3,861.6343 | -3.78% | 24.00 | 21.11 | 0 | 0.1722 |
 | `4b_duration_prior__d60__w24` | 2,475 | 0 | 3,861.8940 | -3.77% | 24.00 | 21.06 | 0 | 0.1668 |
-| `4b_duration_prior__d120__w24` | 2,387 | 0 | 3,862.3464 | -3.76% | 24.00 | 21.06 | 0 | 0.1623 |
+| `4b_duration_prior__d120__w24` | 2,388 | 0 | 3,862.3462 | -3.76% | 24.00 | 21.06 | 0 | 0.1623 |
 | `4b_duration_prior__d240__w24` | 1,842 | 0 | 3,866.4563 | -3.66% | 24.00 | 20.70 | 0 | 0.1305 |
-| `4b_duration_prior__d480__w24` | 1,385 | 0 | 3,873.7876 | -3.48% | 24.00 | 19.20 | 0 | 0.1032 |
-| `4b_duration_prior__d960__w24` | 905 | 0 | 3,884.9268 | -3.20% | 24.00 | 15.10 | 0 | 0.0745 |
-| `4b_duration_prior__d1920__w24` | 669 | 0 | 3,896.5452 | -2.91% | 24.00 | 11.38 | 0 | 0.0638 |
+| `4b_duration_prior__d480__w24` | 1,384 | 0 | 3,873.7938 | -3.48% | 24.00 | 19.20 | 0 | 0.1032 |
+| `4b_duration_prior__d960__w24` | 904 | 0 | 3,884.9294 | -3.20% | 24.00 | 15.10 | 0 | 0.0744 |
+| `4b_duration_prior__d1920__w24` | 670 | 0 | 3,896.4585 | -2.91% | 24.00 | 11.38 | 0 | 0.0638 |
 | `4b_duration_prior__d3840__w24` | 513 | 0 | 3,909.8379 | -2.58% | 24.00 | 7.91 | 0 | 0.0586 |
-| `4b_duration_prior__d7680__w24` | 343 | 0 | 3,937.2291 | -1.90% | 24.00 | 6.97 | 0 | 0.0552 |
+| `4b_duration_prior__d7680__w24` | 342 | 0 | 3,937.3608 | -1.89% | 24.00 | 6.97 | 0 | 0.0552 |
 | `4b_duration_prior__d15360__w24` | 0 | 0 | 4,013.2856 | 0.00% | — | 5.49 | 0 | 0.0559 |
 | `5_se_informed_policy__d0__w24` | 2,581 | 0 | 3,861.6343 | -3.78% | 24.00 | 21.11 | 0 | 0.1722 |
 | `5_se_informed_policy__d60__w24` | 2,475 | 0 | 3,861.8940 | -3.77% | 24.00 | 21.06 | 0 | 0.1668 |
-| `5_se_informed_policy__d120__w24` | 2,387 | 0 | 3,862.3464 | -3.76% | 24.00 | 21.06 | 0 | 0.1623 |
+| `5_se_informed_policy__d120__w24` | 2,388 | 0 | 3,862.3462 | -3.76% | 24.00 | 21.06 | 0 | 0.1623 |
 | `5_se_informed_policy__d240__w24` | 1,842 | 0 | 3,866.4563 | -3.66% | 24.00 | 20.70 | 0 | 0.1305 |
-| `5_se_informed_policy__d480__w24` | 1,385 | 0 | 3,873.7876 | -3.48% | 24.00 | 19.20 | 0 | 0.1032 |
-| `5_se_informed_policy__d960__w24` | 905 | 0 | 3,884.9268 | -3.20% | 24.00 | 15.10 | 0 | 0.0745 |
-| `5_se_informed_policy__d1920__w24` | 669 | 0 | 3,896.5452 | -2.91% | 24.00 | 11.38 | 0 | 0.0638 |
+| `5_se_informed_policy__d480__w24` | 1,384 | 0 | 3,873.7938 | -3.48% | 24.00 | 19.20 | 0 | 0.1032 |
+| `5_se_informed_policy__d960__w24` | 904 | 0 | 3,884.9294 | -3.20% | 24.00 | 15.10 | 0 | 0.0744 |
+| `5_se_informed_policy__d1920__w24` | 670 | 0 | 3,896.4585 | -2.91% | 24.00 | 11.38 | 0 | 0.0638 |
 | `5_se_informed_policy__d3840__w24` | 513 | 0 | 3,909.8379 | -2.58% | 24.00 | 7.91 | 0 | 0.0586 |
-| `5_se_informed_policy__d7680__w24` | 343 | 0 | 3,937.2291 | -1.90% | 24.00 | 6.97 | 0 | 0.0552 |
+| `5_se_informed_policy__d7680__w24` | 342 | 0 | 3,937.3608 | -1.89% | 24.00 | 6.97 | 0 | 0.0552 |
 | `5_se_informed_policy__d15360__w24` | 0 | 0 | 4,013.2856 | 0.00% | — | 5.49 | 0 | 0.0559 |
 | `6_risk_only_skip__t0` | 0 | 0 | 4,013.2856 | 0.00% | — | 5.49 | 0 | 0.0559 |
-| `6_risk_only_skip__t0.05` | 0 | 0 | 4,013.2856 | 0.00% | — | 5.49 | 0 | 0.0559 |
-| `6_risk_only_skip__t0.1` | 0 | 4 | 4,011.5228 | -0.04% | — | 5.49 | 1 | 0.0559 |
-| `6_risk_only_skip__t0.15` | 0 | 8 | 4,010.0078 | -0.08% | — | 5.49 | 1 | 0.0560 |
-| `6_risk_only_skip__t0.2` | 0 | 19 | 4,003.4289 | -0.25% | — | 5.49 | 2 | 0.0560 |
-| `6_risk_only_skip__t0.25` | 0 | 48 | 3,982.0052 | -0.78% | — | 5.50 | 7 | 0.0561 |
-| `6_risk_only_skip__t0.3` | 0 | 2,322 | 3,229.0402 | -19.54% | — | 5.91 | 778 | 0.0573 |
+| `6_risk_only_skip__t0.05` | 0 | 1 | 4,013.2632 | -0.00% | — | 5.49 | 0 | 0.0559 |
+| `6_risk_only_skip__t0.1` | 0 | 20 | 4,012.9255 | -0.01% | — | 5.49 | 2 | 0.0560 |
+| `6_risk_only_skip__t0.15` | 0 | 64 | 4,003.2636 | -0.25% | — | 5.50 | 13 | 0.0560 |
+| `6_risk_only_skip__t0.2` | 0 | 248 | 3,890.9393 | -3.05% | — | 5.51 | 56 | 0.0561 |
+| `6_risk_only_skip__t0.25` | 0 | 389 | 3,828.4476 | -4.61% | — | 5.53 | 105 | 0.0563 |
+| `6_risk_only_skip__t0.3` | 0 | 2,413 | 3,222.8228 | -19.70% | — | 5.93 | 804 | 0.0576 |
 
 **How to read this.** ⑤ equals ④b at every point because the bootstrap spec is on the duration-only path (DL-023 §1) — that is the null path's operational meaning, not a comparison. ⑥'s carbon falls because skipped builds never run; read it beside *missed failures*. None of these magnitudes is interpretable until P2-T5 fits the spec and P3 replays the test split.
 
 ## Provenance
 
-- Command: `PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/parts_b --compare-with C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/run_a`
+- Command: `PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/parts_b --compare-with C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/run_a`
 - Spec: `C:\Users\senit\Desktop\Projects\Research\Artifact\Research_Artifact\code\scheduler_core\config\policy_spec.bootstrap.yaml` (fitted: False)
 - Grid: `replay/sweep_grid.json` sha256 `151a4b360a70d96f…` (DL-023 §2)
-- d̂: frozen fit id `1088d5546f47ff12`, primary form 4b; p̂: `xgboost:full` fit id `65fd81b1e952fd72`
-- Run fingerprint `6fa13fb9f3133599…`; runtime 437.1s
+- d̂: frozen fit id `1088d5546f47ff12`, primary form 4b; p̂: `xgboost:full` fit id `a09cc750e9db41b8`
+- Run fingerprint `8d3cba36e5f8e1fc…`; runtime 364.4s
 - sha256 of every output: `manifest.json`

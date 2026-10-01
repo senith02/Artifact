@@ -1,32 +1,32 @@
 {
-  "command": "PYTHONPATH=. python scripts/fit_policy.py --verify --fresh --out C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/fd1f74d5-e591-4aea-a045-9ceb0a5453e7/scratchpad/refit --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/fd1f74d5-e591-4aea-a045-9ceb0a5453e7/scratchpad/refit_parts",
-  "run_date": "2026-09-25",
+  "command": "PYTHONPATH=. python scripts/fit_policy.py --verify --fresh --out C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/refit --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/refit_parts",
+  "run_date": "2026-10-01",
   "fresh": true,
-  "refit_dir": "C:\\Users\\senit\\AppData\\Local\\Temp\\claude\\c--Users-senit-Desktop-Projects-Research-Artifact\\fd1f74d5-e591-4aea-a045-9ceb0a5453e7\\scratchpad\\refit",
+  "refit_dir": "C:\\Users\\senit\\AppData\\Local\\Temp\\claude\\c--Users-senit-Desktop-Projects-Research-Artifact\\e93a54ac-1b76-4b31-a884-1f6b75865b33\\scratchpad\\refit",
   "policy_spec_yaml": {
-    "committed_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
-    "refit_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+    "committed_sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
+    "refit_sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
     "byte_identical": true
   },
   "files": {
     "trace.csv": {
-      "committed": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
-      "refit": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+      "committed": "44e1f0b55ab107ec5f83717f47feded3b42d682e593456f31e0de77a49539c50",
+      "refit": "44e1f0b55ab107ec5f83717f47feded3b42d682e593456f31e0de77a49539c50",
       "identical": true
     },
     "decisions.csv.gz": {
-      "committed": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
-      "refit": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
+      "committed": "2929114e63131402fdccab67ddce01a0fb0f2332017aa16152cca28bceb0a6f1",
+      "refit": "2929114e63131402fdccab67ddce01a0fb0f2332017aa16152cca28bceb0a6f1",
       "identical": true
     },
     "summary.csv": {
-      "committed": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
-      "refit": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+      "committed": "60349537f6fe4978d09833f6cd396faf1084a70e98536952fce1965f18012f18",
+      "refit": "60349537f6fe4978d09833f6cd396faf1084a70e98536952fce1965f18012f18",
       "identical": true
     },
     "selection.json": {
-      "committed": "50ba25d7fc6f7c28970cc8a52deed1454284c36cbd94dc45c5eafff51509ae89",
-      "refit": "50ba25d7fc6f7c28970cc8a52deed1454284c36cbd94dc45c5eafff51509ae89",
+      "committed": "af89b2475c124cc46216816e25cc590d3e6088f57a35f13169817333b1b8049e",
+      "refit": "af89b2475c124cc46216816e25cc590d3e6088f57a35f13169817333b1b8049e",
       "identical": true
     }
   },

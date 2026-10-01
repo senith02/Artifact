@@ -5,9 +5,9 @@
     "DL-022",
     "DL-023"
   ],
-  "command": "PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/parts_b --compare-with C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/1c79e87f-2eb1-4a18-bf40-de4faab0280f/scratchpad/run_a",
-  "run_date": "2026-09-23",
-  "fingerprint": "6fa13fb9f31335998f262c80c8169405dde58d980ba1d745a0a15e200a70eb72",
+  "command": "PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --parts-dir C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/parts_b --compare-with C:/Users/senit/AppData/Local/Temp/claude/c--Users-senit-Desktop-Projects-Research-Artifact/e93a54ac-1b76-4b31-a884-1f6b75865b33/scratchpad/run_a",
+  "run_date": "2026-10-01",
+  "fingerprint": "8d3cba36e5f8e1fc70bcb775286c9d8fc1ffa6c0ae5d9f722b7b789d1472c2a3",
   "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
   "spec": {
     "policy_path": "duration_only_fallback",
@@ -57,10 +57,10 @@
     "duration_control_fit_id": "1088d5546f47ff12",
     "duration_control_primary_form": "4b",
     "risk_arm": "xgboost:full",
-    "risk_arm_fit_id": "65fd81b1e952fd72",
-    "risk_arm_sha256": "315a31028401e356dc0b4e16a0f1d430402b44d5263e0fbd4400a8b4049df0b6",
+    "risk_arm_fit_id": "a09cc750e9db41b8",
+    "risk_arm_sha256": "c956607b048dd8949a99e288c3024ea57aabda9be217eada045e02839dc769f0",
     "duration_estimator_sha256": "ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0",
-    "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014)"
+    "history_rule": "expanding, finished before arrival (gh_build_started_at + tr_duration < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014, corrected by DL-034)"
   },
   "population": {
     "split": "calibration",
@@ -96,14 +96,14 @@
     "validator": {
       "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\sample_run\\decisions.csv.gz",
       "rows": 1224000,
-      "deferred": 117450,
+      "deferred": 117440,
       "violations": 0,
       "passed": true,
       "missing_columns": [],
       "violation_rows": []
     },
     "skip_audit": {
-      "skipped_rows": 2401,
+      "skipped_rows": 3135,
       "non_deferrable_skipped": 0,
       "passed": true,
       "examples": []
@@ -116,13 +116,13 @@
     }
   },
   "seed": 42,
-  "runtime_s": 437.1,
+  "runtime_s": 364.4,
   "sha256": {
-    "trace.csv": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
-    "decisions.csv.gz": "bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e",
-    "summary.csv": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
-    "herding.csv": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
-    "validator.json": "39b1f0e6816ef0d90192dca20e9b5e97dcd18a1e6121bda28d49c8871ff9caa1",
-    "worked_reasons.json": "20237a52cd54faa700653bde9cfd4f3a171b241e7ffae760a56d4a486efbd342"
+    "trace.csv": "44e1f0b55ab107ec5f83717f47feded3b42d682e593456f31e0de77a49539c50",
+    "decisions.csv.gz": "2929114e63131402fdccab67ddce01a0fb0f2332017aa16152cca28bceb0a6f1",
+    "summary.csv": "60349537f6fe4978d09833f6cd396faf1084a70e98536952fce1965f18012f18",
+    "herding.csv": "b5941ed1d3fc17f0b6663f2f09092ac71311ec8676562fc5aba69eb76997e41d",
+    "validator.json": "c88304e969cb3de5146abac9ccc453edcc30c59abedddd82fbb471a1080361bb",
+    "worked_reasons.json": "191ff97a96148f48573d44af78afba87d577aee305d6bfa09ff85f0aba1e5f91"
   }
 }

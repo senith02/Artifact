@@ -4,22 +4,22 @@
 
 ## `decisions.csv.gz` is not tracked
 
-The per-record decision file (1,224,000 rows, 61,046,536 bytes) is kept out of git by `.gitignore`
+The per-record decision file (1,224,000 rows, 60,974,525 bytes) is kept out of git by `.gitignore`
 (author decision, 2026-09-24, at the P2-T4 gate). Everything else in this folder is tracked, and the
 file is **deterministically regenerable**; its identity is pinned rather than stored:
 
 | evidence | where |
 | :-- | :-- |
-| sha256 `bc4defb62613ded8697816e82eefb77f69fec94ed339c1541ee2120e9c78fd7e` | `manifest.json` → `sha256`, `determinism.json` |
+| sha256 `2929114e63131402fdccab67ddce01a0fb0f2332017aa16152cca28bceb0a6f1` | `manifest.json` → `sha256`, `determinism.json` |
 | byte-identical across two fully fresh end-to-end runs | `determinism.json` (`byte_identical: true`) |
-| independent validator over it: 0 violations / 117,450 deferrals / 1,224,000 rows | `validator.json`, `validator_cli.txt` |
-| run fingerprint `6fa13fb9f31335998f262c80c8169405dde58d980ba1d745a0a15e200a70eb72`, grid sha256 `151a4b360a70d96f…` | `manifest.json` |
+| independent validator over it: 0 violations / 117,440 deferrals / 1,224,000 rows | `validator.json`, `validator_cli.txt` |
+| run fingerprint `8d3cba36e5f8e1fc70bcb775286c9d8fc1ffa6c0ae5d9f722b7b789d1472c2a3`, grid sha256 `151a4b360a70d96f…` | `manifest.json` |
 
 ### Regenerate
 
 From `Research_Artifact/code/`, with the locked environment and the frozen artifacts present
 (`split_assignment.csv` sha256 `3d9a7947…5cde`, duration control fit id `1088d5546f47ff12`,
-`xgboost:full` fit id `65fd81b1e952fd72`):
+`xgboost:full` fit id `a09cc750e9db41b8`; regenerated under DL-034, 2026-10-01 — the pre-DL-034 values were `bc4defb6…` / `65fd81b1…`, commit `95c6d6d`):
 
 ```
 PYTHONPATH=. python scripts/run_replay.py --allow-unfitted-spec --fresh --out <dir>
