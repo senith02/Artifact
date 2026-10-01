@@ -182,8 +182,21 @@ completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
 - [x] Tests: +7 DL-034 tests; full suite **645 passed**; fixed function == independent recomputation on
       all 138,693 test-trace builds; guard rejects the old rule (38,019 builds)
 - [x] Originals snapshotted: `results/corrections/dl034/original/` (15 files, MANIFEST.txt)
-- [ ] **Commit predeclaration** (DL-034 + fix + tests + diagnostic) — awaiting author go-ahead
-- [ ] P1-T4 fit_duration_estimator · [ ] P1-T5 train_models · [ ] P1-T6 run_ablation · [ ] P1-T7 apply_admission
+- [x] **Commit predeclaration** `548141b` (DL-034 + fix + tests + diagnostic). Run locally (author
+      decision 2026-10-01: no Colab — CPU-only stack, locked env, repo-local guards); pause after each
+      phase (P1, P2, P3) for author review. `train_models.py`/`run_ablation.py` run with `--fresh`
+      (their checkpoint fingerprint keys on the d̂ fit id, not the history rule).
+- [x] P1-T4 fit_duration_estimator (530.7 s, exit 0; guard PASS; fit id unchanged `1088d5546f47ff12`,
+      joblib byte-identical; ④b calib MAE 0.600958 → 0.601856, ρ 0.8691 → 0.8688; primary ④b)
+- [x] P1-T5 train_models `--fresh` (2,381.6 s, exit 0; 6 arms, all round-trip PASS, isotonic everywhere;
+      calib PR-AUC control xgb 0.390357→0.391477, logreg 0.388304→0.388177, rf 0.377358→0.377668;
+      full xgb 0.328552→0.310566 (new search pick), logreg 0.307219→0.307124, rf 0.378120→0.365366;
+      full < control for every algorithm, as before)
+- [x] P1-T6 run_ablation `--fresh` (3,975.5 s, exit 0; frozen control/full re-verified exactly; ΔPR-AUC
+      vs {d̂}: F1 −0.003456, F2 −0.006544, F3 −0.033082, F4 −0.066490, F5 −0.072851, F6 −0.008449 —
+      all CIs below 0, no LOO arm triggered)
+- [x] P1-T7 apply_admission (exit 0): admitted set **empty** at ×0.5/×1/×2 (stable) →
+      `duration_only_fallback`, unchanged. **P1 phase paused for author review 2026-10-01.**
 - [ ] P2-T4 sample run · [ ] P2-T5 fit_policy
 - [ ] P3-T1 rehearse + test `--rerun-under DL-034` · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
 - [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md

@@ -1,7 +1,7 @@
 {
   "provenance": {
     "command": "PYTHONPATH=. python scripts/train_models.py",
-    "run_date": "2026-08-18",
+    "run_date": "2026-10-01",
     "dataset_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Dataset\\19314170\\final-2017-01-25.csv\\final-2017-01-25.csv",
     "seed": 42,
     "n_iter": 20,
@@ -19,7 +19,7 @@
       "scikit-learn": "1.9.0",
       "xgboost": "3.2.0"
     },
-    "elapsed_s": 3113.6,
+    "elapsed_s": 2381.6,
     "resume": {
       "fingerprint": "18fa5af3ff73ca57",
       "arms_fitted_in_this_invocation": [
@@ -32,7 +32,7 @@
       ],
       "arms_resumed_from_checkpoint": [],
       "checkpoint_dir": "code\\artifacts\\checkpoints",
-      "total_arm_fit_seconds": 2972.8,
+      "total_arm_fit_seconds": 2296.5,
       "note": "`elapsed_s` is this invocation's wall clock. Where arms were resumed it is NOT the total compute: `total_arm_fit_seconds` sums the real per-arm fit time across every segment. Resumed arms are bit-identical to a cold run (per-arm seeded search, no cross-arm random state) and each was re-verified against its persisted model before being reused."
     }
   },
@@ -67,7 +67,7 @@
         "min_child_weight": 4,
         "gamma": 1.6493060616639266,
         "scale_pos_weight": 1.8145155509009034,
-        "internal_val_pr_auc": 0.2688437216472169
+        "internal_val_pr_auc": 0.268650806897575
       },
       "calibration_choice": {
         "split": "calibration",
@@ -76,92 +76,92 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.19216902179148526,
-            "ece": 1.4516832108097094e-09
+            "brier": 0.19213315160582506,
+            "ece": 1.4125734024575156e-09
           },
           "sigmoid": {
-            "brier": 0.19531233388770813,
-            "ece": 0.027701655501832366
+            "brier": 0.19531372265044417,
+            "ece": 0.027766331185835685
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.2663073241710663,
-          "f1": 0.4903978252608811,
-          "precision": 0.34502827763496147,
-          "recall": 0.8474516340859726
+          "tau": 0.27538615465164185,
+          "f1": 0.49160943038253935,
+          "precision": 0.34677151630840736,
+          "recall": 0.8442188210334899
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.3903574367340774,
-        "roc_auc": 0.6507118729629673,
-        "brier": 0.19216902179148526,
-        "ece": 1.4516832108097094e-09,
-        "tau": 0.2663073241710663,
-        "precision_at_tau": 0.34502827763496147,
-        "recall_at_tau": 0.8474516340859726,
-        "f1_at_tau": 0.490397825260881
+        "pr_auc": 0.39147705075077627,
+        "roc_auc": 0.6504967467925957,
+        "brier": 0.19213315160582506,
+        "ece": 1.4125734024575156e-09,
+        "tau": 0.27538615465164185,
+        "precision_at_tau": 0.34677151630840736,
+        "recall_at_tau": 0.8442188210334899,
+        "f1_at_tau": 0.4916094303825394
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.39071344296182775,
-        "roc_auc": 0.6457332983387593,
-        "brier": 0.2022930143160808,
-        "ece": 0.08650123401296031
+        "pr_auc": 0.39114624960593425,
+        "roc_auc": 0.6457274958490878,
+        "brier": 0.20231815692177688,
+        "ece": 0.08661026499176272
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.2000662182470618,
-        "ece": 0.04365450061366516
+        "brier": 0.19996311194253272,
+        "ece": 0.040260754485047456
       },
       "reliability_bins": [
         {
           "bin": 0,
           "lo": 0.0,
           "hi": 0.1,
-          "n": 2442,
-          "confidence": 0.09623260051012039,
-          "observed": 0.09623259623259624
+          "n": 2452,
+          "confidence": 0.09624796360731125,
+          "observed": 0.09624796084828711
         },
         {
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 37785,
-          "confidence": 0.14693661317617723,
-          "observed": 0.1469366150588858
+          "n": 39843,
+          "confidence": 0.148884369600589,
+          "observed": 0.1488843711567904
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 38764,
-          "confidence": 0.27417191280298664,
-          "observed": 0.2741719120833763
+          "n": 36573,
+          "confidence": 0.2797145405177933,
+          "observed": 0.2797145435157083
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 37703,
-          "confidence": 0.35639073814782457,
-          "observed": 0.35639073813754873
+          "n": 34981,
+          "confidence": 0.34933249461845434,
+          "observed": 0.34933249478288214
         },
         {
           "bin": 4,
           "lo": 0.4,
           "hi": 0.5,
-          "n": 21993,
-          "confidence": 0.4429591191986847,
-          "observed": 0.4429591233574319
+          "n": 24838,
+          "confidence": 0.4419035353789401,
+          "observed": 0.4419035349061921
         },
         {
           "bin": 5,
@@ -206,7 +206,7 @@
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_xgboost__control.png",
       "artifact": "code\\artifacts\\models\\xgboost__control.joblib",
-      "fit_id": "5b6c9fd6e4762e25",
+      "fit_id": "8f9522957d82a1a1",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -234,17 +234,17 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "5b6c9fd6e4762e25"
+        "fit_id": "8f9522957d82a1a1"
       },
-      "fit_seconds": 96.7
+      "fit_seconds": 107.9
     },
     "logreg:control": {
       "algorithm": "logreg",
       "arm": "control",
       "n_features": 1,
       "best_params": {
-        "C": 4.402874346669274,
-        "internal_val_pr_auc": 0.24531560807839103
+        "C": 1.528298456002911,
+        "internal_val_pr_auc": 0.245269265632753
       },
       "calibration_choice": {
         "split": "calibration",
@@ -253,100 +253,100 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.19152932281567173,
-            "ece": 1.2404523046917962e-17
+            "brier": 0.19154023269198608,
+            "ece": 8.797120755521981e-17
           },
           "sigmoid": {
-            "brier": 0.19458074396665176,
-            "ece": 0.020446243081153746
+            "brier": 0.19459102171142623,
+            "ece": 0.020376554517352114
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.24735802044849226,
-          "f1": 0.4925292741774823,
-          "precision": 0.3479022254651587,
-          "recall": 0.8429560034348639
+          "tau": 0.24726148030413658,
+          "f1": 0.4925065857923981,
+          "precision": 0.34789679437060206,
+          "recall": 0.8428549780269737
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.3883038034944576,
-        "roc_auc": 0.6540760032179549,
-        "brier": 0.19152932281567173,
-        "ece": 1.2404523046917962e-17,
-        "tau": 0.24735802044849226,
-        "precision_at_tau": 0.3479022254651587,
-        "recall_at_tau": 0.8429560034348639,
-        "f1_at_tau": 0.4925292741774823
+        "pr_auc": 0.3881771877816067,
+        "roc_auc": 0.6540036102394416,
+        "brier": 0.19154023269198608,
+        "ece": 8.797120755521981e-17,
+        "tau": 0.24726148030413658,
+        "precision_at_tau": 0.34789679437060206,
+        "recall_at_tau": 0.8428549780269737,
+        "f1_at_tau": 0.4925065857923981
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.38112126634760435,
-        "roc_auc": 0.6454373197532829,
-        "brier": 0.24362014811597305,
-        "ece": 0.22192399295159346
+        "pr_auc": 0.38107416161122387,
+        "roc_auc": 0.6453846608723952,
+        "brier": 0.2436271408118959,
+        "ece": 0.22191493421898606
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.19878817563395118,
-        "ece": 0.049496676136120306
+        "brier": 0.1987928909540729,
+        "ece": 0.04944920996805599
       },
       "reliability_bins": [
         {
           "bin": 0,
           "lo": 0.0,
           "hi": 0.1,
-          "n": 504,
-          "confidence": 0.09126984126984124,
-          "observed": 0.09126984126984126
+          "n": 508,
+          "confidence": 0.09448818897637798,
+          "observed": 0.09448818897637795
         },
         {
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 42238,
-          "confidence": 0.14607699228183152,
-          "observed": 0.14607699228183152
+          "n": 42254,
+          "confidence": 0.14611634401476786,
+          "observed": 0.14611634401476783
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 30301,
-          "confidence": 0.2569882182106202,
-          "observed": 0.2569882182106201
+          "n": 30286,
+          "confidence": 0.2569834246846726,
+          "observed": 0.2569834246846728
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 42101,
-          "confidence": 0.36516947340918265,
-          "observed": 0.36516947340918265
+          "n": 42108,
+          "confidence": 0.3653462524935878,
+          "observed": 0.36534625249358793
         },
         {
           "bin": 4,
           "lo": 0.4,
           "hi": 0.5,
-          "n": 23222,
-          "confidence": 0.4312290069761433,
-          "observed": 0.4312290069761433
+          "n": 23199,
+          "confidence": 0.43088064140695714,
+          "observed": 0.4308806414069572
         },
         {
           "bin": 5,
           "lo": 0.5,
           "hi": 0.6000000000000001,
-          "n": 219,
-          "confidence": 0.5433789954337901,
-          "observed": 0.54337899543379
+          "n": 229,
+          "confidence": 0.5458515283842795,
+          "observed": 0.5458515283842795
         },
         {
           "bin": 6,
@@ -360,17 +360,17 @@
           "bin": 7,
           "lo": 0.7000000000000001,
           "hi": 0.8,
-          "n": 74,
-          "confidence": 0.7972972972972973,
-          "observed": 0.7972972972972973
+          "n": 65,
+          "confidence": 0.7692307692307694,
+          "observed": 0.7692307692307693
         },
         {
           "bin": 8,
           "lo": 0.8,
           "hi": 0.9,
-          "n": 27,
-          "confidence": 0.8888888888888888,
-          "observed": 0.8888888888888888
+          "n": 37,
+          "confidence": 0.8918918918918919,
+          "observed": 0.8918918918918919
         },
         {
           "bin": 9,
@@ -383,7 +383,7 @@
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_logreg__control.png",
       "artifact": "code\\artifacts\\models\\logreg__control.joblib",
-      "fit_id": "7281075273971173",
+      "fit_id": "9a5cea361498e420",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -411,9 +411,9 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "7281075273971173"
+        "fit_id": "9a5cea361498e420"
       },
-      "fit_seconds": 9.4
+      "fit_seconds": 10.4
     },
     "random_forest:control": {
       "algorithm": "random_forest",
@@ -424,7 +424,7 @@
         "max_depth": 5,
         "min_samples_leaf": 12,
         "max_features": "log2",
-        "internal_val_pr_auc": 0.2681687294339297
+        "internal_val_pr_auc": 0.26866131616403616
       },
       "calibration_choice": {
         "split": "calibration",
@@ -433,51 +433,51 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.19391556069103819,
-            "ece": 2.6763125714211307e-17
+            "brier": 0.1938548779853508,
+            "ece": 2.313514995036811e-17
           },
           "sigmoid": {
-            "brier": 0.19605175789844298,
-            "ece": 0.030760308987353345
+            "brier": 0.19611478278897332,
+            "ece": 0.03156326846587097
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.24245989304812834,
-          "f1": 0.4818639859602584,
-          "precision": 0.35442269942299687,
-          "recall": 0.7524119816133757
+          "tau": 0.2779783393501805,
+          "f1": 0.4824993427394619,
+          "precision": 0.3694374362553009,
+          "recall": 0.695282113451533
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.377358371982067,
-        "roc_auc": 0.6387251756418033,
-        "brier": 0.19391556069103819,
-        "ece": 2.6763125714211307e-17,
-        "tau": 0.24245989304812834,
-        "precision_at_tau": 0.35442269942299687,
-        "recall_at_tau": 0.7524119816133757,
-        "f1_at_tau": 0.4818639859602585
+        "pr_auc": 0.3776682664265572,
+        "roc_auc": 0.6395417037673896,
+        "brier": 0.1938548779853508,
+        "ece": 2.313514995036811e-17,
+        "tau": 0.2779783393501805,
+        "precision_at_tau": 0.3694374362553009,
+        "recall_at_tau": 0.695282113451533,
+        "f1_at_tau": 0.48249934273946193
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.37684366276883263,
-        "roc_auc": 0.6321988388923021,
-        "brier": 0.2430048769479626,
-        "ece": 0.21660670430449835
+        "pr_auc": 0.3769442670537979,
+        "roc_auc": 0.6326779323377414,
+        "brier": 0.24309193172182694,
+        "ece": 0.21665729205052153
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.20070128241959773,
-        "ece": 0.031115527548623647
+        "brier": 0.20086033355291716,
+        "ece": 0.031342909747961285
       },
       "reliability_bins": [
         {
@@ -492,33 +492,33 @@
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 36262,
-          "confidence": 0.16857867740334234,
-          "observed": 0.16857867740334234
+          "n": 40414,
+          "confidence": 0.16808531696936702,
+          "observed": 0.16808531696936704
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 27720,
-          "confidence": 0.21489898989898998,
-          "observed": 0.2148989898989899
+          "n": 24311,
+          "confidence": 0.22319114803998186,
+          "observed": 0.2231911480399819
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 62063,
-          "confidence": 0.3523033047065079,
-          "observed": 0.3523033047065079
+          "n": 60680,
+          "confidence": 0.3538233355306526,
+          "observed": 0.3538233355306526
         },
         {
           "bin": 4,
           "lo": 0.4,
           "hi": 0.5,
-          "n": 12642,
-          "confidence": 0.44763486790064877,
-          "observed": 0.44763486790064866
+          "n": 13282,
+          "confidence": 0.4445866586357477,
+          "observed": 0.44458665863574764
         },
         {
           "bin": 5,
@@ -563,7 +563,7 @@
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_random_forest__control.png",
       "artifact": "code\\artifacts\\models\\random_forest__control.joblib",
-      "fit_id": "9657b7418bba4dac",
+      "fit_id": "48f1f78d25358f09",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -591,24 +591,24 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "9657b7418bba4dac"
+        "fit_id": "48f1f78d25358f09"
       },
-      "fit_seconds": 977.1
+      "fit_seconds": 776.3
     },
     "xgboost:full": {
       "algorithm": "xgboost",
       "arm": "full",
       "n_features": 29,
       "best_params": {
-        "n_estimators": 641,
-        "max_depth": 7,
-        "learning_rate": 0.14117792935678877,
-        "subsample": 0.677855483140787,
-        "colsample_bytree": 0.7866884014908136,
-        "min_child_weight": 1,
-        "gamma": 0.7714474603377391,
-        "scale_pos_weight": 3.8281144151651576,
-        "internal_val_pr_auc": 0.4607000885494657
+        "n_estimators": 398,
+        "max_depth": 6,
+        "learning_rate": 0.11005626471339772,
+        "subsample": 0.9122916124087872,
+        "colsample_bytree": 0.783566310215336,
+        "min_child_weight": 5,
+        "gamma": 0.6989849906382872,
+        "scale_pos_weight": 1.7406138616062856,
+        "internal_val_pr_auc": 0.46583240353090993
       },
       "calibration_choice": {
         "split": "calibration",
@@ -617,137 +617,137 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.2017098572971861,
-            "ece": 6.158237631194924e-09
+            "brier": 0.201951877776678,
+            "ece": 1.0474494413000103e-07
           },
           "sigmoid": {
-            "brier": 0.20295587581911825,
-            "ece": 0.005159629454136764
+            "brier": 0.20324622733216235,
+            "ece": 0.010376004748343751
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.24174372851848602,
-          "f1": 0.44478232223404796,
-          "precision": 0.286205022285031,
-          "recall": 0.9974238520988028
+          "tau": 0.22900763154029846,
+          "f1": 0.4520156046814044,
+          "precision": 0.29941917700334714,
+          "recall": 0.9218063342930747
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.3285523357829936,
-        "roc_auc": 0.5395081056547231,
-        "brier": 0.2017098572971861,
-        "ece": 6.158237631194924e-09,
-        "tau": 0.24174372851848602,
-        "precision_at_tau": 0.286205022285031,
-        "recall_at_tau": 0.9974238520988028,
-        "f1_at_tau": 0.44478232223404796
+        "pr_auc": 0.3105661781350955,
+        "roc_auc": 0.548655561511939,
+        "brier": 0.201951877776678,
+        "ece": 1.0474494413000103e-07,
+        "tau": 0.22900763154029846,
+        "precision_at_tau": 0.29941917700334714,
+        "recall_at_tau": 0.9218063342930747,
+        "f1_at_tau": 0.45201560468140445
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.33435798839961683,
-        "roc_auc": 0.5374723599082472,
-        "brier": 0.25299634259109915,
-        "ece": 0.18238694617642515
+        "pr_auc": 0.3100807638247939,
+        "roc_auc": 0.5390000407958404,
+        "brier": 0.22138764483523385,
+        "ece": 0.10414487032642333
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.20686606221326964,
-        "ece": 0.024391265308166973
+        "brier": 0.20791856886937246,
+        "ece": 0.0744552044595143
       },
       "reliability_bins": [
         {
           "bin": 0,
           "lo": 0.0,
           "hi": 0.1,
-          "n": 182,
-          "confidence": 0.0824175853241276,
-          "observed": 0.08241758241758242
+          "n": 546,
+          "confidence": 0.09157509156144582,
+          "observed": 0.09157509157509157
         },
         {
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 477,
-          "confidence": 0.16352201520272022,
-          "observed": 0.16352201257861634
+          "n": 10296,
+          "confidence": 0.17453387398026715,
+          "observed": 0.17453379953379952
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 122152,
-          "confidence": 0.27468235623556236,
-          "observed": 0.27468236295762655
+          "n": 115116,
+          "confidence": 0.28816162582655536,
+          "observed": 0.2881615066541576
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 12099,
-          "confidence": 0.3306884867798761,
-          "observed": 0.3306884866517894
+          "n": 12709,
+          "confidence": 0.3588795374619594,
+          "observed": 0.35887953418837043
         },
         {
           "bin": 4,
           "lo": 0.4,
           "hi": 0.5,
-          "n": 2395,
-          "confidence": 0.4526096075959892,
-          "observed": 0.45260960334029227
+          "n": 0,
+          "confidence": NaN,
+          "observed": NaN
         },
         {
           "bin": 5,
           "lo": 0.5,
           "hi": 0.6000000000000001,
-          "n": 515,
-          "confidence": 0.5184466242790222,
-          "observed": 0.5184466019417475
+          "n": 0,
+          "confidence": NaN,
+          "observed": NaN
         },
         {
           "bin": 6,
           "lo": 0.6000000000000001,
           "hi": 0.7000000000000001,
-          "n": 611,
-          "confidence": 0.6563011362002447,
-          "observed": 0.6563011456628478
+          "n": 17,
+          "confidence": 0.6470588235294118,
+          "observed": 0.6470588235294118
         },
         {
           "bin": 7,
           "lo": 0.7000000000000001,
           "hi": 0.8,
-          "n": 234,
-          "confidence": 0.7521367439856896,
-          "observed": 0.7521367521367521
+          "n": 0,
+          "confidence": NaN,
+          "observed": NaN
         },
         {
           "bin": 8,
           "lo": 0.8,
           "hi": 0.9,
-          "n": 22,
-          "confidence": 0.8636363744735718,
-          "observed": 0.8636363636363636
+          "n": 0,
+          "confidence": NaN,
+          "observed": NaN
         },
         {
           "bin": 9,
           "lo": 0.9,
           "hi": 1.0,
-          "n": 0,
-          "confidence": NaN,
-          "observed": NaN
+          "n": 3,
+          "confidence": 1.0,
+          "observed": 1.0
         }
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_xgboost__full.png",
       "artifact": "code\\artifacts\\models\\xgboost__full.joblib",
-      "fit_id": "65fd81b1e952fd72",
+      "fit_id": "a09cc750e9db41b8",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -803,9 +803,9 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "65fd81b1e952fd72"
+        "fit_id": "a09cc750e9db41b8"
       },
-      "fit_seconds": 225.8
+      "fit_seconds": 181.1
     },
     "logreg:full": {
       "algorithm": "logreg",
@@ -813,7 +813,7 @@
       "n_features": 29,
       "best_params": {
         "C": 0.0005870590616328633,
-        "internal_val_pr_auc": 0.3077318748834319
+        "internal_val_pr_auc": 0.3076823515855238
       },
       "calibration_choice": {
         "split": "calibration",
@@ -822,84 +822,84 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.20194290279212698,
-            "ece": 4.2268479326276355e-17
+            "brier": 0.20195447267267613,
+            "ece": 2.1270328780493284e-17
           },
           "sigmoid": {
-            "brier": 0.20320403521681626,
-            "ece": 0.01646674351663254
+            "brier": 0.20321043264944066,
+            "ece": 0.016460386070410164
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.23353293413173654,
-          "f1": 0.45169879646394717,
-          "precision": 0.294950853115727,
-          "recall": 0.9640096984391574
+          "tau": 0.23357664233576642,
+          "f1": 0.4516720814766157,
+          "precision": 0.2949446234938595,
+          "recall": 0.9638329039753498
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.30721865722950464,
-        "roc_auc": 0.5449022199465534,
-        "brier": 0.20194290279212698,
-        "ece": 4.2268479326276355e-17,
-        "tau": 0.23353293413173654,
-        "precision_at_tau": 0.294950853115727,
-        "recall_at_tau": 0.9640096984391574,
-        "f1_at_tau": 0.45169879646394717
+        "pr_auc": 0.307124470416581,
+        "roc_auc": 0.5446884119909132,
+        "brier": 0.20195447267267613,
+        "ece": 2.1270328780493284e-17,
+        "tau": 0.23357664233576642,
+        "precision_at_tau": 0.2949446234938595,
+        "recall_at_tau": 0.9638329039753498,
+        "f1_at_tau": 0.4516720814766157
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.2983353258075983,
-        "roc_auc": 0.5354235716860853,
-        "brier": 0.2524694176275899,
-        "ece": 0.21173721676874757
+        "pr_auc": 0.29822666894401495,
+        "roc_auc": 0.5352221082302915,
+        "brier": 0.2524842179825744,
+        "ece": 0.21173521514175528
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.2098433319293321,
-        "ece": 0.06410909684160546
+        "brier": 0.2098534447031053,
+        "ece": 0.064050969589872
       },
       "reliability_bins": [
         {
           "bin": 0,
           "lo": 0.0,
           "hi": 0.1,
-          "n": 2523,
-          "confidence": 0.04042806183115339,
-          "observed": 0.04042806183115339
+          "n": 2496,
+          "confidence": 0.04006410256410257,
+          "observed": 0.04006410256410257
         },
         {
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 6396,
-          "confidence": 0.19480925578486555,
-          "observed": 0.19480925578486555
+          "n": 6117,
+          "confidence": 0.19421284943599804,
+          "observed": 0.19421284943599804
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 52759,
-          "confidence": 0.27185882977311937,
-          "observed": 0.27185882977311926
+          "n": 53057,
+          "confidence": 0.27168893831162716,
+          "observed": 0.2716889383116271
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 76899,
-          "confidence": 0.3100950597537029,
-          "observed": 0.3100950597537029
+          "n": 76907,
+          "confidence": 0.3099067705150376,
+          "observed": 0.3099067705150376
         },
         {
           "bin": 4,
@@ -952,7 +952,7 @@
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_logreg__full.png",
       "artifact": "code\\artifacts\\models\\logreg__full.joblib",
-      "fit_id": "db68e260c2675085",
+      "fit_id": "10d962a2e78a7084",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -1008,9 +1008,9 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "db68e260c2675085"
+        "fit_id": "10d962a2e78a7084"
       },
-      "fit_seconds": 96.1
+      "fit_seconds": 77.5
     },
     "random_forest:full": {
       "algorithm": "random_forest",
@@ -1021,7 +1021,7 @@
         "max_depth": 14,
         "min_samples_leaf": 24,
         "max_features": "sqrt",
-        "internal_val_pr_auc": 0.458255436901872
+        "internal_val_pr_auc": 0.4572987802800683
       },
       "calibration_choice": {
         "split": "calibration",
@@ -1030,116 +1030,116 @@
         "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
         "comparison": {
           "isotonic": {
-            "brier": 0.19578963551356252,
-            "ece": 4.7842529468297573e-17
+            "brier": 0.19638562144786345,
+            "ece": 2.0730014958382525e-16
           },
           "sigmoid": {
-            "brier": 0.197446727087612,
-            "ece": 0.025973547866604635
+            "brier": 0.19860164505738248,
+            "ece": 0.018407566115419553
           }
         },
         "chosen": "isotonic",
         "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
         "tau_selection": {
-          "tau": 0.23390663390663388,
-          "f1": 0.46433364564077895,
-          "precision": 0.309825124609276,
-          "recall": 0.9262514522402384
+          "tau": 0.234274444675109,
+          "f1": 0.46013444951801125,
+          "precision": 0.3072083058110191,
+          "recall": 0.9162246805071476
         }
       },
       "calibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.3781199987423242,
-        "roc_auc": 0.612635647093141,
-        "brier": 0.19578963551356252,
-        "ece": 4.7842529468297573e-17,
-        "tau": 0.23390663390663388,
-        "precision_at_tau": 0.309825124609276,
-        "recall_at_tau": 0.9262514522402384,
-        "f1_at_tau": 0.4643336456407789
+        "pr_auc": 0.3653660294455085,
+        "roc_auc": 0.6039935035696736,
+        "brier": 0.19638562144786345,
+        "ece": 2.0730014958382525e-16,
+        "tau": 0.234274444675109,
+        "precision_at_tau": 0.3072083058110191,
+        "recall_at_tau": 0.9162246805071476,
+        "f1_at_tau": 0.46013444951801113
       },
       "uncalibrated": {
         "n": 138687,
         "positives": 39594,
         "base_rate": 0.28549179086720455,
-        "pr_auc": 0.3762158824092123,
-        "roc_auc": 0.6107571749159839,
-        "brier": 0.22497340553904116,
-        "ece": 0.1660300722490456
+        "pr_auc": 0.3665437399301654,
+        "roc_auc": 0.5996197649622013,
+        "brier": 0.2260403028281295,
+        "ece": 0.16576350353539832
       },
       "out_of_fold_calibration": {
         "n": 138687,
         "n_splits": 5,
         "grouping": "GroupKFold over gh_project_name \u2014 folds are project-disjoint, so the diagnostic never scores a project it calibrated on",
-        "brier": 0.21006330696042305,
-        "ece": 0.0704109120817686
+        "brier": 0.21022254790046976,
+        "ece": 0.06514956214718434
       },
       "reliability_bins": [
         {
           "bin": 0,
           "lo": 0.0,
           "hi": 0.1,
-          "n": 320,
-          "confidence": 0.08750000000000001,
-          "observed": 0.0875
+          "n": 396,
+          "confidence": 0.08333333333333333,
+          "observed": 0.08333333333333333
         },
         {
           "bin": 1,
           "lo": 0.1,
           "hi": 0.2,
-          "n": 18909,
-          "confidence": 0.1400920196731715,
-          "observed": 0.1400920196731715
+          "n": 18124,
+          "confidence": 0.15509821231516221,
+          "observed": 0.15509821231516221
         },
         {
           "bin": 2,
           "lo": 0.2,
           "hi": 0.30000000000000004,
-          "n": 82151,
-          "confidence": 0.27083054375479293,
-          "observed": 0.270830543754793
+          "n": 91363,
+          "confidence": 0.2704158138414892,
+          "observed": 0.27041581384148944
         },
         {
           "bin": 3,
           "lo": 0.30000000000000004,
           "hi": 0.4,
-          "n": 22757,
-          "confidence": 0.3316342224370524,
-          "observed": 0.3316342224370523
+          "n": 11672,
+          "confidence": 0.32950651130911585,
+          "observed": 0.32950651130911585
         },
         {
           "bin": 4,
           "lo": 0.4,
           "hi": 0.5,
-          "n": 14540,
-          "confidence": 0.4893397524071526,
-          "observed": 0.48933975240715266
+          "n": 16899,
+          "confidence": 0.4770104739925434,
+          "observed": 0.4770104739925439
         },
         {
           "bin": 5,
           "lo": 0.5,
           "hi": 0.6000000000000001,
-          "n": 6,
-          "confidence": 0.5,
-          "observed": 0.5
+          "n": 184,
+          "confidence": 0.5597826086956523,
+          "observed": 0.5597826086956522
         },
         {
           "bin": 6,
           "lo": 0.6000000000000001,
           "hi": 0.7000000000000001,
-          "n": 3,
-          "confidence": 0.6666666666666666,
-          "observed": 0.6666666666666666
+          "n": 27,
+          "confidence": 0.6296296296296297,
+          "observed": 0.6296296296296297
         },
         {
           "bin": 7,
           "lo": 0.7000000000000001,
           "hi": 0.8,
-          "n": 0,
-          "confidence": NaN,
-          "observed": NaN
+          "n": 20,
+          "confidence": 0.75,
+          "observed": 0.75
         },
         {
           "bin": 8,
@@ -1153,14 +1153,14 @@
           "bin": 9,
           "lo": 0.9,
           "hi": 1.0,
-          "n": 1,
+          "n": 2,
           "confidence": 1.0,
           "observed": 1.0
         }
       ],
       "reliability_plot": "results\\p1\\calibration\\reliability_random_forest__full.png",
       "artifact": "code\\artifacts\\models\\random_forest__full.joblib",
-      "fit_id": "0371ee375352f4db",
+      "fit_id": "2b17c9216d8bd893",
       "round_trip": "PASS",
       "provenance": {
         "seed": 42,
@@ -1216,9 +1216,9 @@
           "scikit-learn": "1.9.0",
           "xgboost": "3.2.0"
         },
-        "fit_id": "0371ee375352f4db"
+        "fit_id": "2b17c9216d8bd893"
       },
-      "fit_seconds": 1567.7
+      "fit_seconds": 1143.3
     }
   }
 }

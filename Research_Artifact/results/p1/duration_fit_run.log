@@ -1,5 +1,5 @@
 reading C:\Users\senit\Desktop\Projects\Research\Artifact\Dataset\19314170\final-2017-01-25.csv\final-2017-01-25.csv …
-  analytic builds: 922,624 across 948 projects (98s)
+  analytic builds: 922,624 across 948 projects (69s)
   frozen split verified: 948 projects
   test split closed: dropped 138,693 builds / 170 projects — not read again in this task
 
@@ -84,14 +84,15 @@ fitting ④a on 645,244 train builds (40 candidates per family, seed 42) …
     ridge   38/40  val MAE 1.183345  best 1.182822
     ridge   39/40  val MAE 1.183346  best 1.182822
     ridge   40/40  val MAE 1.183338  best 1.182822
-  fit_id 1088d5546f47ff12  (934s elapsed)
+  fit_id 1088d5546f47ff12  (526s elapsed)
 
 building causal history for 138,687 calibration builds …
   causality guard: PASS
 
-  ④a log1p MAE 1.178319 · ④b log1p MAE 0.600958 → primary = 4b
+  ④a log1p MAE 1.178319 · ④b log1p MAE 0.601856 → primary = 4b
 
 sensitivities …
   persisted duration_estimator.joblib; round-trip identical: True
 
-wrote results/p1/duration_control.{md,json} in 948.4s
+wrote results/p1/duration_control.{md,json} in 530.7s
+exit=0

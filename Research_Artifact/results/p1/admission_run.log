@@ -1,12 +1,13 @@
 applying §A1.7 model floor +0.010000 to 6 families …
-  F1: REJECTED — ΔPR-AUC -0.003678 is below the +0.010000 floor, and its 95% CI [-0.005310, -0.001958] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
-  F2: REJECTED — ΔPR-AUC -0.005526 is below the +0.010000 floor, and its 95% CI [-0.007217, -0.003854] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
-  F3: REJECTED — ΔPR-AUC -0.023333 is below the +0.010000 floor, and its 95% CI [-0.026575, -0.019859] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
-  F4: REJECTED — ΔPR-AUC -0.064694 is below the +0.010000 floor, and its 95% CI [-0.067304, -0.061747] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
-  F5: REJECTED — ΔPR-AUC -0.066323 is below the +0.010000 floor, and its 95% CI [-0.069205, -0.063377] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
-  F6: REJECTED — ΔPR-AUC -0.002920 is below the +0.010000 floor, and its 95% CI [-0.004531, -0.001263] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F1: REJECTED — ΔPR-AUC -0.003456 is below the +0.010000 floor, and its 95% CI [-0.005189, -0.001728] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F2: REJECTED — ΔPR-AUC -0.006544 is below the +0.010000 floor, and its 95% CI [-0.008138, -0.005010] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F3: REJECTED — ΔPR-AUC -0.033082 is below the +0.010000 floor, and its 95% CI [-0.036426, -0.029669] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F4: REJECTED — ΔPR-AUC -0.066490 is below the +0.010000 floor, and its 95% CI [-0.069371, -0.063261] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F5: REJECTED — ΔPR-AUC -0.072851 is below the +0.010000 floor, and its 95% CI [-0.075662, -0.069727] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
+  F6: REJECTED — ΔPR-AUC -0.008449 is below the +0.010000 floor, and its 95% CI [-0.010149, -0.006754] lies entirely below 0 — the family is significantly *worse* than the control, not merely short of the floor
 
 admitted set: (empty)
 floor sweep stable across ×0.5/×1/×2: True
 
 wrote results/p1/admission.json and results/p1/incremental_value.md
+exit=0

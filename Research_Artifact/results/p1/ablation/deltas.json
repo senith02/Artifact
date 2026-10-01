@@ -1,16 +1,16 @@
 {
   "provenance": {
     "command": "PYTHONPATH=. python scripts/run_ablation.py",
-    "run_date": "2026-09-12",
+    "run_date": "2026-10-01",
     "seed": 42,
     "n_iter": 20,
-    "elapsed_s": 6532.1,
+    "elapsed_s": 3975.5,
     "algorithm": "xgboost",
     "protocol": "eval_protocol \u00a7A1.3 (families), \u00a7A1.4 (model-level incremental value), \u00a7A1.7 (model floor, used here only as the leave-one-out trigger), \u00a7A1.8 (monotonicity), \u00a7A1.9 (variance decomposition); config DL-019",
     "duration_control_fit_id": "1088d5546f47ff12",
     "split_digest": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde",
-    "control_arm_fit_id": "5b6c9fd6e4762e25",
-    "full_arm_fit_id": "65fd81b1e952fd72",
+    "control_arm_fit_id": "8f9522957d82a1a1",
+    "full_arm_fit_id": "a09cc750e9db41b8",
     "population": {
       "train_builds": 645244,
       "train_failure_rate_pct": 24.354,
@@ -45,7 +45,7 @@
           "min_child_weight": 4,
           "gamma": 0.806358895168009,
           "scale_pos_weight": 2.9744554978355415,
-          "internal_val_pr_auc": 0.2923246384294572
+          "internal_val_pr_auc": 0.29251006497527376
         },
         "calibration_choice": {
           "split": "calibration",
@@ -54,71 +54,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.19263715953056104,
-              "ece": 1.0876342371739084e-08
+              "brier": 0.19269513929246418,
+              "ece": 7.917631277140492e-08
             },
             "sigmoid": {
-              "brier": 0.19488324313621672,
-              "ece": 0.0301384875647613
+              "brier": 0.19490766276268237,
+              "ece": 0.029308920738855472
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.24330617487430573,
-            "f1": 0.4854724283745162,
-            "precision": 0.35094632784264274,
-            "recall": 0.7872404909834824
+            "tau": 0.2529999911785126,
+            "f1": 0.48554886341558184,
+            "precision": 0.3506808410323189,
+            "recall": 0.7889831792695863
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.3866791614540755,
-          "roc_auc": 0.6482360603949531,
-          "brier": 0.19263715953056104,
-          "ece": 1.0876342371739084e-08,
-          "tau": 0.24330617487430573,
-          "precision_at_tau": 0.35094632784264274,
-          "recall_at_tau": 0.7872404909834824,
-          "f1_at_tau": 0.4854724283745162
+          "pr_auc": 0.3880205719282258,
+          "roc_auc": 0.6479536098224912,
+          "brier": 0.19269513929246418,
+          "ece": 7.917631277140492e-08,
+          "tau": 0.2529999911785126,
+          "precision_at_tau": 0.3506808410323189,
+          "recall_at_tau": 0.7889831792695863,
+          "f1_at_tau": 0.4855488634155819
         },
         "artifact": "code\\artifacts\\models\\xgboost__F1.joblib",
-        "fit_id": "794f37e9bb3f37c0",
+        "fit_id": "7bb58326cd03de07",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.3866791614540755,
-          "delta": -0.003678275280001919,
-          "ci_lo": -0.005309682494735371,
-          "ci_hi": -0.0019578700339908206,
+          "control": 0.39147705075077627,
+          "treatment": 0.3880205719282258,
+          "delta": -0.0034564788225504572,
+          "ci_lo": -0.005189027112659486,
+          "ci_hi": -0.0017278064748866375,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.6482360603949531,
-          "delta": -0.002475812568014213,
-          "ci_lo": -0.003881108031357011,
-          "ci_hi": -0.0009601882076574199,
+          "control": 0.6504967467925957,
+          "treatment": 0.6479536098224912,
+          "delta": -0.0025431369701045536,
+          "ci_lo": -0.003944161737012999,
+          "ci_hi": -0.0010382094380212517,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.19263715953056104,
-          "delta": 0.00046813773907578016,
-          "ci_lo": 0.00022607330091657318,
-          "ci_hi": 0.0006928524856530192,
+          "control": 0.19213315160582506,
+          "treatment": 0.19269513929246418,
+          "delta": 0.0005619876866391205,
+          "ci_lo": 0.0003248094594545753,
+          "ci_hi": 0.000794587076685667,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 1.0876342371739084e-08,
-          "delta": 9.424659160929375e-09,
-          "ci_lo": -0.0014822276419290189,
-          "ci_hi": 0.0013818068570338445,
+          "control": 1.4125734024575156e-09,
+          "treatment": 7.917631277140492e-08,
+          "delta": 7.776373936894741e-08,
+          "ci_lo": -0.0015242507026456689,
+          "ci_hi": 0.0013227495094373252,
           "significant": false
         },
         "loo_triggered": false
@@ -148,7 +148,7 @@
           "min_child_weight": 4,
           "gamma": 0.806358895168009,
           "scale_pos_weight": 2.9744554978355415,
-          "internal_val_pr_auc": 0.2843168704430443
+          "internal_val_pr_auc": 0.28350733034638176
         },
         "calibration_choice": {
           "split": "calibration",
@@ -157,71 +157,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.1929802243355093,
-              "ece": 2.0963182254981986e-08
+              "brier": 0.193002409162231,
+              "ece": 4.1816042060694424e-06
             },
             "sigmoid": {
-              "brier": 0.19504740857911235,
-              "ece": 0.021732946841689492
+              "brier": 0.1950578846366872,
+              "ece": 0.02113613996677918
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.2529258728027344,
-            "f1": 0.4853898007033998,
-            "precision": 0.34187601923910577,
-            "recall": 0.8365661463858161
+            "tau": 0.24307601153850555,
+            "f1": 0.4852977299984106,
+            "precision": 0.33987047156446065,
+            "recall": 0.8482598373490933
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.38483174248784546,
-          "roc_auc": 0.6436123244790904,
-          "brier": 0.1929802243355093,
-          "ece": 2.0963182254981986e-08,
-          "tau": 0.2529258728027344,
-          "precision_at_tau": 0.34187601923910577,
-          "recall_at_tau": 0.8365661463858161,
-          "f1_at_tau": 0.48538980070339977
+          "pr_auc": 0.38493324015648667,
+          "roc_auc": 0.643249032196284,
+          "brier": 0.193002409162231,
+          "ece": 4.1816042060694424e-06,
+          "tau": 0.24307601153850555,
+          "precision_at_tau": 0.33987047156446065,
+          "recall_at_tau": 0.8482598373490933,
+          "f1_at_tau": 0.4852977299984106
         },
         "artifact": "code\\artifacts\\models\\xgboost__F2.joblib",
-        "fit_id": "6a66a8b335ab0773",
+        "fit_id": "8d703b95afc71e67",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.38483174248784546,
-          "delta": -0.005525694246231949,
-          "ci_lo": -0.007217405075249012,
-          "ci_hi": -0.0038536109951977774,
+          "control": 0.39147705075077627,
+          "treatment": 0.38493324015648667,
+          "delta": -0.006543810594289601,
+          "ci_lo": -0.008137766834026993,
+          "ci_hi": -0.005010044454435949,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.6436123244790904,
-          "delta": -0.007099548483876839,
-          "ci_lo": -0.008528457635977997,
-          "ci_hi": -0.0055568361606281045,
+          "control": 0.6504967467925957,
+          "treatment": 0.643249032196284,
+          "delta": -0.007247714596311683,
+          "ci_lo": -0.008669199703045633,
+          "ci_hi": -0.005703242472778089,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.1929802243355093,
-          "delta": 0.0008112025440240311,
-          "ci_lo": 0.0005721640786801402,
-          "ci_hi": 0.0010155498827327648,
+          "control": 0.19213315160582506,
+          "treatment": 0.193002409162231,
+          "delta": 0.0008692575564059335,
+          "ci_lo": 0.0006284314254344045,
+          "ci_hi": 0.0010781878907773752,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 2.0963182254981986e-08,
-          "delta": 1.9511499044172277e-08,
-          "ci_lo": -0.0016261122166019099,
-          "ci_hi": 0.0012582780100855906,
+          "control": 1.4125734024575156e-09,
+          "treatment": 4.1816042060694424e-06,
+          "delta": 4.180191632666985e-06,
+          "ci_lo": -0.001663726901152407,
+          "ci_hi": 0.0012162429626664762,
           "significant": false
         },
         "loo_triggered": false
@@ -250,7 +250,7 @@
           "min_child_weight": 7,
           "gamma": 2.031934307200353,
           "scale_pos_weight": 4.590262991313185,
-          "internal_val_pr_auc": 0.37814728298036315
+          "internal_val_pr_auc": 0.3747747111345088
         },
         "calibration_choice": {
           "split": "calibration",
@@ -259,71 +259,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.193314603087742,
-              "ece": 1.2057426365501099e-09
+              "brier": 0.19593654804194993,
+              "ece": 5.988112622560023e-09
             },
             "sigmoid": {
-              "brier": 0.20011477702949612,
-              "ece": 0.044762619874404844
+              "brier": 0.20031744645544242,
+              "ece": 0.028009964729874427
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.22906166315078735,
-            "f1": 0.4505771608338536,
-            "precision": 0.2973455473697816,
-            "recall": 0.9296610597565288
+            "tau": 0.25,
+            "f1": 0.4539977058727137,
+            "precision": 0.30248085192152646,
+            "recall": 0.909658028994292
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.3670245690857095,
-          "roc_auc": 0.5858938609506861,
-          "brier": 0.193314603087742,
-          "ece": 1.2057426365501099e-09,
-          "tau": 0.22906166315078735,
-          "precision_at_tau": 0.2973455473697816,
-          "recall_at_tau": 0.9296610597565288,
-          "f1_at_tau": 0.4505771608338536
+          "pr_auc": 0.3583950532895127,
+          "roc_auc": 0.5850863143736166,
+          "brier": 0.19593654804194993,
+          "ece": 5.988112622560023e-09,
+          "tau": 0.25,
+          "precision_at_tau": 0.30248085192152646,
+          "recall_at_tau": 0.909658028994292,
+          "f1_at_tau": 0.45399770587271376
         },
         "artifact": "code\\artifacts\\models\\xgboost__F3.joblib",
-        "fit_id": "18be00d7b1974252",
+        "fit_id": "10ea5fd0eef40456",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.3670245690857095,
-          "delta": -0.023332867648367894,
-          "ci_lo": -0.02657499636602649,
-          "ci_hi": -0.019858511028183035,
+          "control": 0.39147705075077627,
+          "treatment": 0.3583950532895127,
+          "delta": -0.03308199746126356,
+          "ci_lo": -0.03642573765786171,
+          "ci_hi": -0.02966898470266872,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.5858938609506861,
-          "delta": -0.06481801201228121,
-          "ci_lo": -0.06831613259066689,
-          "ci_hi": -0.06115237251251215,
+          "control": 0.6504967467925957,
+          "treatment": 0.5850863143736166,
+          "delta": -0.06541043241897915,
+          "ci_lo": -0.06902241409484768,
+          "ci_hi": -0.06182223087363412,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.193314603087742,
-          "delta": 0.001145581296256748,
-          "ci_lo": 0.0005279522537261279,
-          "ci_hi": 0.0016829781815628725,
+          "control": 0.19213315160582506,
+          "treatment": 0.19593654804194993,
+          "delta": 0.003803396436124873,
+          "ci_lo": 0.0032240117335968115,
+          "ci_hi": 0.00431596338720258,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 1.2057426365501099e-09,
-          "delta": -2.459405742595996e-10,
-          "ci_lo": -0.002168168555076027,
-          "ci_hi": 0.001010047821704584,
+          "control": 1.4125734024575156e-09,
+          "treatment": 5.988112622560023e-09,
+          "delta": 4.575539220102507e-09,
+          "ci_lo": -0.002074045367407837,
+          "ci_hi": 0.0012200283842625553,
           "significant": false
         },
         "loo_triggered": false
@@ -344,15 +344,15 @@
         "arm": "F4",
         "n_features": 6,
         "best_params": {
-          "n_estimators": 471,
-          "max_depth": 5,
-          "learning_rate": 0.03028890421647745,
-          "subsample": 0.7481838824139475,
-          "colsample_bytree": 0.7878223245103232,
-          "min_child_weight": 2,
-          "gamma": 0.6496075266773582,
-          "scale_pos_weight": 2.871781321356961,
-          "internal_val_pr_auc": 0.3910725604844143
+          "n_estimators": 398,
+          "max_depth": 6,
+          "learning_rate": 0.11005626471339772,
+          "subsample": 0.9122916124087872,
+          "colsample_bytree": 0.783566310215336,
+          "min_child_weight": 5,
+          "gamma": 0.6989849906382872,
+          "scale_pos_weight": 1.7406138616062856,
+          "internal_val_pr_auc": 0.39384748778844314
         },
         "calibration_choice": {
           "split": "calibration",
@@ -361,71 +361,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.19987618989454423,
-              "ece": 2.714398328087919e-09
+              "brier": 0.20074219429824677,
+              "ece": 6.846070756820419e-09
             },
             "sigmoid": {
-              "brier": 0.2024659769925767,
-              "ece": 0.02414577339083505
+              "brier": 0.20234762392228453,
+              "ece": 0.012387245738219628
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.23654866218566895,
-            "f1": 0.455947883217977,
-            "precision": 0.301564525465322,
-            "recall": 0.9342072031115826
+            "tau": 0.23043189942836761,
+            "f1": 0.45147266474100195,
+            "precision": 0.293920645697764,
+            "recall": 0.9730767287972926
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.32566372410386896,
-          "roc_auc": 0.5625192294127946,
-          "brier": 0.19987618989454423,
-          "ece": 2.714398328087919e-09,
-          "tau": 0.23654866218566895,
-          "precision_at_tau": 0.301564525465322,
-          "recall_at_tau": 0.9342072031115826,
-          "f1_at_tau": 0.4559478832179771
+          "pr_auc": 0.324987502021832,
+          "roc_auc": 0.5552077307588883,
+          "brier": 0.20074219429824677,
+          "ece": 6.846070756820419e-09,
+          "tau": 0.23043189942836761,
+          "precision_at_tau": 0.293920645697764,
+          "recall_at_tau": 0.9730767287972926,
+          "f1_at_tau": 0.451472664741002
         },
         "artifact": "code\\artifacts\\models\\xgboost__F4.joblib",
-        "fit_id": "55cc8ec94e4c0e45",
+        "fit_id": "0a2ec6f87739b527",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.32566372410386896,
-          "delta": -0.06469371263020846,
-          "ci_lo": -0.06730397350535278,
-          "ci_hi": -0.06174682611105038,
+          "control": 0.39147705075077627,
+          "treatment": 0.324987502021832,
+          "delta": -0.06648954872894425,
+          "ci_lo": -0.06937123389542724,
+          "ci_hi": -0.06326116554154886,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.5625192294127946,
-          "delta": -0.08819264355017264,
-          "ci_lo": -0.09115147125762071,
-          "ci_hi": -0.08474818396880432,
+          "control": 0.6504967467925957,
+          "treatment": 0.5552077307588883,
+          "delta": -0.09528901603370743,
+          "ci_lo": -0.09831142818605385,
+          "ci_hi": -0.09192592469385023,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.19987618989454423,
-          "delta": 0.0077071681030589645,
-          "ci_lo": 0.007213807389994298,
-          "ci_hi": 0.008125763428220726,
+          "control": 0.19213315160582506,
+          "treatment": 0.20074219429824677,
+          "delta": 0.008609042692421714,
+          "ci_lo": 0.008132505650746863,
+          "ci_hi": 0.009036824308079066,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 2.714398328087919e-09,
-          "delta": 1.2627151172782095e-09,
-          "ci_lo": -0.0018964973091182445,
-          "ci_hi": 0.001263006937907315,
+          "control": 1.4125734024575156e-09,
+          "treatment": 6.846070756820419e-09,
+          "delta": 5.433497354362903e-09,
+          "ci_lo": -0.002091263510691396,
+          "ci_hi": 0.0010970963248013398,
           "significant": false
         },
         "loo_triggered": false
@@ -443,15 +443,15 @@
         "arm": "F5",
         "n_features": 3,
         "best_params": {
-          "n_estimators": 107,
+          "n_estimators": 137,
           "max_depth": 6,
-          "learning_rate": 0.044165640996929656,
-          "subsample": 0.6858338691278116,
-          "colsample_bytree": 0.7634114574898545,
-          "min_child_weight": 13,
-          "gamma": 1.1696974293267037,
-          "scale_pos_weight": 1.610090215591977,
-          "internal_val_pr_auc": 0.3379910552548393
+          "learning_rate": 0.04560651820005272,
+          "subsample": 0.752408490438593,
+          "colsample_bytree": 0.7206048356591506,
+          "min_child_weight": 7,
+          "gamma": 1.8090630527669522,
+          "scale_pos_weight": 1.676945592250578,
+          "internal_val_pr_auc": 0.33888353937349314
         },
         "calibration_choice": {
           "split": "calibration",
@@ -460,71 +460,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.2002956607920041,
-              "ece": 5.297606876834307e-09
+              "brier": 0.20081517719493494,
+              "ece": 4.247121558428201e-09
             },
             "sigmoid": {
-              "brier": 0.20313430898432303,
-              "ece": 0.008185256591200436
+              "brier": 0.2033339908138659,
+              "ece": 0.0025061106484530523
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.25869449973106384,
-            "f1": 0.45952933377527344,
-            "precision": 0.3017706049500954,
-            "recall": 0.9629236753043391
+            "tau": 0.2610369622707367,
+            "f1": 0.45596632006565935,
+            "precision": 0.29754556313335645,
+            "recall": 0.9751730060110118
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.3240341149271667,
-          "roc_auc": 0.5705489671249537,
-          "brier": 0.2002956607920041,
-          "ece": 5.297606876834307e-09,
-          "tau": 0.25869449973106384,
-          "precision_at_tau": 0.3017706049500954,
-          "recall_at_tau": 0.9629236753043391,
-          "f1_at_tau": 0.45952933377527344
+          "pr_auc": 0.3186262078523305,
+          "roc_auc": 0.5655484728479531,
+          "brier": 0.20081517719493494,
+          "ece": 4.247121558428201e-09,
+          "tau": 0.2610369622707367,
+          "precision_at_tau": 0.29754556313335645,
+          "recall_at_tau": 0.9751730060110118,
+          "f1_at_tau": 0.45596632006565935
         },
         "artifact": "code\\artifacts\\models\\xgboost__F5.joblib",
-        "fit_id": "016ceab401036154",
+        "fit_id": "2ea0a7f083a291fe",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.3240341149271667,
-          "delta": -0.0663233218069107,
-          "ci_lo": -0.06920472547893501,
-          "ci_hi": -0.06337702272572368,
+          "control": 0.39147705075077627,
+          "treatment": 0.3186262078523305,
+          "delta": -0.07285084289844579,
+          "ci_lo": -0.07566171494618941,
+          "ci_hi": -0.06972719167867315,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.5705489671249537,
-          "delta": -0.08016290583801355,
-          "ci_lo": -0.0832783351719597,
-          "ci_hi": -0.07703644564880444,
+          "control": 0.6504967467925957,
+          "treatment": 0.5655484728479531,
+          "delta": -0.08494827394464266,
+          "ci_lo": -0.08803759163643683,
+          "ci_hi": -0.08170719395672778,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.2002956607920041,
-          "delta": 0.008126639000518826,
-          "ci_lo": 0.007676296697062881,
-          "ci_hi": 0.00852694061135009,
+          "control": 0.19213315160582506,
+          "treatment": 0.20081517719493494,
+          "delta": 0.008682025589109882,
+          "ci_lo": 0.00822173055753954,
+          "ci_hi": 0.00909003816574513,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 5.297606876834307e-09,
-          "delta": 3.8459236660245976e-09,
-          "ci_lo": -0.002136720824333366,
-          "ci_hi": 0.0012660945896494466,
+          "control": 1.4125734024575156e-09,
+          "treatment": 4.247121558428201e-09,
+          "delta": 2.8345481559706853e-09,
+          "ci_lo": -0.00210511543724469,
+          "ci_hi": 0.0011629151459131445,
           "significant": false
         },
         "loo_triggered": false
@@ -551,7 +551,7 @@
           "min_child_weight": 4,
           "gamma": 0.806358895168009,
           "scale_pos_weight": 2.9744554978355415,
-          "internal_val_pr_auc": 0.28060753966344276
+          "internal_val_pr_auc": 0.2806384854153545
         },
         "calibration_choice": {
           "split": "calibration",
@@ -560,71 +560,71 @@
           "rule": "fit both isotonic and Platt on the calibration split; keep the lower calibration-split Brier (eval_protocol \u00a75, DL-004)",
           "comparison": {
             "isotonic": {
-              "brier": 0.19373960104966856,
-              "ece": 1.944370154145252e-08
+              "brier": 0.19386475902123895,
+              "ece": 1.23804209111112e-07
             },
             "sigmoid": {
-              "brier": 0.19534827579974695,
-              "ece": 0.012018062110618274
+              "brier": 0.19544265623613652,
+              "ece": 0.011290457968199693
             }
           },
           "chosen": "isotonic",
           "tau_rule": "threshold on the calibrated probability maximising F1 on the calibration split; frozen for test (\u00a75)",
           "tau_selection": {
-            "tau": 0.24812030792236328,
-            "f1": 0.48017263808751287,
-            "precision": 0.34445127574546575,
-            "recall": 0.7923927867858767
+            "tau": 0.24839568138122559,
+            "f1": 0.4798260843757884,
+            "precision": 0.339710455538746,
+            "recall": 0.8166641410314694
           }
         },
         "calibrated": {
           "n": 138687,
           "positives": 39594,
           "base_rate": 0.28549179086720455,
-          "pr_auc": 0.38743775838454136,
-          "roc_auc": 0.6403438979644582,
-          "brier": 0.19373960104966856,
-          "ece": 1.944370154145252e-08,
-          "tau": 0.24812030792236328,
-          "precision_at_tau": 0.34445127574546575,
-          "recall_at_tau": 0.7923927867858767,
-          "f1_at_tau": 0.4801726380875128
+          "pr_auc": 0.38302770434269806,
+          "roc_auc": 0.6396332363470354,
+          "brier": 0.19386475902123895,
+          "ece": 1.23804209111112e-07,
+          "tau": 0.24839568138122559,
+          "precision_at_tau": 0.339710455538746,
+          "recall_at_tau": 0.8166641410314694,
+          "f1_at_tau": 0.47982608437578833
         },
         "artifact": "code\\artifacts\\models\\xgboost__F6.joblib",
-        "fit_id": "679f18ed2809519e",
+        "fit_id": "dd9e25f8bc70dbfe",
         "round_trip": "PASS"
       },
       "delta_vs_control": {
         "pr_auc": {
-          "control": 0.3903574367340774,
-          "treatment": 0.38743775838454136,
-          "delta": -0.002919678349536048,
-          "ci_lo": -0.004531434800921335,
-          "ci_hi": -0.0012633452869816226,
+          "control": 0.39147705075077627,
+          "treatment": 0.38302770434269806,
+          "delta": -0.008449346408078207,
+          "ci_lo": -0.010149026981486732,
+          "ci_hi": -0.00675439991192905,
           "significant": true
         },
         "roc_auc": {
-          "control": 0.6507118729629673,
-          "treatment": 0.6403438979644582,
-          "delta": -0.010367974998509055,
-          "ci_lo": -0.011662424977576502,
-          "ci_hi": -0.00893593996476858,
+          "control": 0.6504967467925957,
+          "treatment": 0.6396332363470354,
+          "delta": -0.010863510445560332,
+          "ci_lo": -0.012072356197688516,
+          "ci_hi": -0.00951376992696043,
           "significant": true
         },
         "brier": {
-          "control": 0.19216902179148526,
-          "treatment": 0.19373960104966856,
-          "delta": 0.0015705792581832967,
-          "ci_lo": 0.001349210549608138,
-          "ci_hi": 0.00177362895238303,
+          "control": 0.19213315160582506,
+          "treatment": 0.19386475902123895,
+          "delta": 0.0017316074154138938,
+          "ci_lo": 0.001504697609591099,
+          "ci_hi": 0.0019501942119278816,
           "significant": true
         },
         "ece": {
-          "control": 1.4516832108097094e-09,
-          "treatment": 1.944370154145252e-08,
-          "delta": 1.799201833064281e-08,
-          "ci_lo": -0.0015624233800373098,
-          "ci_hi": 0.0013695151003231185,
+          "control": 1.4125734024575156e-09,
+          "treatment": 1.23804209111112e-07,
+          "delta": 1.2239163570865447e-07,
+          "ci_lo": -0.0016083545009725891,
+          "ci_hi": 0.0014675086042232675,
           "significant": false
         },
         "loo_triggered": false

@@ -1,168 +1,169 @@
 reading C:\Users\senit\Desktop\Projects\Research\Artifact\Dataset\19314170\final-2017-01-25.csv\final-2017-01-25.csv …
-  analytic builds: 922,624 across 948 projects (92s)
+  analytic builds: 922,624 across 948 projects (67s)
   test split closed: 138,693 builds / 170 projects dropped unread
   train 645,244 builds (24.354% failure) · calibration 138,687 builds (28.549% failure)
-verified frozen xgboost:control reproduces its P1-T5 metrics exactly (fit id 5b6c9fd6e4762e25)
-verified frozen xgboost:full reproduces its P1-T5 metrics exactly (fit id 65fd81b1e952fd72)
+verified frozen xgboost:control reproduces its P1-T5 metrics exactly (fit id 8f9522957d82a1a1)
+verified frozen xgboost:full reproduces its P1-T5 metrics exactly (fit id a09cc750e9db41b8)
 
 run fingerprint 29733023f7b7a1d4
 
-[   125s] training xgboost:F1 (8 feature(s), 20 candidates) …
-    xgboost        F1        1/20  val PR-AUC 0.263168  best 0.263168
-    xgboost        F1        2/20  val PR-AUC 0.273790  best 0.273790
-    xgboost        F1        3/20  val PR-AUC 0.281476  best 0.281476
-    xgboost        F1        4/20  val PR-AUC 0.258376  best 0.281476
-    xgboost        F1        5/20  val PR-AUC 0.269546  best 0.281476
-    xgboost        F1        6/20  val PR-AUC 0.262253  best 0.281476
-    xgboost        F1        7/20  val PR-AUC 0.261691  best 0.281476
-    xgboost        F1        8/20  val PR-AUC 0.262402  best 0.281476
-    xgboost        F1        9/20  val PR-AUC 0.266583  best 0.281476
-    xgboost        F1       10/20  val PR-AUC 0.274153  best 0.281476
-    xgboost        F1       11/20  val PR-AUC 0.262561  best 0.281476
-    xgboost        F1       12/20  val PR-AUC 0.292325  best 0.292325
-    xgboost        F1       13/20  val PR-AUC 0.275159  best 0.292325
-    xgboost        F1       14/20  val PR-AUC 0.264441  best 0.292325
-    xgboost        F1       15/20  val PR-AUC 0.265169  best 0.292325
-    xgboost        F1       16/20  val PR-AUC 0.273909  best 0.292325
-    xgboost        F1       17/20  val PR-AUC 0.288193  best 0.292325
-    xgboost        F1       18/20  val PR-AUC 0.267739  best 0.292325
-    xgboost        F1       19/20  val PR-AUC 0.279978  best 0.292325
-    xgboost        F1       20/20  val PR-AUC 0.263619  best 0.292325
-    xgboost:F1               isotonic  Brier 0.192637  ECE 0.000000
-    xgboost:F1               sigmoid   Brier 0.194883  ECE 0.030138
-  xgboost:F1: PR-AUC 0.386679 · ROC-AUC 0.648236 · Brier 0.192637 · round-trip PASS
-  F1 vs control: ΔPR-AUC -0.003678 [-0.005310, -0.001958] — floor trigger: False
+[    86s] training xgboost:F1 (8 feature(s), 20 candidates) …
+    xgboost        F1        1/20  val PR-AUC 0.264987  best 0.264987
+    xgboost        F1        2/20  val PR-AUC 0.274399  best 0.274399
+    xgboost        F1        3/20  val PR-AUC 0.281511  best 0.281511
+    xgboost        F1        4/20  val PR-AUC 0.257260  best 0.281511
+    xgboost        F1        5/20  val PR-AUC 0.269915  best 0.281511
+    xgboost        F1        6/20  val PR-AUC 0.262493  best 0.281511
+    xgboost        F1        7/20  val PR-AUC 0.262680  best 0.281511
+    xgboost        F1        8/20  val PR-AUC 0.262654  best 0.281511
+    xgboost        F1        9/20  val PR-AUC 0.266240  best 0.281511
+    xgboost        F1       10/20  val PR-AUC 0.275027  best 0.281511
+    xgboost        F1       11/20  val PR-AUC 0.262870  best 0.281511
+    xgboost        F1       12/20  val PR-AUC 0.292510  best 0.292510
+    xgboost        F1       13/20  val PR-AUC 0.275079  best 0.292510
+    xgboost        F1       14/20  val PR-AUC 0.263438  best 0.292510
+    xgboost        F1       15/20  val PR-AUC 0.265142  best 0.292510
+    xgboost        F1       16/20  val PR-AUC 0.273067  best 0.292510
+    xgboost        F1       17/20  val PR-AUC 0.288031  best 0.292510
+    xgboost        F1       18/20  val PR-AUC 0.267194  best 0.292510
+    xgboost        F1       19/20  val PR-AUC 0.279597  best 0.292510
+    xgboost        F1       20/20  val PR-AUC 0.263965  best 0.292510
+    xgboost:F1               isotonic  Brier 0.192695  ECE 0.000000
+    xgboost:F1               sigmoid   Brier 0.194908  ECE 0.029309
+  xgboost:F1: PR-AUC 0.388021 · ROC-AUC 0.647954 · Brier 0.192695 · round-trip PASS
+  F1 vs control: ΔPR-AUC -0.003456 [-0.005189, -0.001728] — floor trigger: False
 
-[   649s] training xgboost:F2 (7 feature(s), 20 candidates) …
-    xgboost        F2        1/20  val PR-AUC 0.257032  best 0.257032
-    xgboost        F2        2/20  val PR-AUC 0.265035  best 0.265035
-    xgboost        F2        3/20  val PR-AUC 0.276437  best 0.276437
-    xgboost        F2        4/20  val PR-AUC 0.253577  best 0.276437
-    xgboost        F2        5/20  val PR-AUC 0.262910  best 0.276437
-    xgboost        F2        6/20  val PR-AUC 0.254812  best 0.276437
-    xgboost        F2        7/20  val PR-AUC 0.254919  best 0.276437
-    xgboost        F2        8/20  val PR-AUC 0.255385  best 0.276437
-    xgboost        F2        9/20  val PR-AUC 0.258679  best 0.276437
-    xgboost        F2       10/20  val PR-AUC 0.269714  best 0.276437
-    xgboost        F2       11/20  val PR-AUC 0.254534  best 0.276437
-    xgboost        F2       12/20  val PR-AUC 0.284317  best 0.284317
-    xgboost        F2       13/20  val PR-AUC 0.265694  best 0.284317
-    xgboost        F2       14/20  val PR-AUC 0.259103  best 0.284317
-    xgboost        F2       15/20  val PR-AUC 0.256378  best 0.284317
-    xgboost        F2       16/20  val PR-AUC 0.266077  best 0.284317
-    xgboost        F2       17/20  val PR-AUC 0.276989  best 0.284317
-    xgboost        F2       18/20  val PR-AUC 0.259375  best 0.284317
-    xgboost        F2       19/20  val PR-AUC 0.273535  best 0.284317
-    xgboost        F2       20/20  val PR-AUC 0.257146  best 0.284317
-    xgboost:F2               isotonic  Brier 0.192980  ECE 0.000000
-    xgboost:F2               sigmoid   Brier 0.195047  ECE 0.021733
-  xgboost:F2: PR-AUC 0.384832 · ROC-AUC 0.643612 · Brier 0.192980 · round-trip PASS
-  F2 vs control: ΔPR-AUC -0.005526 [-0.007217, -0.003854] — floor trigger: False
+[   404s] training xgboost:F2 (7 feature(s), 20 candidates) …
+    xgboost        F2        1/20  val PR-AUC 0.257550  best 0.257550
+    xgboost        F2        2/20  val PR-AUC 0.264381  best 0.264381
+    xgboost        F2        3/20  val PR-AUC 0.276607  best 0.276607
+    xgboost        F2        4/20  val PR-AUC 0.251724  best 0.276607
+    xgboost        F2        5/20  val PR-AUC 0.263073  best 0.276607
+    xgboost        F2        6/20  val PR-AUC 0.254552  best 0.276607
+    xgboost        F2        7/20  val PR-AUC 0.254452  best 0.276607
+    xgboost        F2        8/20  val PR-AUC 0.256197  best 0.276607
+    xgboost        F2        9/20  val PR-AUC 0.258520  best 0.276607
+    xgboost        F2       10/20  val PR-AUC 0.268991  best 0.276607
+    xgboost        F2       11/20  val PR-AUC 0.254674  best 0.276607
+    xgboost        F2       12/20  val PR-AUC 0.283507  best 0.283507
+    xgboost        F2       13/20  val PR-AUC 0.265574  best 0.283507
+    xgboost        F2       14/20  val PR-AUC 0.259656  best 0.283507
+    xgboost        F2       15/20  val PR-AUC 0.256812  best 0.283507
+    xgboost        F2       16/20  val PR-AUC 0.266666  best 0.283507
+    xgboost        F2       17/20  val PR-AUC 0.277587  best 0.283507
+    xgboost        F2       18/20  val PR-AUC 0.259874  best 0.283507
+    xgboost        F2       19/20  val PR-AUC 0.273973  best 0.283507
+    xgboost        F2       20/20  val PR-AUC 0.257229  best 0.283507
+    xgboost:F2               isotonic  Brier 0.193002  ECE 0.000004
+    xgboost:F2               sigmoid   Brier 0.195058  ECE 0.021136
+  xgboost:F2: PR-AUC 0.384933 · ROC-AUC 0.643249 · Brier 0.193002 · round-trip PASS
+  F2 vs control: ΔPR-AUC -0.006544 [-0.008138, -0.005010] — floor trigger: False
 
-[  1081s] training xgboost:F3 (6 feature(s), 20 candidates) …
-    xgboost        F3        1/20  val PR-AUC 0.335699  best 0.335699
-    xgboost        F3        2/20  val PR-AUC 0.346644  best 0.346644
-    xgboost        F3        3/20  val PR-AUC 0.283434  best 0.346644
-    xgboost        F3        4/20  val PR-AUC 0.346664  best 0.346664
-    xgboost        F3        5/20  val PR-AUC 0.340893  best 0.346664
-    xgboost        F3        6/20  val PR-AUC 0.359148  best 0.359148
-    xgboost        F3        7/20  val PR-AUC 0.349007  best 0.359148
-    xgboost        F3        8/20  val PR-AUC 0.346022  best 0.359148
-    xgboost        F3        9/20  val PR-AUC 0.360531  best 0.360531
-    xgboost        F3       10/20  val PR-AUC 0.334903  best 0.360531
-    xgboost        F3       11/20  val PR-AUC 0.378147  best 0.378147
-    xgboost        F3       12/20  val PR-AUC 0.294076  best 0.378147
-    xgboost        F3       13/20  val PR-AUC 0.337964  best 0.378147
-    xgboost        F3       14/20  val PR-AUC 0.341753  best 0.378147
-    xgboost        F3       15/20  val PR-AUC 0.378094  best 0.378147
-    xgboost        F3       16/20  val PR-AUC 0.338688  best 0.378147
-    xgboost        F3       17/20  val PR-AUC 0.310720  best 0.378147
-    xgboost        F3       18/20  val PR-AUC 0.360159  best 0.378147
-    xgboost        F3       19/20  val PR-AUC 0.325671  best 0.378147
-    xgboost        F3       20/20  val PR-AUC 0.352236  best 0.378147
-    xgboost:F3               isotonic  Brier 0.193315  ECE 0.000000
-    xgboost:F3               sigmoid   Brier 0.200115  ECE 0.044763
-  xgboost:F3: PR-AUC 0.367025 · ROC-AUC 0.585894 · Brier 0.193315 · round-trip PASS
-  F3 vs control: ΔPR-AUC -0.023333 [-0.026575, -0.019859] — floor trigger: False
+[   727s] training xgboost:F3 (6 feature(s), 20 candidates) …
+    xgboost        F3        1/20  val PR-AUC 0.334370  best 0.334370
+    xgboost        F3        2/20  val PR-AUC 0.343598  best 0.343598
+    xgboost        F3        3/20  val PR-AUC 0.282584  best 0.343598
+    xgboost        F3        4/20  val PR-AUC 0.361259  best 0.361259
+    xgboost        F3        5/20  val PR-AUC 0.336278  best 0.361259
+    xgboost        F3        6/20  val PR-AUC 0.368733  best 0.368733
+    xgboost        F3        7/20  val PR-AUC 0.351457  best 0.368733
+    xgboost        F3        8/20  val PR-AUC 0.339118  best 0.368733
+    xgboost        F3        9/20  val PR-AUC 0.364191  best 0.368733
+    xgboost        F3       10/20  val PR-AUC 0.334181  best 0.368733
+    xgboost        F3       11/20  val PR-AUC 0.374775  best 0.374775
+    xgboost        F3       12/20  val PR-AUC 0.293323  best 0.374775
+    xgboost        F3       13/20  val PR-AUC 0.331531  best 0.374775
+    xgboost        F3       14/20  val PR-AUC 0.333489  best 0.374775
+    xgboost        F3       15/20  val PR-AUC 0.372520  best 0.374775
+    xgboost        F3       16/20  val PR-AUC 0.340690  best 0.374775
+    xgboost        F3       17/20  val PR-AUC 0.310018  best 0.374775
+    xgboost        F3       18/20  val PR-AUC 0.363144  best 0.374775
+    xgboost        F3       19/20  val PR-AUC 0.326382  best 0.374775
+    xgboost        F3       20/20  val PR-AUC 0.361986  best 0.374775
+    xgboost:F3               isotonic  Brier 0.195937  ECE 0.000000
+    xgboost:F3               sigmoid   Brier 0.200317  ECE 0.028010
+  xgboost:F3: PR-AUC 0.358395 · ROC-AUC 0.585086 · Brier 0.195937 · round-trip PASS
+  F3 vs control: ΔPR-AUC -0.033082 [-0.036426, -0.029669] — floor trigger: False
 
-[  1522s] training xgboost:F4 (6 feature(s), 20 candidates) …
-    xgboost        F4        1/20  val PR-AUC 0.365819  best 0.365819
-    xgboost        F4        2/20  val PR-AUC 0.365355  best 0.365819
-    xgboost        F4        3/20  val PR-AUC 0.299411  best 0.365819
-    xgboost        F4        4/20  val PR-AUC 0.380250  best 0.380250
-    xgboost        F4        5/20  val PR-AUC 0.391073  best 0.391073
-    xgboost        F4        6/20  val PR-AUC 0.361941  best 0.391073
-    xgboost        F4        7/20  val PR-AUC 0.377924  best 0.391073
-    xgboost        F4        8/20  val PR-AUC 0.381095  best 0.391073
-    xgboost        F4        9/20  val PR-AUC 0.377813  best 0.391073
-    xgboost        F4       10/20  val PR-AUC 0.348989  best 0.391073
-    xgboost        F4       11/20  val PR-AUC 0.357394  best 0.391073
-    xgboost        F4       12/20  val PR-AUC 0.320905  best 0.391073
-    xgboost        F4       13/20  val PR-AUC 0.356925  best 0.391073
-    xgboost        F4       14/20  val PR-AUC 0.341875  best 0.391073
-    xgboost        F4       15/20  val PR-AUC 0.358085  best 0.391073
-    xgboost        F4       16/20  val PR-AUC 0.360413  best 0.391073
-    xgboost        F4       17/20  val PR-AUC 0.312596  best 0.391073
-    xgboost        F4       18/20  val PR-AUC 0.361502  best 0.391073
-    xgboost        F4       19/20  val PR-AUC 0.346889  best 0.391073
-    xgboost        F4       20/20  val PR-AUC 0.373722  best 0.391073
-    xgboost:F4               isotonic  Brier 0.199876  ECE 0.000000
-    xgboost:F4               sigmoid   Brier 0.202466  ECE 0.024146
-  xgboost:F4: PR-AUC 0.325664 · ROC-AUC 0.562519 · Brier 0.199876 · round-trip PASS
-  F4 vs control: ΔPR-AUC -0.064694 [-0.067304, -0.061747] — floor trigger: False
+[   987s] training xgboost:F4 (6 feature(s), 20 candidates) …
+    xgboost        F4        1/20  val PR-AUC 0.384824  best 0.384824
+    xgboost        F4        2/20  val PR-AUC 0.372025  best 0.384824
+    xgboost        F4        3/20  val PR-AUC 0.297701  best 0.384824
+    xgboost        F4        4/20  val PR-AUC 0.380897  best 0.384824
+    xgboost        F4        5/20  val PR-AUC 0.382424  best 0.384824
+    xgboost        F4        6/20  val PR-AUC 0.362088  best 0.384824
+    xgboost        F4        7/20  val PR-AUC 0.382345  best 0.384824
+    xgboost        F4        8/20  val PR-AUC 0.393847  best 0.393847
+    xgboost        F4        9/20  val PR-AUC 0.386400  best 0.393847
+    xgboost        F4       10/20  val PR-AUC 0.363767  best 0.393847
+    xgboost        F4       11/20  val PR-AUC 0.349657  best 0.393847
+    xgboost        F4       12/20  val PR-AUC 0.320189  best 0.393847
+    xgboost        F4       13/20  val PR-AUC 0.376259  best 0.393847
+    xgboost        F4       14/20  val PR-AUC 0.387571  best 0.393847
+    xgboost        F4       15/20  val PR-AUC 0.355556  best 0.393847
+    xgboost        F4       16/20  val PR-AUC 0.377766  best 0.393847
+    xgboost        F4       17/20  val PR-AUC 0.311899  best 0.393847
+    xgboost        F4       18/20  val PR-AUC 0.361809  best 0.393847
+    xgboost        F4       19/20  val PR-AUC 0.346771  best 0.393847
+    xgboost        F4       20/20  val PR-AUC 0.380141  best 0.393847
+    xgboost:F4               isotonic  Brier 0.200742  ECE 0.000000
+    xgboost:F4               sigmoid   Brier 0.202348  ECE 0.012387
+  xgboost:F4: PR-AUC 0.324988 · ROC-AUC 0.555208 · Brier 0.200742 · round-trip PASS
+  F4 vs control: ΔPR-AUC -0.066490 [-0.069371, -0.063261] — floor trigger: False
 
-[  1982s] training xgboost:F5 (3 feature(s), 20 candidates) …
-    xgboost        F5        1/20  val PR-AUC 0.285343  best 0.285343
-    xgboost        F5        2/20  val PR-AUC 0.336220  best 0.336220
-    xgboost        F5        3/20  val PR-AUC 0.329905  best 0.336220
-    xgboost        F5        4/20  val PR-AUC 0.305359  best 0.336220
-    xgboost        F5        5/20  val PR-AUC 0.336133  best 0.336220
-    xgboost        F5        6/20  val PR-AUC 0.321949  best 0.336220
-    xgboost        F5        7/20  val PR-AUC 0.280544  best 0.336220
-    xgboost        F5        8/20  val PR-AUC 0.328637  best 0.336220
-    xgboost        F5        9/20  val PR-AUC 0.331373  best 0.336220
-    xgboost        F5       10/20  val PR-AUC 0.337991  best 0.337991
-    xgboost        F5       11/20  val PR-AUC 0.323919  best 0.337991
-    xgboost        F5       12/20  val PR-AUC 0.334671  best 0.337991
-    xgboost        F5       13/20  val PR-AUC 0.336418  best 0.337991
-    xgboost        F5       14/20  val PR-AUC 0.325633  best 0.337991
-    xgboost        F5       15/20  val PR-AUC 0.329095  best 0.337991
-    xgboost        F5       16/20  val PR-AUC 0.334980  best 0.337991
-    xgboost        F5       17/20  val PR-AUC 0.321881  best 0.337991
-    xgboost        F5       18/20  val PR-AUC 0.329000  best 0.337991
-    xgboost        F5       19/20  val PR-AUC 0.322976  best 0.337991
-    xgboost        F5       20/20  val PR-AUC 0.325592  best 0.337991
-    xgboost:F5               isotonic  Brier 0.200296  ECE 0.000000
-    xgboost:F5               sigmoid   Brier 0.203134  ECE 0.008185
-  xgboost:F5: PR-AUC 0.324034 · ROC-AUC 0.570549 · Brier 0.200296 · round-trip PASS
-  F5 vs control: ΔPR-AUC -0.066323 [-0.069205, -0.063377] — floor trigger: False
+[  1399s] training xgboost:F5 (3 feature(s), 20 candidates) …
+    xgboost        F5        1/20  val PR-AUC 0.285530  best 0.285530
+    xgboost        F5        2/20  val PR-AUC 0.337068  best 0.337068
+    xgboost        F5        3/20  val PR-AUC 0.328531  best 0.337068
+    xgboost        F5        4/20  val PR-AUC 0.306073  best 0.337068
+    xgboost        F5        5/20  val PR-AUC 0.337088  best 0.337088
+    xgboost        F5        6/20  val PR-AUC 0.322027  best 0.337088
+    xgboost        F5        7/20  val PR-AUC 0.280766  best 0.337088
+    xgboost        F5        8/20  val PR-AUC 0.324588  best 0.337088
+    xgboost        F5        9/20  val PR-AUC 0.330091  best 0.337088
+    xgboost        F5       10/20  val PR-AUC 0.337939  best 0.337939
+    xgboost        F5       11/20  val PR-AUC 0.322174  best 0.337939
+    xgboost        F5       12/20  val PR-AUC 0.334646  best 0.337939
+    xgboost        F5       13/20  val PR-AUC 0.338884  best 0.338884
+    xgboost        F5       14/20  val PR-AUC 0.330033  best 0.338884
+    xgboost        F5       15/20  val PR-AUC 0.326263  best 0.338884
+    xgboost        F5       16/20  val PR-AUC 0.334493  best 0.338884
+    xgboost        F5       17/20  val PR-AUC 0.322065  best 0.338884
+    xgboost        F5       18/20  val PR-AUC 0.327328  best 0.338884
+    xgboost        F5       19/20  val PR-AUC 0.323310  best 0.338884
+    xgboost        F5       20/20  val PR-AUC 0.328325  best 0.338884
+    xgboost:F5               isotonic  Brier 0.200815  ECE 0.000000
+    xgboost:F5               sigmoid   Brier 0.203334  ECE 0.002506
+  xgboost:F5: PR-AUC 0.318626 · ROC-AUC 0.565548 · Brier 0.200815 · round-trip PASS
+  F5 vs control: ΔPR-AUC -0.072851 [-0.075662, -0.069727] — floor trigger: False
 
-[  2478s] training xgboost:F6 (4 feature(s), 20 candidates) …
-    xgboost        F6        1/20  val PR-AUC 0.253797  best 0.253797
-    xgboost        F6        2/20  val PR-AUC 0.263556  best 0.263556
-    xgboost        F6        3/20  val PR-AUC 0.275007  best 0.275007
-    xgboost        F6        4/20  val PR-AUC 0.248140  best 0.275007
-    xgboost        F6        5/20  val PR-AUC 0.261066  best 0.275007
-    xgboost        F6        6/20  val PR-AUC 0.249998  best 0.275007
-    xgboost        F6        7/20  val PR-AUC 0.250560  best 0.275007
-    xgboost        F6        8/20  val PR-AUC 0.255225  best 0.275007
-    xgboost        F6        9/20  val PR-AUC 0.256624  best 0.275007
-    xgboost        F6       10/20  val PR-AUC 0.265177  best 0.275007
-    xgboost        F6       11/20  val PR-AUC 0.250260  best 0.275007
-    xgboost        F6       12/20  val PR-AUC 0.280608  best 0.280608
-    xgboost        F6       13/20  val PR-AUC 0.260775  best 0.280608
-    xgboost        F6       14/20  val PR-AUC 0.256858  best 0.280608
-    xgboost        F6       15/20  val PR-AUC 0.251263  best 0.280608
-    xgboost        F6       16/20  val PR-AUC 0.261638  best 0.280608
-    xgboost        F6       17/20  val PR-AUC 0.278245  best 0.280608
-    xgboost        F6       18/20  val PR-AUC 0.255092  best 0.280608
-    xgboost        F6       19/20  val PR-AUC 0.268037  best 0.280608
-    xgboost        F6       20/20  val PR-AUC 0.252322  best 0.280608
-    xgboost:F6               isotonic  Brier 0.193740  ECE 0.000000
-    xgboost:F6               sigmoid   Brier 0.195348  ECE 0.012018
-  xgboost:F6: PR-AUC 0.387438 · ROC-AUC 0.640344 · Brier 0.193740 · round-trip PASS
-  F6 vs control: ΔPR-AUC -0.002920 [-0.004531, -0.001263] — floor trigger: False
+[  1746s] training xgboost:F6 (4 feature(s), 20 candidates) …
+    xgboost        F6        1/20  val PR-AUC 0.253470  best 0.253470
+    xgboost        F6        2/20  val PR-AUC 0.263441  best 0.263441
+    xgboost        F6        3/20  val PR-AUC 0.275046  best 0.275046
+    xgboost        F6        4/20  val PR-AUC 0.247597  best 0.275046
+    xgboost        F6        5/20  val PR-AUC 0.260513  best 0.275046
+    xgboost        F6        6/20  val PR-AUC 0.250498  best 0.275046
+    xgboost        F6        7/20  val PR-AUC 0.251103  best 0.275046
+    xgboost        F6        8/20  val PR-AUC 0.253374  best 0.275046
+    xgboost        F6        9/20  val PR-AUC 0.256652  best 0.275046
+    xgboost        F6       10/20  val PR-AUC 0.264728  best 0.275046
+    xgboost        F6       11/20  val PR-AUC 0.250787  best 0.275046
+    xgboost        F6       12/20  val PR-AUC 0.280638  best 0.280638
+    xgboost        F6       13/20  val PR-AUC 0.260422  best 0.280638
+    xgboost        F6       14/20  val PR-AUC 0.256194  best 0.280638
+    xgboost        F6       15/20  val PR-AUC 0.251575  best 0.280638
+    xgboost        F6       16/20  val PR-AUC 0.261558  best 0.280638
+    xgboost        F6       17/20  val PR-AUC 0.279461  best 0.280638
+    xgboost        F6       18/20  val PR-AUC 0.255759  best 0.280638
+    xgboost        F6       19/20  val PR-AUC 0.267811  best 0.280638
+    xgboost        F6       20/20  val PR-AUC 0.252604  best 0.280638
+    xgboost:F6               isotonic  Brier 0.193865  ECE 0.000000
+    xgboost:F6               sigmoid   Brier 0.195443  ECE 0.011290
+  xgboost:F6: PR-AUC 0.383028 · ROC-AUC 0.639633 · Brier 0.193865 · round-trip PASS
+  F6 vs control: ΔPR-AUC -0.008449 [-0.010149, -0.006754] — floor trigger: False
 
-[  3057s] computing SHAP on the frozen full arm (138,687 calibration builds) …
+[  2074s] computing SHAP on the frozen full arm (138,687 calibration builds) …
 
-done in 6532.1s
+done in 3975.5s
+exit=0

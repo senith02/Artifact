@@ -5,7 +5,7 @@
     "dataset_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Dataset\\19314170\\final-2017-01-25.csv\\final-2017-01-25.csv",
     "seed": 42,
     "spec": "context/duration_control_spec.md (P1-T1); eval_protocol \u00a7A1.1/\u00a7A1.2; DL-014 (Accepted 2026-08-17)",
-    "elapsed_s": 948.4,
+    "elapsed_s": 530.7,
     "estimator_artifact": "code\\artifacts\\duration_estimator.joblib",
     "fit_id": "1088d5546f47ff12",
     "split": "train",
@@ -75,7 +75,7 @@
   "selection": {
     "rule": "lower calibration-split log1p MAE wins; ties to 4 d.p. resolve to \u2463b (duration_control_spec.md \u00a75)",
     "mae_log1p_4a_xgboost": 1.1783185175366975,
-    "mae_log1p_4b_expanding": 0.6009576160663775,
+    "mae_log1p_4b_expanding": 0.6018564232399453,
     "primary_form": "4b"
   },
   "calibration_split": {
@@ -83,31 +83,31 @@
       "all_builds": {
         "n": 138565,
         "n_excluded_no_label": 122,
-        "mae_log1p": 0.6009576160663775,
-        "median_ae_log1p": 0.36261248124216294,
-        "mae_seconds": 1285.1231102758356,
-        "median_ae_seconds": 217.00000000000006,
-        "spearman_rho": 0.8690534715462298
+        "mae_log1p": 0.6018564232399453,
+        "median_ae_log1p": 0.3633316603269714,
+        "mae_seconds": 1286.069922601532,
+        "median_ae_seconds": 217.50076923258987,
+        "spearman_rho": 0.8687936959178018
       },
       "project_rung_only": {
-        "n": 138415,
+        "n": 138394,
         "n_excluded_no_label": 120,
-        "mae_log1p": 0.599674417555128,
-        "median_ae_log1p": 0.3619799961684258,
-        "mae_seconds": 1285.9539051068973,
-        "median_ae_seconds": 216.9999999999999,
-        "spearman_rho": 0.8698129448583225
+        "mae_log1p": 0.600446652053904,
+        "median_ae_log1p": 0.36275110724484083,
+        "mae_seconds": 1287.0102231692217,
+        "median_ae_seconds": 217.0000000000001,
+        "spearman_rho": 0.8696412812026303
       },
       "coverage": {
         "n_builds": 138687,
         "levels": {
           "project": {
-            "n": 138535,
-            "pct": 99.8904
+            "n": 138514,
+            "pct": 99.8753
           },
           "language": {
-            "n": 152,
-            "pct": 0.1096
+            "n": 173,
+            "pct": 0.1247
           },
           "global": {
             "n": 0,
@@ -117,11 +117,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     },
@@ -163,11 +163,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     },
@@ -209,11 +209,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     }
@@ -223,31 +223,31 @@
       "all_builds": {
         "n": 138565,
         "n_excluded_no_label": 122,
-        "mae_log1p": 0.28863090576990497,
-        "median_ae_log1p": 0.1123933664136958,
-        "mae_seconds": 435.36415558968196,
-        "median_ae_seconds": 87.48438507805758,
-        "spearman_rho": 0.9299527138125174
+        "mae_log1p": 0.2908087222172872,
+        "median_ae_log1p": 0.11367189305463654,
+        "mae_seconds": 441.1117518826813,
+        "median_ae_seconds": 88.02381102371649,
+        "spearman_rho": 0.929390908996251
       },
       "project_rung_only": {
-        "n": 138415,
+        "n": 138394,
         "n_excluded_no_label": 120,
-        "mae_log1p": 0.28700923955974644,
-        "median_ae_log1p": 0.1121651627281075,
-        "mae_seconds": 435.2740687012555,
-        "median_ae_seconds": 87.00116076649624,
-        "spearman_rho": 0.9305445332912357
+        "mae_log1p": 0.2890146196521769,
+        "median_ae_log1p": 0.11341844409950386,
+        "mae_seconds": 441.0080198536333,
+        "median_ae_seconds": 88.00000000000003,
+        "spearman_rho": 0.9300556515856606
       },
       "coverage": {
         "n_builds": 138687,
         "levels": {
           "project": {
-            "n": 138535,
-            "pct": 99.8904
+            "n": 138514,
+            "pct": 99.8753
           },
           "language": {
-            "n": 152,
-            "pct": 0.1096
+            "n": 173,
+            "pct": 0.1247
           },
           "global": {
             "n": 0,
@@ -261,7 +261,7 @@
           "p75": 50.0,
           "p95": 50.0,
           "max": 50,
-          "zero": 152
+          "zero": 173
         }
       }
     },
@@ -269,31 +269,31 @@
       "all_builds": {
         "n": 138565,
         "n_excluded_no_label": 122,
-        "mae_log1p": 0.6057766561629532,
-        "median_ae_log1p": 0.3653675542174515,
-        "mae_seconds": 1286.7143572389778,
-        "median_ae_seconds": 220.0,
-        "spearman_rho": 0.8661215935961911
+        "mae_log1p": 0.6066651658515654,
+        "median_ae_log1p": 0.3660583523733214,
+        "mae_seconds": 1287.7652240036296,
+        "median_ae_seconds": 220.4980450410319,
+        "spearman_rho": 0.8658152320995682
       },
       "project_rung_only": {
-        "n": 137815,
+        "n": 137783,
         "n_excluded_no_label": 120,
-        "mae_log1p": 0.6004246053413999,
-        "median_ae_log1p": 0.36321024330406715,
-        "mae_seconds": 1290.9263861758077,
-        "median_ae_seconds": 218.5003364739075,
-        "spearman_rho": 0.8695065021384412
+        "mae_log1p": 0.601160034078138,
+        "median_ae_log1p": 0.363983265329062,
+        "mae_seconds": 1292.1044923108286,
+        "median_ae_seconds": 219.0,
+        "spearman_rho": 0.8693199757217439
       },
       "coverage": {
         "n_builds": 138687,
         "levels": {
           "project": {
-            "n": 137935,
-            "pct": 99.4578
+            "n": 137903,
+            "pct": 99.4347
           },
           "language": {
-            "n": 752,
-            "pct": 0.5422
+            "n": 784,
+            "pct": 0.5653
           },
           "global": {
             "n": 0,
@@ -303,11 +303,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     },
@@ -315,31 +315,31 @@
       "all_builds": {
         "n": 138565,
         "n_excluded_no_label": 122,
-        "mae_log1p": 0.6213776975090919,
-        "median_ae_log1p": 0.37520802290812494,
-        "mae_seconds": 1292.508758290055,
-        "median_ae_seconds": 231.00000000000728,
-        "spearman_rho": 0.8566670788776118
+        "mae_log1p": 0.6221583023876353,
+        "median_ae_log1p": 0.37584424925165116,
+        "mae_seconds": 1293.4438858727408,
+        "median_ae_seconds": 231.9999999999999,
+        "spearman_rho": 0.8563676129048926
       },
       "project_rung_only": {
-        "n": 135643,
+        "n": 135607,
         "n_excluded_no_label": 114,
-        "mae_log1p": 0.6037603362401224,
-        "median_ae_log1p": 0.36753805619610347,
-        "mae_seconds": 1309.0846862164765,
-        "median_ae_seconds": 225.00000000000034,
-        "spearman_rho": 0.8686207365353549
+        "mae_log1p": 0.6044232900633593,
+        "median_ae_log1p": 0.3677247801253176,
+        "mae_seconds": 1310.2459979643852,
+        "median_ae_seconds": 225.99999999999977,
+        "spearman_rho": 0.8684526009046335
       },
       "coverage": {
         "n_builds": 138687,
         "levels": {
           "project": {
-            "n": 135757,
-            "pct": 97.8873
+            "n": 135721,
+            "pct": 97.8614
           },
           "language": {
-            "n": 2930,
-            "pct": 2.1127
+            "n": 2966,
+            "pct": 2.1386
           },
           "global": {
             "n": 0,
@@ -349,11 +349,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     },
@@ -395,11 +395,11 @@
         "n_history": {
           "min": 0,
           "p25": 294.0,
-          "p50": 746.0,
-          "p75": 1587.0,
-          "p95": 5583.0,
-          "max": 9697,
-          "zero": 152
+          "p50": 745.0,
+          "p75": 1586.0,
+          "p95": 5580.6999999999825,
+          "max": 9695,
+          "zero": 173
         }
       }
     }
