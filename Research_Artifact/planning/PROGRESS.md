@@ -17,14 +17,15 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-09-26 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 20
-  current_task: P3-T5    # results synthesis + the four RQ verdicts
-  next_task: P4-T1       # prototype (P4 direction to be confirmed after P3-T5, DL-026)
-  current_phase: P3
-  blocked_on: null
-  last_gate_passed: P3-T4 (sensitivity sweeps; verdict table in results/p3/sensitivity.md)
-  last_updated: 2026-09-26
+  tasks_total: 28        # derived — recounted 2026-10-01 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 21
+  current_task: P4-T1    # REST API service — NOT started (author: stop after P3-T5 for review)
+  next_task: P4-T2       # GitHub Action + demo repo
+  current_phase: P4
+  blocked_on: author review of results/p3/evaluation_report.md, then the DL-026 follow-up DL entry
+                  (accept / amend / withdraw the P4 direction) — required before P4-T1 starts
+  last_gate_passed: P3-T5 (results synthesis; results/p3/evaluation_report.md)
+  last_updated: 2026-10-01
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   test_split:     **OPENED ONCE** 2026-09-25T19:20:25Z UTC by P3-T1 (sentinel
                   results/p3/test_split_opened.json, fingerprint da77d6ca…). A second pass of
@@ -33,7 +34,13 @@ state:
                   model-level finding is reported, no post-hoc F1 arm, frozen spec only;
                   test_scores.csv.gz tracked. Earlier: ④b trailing-50 (DL-024 §3); review
                   addendum items 3/4 adopted as DL-027.
-                  DL-026 (P4 artifact direction) is Proposed/Conditional until after P3-T5.
+                  DL-026 (P4 artifact direction) is Proposed/Conditional; P3-T5 is done, so its
+                  follow-up DL entry is now due (before P4-T1). Inputs: evaluation_report.md §7.
+  p3_synthesis:   **P3-T5 — the four RQ verdicts** (results/p3/evaluation_report.md §2, §9).
+                  RQ1 null/modest (F1 non-replicating model-level candidate; attribution ≠
+                  incremental value). RQ2 no — ⑤ ≡ ④b, null by construction of the predeclared
+                  pipeline, stable. RQ3 duration-only spec d480/w24, ρ-sensitive, SE branch
+                  unexercised. RQ4 −2.480% vs ① at TTFF p95 13.89 h; robust in sign.
   p3_model_level: **P3-T1 — calibration null does NOT fully replicate on test.** F1 ΔPR-AUC
                   +0.013313 [+0.011924, +0.014733] (calibration −0.003678); admitted at ×0.5/×1,
                   not ×2 (stable: False). F2–F5 rejected on both splits (CIs below 0); F6 +0.002257,
@@ -152,16 +159,16 @@ state:
 ```
 
 ```
-Overall   [██████████████░░░░░░]  71%   (20 / 28 tasks)   Milestone: ✅ M2 reached (P2 complete)
-Phase 3   [████████████████░░░░]  80%   Evaluation   (4 / 5 tasks)
+Overall   [███████████████░░░░░]  75%   (21 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
+Phase 3   [████████████████████] 100%   Evaluation   (5 / 5 tasks)
 
-► CURRENT : P3-T5 — results synthesis + the four RQ verdicts
-○ NEXT    : P4-T1 — prototype (direction per DL-026, to be confirmed after P3-T5)
+► CURRENT : P4-T1 — REST API service (not started; awaits the DL-026 follow-up decision)
+○ NEXT    : P4-T2 — GitHub Action + demo repo
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P3-T4 gated 2026-09-28; P3-T5 not started)*
+*(empty — P3-T5 gated 2026-10-01; P4-T1 not started)*
 
 ---
 
@@ -191,8 +198,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T2 Full replay, all six strategies | ✅ | `strategy_results.*` | **RQ4** |
 | | P3-T3 ④-vs-⑤ decision-level value | ✅ | `incremental_value_decision.*` | **RQ2** |
 | | P3-T4 Sensitivity sweeps | ✅ | `sensitivity.*` | RQ4 |
-| | P3-T5 Results synthesis + RQ verdicts | ► ⬜ | `evaluation_report.md` | RQ1–4 |
-| **P4 Prototype** | P4-T1 REST API service | ⬜ | `code/api/` (parity-tested) | artifact |
+| | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
+| **P4 Prototype** | P4-T1 REST API service | ► ⬜ | `code/api/` (parity-tested) | artifact |
 | | P4-T2 GitHub Action + demo repo | ⬜ | `code/github-action/` | artifact |
 | | P4-T3 Monitoring dashboard | ⬜ | `code/dashboard/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
@@ -209,7 +216,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | P0 Setup | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
 | P2 Core + simulator + policy | 5 / 5 | `[████████████████████]` 100% ✅ |
-| P3 Evaluation | 4 / 5 | `[████████████████░░░░]` 80% |
+| P3 Evaluation | 5 / 5 | `[████████████████████]` 100% ✅ |
 | P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 
@@ -244,3 +251,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-26 | P3-T2 Full replay, all six strategies (test trace) | **DL-028 written first** (author decisions: option (a), no post-hoc F1 arm; `test_scores.csv.gz` tracked; plus predeclared headline operating points, streaming replay and the §10 paired bootstrap). `replay/stats.py` (`paired_bootstrap`, §10 signature) + `scripts/run_test_replay.py` + `tests/test_stats.py` (7) + `tests/test_run_test_replay.py` (11; streaming aggregation byte-identical to `simulator.summarise`) — **615 passed** overall, verbatim in `results/p3/pytest_p3_t2.txt`. **Rehearsal** `PYTHONPATH=. python scripts/run_test_replay.py --mode rehearse` on the DL-023 §4 calibration sample: trace/summary/herding **byte-identical** to `results/p2/policy_fit/`, decisions equal over 1,224,001 lines except `spec_fitted` → `results/p3/replay_rehearsal/rehearsal.json`. **Test replay** `… --mode test` (2,402 s, log `results/p3/strategy_replay_run.log`; sentinel `results/p3/test_replay_opened.json`): frozen spec sha256 `34d689c9…` loaded `require_fitted=True`, grid digest asserted; **full** test trace 138,693 builds / 170 projects (55 unaccountable), `d̂`/`p̂` equal to P3-T1's per-build scores (max |Δp̂| 9.7e-17); 102 settings = **14,146,686 records**; identical build set at every setting; validator **0 violations / 1,016,092 deferrals**; 0 non-deferrable skips of 26,328; identities ⑤≡④b, ③≡④b@d0, ⑥@τ0≡① hold; bootstrap points equal summary (8.3e-15). **Headline (DL-028 §3, 95% paired CIs):** ⑤ (≡ ④b, d480/w24) −70.7 [−78.5, −64.9] gCO₂e/1k vs ① (−2.480%), 7.92% deferred, TTFF p95 13.89 h vs ① 1.67 h; ② −4.681% at TTFF p95 127.01 h; ③ −2.815% at 19.81 h; ④a −2.411%, ⑤ − ④a TTFF p95 −0.18 [−0.62, +0.16]; ⑥ τ = 0.30 −14.532% with 6,689 missed failures (recall 0.8074). ⑤ policy path: all 138,693 `duration_only_fallback` (27,027 eligible; 10,982 deferred). Evidence: `results/p3/strategy_results.{md,csv,json}`, `strategy_herding.csv`, `test_trace.csv.gz` (tracked); `decisions.csv.gz` 575 MB untracked, sha256 `7ac6ccf2…`. | **DL-028** |
 | 2026-09-26 | P3-T3 Decision-level ④ vs ⑤ frontiers (headline RQ2) | **DL-029 written first** (Pareto frontier over the 30 swept points; K = 10 interior matched points per axis; area by trapezoid over the carbon overlap; §A1.7 "counts" = floor met + CI above 0 + ≤ 5% undefined resamples, ≥ 3 points on one axis; bands = terciles of test-project failure rate; §A1.10 oracle rule), per the author's "no post-hoc additions" instruction; its §1 numeric check was restated *before any frontier number existed*, after the first run stopped on a summation-order artefact. `replay/frontier.py` + `scripts/frontier_analysis.py` + `tests/test_frontier.py` (10) + `tests/test_frontier_analysis.py` (4) — **629 passed** overall, verbatim in `results/p3/pytest_p3_t3.txt`. Run `PYTHONPATH=. python scripts/frontier_analysis.py` (326 s, log `results/p3/frontier_run.log`): 91 P3-T2 parts sha256-verified; recomputed points equal `strategy_results.csv` (carbon/1k 9.5e-15 rel, TTFF p95 exact, saving 8.5e-13 pp); tracked trace reproduces a P3-T2 part byte for byte (after fixing the reader to `float_precision="round_trip"`: the default parser was one ulp off and flipped 7 threshold-edge decisions, caught by the probe before any oracle number existed); oracle arm 0 violations / 309,696 deferrals. **RQ2 decision level:** ⑤ vs ④b area **+0.0000 [+0.0000, +0.0000]**, condition false at ×0.5/×1/×2 → ⑤ does not beat both controls at any floor; the null is by construction (frozen spec admits no SE family) and F1's decision-level value is **untested** (DL-028 §1). **Secondary:** ④b dominates ④a, area **+2.4308 [+1.7358, +2.5684]** pp·h, condition true at every floor, concentrated at 1.29–1.63% saved (≈ 0 near the frozen point, +0.0360 [−1.7830, +0.7492] h); reverses in the low failure-rate band (−2.6750 [−4.2721, −1.3844]); mid +1.5637, high +2.1981. **Oracle (unrealizable)** vs ④b +1.9290 [+1.7625, +2.3492]. §A1.9 variance decomposition not applicable (no admitted family). Evidence: `results/p3/incremental_value_decision.{md,json}` (§6b states the verdict) + `figures/frontiers.png`, `figures/frontiers_by_band.png` (palette validated with the dataviz validator). | **DL-029** |
 | 2026-09-28 | P3-T4 Sensitivity analyses | **DL-030 written first** (nine sweeps S-a…S-i plus herding, and verdicts V1 model-level admitted set · V2 "⑤ beats both" · V3 ④b over ④a · V4 eight-class RQ4 sign pattern, fixed before any sweep ran). `scripts/sensitivity_analysis.py` + `scripts/sensitivity_report.py` + `tests/test_sensitivity_analysis.py` (9); `frontier_analysis.analyse` generalised behaviour-preservingly — **638 passed** overall, verbatim in `results/p3/pytest_p3_t4.txt`. V4 baseline recomputed from the P3-T2 parts matches P3-T2's stored classes exactly. Re-replays audited: S-a 0 violations / 764,602 deferrals / 14,146,686 rows, identities hold; S-h 0 / 318,837. **Results:** V2 stable everywhere (and cannot flip: ⑤ ≡ ④b). V1 {F1} stable early (+0.0127), late (+0.0101, marginal), cold-start excluded (+0.0128); empty at ×2 as in P3-T1. V3 direction holds in every sweep (areas +0.7500 … +5.9026, all CIs > 0); **counting condition flips in the late period** (area +3.5694 [+1.7615, +4.3448]; strongest matched points undefined in 9–34% of resamples, over the predeclared 5%). **V4 flips one class at W = 12 h** (⑤−④a TTFF p95 n.s. → significantly lower); stable under S-a (deferrable 14.02%), S-c ×0.5/×1.5 (invariant by construction), S-d n_jobs. S-h trailing-50 vs frozen ④b +0.3538 [+0.2370, +0.7650] (condition ×0.5/×1). Herding: ② largest slot 18.77× static, ⑤ 1.78×. **S-f second grid: DL-031** switched the source to account-free EIA-930 (CAISO, consumed intensity), **DL-032** (author decision): not run — CAISO peak/trough 1.8669 < UK 1.8746 (criterion c), Germany no account-free series (Energy-Charts endpoint list saved as evidence); ranking invariance untested. Evidence: `results/p3/sensitivity.md` (flips first) + `sensitivity/*.json` + `sensitivity/reading.md` + `figures/sensitivity_v3_area.png`. | **DL-030**, **DL-031**, **DL-032** |
+| 2026-10-01 | P3-T5 Results synthesis + the four RQ verdicts | **Pre-task:** checkpoint commit `1e38db7` ("Complete P3 test evaluation and sensitivity analyses", 93 files, P3-T1..T4 + DL-026..DL-032; `dissertation/proposed solution.md` and `results/p3/decisions.csv.gz` excluded; no attribution trailer, DL-011). `results/p3/evaluation_report.md` — **authored synthesis, no new run, no dataset read, test split not re-opened.** §0 one-paragraph answer; §2 one evidenced paragraph per active RQ; §3 robustness (both P3-T4 flips stated first-class); §4 the null written as a contribution (duration-only policy defensible; duration estimation is the lever — oracle +1.9290, trailing-50 +0.3538; carbon ∝ duration confound generalises; attribution ≠ incremental value — F4/F3 rank 1/2 by SHAP yet harmful additions); §5 thirteen limitations incl. hour-of-week alignment, estimator error, energy model, herding, project confound; §6 claims not supported; §7 facts for the DL-026 follow-up (frozen `decide()` consumes `gh_is_pr`, `git_branch`, arrival slot, `d_hat_seconds` only — no SE feature; ④b needs project build history live; tension with P4-T1 S2's "28 commit features only" schema); §10 provenance footer. **Verdicts:** RQ1 null/modest; RQ2 no (⑤ ≡ ④b, area +0.0000, fails at every floor; null by construction, F1 decision value untested); RQ3 duration-only d480/w24, ρ-sensitive, SE branch unexercised; RQ4 −2.480% vs ① at TTFF p95 13.89 h, robust in sign. **Number-trace check** (scratchpad script, every numeric token in §0–§9 searched in the cited sources, Unicode minus normalised): **230 distinct tokens, 0 misses** against 29 sources, and **0 misses** against the 24 results-only sources (decision log, spec, plan and code removed). Two family names first written from memory (F2, F6) were caught on review and corrected from `context/feature_spec.md`. `pytest` **638 passed** (`results/p3/pytest_p3_t5.txt`; project `.venv`). **Phase 3 complete → M3 (21/28, 75%).** P4-T1 not started (author instruction). | none (DL-026 follow-up due before P4-T1) |
