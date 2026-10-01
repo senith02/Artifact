@@ -1,0 +1,152 @@
+﻿loading 91 P3-T2 part files from d9e30163609cc2a4 …
+  loaded 1_static
+  loaded 4a_duration_estimator__d0__w6
+  loaded 4a_duration_estimator__d60__w6
+  loaded 4a_duration_estimator__d120__w6
+  loaded 4a_duration_estimator__d240__w6
+  loaded 4a_duration_estimator__d480__w6
+  loaded 4a_duration_estimator__d960__w6
+  loaded 4a_duration_estimator__d1920__w6
+  loaded 4a_duration_estimator__d3840__w6
+  loaded 4a_duration_estimator__d7680__w6
+  loaded 4a_duration_estimator__d15360__w6
+  loaded 4a_duration_estimator__d0__w12
+  loaded 4a_duration_estimator__d60__w12
+  loaded 4a_duration_estimator__d120__w12
+  loaded 4a_duration_estimator__d240__w12
+  loaded 4a_duration_estimator__d480__w12
+  loaded 4a_duration_estimator__d960__w12
+  loaded 4a_duration_estimator__d1920__w12
+  loaded 4a_duration_estimator__d3840__w12
+  loaded 4a_duration_estimator__d7680__w12
+  loaded 4a_duration_estimator__d15360__w12
+  loaded 4a_duration_estimator__d0__w24
+  loaded 4a_duration_estimator__d60__w24
+  loaded 4a_duration_estimator__d120__w24
+  loaded 4a_duration_estimator__d240__w24
+  loaded 4a_duration_estimator__d480__w24
+  loaded 4a_duration_estimator__d960__w24
+  loaded 4a_duration_estimator__d1920__w24
+  loaded 4a_duration_estimator__d3840__w24
+  loaded 4a_duration_estimator__d7680__w24
+  loaded 4a_duration_estimator__d15360__w24
+  loaded 4b_duration_prior__d0__w6
+  loaded 4b_duration_prior__d60__w6
+  loaded 4b_duration_prior__d120__w6
+  loaded 4b_duration_prior__d240__w6
+  loaded 4b_duration_prior__d480__w6
+  loaded 4b_duration_prior__d960__w6
+  loaded 4b_duration_prior__d1920__w6
+  loaded 4b_duration_prior__d3840__w6
+  loaded 4b_duration_prior__d7680__w6
+  loaded 4b_duration_prior__d15360__w6
+  loaded 4b_duration_prior__d0__w12
+  loaded 4b_duration_prior__d60__w12
+  loaded 4b_duration_prior__d120__w12
+  loaded 4b_duration_prior__d240__w12
+  loaded 4b_duration_prior__d480__w12
+  loaded 4b_duration_prior__d960__w12
+  loaded 4b_duration_prior__d1920__w12
+  loaded 4b_duration_prior__d3840__w12
+  loaded 4b_duration_prior__d7680__w12
+  loaded 4b_duration_prior__d15360__w12
+  loaded 4b_duration_prior__d0__w24
+  loaded 4b_duration_prior__d60__w24
+  loaded 4b_duration_prior__d120__w24
+  loaded 4b_duration_prior__d240__w24
+  loaded 4b_duration_prior__d480__w24
+  loaded 4b_duration_prior__d960__w24
+  loaded 4b_duration_prior__d1920__w24
+  loaded 4b_duration_prior__d3840__w24
+  loaded 4b_duration_prior__d7680__w24
+  loaded 4b_duration_prior__d15360__w24
+  loaded 5_se_informed_policy__d0__w6
+  loaded 5_se_informed_policy__d60__w6
+  loaded 5_se_informed_policy__d120__w6
+  loaded 5_se_informed_policy__d240__w6
+  loaded 5_se_informed_policy__d480__w6
+  loaded 5_se_informed_policy__d960__w6
+  loaded 5_se_informed_policy__d1920__w6
+  loaded 5_se_informed_policy__d3840__w6
+  loaded 5_se_informed_policy__d7680__w6
+  loaded 5_se_informed_policy__d15360__w6
+  loaded 5_se_informed_policy__d0__w12
+  loaded 5_se_informed_policy__d60__w12
+  loaded 5_se_informed_policy__d120__w12
+  loaded 5_se_informed_policy__d240__w12
+  loaded 5_se_informed_policy__d480__w12
+  loaded 5_se_informed_policy__d960__w12
+  loaded 5_se_informed_policy__d1920__w12
+  loaded 5_se_informed_policy__d3840__w12
+  loaded 5_se_informed_policy__d7680__w12
+  loaded 5_se_informed_policy__d15360__w12
+  loaded 5_se_informed_policy__d0__w24
+  loaded 5_se_informed_policy__d60__w24
+  loaded 5_se_informed_policy__d120__w24
+  loaded 5_se_informed_policy__d240__w24
+  loaded 5_se_informed_policy__d480__w24
+  loaded 5_se_informed_policy__d960__w24
+  loaded 5_se_informed_policy__d1920__w24
+  loaded 5_se_informed_policy__d3840__w24
+  loaded 5_se_informed_policy__d7680__w24
+  loaded 5_se_informed_policy__d15360__w24
+tracked trace reproduces P3-T2 part 4b_duration_prior__d480__w24: True
+replaying the oracle arm (30 settings, fingerprint b4f3e3a23a093cc7) …
+  [  1/30] 4b_duration_prior__d0__w6: resumed
+  [  2/30] 4b_duration_prior__d60__w6: resumed
+  [  3/30] 4b_duration_prior__d120__w6: resumed
+  [  4/30] 4b_duration_prior__d240__w6: resumed
+  [  5/30] 4b_duration_prior__d480__w6: resumed
+  [  6/30] 4b_duration_prior__d960__w6: resumed
+  [  7/30] 4b_duration_prior__d1920__w6: resumed
+  [  8/30] 4b_duration_prior__d3840__w6: resumed
+  [  9/30] 4b_duration_prior__d7680__w6: resumed
+  [ 10/30] 4b_duration_prior__d15360__w6: resumed
+  [ 11/30] 4b_duration_prior__d0__w12: resumed
+  [ 12/30] 4b_duration_prior__d60__w12: resumed
+  [ 13/30] 4b_duration_prior__d120__w12: resumed
+  [ 14/30] 4b_duration_prior__d240__w12: resumed
+  [ 15/30] 4b_duration_prior__d480__w12: resumed
+  [ 16/30] 4b_duration_prior__d960__w12: resumed
+  [ 17/30] 4b_duration_prior__d1920__w12: resumed
+  [ 18/30] 4b_duration_prior__d3840__w12: resumed
+  [ 19/30] 4b_duration_prior__d7680__w12: resumed
+  [ 20/30] 4b_duration_prior__d15360__w12: resumed
+  [ 21/30] 4b_duration_prior__d0__w24: resumed
+  [ 22/30] 4b_duration_prior__d60__w24: resumed
+  [ 23/30] 4b_duration_prior__d120__w24: resumed
+  [ 24/30] 4b_duration_prior__d240__w24: resumed
+  [ 25/30] 4b_duration_prior__d480__w24: resumed
+  [ 26/30] 4b_duration_prior__d960__w24: resumed
+  [ 27/30] 4b_duration_prior__d1920__w24: resumed
+  [ 28/30] 4b_duration_prior__d3840__w24: resumed
+  [ 29/30] 4b_duration_prior__d7680__w24: resumed
+  [ 30/30] 4b_duration_prior__d15360__w24: resumed
+recomputed points vs strategy_results.csv: {'carbon_per_1000_rel': np.float64(9.491473266816759e-15), 'ttff_p95_rel': 0.0, 'saving_abs_pp': np.float64(8.530953721219703e-13)}
+
+bootstrap, all test builds (B = 1000) …
+    [all] resample 200/1000
+    [all] resample 400/1000
+    [all] resample 600/1000
+    [all] resample 800/1000
+    [all] resample 1000/1000
+bootstrap, low band …
+    [low] resample 200/1000
+    [low] resample 400/1000
+    [low] resample 600/1000
+    [low] resample 800/1000
+    [low] resample 1000/1000
+bootstrap, mid band …
+    [mid] resample 200/1000
+    [mid] resample 400/1000
+    [mid] resample 600/1000
+    [mid] resample 800/1000
+    [mid] resample 1000/1000
+bootstrap, high band …
+    [high] resample 200/1000
+    [high] resample 400/1000
+    [high] resample 600/1000
+    [high] resample 800/1000
+    [high] resample 1000/1000
+
+wrote results/p3/incremental_value_decision.* (326s)

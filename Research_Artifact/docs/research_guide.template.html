@@ -115,6 +115,8 @@ section+section{border-top:1px solid var(--hair);margin-top:2.6rem}
 .pend{background:var(--final-bg);border:1px dashed color-mix(in srgb,var(--final) 60%,transparent)}
 .obs h3,.pend h3{margin-top:0}
 .tag-calib{display:inline-block;font:500 .7rem var(--font-mono);letter-spacing:.04em;background:var(--calib-bg);color:var(--warn-ink);border:1px solid color-mix(in srgb,var(--calib) 50%,transparent);padding:.15rem .45rem;border-radius:4px}
+.obs.test{background:var(--final-bg);border:1px solid color-mix(in srgb,var(--final) 55%,transparent);margin:1rem 0}
+.tag-test{display:inline-block;font:500 .7rem var(--font-mono);letter-spacing:.04em;background:var(--final-bg);color:var(--final);border:1px solid var(--final);padding:.15rem .45rem;border-radius:4px}
 .tag-pend{display:inline-block;font:500 .7rem var(--font-mono);background:var(--final-bg);color:var(--final);border:1px dashed var(--final);padding:.15rem .45rem;border-radius:4px}
 
 /* ---- tables ---- */
@@ -261,7 +263,7 @@ details.qa p{margin:.45rem 0 .2rem}
   <span>Last updated <b>{{meta.last_updated}}</b></span>
   <span>Research progress <b>{{progress.tasks_done}}/{{progress.tasks_total}}</b> ({{progress.pct}}%)</span>
   <span>Current task <b>{{progress.current_task}}</b></span>
-  <span>Test split <b>not yet opened</b></span>
+  <span>Test split <b>opened once ({{evidence.p3_model.label}}, {{evidence.p3_model.run_date}})</b></span>
   <span class="grow"></span>
   <button class="theme" id="themeBtn" type="button" aria-label="Switch colour theme">Theme: system</button>
 </div>
@@ -423,14 +425,39 @@ details.qa p{margin:.45rem 0 .2rem}
         <li>No family is admitted at ×0.5, ×1 or ×2 of the floor, so the model-level answer is the <b>null path</b>.</li>
         <li>The frozen policy is therefore duration-only: defer if d̂ ≥ {{evidence.policy.d_threshold_s|int}} s, within {{evidence.policy.w_max_h|int}} h.</li>
       </ul></div>
-    <div class="pend"><h3>Final conclusion pending P3 <span class="tag-pend">test split unopened</span></h3>
+    <div class="pend"><h3>Still pending in P3 <span class="tag-pend">synthesis</span></h3>
       <ul>
-        <li>Whether the null replicates on 170 unseen projects (P3-T1).</li>
-        <li>Carbon, latency and TTFF of all six strategies on test (P3-T2).</li>
-        <li>The headline decision-level RQ2 verdict (P3-T3).</li>
-        <li>Whether any sensitivity sweep flips a verdict (P3-T4).</li>
+        <li>The written RQ1–RQ4 verdicts, drawing every test-split result together (P3-T5).</li>
       </ul></div>
   </div>
+  <div class="obs test"><h3>Model level on the held-out test projects <span class="tag-test">test split · P3-T1</span></h3>
+    <ul>
+      <li>{{evidence.p3_model.builds}} builds from {{evidence.p3_model.projects}} unseen projects ({{evidence.p3_model.failure_rate_pct|f2}}% failures), scored once with every model frozen.</li>
+      <li><b>The calibration null does not fully replicate.</b> F1 (change size &amp; diffusion) clears the model-level floor on test: ΔPR-AUC {{evidence.p3_model.families.F1.delta|s4}} [{{evidence.p3_model.families.F1.lo|s4}}, {{evidence.p3_model.families.F1.hi|s4}}]. On calibration it was significantly negative ({{evidence.ablation.families.F1.delta|s4}}).</li>
+      <li>That admission is floor-sensitive: the admitted set is {{evidence.p3_model.floor_sweep.x0_5|join}} at ×0.5, {{evidence.p3_model.floor_sweep.x1|join}} at ×1 and {{evidence.p3_model.floor_sweep.x2|join}} at ×2. The other five families are rejected on both splits.</li>
+      <li>The frozen policy stays duration-only. Model-level admission is only half of the rule, and the policy was fixed before the test split was opened.</li>
+      <li>SHAP structure is stable between the splits (rank correlation {{evidence.p3_model.shap_rho|f4}}, top-10 overlap {{evidence.p3_model.shap_top10}}/10). ④b's test MAE is {{evidence.p3_model.d4b_mae|f4}} (ρ {{evidence.p3_model.d4b_rho|f4}}).</li>
+    </ul></div>
+  <div class="obs test"><h3>Six strategies on the test trace <span class="tag-test">test split · P3-T2</span></h3>
+    <ul>
+      <li>The frozen policy ⑤ (identical to ④b on the null path) saves {{evidence.p3_replay.rows.5_se_informed_policy__d480__w24.saving_pct|f2}}% carbon against static execution, deferring {{evidence.p3_replay.rows.5_se_informed_policy__d480__w24.share_deferred_pct|f2}}% of builds; failed-build TTFF p95 is {{evidence.p3_replay.rows.5_se_informed_policy__d480__w24.ttff_p95_h|f2}} h.</li>
+      <li>Blanket carbon-aware scheduling saves {{evidence.p3_replay.rows.2_blanket_carbon_aware__d0__w167.saving_pct|f2}}%, but its TTFF p95 is {{evidence.p3_replay.rows.2_blanket_carbon_aware__d0__w167.ttff_p95_h|f2}} h. Eligibility-only saves {{evidence.p3_replay.rows.3_eligibility_only__d0__w24.saving_pct|f2}}% with TTFF p95 {{evidence.p3_replay.rows.3_eligibility_only__d0__w24.ttff_p95_h|f2}} h.</li>
+      <li>Risk-only skip at τ = 0.30 saves {{evidence.p3_replay.rows.6_risk_only_skip__t0_3.saving_pct|f2}}% only by not running builds: {{evidence.p3_replay.rows.6_risk_only_skip__t0_3.missed}} failures are never reported.</li>
+      <li>{{evidence.p3_replay.violations}} non-deferrable builds were deferred across {{evidence.p3_replay.n_records}} replay records. These are single-point descriptions; the decision-level RQ2 test compares whole frontiers (P3-T3).</li>
+    </ul></div>
+  <div class="obs test"><h3>Decision level: whole frontiers compared <span class="tag-test">test split · P3-T3</span></h3>
+    <ul>
+      <li><b>RQ2 at the decision altitude:</b> the frozen policy uses no SE family, so ⑤ is ④b and the area between their frontiers is {{evidence.p3_decision.vs_4b.point|s4}} [{{evidence.p3_decision.vs_4b.lo|s4}}, {{evidence.p3_decision.vs_4b.hi|s4}}]. "SE adds value" at ×1: {{evidence.p3_decision.verdict_x1}}. This null follows from the pre-registered pipeline; F1's decision-level value was not tested (DL-028).</li>
+      <li>The project-history duration prior (④b) beats the commit-feature duration regressor (④a): area {{evidence.p3_decision.vs_4a.point|s4}} [{{evidence.p3_decision.vs_4a.lo|s4}}, {{evidence.p3_decision.vs_4a.hi|s4}}] pp·h. The advantage sits at low-to-mid carbon savings, and it reverses in the low failure-rate band ({{evidence.p3_decision.low_band_vs_4a|s4}}).</li>
+      <li>Oracle duration (unrealizable) would push the frontier out by {{evidence.p3_decision.oracle_vs_4b.point|s4}} [{{evidence.p3_decision.oracle_vs_4b.lo|s4}}, {{evidence.p3_decision.oracle_vs_4b.hi|s4}}] pp·h over ④b: a better duration estimate is where the remaining headroom lies.</li>
+    </ul></div>
+  <div class="obs test"><h3>Sensitivity: do the verdicts survive? <span class="tag-test">test split · P3-T4</span></h3>
+    <ul>
+      <li>The RQ2 decision-level verdict cannot flip in this design (⑤ is ④b), and it does not. The RQ4 comparison pattern survives the stricter eligibility rule (deferrable share {{evidence.p3_sensitivity.variant_eligible_pct|f2}}%), both energy scalings and per-job energy. Its one change is at a 12-hour window, where the policy's feedback advantage over the regressor becomes significant.</li>
+      <li>The duration-control finding keeps its direction everywhere: area {{evidence.p3_sensitivity.v3_early_area|s4}} in the early test period, {{evidence.p3_sensitivity.v3_late_area|s4}} in the late one. In the late half it fails the three-point counting rule, because the frontier does not reach the strongest comparison points in enough resamples.</li>
+      <li>A trailing 50-build duration estimate would improve on the frozen one (area {{evidence.p3_sensitivity.trailing_vs_4b_area|s4}} pp·h), again pointing at duration estimation as the lever.</li>
+      <li>The second-grid check was not run: California's profile ({{evidence.p3_sensitivity.caiso_ptt|f4}}) was not more variable than the UK's ({{evidence.p3_sensitivity.uk_ptt|f4}}), and Germany had no account-free series. Whether the ranking survives a more variable grid stays untested.</li>
+    </ul></div>
 
   <h3>Duration control</h3>
   <div class="figs2">

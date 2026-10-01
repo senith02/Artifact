@@ -1,0 +1,133 @@
+{
+  "mode": "calibration-sample rehearsal \u2014 reproduces P2-T5; not a test result",
+  "command": "PYTHONPATH=. python scripts/run_test_replay.py --mode rehearse",
+  "run_date": "2026-09-26",
+  "code_fingerprint": "51930b106b490ea9e68e7b123b59e11400858f5ffabb462562d96d914e575f79",
+  "run_fingerprint": "d08d15b7f28f10bdef39f0ec95e1dae6a46e76eadbe29ef33aced36ac30e7b03",
+  "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
+  "seed": 42,
+  "energy": {
+    "p_avg_w": 42.5,
+    "duration_source_column": "tr_duration",
+    "pinned_by": "DL-021",
+    "schema_version": 1,
+    "config_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\code\\scheduler_core\\config\\energy.json",
+    "citations": [
+      {
+        "kind": "documentation",
+        "work": "CodeCarbon \u2014 Methodology (CPU power estimation)",
+        "url": "https://docs.codecarbon.io/latest/explanation/methodology/",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "If the CPU is not found in the data source, a global constant will be applied",
+          "CodeCarbon assumes that 50% of the TDP will be the average power consumption to make this approximation."
+        ]
+      },
+      {
+        "kind": "source",
+        "work": "CodeCarbon source, codecarbon/external/hardware.py",
+        "version_pinned": "v3.3.1",
+        "version_published": "2026-09-09",
+        "url": "https://github.com/mlco2/codecarbon/blob/v3.3.1/codecarbon/external/hardware.py",
+        "accessed": "2026-09-20",
+        "quotes": [
+          "POWER_CONSTANT = 85  (line 13)",
+          "CONSUMPTION_PERCENTAGE_CONSTANT = 0.5  (line 15)",
+          "power = self._tdp * CONSUMPTION_PERCENTAGE_CONSTANT  (line 256, _get_power_from_cpus, constant-mode branch)"
+        ],
+        "why_pinned": "A release tag rather than master, so a later CodeCarbon change cannot silently alter this study's energy model (R8)."
+      }
+    ]
+  },
+  "trace_provenance": {
+    "duration_control_fit_id": "1088d5546f47ff12",
+    "duration_control_primary_form": "4b",
+    "risk_arm": "xgboost:full",
+    "risk_arm_fit_id": "65fd81b1e952fd72",
+    "risk_arm_sha256": "315a31028401e356dc0b4e16a0f1d430402b44d5263e0fbd4400a8b4049df0b6",
+    "duration_estimator_sha256": "ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0",
+    "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014)"
+  },
+  "n_resamples": 1000,
+  "all_checks_pass": true,
+  "checks": {
+    "identical_build_sets": {
+      "settings_compared": 102,
+      "builds_per_setting": 12000,
+      "identical": true
+    },
+    "validator": {
+      "rows": 1224000,
+      "deferred": 117450,
+      "violations": 0,
+      "violation_rows": [],
+      "passed": true
+    },
+    "skip_audit": {
+      "skipped_rows": 2401,
+      "non_deferrable_skipped": 0,
+      "examples": [],
+      "passed": true
+    },
+    "validator_self_test": true,
+    "identities": {
+      "5_equals_4b_at_every_point": true,
+      "3_equals_4b_at_d0": true,
+      "6_at_tau0_equals_1_static_actions": true
+    },
+    "bootstrap_points_equal_summary": {
+      "max_relative_difference": 2.6999903139364706e-15,
+      "mismatches": [],
+      "passed": true
+    },
+    "spec": {
+      "sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+      "require_fitted": true,
+      "fitted": true,
+      "grid_digest_matches": true
+    },
+    "reproduces_p2_t5": {
+      "trace.csv": {
+        "this": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+        "p2_t5": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+        "identical": true
+      },
+      "summary.csv": {
+        "this": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+        "p2_t5": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+        "identical": true
+      },
+      "herding.csv": {
+        "this": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
+        "p2_t5": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
+        "identical": true
+      }
+    },
+    "decisions_vs_p2_t5": {
+      "equal": true,
+      "lines_compared": 1224001,
+      "note": "the last field, spec_fitted, is excluded: the P2 sweep ran an unfitted candidate spec (DL-024 \u00a74), this rehearsal runs the frozen one"
+    }
+  },
+  "population": {
+    "split": "calibration (DL-023 \u00a74 sample)",
+    "split_assignment_sha256": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde",
+    "job_rows_dropped_by_split": {
+      "train": 2475417,
+      "calibration": 0,
+      "test": 641607,
+      "unassigned": 0
+    },
+    "n_builds": 12000,
+    "n_projects": 144,
+    "failure_rate": 0.2916666666666667,
+    "n_unaccountable": 6,
+    "first_arrival": "2011-06-13 16:44:42+00:00",
+    "last_arrival": "2016-08-31 23:32:31+00:00",
+    "d_hat_4b_fallback_levels": {
+      "project": 11984,
+      "language": 16
+    }
+  },
+  "runtime_s": 263.2
+}

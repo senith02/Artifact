@@ -107,6 +107,72 @@ def paired_metric_delta(
     return out
 
 
+def _threshold_metrics(y: np.ndarray, p: np.ndarray, tau: float) -> dict[str, float]:
+    """Precision / recall / F1 at ``tau``, with sklearn's ``zero_division=0``."""
+    pred = p >= tau
+    pos = y == 1
+    tp = float(np.sum(pred & pos))
+    fp = float(np.sum(pred & ~pos))
+    fn = float(np.sum(~pred & pos))
+    return {
+        "precision_at_tau": tp / (tp + fp) if (tp + fp) > 0 else 0.0,
+        "recall_at_tau": tp / (tp + fn) if (tp + fn) > 0 else 0.0,
+        "f1_at_tau": (2 * tp) / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0,
+    }
+
+
+def bootstrap_metric_ci(
+    y_true: "np.ndarray | pd.Series",
+    p: "np.ndarray | pd.Series",
+    *,
+    tau: float | None = None,
+    n_resamples: int = N_RESAMPLES,
+    ci: float = CI,
+    seed: int = RANDOM_SEED,
+) -> dict[str, dict[str, float]]:
+    """Percentile bootstrap CI for one arm's §5 metrics on one split (P3-T1 S1).
+
+    The resampling is the one :func:`paired_metric_delta` uses — same seed, same
+    ``n_resamples``, same redraw rule for a single-class resample — so a CI here
+    and a delta CI there are computed over the **identical** resampled indices.
+    With ``tau`` given, precision / recall / F1 at that frozen threshold are
+    included; ``tau`` is never re-selected here.
+    """
+    y = np.asarray(y_true, dtype="int64")
+    q = np.asarray(p, dtype="float64")
+    n = len(y)
+    if len(q) != n:
+        raise ValueError("y_true and p must be the same length")
+
+    def values(yy: np.ndarray, pp: np.ndarray) -> dict[str, float]:
+        out = _metric_values(yy, pp)
+        if tau is not None:
+            out.update(_threshold_metrics(yy, pp, float(tau)))
+        return out
+
+    point = values(y, q)
+    names = tuple(point)
+    rng = np.random.default_rng(seed)
+    draws: dict[str, np.ndarray] = {m: np.empty(n_resamples) for m in names}
+    for b in range(n_resamples):
+        for _retry in range(10):
+            idx = rng.integers(0, n, size=n)
+            yb = y[idx]
+            if 0 < yb.sum() < n:
+                break
+        else:
+            raise RuntimeError("could not draw a non-degenerate resample in 10 tries")
+        vb = values(yb, q[idx])
+        for m in names:
+            draws[m][b] = vb[m]
+
+    lo_q, hi_q = (1.0 - ci) / 2.0, 1.0 - (1.0 - ci) / 2.0
+    return {m: {"point": point[m],
+                "ci_lo": float(np.quantile(draws[m], lo_q)),
+                "ci_hi": float(np.quantile(draws[m], hi_q))}
+            for m in names}
+
+
 def spearman_with_ci(
     x: "np.ndarray | pd.Series",
     s: "np.ndarray | pd.Series",

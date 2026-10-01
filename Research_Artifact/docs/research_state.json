@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-09-25",
+    "last_updated": "2026-09-28",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -435,49 +435,98 @@
       "id": "P3-T1",
       "name": "Test-split model evaluation + confirmatory ablation",
       "rq": "RQ1, RQ2",
-      "purpose": "Open the untouched test split once and re-measure the arms, the family deltas and SHAP.",
-      "will_produce": "results/p3/model_report.md and a calibration-vs-test replication table.",
-      "unknown": "Whether the calibration null replicates on 170 unseen projects. A family admitted nowhere on calibration cannot be admitted now, but a significant positive test delta would be reported as a finding.",
-      "status": "not_started",
-      "completed_on": "",
+      "purpose": "Open the untouched test split once and re-measure every frozen arm, the family deltas, the duration control and SHAP.",
+      "status": "done",
+      "completed_on": "2026-09-26",
       "plan_heading": "Test-split model evaluation + confirmatory ablation + SHAP",
-      "tests": null
+      "tests": {
+        "passed": 597,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t1.txt"
+      },
+      "inputs": "The 12 frozen P1 arms, the frozen d̂ (fit id {{evidence.duration.fit_id}}), each arm's calibration-split τ, and the 170 test projects.",
+      "outputs": "results/p3/model_report.md and a calibration-vs-test replication table; per-build test scores for P3-T4 (DL-027).",
+      "decisions": "DL-026 (proposed P4 artifact direction, no effect on P3) and DL-027 (two predeclared P3-T4 sensitivities) were written before the test split was opened.",
+      "evidence": "A calibration rehearsal reproduced every stored P1 number exactly before test opened. On test, F1 clears the model-level floor (ΔPR-AUC {{evidence.p3_model.families.F1.delta|s4}}) although it was rejected on calibration; the admitted set is not stable across the floor sweep. {{evidence.tests.P3-T1.passed}} tests passed.",
+      "why": "This is the first held-out measurement. A result that differs from calibration is reported as a finding, and the frozen policy is not refitted in response to it.",
+      "files": [
+        "results/p3/model_report.md",
+        "results/p3/replication_table.md",
+        "results/p3/shap/shap_summary.md",
+        "results/p3/rehearsal/rehearsal.md"
+      ]
     },
     {
       "id": "P3-T2",
       "name": "Full replay, all six strategies (test trace)",
       "rq": "RQ4",
-      "purpose": "Replay the test-project trace through all six strategies under the frozen spec.",
-      "will_produce": "results/p3/strategy_results.* with the validator output and the spec hash.",
-      "unknown": "The real carbon, latency and TTFF numbers on test. Every replay figure so far is calibration fitting evidence.",
-      "status": "not_started",
-      "completed_on": "",
+      "purpose": "Replay the full test trace through all six strategies with the frozen policy, and record every protocol metric.",
+      "status": "done",
+      "completed_on": "2026-09-26",
       "plan_heading": "Full replay across all six strategies (test trace)",
-      "tests": null
+      "tests": {
+        "passed": 615,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t2.txt"
+      },
+      "inputs": "The frozen policy_spec.yaml, the frozen sweep grid, d̂ and p̂ from the frozen artifacts, and the 170 test projects.",
+      "outputs": "results/p3/strategy_results.{csv,json,md}: 102 settings, a headline table at the operating points DL-028 fixed in advance, and paired-bootstrap CIs.",
+      "decisions": "DL-028: option (a) for the F1 finding (author decision); test_scores tracked; headline points, streaming replay and the §10 paired bootstrap predeclared.",
+      "evidence": "A calibration-sample rehearsal reproduced the P2-T5 sweep byte for byte before the test replay. On test, {{evidence.p3_replay.violations}} non-deferrable builds were deferred across {{evidence.p3_replay.n_records}} records. {{evidence.tests.P3-T2.passed}} tests passed.",
+      "why": "One replay on identical inputs, with the rows chosen before the numbers existed, is what makes the RQ4 comparison fair.",
+      "files": [
+        "results/p3/strategy_results.md",
+        "results/p3/strategy_results.csv",
+        "results/p3/replay_rehearsal/rehearsal.json"
+      ]
     },
     {
       "id": "P3-T3",
       "name": "Decision-level value: 4 vs 5 frontiers (headline RQ2)",
       "rq": "RQ2 (headline)",
-      "purpose": "Compare the frontiers of 4a, 4b and 5 at matched points and report the area between them with a CI.",
-      "will_produce": "results/p3/incremental_value_decision.* and the frontier figure.",
-      "unknown": "On the null path 5 ≡ 4b by construction, so the headline becomes 4b vs 4a plus the stated null. Whether that is the final reading depends on P3-T1.",
-      "status": "not_started",
-      "completed_on": "",
+      "purpose": "Compare the frozen policy's swept frontier with both duration controls at matched operating points: the headline RQ2 test.",
+      "status": "done",
+      "completed_on": "2026-09-26",
       "plan_heading": "Decision-level incremental value: ④ vs ⑤ **frontiers** (the headline RQ2 test)",
-      "tests": null
+      "tests": {
+        "passed": 629,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t3.txt"
+      },
+      "inputs": "The P3-T2 test replay parts (sha256-verified), plus a §A1.10 oracle-duration arm replayed from the tracked test trace.",
+      "outputs": "results/p3/incremental_value_decision.{md,json} and two frontier figures; matched-point differences, area between frontiers, floors ×0.5/×1/×2, failure-rate bands.",
+      "decisions": "DL-029 fixed the frontier, matched-point, area, floor, band and oracle rules before any frontier number existed; its §1 numeric check was restated before any result.",
+      "evidence": "⑤ vs ④b area {{evidence.p3_decision.vs_4b.point|s4}}, so the SE-adds-value condition fails at every floor. ④b beats ④a by {{evidence.p3_decision.vs_4a.point|s4}} pp·h. {{evidence.tests.P3-T3.passed}} tests passed.",
+      "why": "Carbon cannot carry SE value under this energy model (§A1.13), so the test compares feedback delay at matched carbon across whole frontiers rather than at one point.",
+      "files": [
+        "results/p3/incremental_value_decision.md",
+        "results/p3/figures/frontiers.png",
+        "results/p3/figures/frontiers_by_band.png"
+      ]
     },
     {
       "id": "P3-T4",
       "name": "Sensitivity sweeps",
       "rq": "RQ4",
-      "purpose": "Vary the deferrable fraction, W_max and banded window, the ±50% P_avg band, the floors ×0.5/×2, cold start, and the 4b-as-null reading.",
-      "will_produce": "results/p3/sensitivity.* and a verdict-stable/flips table.",
-      "unknown": "Whether any sweep flips a verdict. The review report's temporal-robustness and second-grid sweeps are NOT in the plan unless a DL entry adds them before P3-T1.",
-      "status": "not_started",
-      "completed_on": "",
+      "purpose": "Test whether each finding survives the predeclared perturbations: eligibility rule, delay window, energy model, time period, cold starts, duration-control form, and a second grid.",
+      "status": "done",
+      "completed_on": "2026-09-28",
       "plan_heading": "Sensitivity analyses",
-      "tests": null
+      "tests": {
+        "passed": 638,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t4.txt"
+      },
+      "inputs": "The P3-T2 test replay, P3-T1 per-build scores, the tracked test trace, and (for the second grid) the public EIA-930 California series.",
+      "outputs": "results/p3/sensitivity.md (the verdict table first) and one JSON per sweep; figure of the duration-control finding across sweeps.",
+      "decisions": "DL-030 defined the sweeps and the four verdicts before any sweep ran; DL-031 switched the second-grid source to account-free EIA data; DL-032 recorded the second grid as not run (author decision).",
+      "evidence": "Two predeclared flips, both reported prominently: one RQ4 class at a 12-hour window, and the duration-control counting rule in the late test period (area {{evidence.p3_sensitivity.v3_late_area|s4}}, direction unchanged). {{evidence.tests.P3-T4.passed}} tests passed.",
+      "why": "A result that only holds at one setting is fragile. Defining what counts as a flip before running the sweeps keeps this test honest.",
+      "files": [
+        "results/p3/sensitivity.md",
+        "results/p3/figures/sensitivity_v3_area.png",
+        "results/p3/sensitivity/reading.md"
+      ]
     },
     {
       "id": "P3-T5",
@@ -726,6 +775,48 @@
       "title": "A living research guide is regenerated at every gate; it is documentation, never governance",
       "date": "2026-09-25",
       "summary": "This research guide is regenerated from results/ at every gate; it is documentation, never governance, and reports discrepancies rather than fixing them."
+    },
+    {
+      "id": "DL-026",
+      "title": "Proposed P4 artifact direction: carbon-aware CI decision support as a reusable GitHub Action (conditional on P3)",
+      "date": "2026-09-25",
+      "summary": "Proposed/Conditional P4 direction: a reusable GitHub Action giving RUN NOW / DEFER recommendations with region and forecast awareness. It changes nothing in P3 and must be confirmed after P3-T5."
+    },
+    {
+      "id": "DL-027",
+      "title": "Two predeclared P3-T4 sensitivities: a within-corpus temporal robustness sweep and a second, higher-variance grid profile",
+      "date": "2026-09-25",
+      "summary": "Two P3-T4 sensitivities predeclared before test opened: an early/late temporal split at a fixed boundary, and a second higher-variance grid (CAISO, then Germany), reported for RQ4 ranking invariance only."
+    },
+    {
+      "id": "DL-028",
+      "title": "The P3-T1 F1 finding is reported, not acted on; test_scores.csv.gz is tracked; P3-T2's headline operating points and replay method, predeclared",
+      "date": "2026-09-26",
+      "summary": "Option (a): the F1 test finding is reported, with no post-hoc F1 arm; test_scores.csv.gz tracked; RQ4 headline operating points, streaming replay and the paired bootstrap predeclared before the test replay."
+    },
+    {
+      "id": "DL-029",
+      "title": "How P3-T3's frontier test is computed: frontiers, matched points, area, floors, bands, oracle",
+      "date": "2026-09-26",
+      "summary": "Operational rules for the P3-T3 frontier test (Pareto frontier, 10 interior matched points, area, §A1.7 counting, bands, oracle), fixed before any frontier number existed."
+    },
+    {
+      "id": "DL-030",
+      "title": "How P3-T4's sensitivity sweeps are run, and what \"the verdict flips\" means",
+      "date": "2026-09-28",
+      "summary": "Nine predeclared sensitivity sweeps and the four verdicts (V1–V4) that 'stable / flips' is judged on, fixed before any sweep ran."
+    },
+    {
+      "id": "DL-031",
+      "title": "S-f's CAISO series comes from EIA-930, not Electricity Maps (source change, before any S-f result)",
+      "date": "2026-09-28",
+      "summary": "Second-grid source switched to the public, account-free EIA-930 California series (consumed intensity, lb→g, hour-end → hour-start), before the profile was built."
+    },
+    {
+      "id": "DL-032",
+      "title": "S-f (second grid) is reported as not run: no qualifying zone under DL-027 §2",
+      "date": "2026-09-28",
+      "summary": "Second grid reported as not run: California was not more variable than the UK, and Germany had no account-free series (author decision)."
     }
   ],
   "artifact_components": [
@@ -997,12 +1088,28 @@
     {
       "date": "2026-09-25",
       "event": "Research guide created (docs/research_guide.html, DL-025). First version; reflects 16/28."
+    },
+    {
+      "date": "2026-09-26",
+      "event": "P3-T1 gated. Test split opened once. F1 clears the model-level floor on test but not on calibration, and not at ×2 of the floor; the frozen duration-only policy is unchanged. DL-026 and DL-027 recorded before opening."
+    },
+    {
+      "date": "2026-09-26",
+      "event": "P3-T2 gated. Full test trace replayed once through all six strategies with the frozen policy; 0 gate violations; headline rows fixed in advance by DL-028."
+    },
+    {
+      "date": "2026-09-26",
+      "event": "P3-T3 gated. Decision-level RQ2: the frozen policy (≡ ④b) realises no SE decision value; ④b's frontier dominates ④a's; the oracle bound shows headroom in duration estimation."
+    },
+    {
+      "date": "2026-09-28",
+      "event": "P3-T4 gated. Sensitivity sweeps run; RQ2 decision verdict unchanged by construction; RQ4 pattern stable except one class at a 12-hour window; duration-control finding keeps its direction everywhere; second grid not run (DL-032)."
     }
   ],
   "progress": {
     "tasks_total": 28,
-    "tasks_done": 16,
-    "pct": 57,
+    "tasks_done": 20,
+    "pct": 71,
     "per_phase_total": {
       "P0": 4,
       "P1": 7,
@@ -1015,15 +1122,15 @@
       "P0": 4,
       "P1": 7,
       "P2": 5,
-      "P3": 0,
+      "P3": 4,
       "P4": 0,
       "P5": 0
     },
-    "current_task": "P3-T1",
-    "next_task": "P3-T2",
-    "last_gate_passed": "P2-T5 (policy_spec.yaml fitted + frozen)",
-    "progress_md_updated": "2026-09-25",
-    "test_split_opened": false
+    "current_task": "P3-T5",
+    "next_task": "P4-T1",
+    "last_gate_passed": "P3-T4 (sensitivity sweeps; verdict table in results/p3/sensitivity.md)",
+    "progress_md_updated": "2026-09-26",
+    "test_split_opened": true
   },
   "evidence": {
     "data": {
@@ -4071,6 +4178,208 @@
         "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[se_informed(window_form=linear, admitted=['F1(illustrative — no family was admitted)'])]: d_hat=5400.0s >= d_threshold=0.0s, window=4.8000h = w_max 24.0000 * (1 - p_hat 0.800000). Greenest reachable slot is 70 (Wed 22:00, 123.3620 gCO2/kWh) at +4h, vs 172.9140 gCO2/kWh now -> deferring 4h."
       }
     ],
+    "p3_model": {
+      "source": "results/p3/model_report.json; results/p3/replication_table.md",
+      "label": "test split, opened once (P3-T1)",
+      "run_date": "2026-09-26",
+      "builds": 138693,
+      "projects": 170,
+      "failure_rate_pct": 25.0359,
+      "control_pr_auc": 0.29422786305663995,
+      "full_pr_auc": 0.2863633706338368,
+      "control_ece": 0.05535990479248504,
+      "families": {
+        "F1": {
+          "delta": 0.013312988721582875,
+          "lo": 0.011923524575020791,
+          "hi": 0.014733419489861191,
+          "admitted": true,
+          "replicates": false
+        },
+        "F2": {
+          "delta": -0.0015561069367713287,
+          "lo": -0.0028708092476698974,
+          "hi": -0.0002372786106275949,
+          "admitted": false,
+          "replicates": true
+        },
+        "F3": {
+          "delta": -0.03365116762643827,
+          "lo": -0.03601787463623611,
+          "hi": -0.03154026469408347,
+          "admitted": false,
+          "replicates": true
+        },
+        "F4": {
+          "delta": -0.019985953103741794,
+          "lo": -0.02215221173619812,
+          "hi": -0.017869311722116987,
+          "admitted": false,
+          "replicates": true
+        },
+        "F5": {
+          "delta": -0.00622478711899993,
+          "lo": -0.008488501624085933,
+          "hi": -0.004032034472963152,
+          "admitted": false,
+          "replicates": true
+        },
+        "F6": {
+          "delta": 0.0022574063444336656,
+          "lo": 0.0009815438387798566,
+          "hi": 0.0036826190016469723,
+          "admitted": false,
+          "replicates": true
+        }
+      },
+      "admitted_x1": [
+        "F1"
+      ],
+      "floor_sweep": {
+        "x0_5": [
+          "F1"
+        ],
+        "x1": [
+          "F1"
+        ],
+        "x2": [
+          "none"
+        ]
+      },
+      "sweep_stable": false,
+      "all_replicate": false,
+      "d4b_mae": 0.5717370241837719,
+      "d4b_rho": 0.8198952310111712,
+      "shap_rho": 0.995967002749771,
+      "shap_top10": 10
+    },
+    "p3_replay": {
+      "source": "results/p3/strategy_results.json; results/p3/strategy_results.md",
+      "label": "test split — frozen policy replayed once (P3-T2)",
+      "run_date": "2026-09-26",
+      "n_records": 14146686,
+      "violations": 0,
+      "deferrals": 1016092,
+      "rows": {
+        "1_static": {
+          "saving_pct": 0.0,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6736527777777823,
+          "missed": 0
+        },
+        "2_blanket_carbon_aware__d0__w167": {
+          "saving_pct": 4.680778080314055,
+          "share_deferred_pct": 19.442221308934123,
+          "ttff_p95_h": 127.01472222222222,
+          "missed": 0
+        },
+        "3_eligibility_only__d0__w24": {
+          "saving_pct": 2.8154890207012495,
+          "share_deferred_pct": 18.73850879280137,
+          "ttff_p95_h": 19.81493055555557,
+          "missed": 0
+        },
+        "4a_duration_estimator__d480__w24": {
+          "saving_pct": 2.4113152255391888,
+          "share_deferred_pct": 9.421528123265054,
+          "ttff_p95_h": 14.068597222222223,
+          "missed": 0
+        },
+        "4b_duration_prior__d480__w24": {
+          "saving_pct": 2.4803236669232294,
+          "share_deferred_pct": 7.918207840338012,
+          "ttff_p95_h": 13.887666666666693,
+          "missed": 0
+        },
+        "5_se_informed_policy__d480__w24": {
+          "saving_pct": 2.4803236669232294,
+          "share_deferred_pct": 7.918207840338012,
+          "ttff_p95_h": 13.887666666666693,
+          "missed": 0
+        },
+        "6_risk_only_skip__t0": {
+          "saving_pct": 0.0,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6736527777777823,
+          "missed": 0
+        },
+        "6_risk_only_skip__t0_05": {
+          "saving_pct": 0.014109252287581732,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6742638888888843,
+          "missed": 4
+        },
+        "6_risk_only_skip__t0_1": {
+          "saving_pct": 0.39066979645932975,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6683333333333332,
+          "missed": 34
+        },
+        "6_risk_only_skip__t0_15": {
+          "saving_pct": 0.7362389691189907,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6677916666666655,
+          "missed": 48
+        },
+        "6_risk_only_skip__t0_2": {
+          "saving_pct": 1.321818577397239,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.6558611111111086,
+          "missed": 88
+        },
+        "6_risk_only_skip__t0_25": {
+          "saving_pct": 2.051451698389393,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.654597222222221,
+          "missed": 158
+        },
+        "6_risk_only_skip__t0_3": {
+          "saving_pct": 14.532147800630085,
+          "share_deferred_pct": 0.0,
+          "ttff_p95_h": 1.9563472222222218,
+          "missed": 6689
+        }
+      }
+    },
+    "p3_decision": {
+      "source": "results/p3/incremental_value_decision.json; results/p3/incremental_value_decision.md",
+      "label": "test split — decision-level frontiers (P3-T3)",
+      "run_date": "2026-09-26",
+      "vs_4b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "cond_x1": false
+      },
+      "vs_4a": {
+        "point": 2.4307500783866933,
+        "lo": 1.7358144936942397,
+        "hi": 2.568361928610672,
+        "cond_x1": true
+      },
+      "oracle_vs_4b": {
+        "point": 1.9290276506099249,
+        "lo": 1.762532030474678,
+        "hi": 2.3492122891552545,
+        "cond_x1": true
+      },
+      "verdict_x1": false,
+      "low_band_vs_4a": -2.6750429577367654
+    },
+    "p3_sensitivity": {
+      "source": "results/p3/sensitivity.md; results/p3/sensitivity/*.json",
+      "label": "test split — sensitivity sweeps (P3-T4)",
+      "v3_late_area": 3.5694086596779737,
+      "v3_late_condition": false,
+      "v3_early_area": 0.7499754051566359,
+      "v3_njobs_area": 5.902570184638883,
+      "v4_w12_stable": false,
+      "trailing_vs_4b_area": 0.35383276088830146,
+      "grid2_status": "not run — no qualifying data (DL-027 §2, DL-032)",
+      "caiso_ptt": 1.8668692169589838,
+      "uk_ptt": 1.8746097137901128,
+      "variant_eligible_pct": 14.023058121174103
+    },
     "tests": {
       "P1-T2": {
         "passed": 71,
@@ -4126,6 +4435,26 @@
         "passed": 579,
         "skipped": 0,
         "file": "results/p2/pytest_p2_t5.txt"
+      },
+      "P3-T1": {
+        "passed": 597,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t1.txt"
+      },
+      "P3-T2": {
+        "passed": 615,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t2.txt"
+      },
+      "P3-T3": {
+        "passed": 629,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t3.txt"
+      },
+      "P3-T4": {
+        "passed": 638,
+        "skipped": 0,
+        "file": "results/p3/pytest_p3_t4.txt"
       }
     }
   }

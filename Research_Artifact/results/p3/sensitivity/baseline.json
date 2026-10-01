@@ -1,0 +1,157 @@
+{
+  "v4": {
+    "w_max_hours": 24.0,
+    "setting_ids": {
+      "5": "5_se_informed_policy__d480__w24",
+      "1": "1_static",
+      "2": "2_blanket_carbon_aware__d0__w167",
+      "3": "3_eligibility_only__d0__w24",
+      "4a": "4a_duration_estimator__d480__w24"
+    },
+    "pairs": {
+      "5_minus_1": {
+        "carbon_per_1000_builds_g": {
+          "point": -70.67811215404981,
+          "ci_lo": -78.5213114429441,
+          "ci_hi": -64.896585298558,
+          "class": "lower"
+        },
+        "ttff_p95_h_failed": {
+          "point": 12.21401388888891,
+          "ci_lo": 11.668193749999997,
+          "ci_hi": 12.590901388888875,
+          "class": "higher"
+        }
+      },
+      "5_minus_2": {
+        "carbon_per_1000_builds_g": {
+          "point": 62.70309229943405,
+          "ci_lo": 59.94258031291495,
+          "ci_hi": 66.06564061823114,
+          "class": "higher"
+        },
+        "ttff_p95_h_failed": {
+          "point": -113.12705555555553,
+          "ci_lo": -116.01552743055572,
+          "ci_hi": -110.91442986111109,
+          "class": "lower"
+        }
+      },
+      "5_minus_3": {
+        "carbon_per_1000_builds_g": {
+          "point": 9.550710973907826,
+          "ci_lo": 9.174468325426563,
+          "ci_hi": 10.026203818162765,
+          "class": "higher"
+        },
+        "ttff_p95_h_failed": {
+          "point": -5.927263888888877,
+          "ci_lo": -6.491937500000008,
+          "ci_hi": -5.397368750000034,
+          "class": "lower"
+        }
+      },
+      "5_minus_4a": {
+        "carbon_per_1000_builds_g": {
+          "point": -1.9664314076298979,
+          "ci_lo": -2.4422971596275262,
+          "ci_hi": -1.4948784649774551,
+          "class": "lower"
+        },
+        "ttff_p95_h_failed": {
+          "point": -0.1809305555555305,
+          "ci_lo": -0.6201614583333352,
+          "ci_hi": 0.1648520833333134,
+          "class": "n.s."
+        }
+      }
+    },
+    "classes": [
+      "lower",
+      "higher",
+      "higher",
+      "lower",
+      "higher",
+      "lower",
+      "lower",
+      "n.s."
+    ]
+  },
+  "cross_check_vs_p3t2": {
+    "rows": [
+      {
+        "pair": "5_minus_1",
+        "metric": "carbon_per_1000_builds_g",
+        "p3t2_class": "lower",
+        "this_class": "lower",
+        "point_abs_diff": 9.094947017729282e-13
+      },
+      {
+        "pair": "5_minus_1",
+        "metric": "ttff_p95_h_failed",
+        "p3t2_class": "higher",
+        "this_class": "higher",
+        "point_abs_diff": 0.0
+      },
+      {
+        "pair": "5_minus_2",
+        "metric": "carbon_per_1000_builds_g",
+        "p3t2_class": "higher",
+        "this_class": "higher",
+        "point_abs_diff": 0.0
+      },
+      {
+        "pair": "5_minus_2",
+        "metric": "ttff_p95_h_failed",
+        "p3t2_class": "lower",
+        "this_class": "lower",
+        "point_abs_diff": 0.0
+      },
+      {
+        "pair": "5_minus_3",
+        "metric": "carbon_per_1000_builds_g",
+        "p3t2_class": "higher",
+        "this_class": "higher",
+        "point_abs_diff": 4.547473508864641e-13
+      },
+      {
+        "pair": "5_minus_3",
+        "metric": "ttff_p95_h_failed",
+        "p3t2_class": "lower",
+        "this_class": "lower",
+        "point_abs_diff": 0.0
+      },
+      {
+        "pair": "5_minus_4a",
+        "metric": "carbon_per_1000_builds_g",
+        "p3t2_class": "lower",
+        "this_class": "lower",
+        "point_abs_diff": 0.0
+      },
+      {
+        "pair": "5_minus_4a",
+        "metric": "ttff_p95_h_failed",
+        "p3t2_class": "n.s.",
+        "this_class": "n.s.",
+        "point_abs_diff": 0.0
+      }
+    ],
+    "classes_match": true
+  },
+  "v1_baseline": [
+    "F1"
+  ],
+  "note": "V4 baseline recomputed from the P3-T2 parts",
+  "sweep": "baseline",
+  "command": "PYTHONPATH=. python scripts/sensitivity_analysis.py --sweep baseline",
+  "run_date": "2026-09-28",
+  "seed": 42,
+  "n_resamples": 1000,
+  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "decision_log": [
+    "DL-027",
+    "DL-029",
+    "DL-030"
+  ],
+  "runtime_s": 14.2
+}

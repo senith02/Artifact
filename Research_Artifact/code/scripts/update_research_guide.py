@@ -315,6 +315,99 @@ def collect_evidence() -> dict[str, Any]:
     ev["decide_examples"] = [{"id": e["id"], "shows": e["shows"], "action": e["decision"]["action"],
                               "reason": e["decision"]["reason"]} for e in dx["examples"]]
 
+    # ---- P3-T1: the single test-split model evaluation ----
+    mr_path = RES / "p3" / "model_report.json"
+    if mr_path.exists():
+        mr = load_json(mr_path)
+        rep = mr["replication"]["families"]
+        ev["p3_model"] = {
+            "source": "results/p3/model_report.json; results/p3/replication_table.md",
+            "label": "test split, opened once (P3-T1)",
+            "run_date": mr["provenance"]["run_date"],
+            "builds": mr["population"]["builds"], "projects": mr["population"]["projects"],
+            "failure_rate_pct": mr["population"]["failure_rate_pct"],
+            "control_pr_auc": mr["arms"]["xgboost:control"]["metrics"]["pr_auc"],
+            "full_pr_auc": mr["arms"]["xgboost:full"]["metrics"]["pr_auc"],
+            "control_ece": mr["arms"]["xgboost:control"]["metrics"]["ece"],
+            "families": {fam: {"delta": r["test"]["delta"], "lo": r["test"]["ci_lo"],
+                               "hi": r["test"]["ci_hi"], "admitted": r["test"]["admitted"],
+                               "replicates": r["verdict_replicates"]}
+                         for fam, r in rep.items()},
+            "admitted_x1": mr["admission"]["x1"]["admitted"],
+            # "x0.5" -> "x0_5": token paths split on "."
+            "floor_sweep": {k.replace(".", "_"): v["admitted"] or ["none"]
+                            for k, v in mr["admission"]["floor_sweep"]["by_floor"].items()},
+            "sweep_stable": mr["admission"]["floor_sweep"]["stable"],
+            "all_replicate": mr["replication"]["all_verdicts_replicate"],
+            "d4b_mae": mr["duration_control"]["forms"]["4b_expanding"]["all_builds"]["mae_log1p"],
+            "d4b_rho": mr["duration_control"]["forms"]["4b_expanding"]["all_builds"]["spearman_rho"],
+            "shap_rho": mr["shap_comparison"]["spearman_mean_abs_shap_calibration_vs_test"],
+            "shap_top10": mr["shap_comparison"]["top10_overlap"],
+        }
+
+    # ---- P3-T2: the six strategies on the test trace ----
+    sr_path = RES / "p3" / "strategy_results.json"
+    if sr_path.exists():
+        sr = load_json(sr_path)
+        head = {r["setting_id"]: r for r in sr["headline"]}
+        ps = sr["bootstrap"]["per_strategy"]
+        ev["p3_replay"] = {
+            "source": "results/p3/strategy_results.json; results/p3/strategy_results.md",
+            "label": "test split — frozen policy replayed once (P3-T2)",
+            "run_date": sr["run_date"], "n_records": sr["n_records"],
+            "violations": sr["checks"]["validator"]["violations"],
+            "deferrals": sr["checks"]["validator"]["deferred"],
+            # "t0.3" -> "t0_3": token paths split on "."
+            "rows": {sid.replace(".", "_"): {"saving_pct": -r["carbon_pct_vs_static"] + 0.0,
+                           "share_deferred_pct": 100 * r["share_deferred"],
+                           "ttff_p95_h": ps[sid]["ttff_p95_h_failed"]["point"],
+                           "missed": r["missed_failures"]}
+                     for sid, r in head.items()},
+        }
+
+    # ---- P3-T3: decision-level frontiers ----
+    iv_path = RES / "p3" / "incremental_value_decision.json"
+    if iv_path.exists():
+        iv = load_json(iv_path)
+        pa = iv["populations"]["all"]["pairs"]
+
+        def _area(key: str) -> dict:
+            a = pa[key]["area"]
+            return {"point": a["point"], "lo": a["ci_lo"], "hi": a["ci_hi"],
+                    "cond_x1": pa[key]["condition"]["x1"]}
+        ev["p3_decision"] = {
+            "source": "results/p3/incremental_value_decision.json; results/p3/incremental_value_decision.md",
+            "label": "test split — decision-level frontiers (P3-T3)",
+            "run_date": iv["run_date"],
+            "vs_4b": _area("4b_duration_prior|5_se_informed_policy"),
+            "vs_4a": _area("4a_duration_estimator|5_se_informed_policy"),
+            "oracle_vs_4b": _area("4b_duration_prior|4_oracle_duration"),
+            "verdict_x1": iv["populations"]["all"]["verdict_se_adds_value"]["x1"],
+            "low_band_vs_4a": iv["populations"]["low"]["pairs"][
+                "4a_duration_estimator|5_se_informed_policy"]["area"]["point"],
+        }
+
+    # ---- P3-T4: sensitivity sweeps ----
+    sd = RES / "p3" / "sensitivity"
+    if (sd / "baseline.json").exists():
+        def _j(name: str) -> dict:
+            return load_json(sd / f"{name}.json")
+        e, h, b = _j("e"), _j("h"), _j("b")
+        ev["p3_sensitivity"] = {
+            "source": "results/p3/sensitivity.md; results/p3/sensitivity/*.json",
+            "label": "test split — sensitivity sweeps (P3-T4)",
+            "v3_late_area": e["late"]["V3"]["area"]["point"],
+            "v3_late_condition": e["late"]["V3"]["value"],
+            "v3_early_area": e["early"]["V3"]["area"]["point"],
+            "v3_njobs_area": _j("d")["V3"]["area"]["point"],
+            "v4_w12_stable": b["V4_by_w"]["w12"]["stable"],
+            "trailing_vs_4b_area": h["trailing_vs_4b"]["point"],
+            "grid2_status": _j("f")["status"],
+            "caiso_ptt": _j("f").get("by_product", {}).get("caiso_peak_to_trough"),
+            "uk_ptt": _j("f").get("by_product", {}).get("uk_peak_to_trough"),
+            "variant_eligible_pct": 100 * _j("a")["eligible_share"],
+        }
+
     # ---- tests per gate ----
     ev["tests"] = {}
     for p in sorted(RES.glob("p*/pytest_p*_t*.txt")):
@@ -394,6 +487,8 @@ def lookup(root: dict, path: str) -> Any:
 
 def fmt(value: Any, spec: str | None) -> str:
     if spec in (None, "raw"):
+        if isinstance(value, bool):                          # before int: bool is an int
+            return "yes" if value else "no"
         if isinstance(value, float):
             return f"{value:g}"
         if isinstance(value, int):
@@ -484,7 +579,7 @@ def build(check_only: bool) -> int:
         "per_phase_total": plan["per_phase"], "per_phase_done": phases_done,
         "current_task": prog["current_task"], "next_task": prog["next_task"],
         "last_gate_passed": prog["last_gate_passed"], "progress_md_updated": prog["last_updated"],
-        "test_split_opened": False,
+        "test_split_opened": (RES / "p3" / "test_split_opened.json").exists(),
     }
     state["evidence"] = evidence
     state["meta"]["last_updated"] = dt.date.today().isoformat()

@@ -1,0 +1,104 @@
+﻿sweep g …
+  loaded 1_static
+  loaded 4a_duration_estimator__d0__w6
+  loaded 4a_duration_estimator__d60__w6
+  loaded 4a_duration_estimator__d120__w6
+  loaded 4a_duration_estimator__d240__w6
+  loaded 4a_duration_estimator__d480__w6
+  loaded 4a_duration_estimator__d960__w6
+  loaded 4a_duration_estimator__d1920__w6
+  loaded 4a_duration_estimator__d3840__w6
+  loaded 4a_duration_estimator__d7680__w6
+  loaded 4a_duration_estimator__d15360__w6
+  loaded 4a_duration_estimator__d0__w12
+  loaded 4a_duration_estimator__d60__w12
+  loaded 4a_duration_estimator__d120__w12
+  loaded 4a_duration_estimator__d240__w12
+  loaded 4a_duration_estimator__d480__w12
+  loaded 4a_duration_estimator__d960__w12
+  loaded 4a_duration_estimator__d1920__w12
+  loaded 4a_duration_estimator__d3840__w12
+  loaded 4a_duration_estimator__d7680__w12
+  loaded 4a_duration_estimator__d15360__w12
+  loaded 4a_duration_estimator__d0__w24
+  loaded 4a_duration_estimator__d60__w24
+  loaded 4a_duration_estimator__d120__w24
+  loaded 4a_duration_estimator__d240__w24
+  loaded 4a_duration_estimator__d480__w24
+  loaded 4a_duration_estimator__d960__w24
+  loaded 4a_duration_estimator__d1920__w24
+  loaded 4a_duration_estimator__d3840__w24
+  loaded 4a_duration_estimator__d7680__w24
+  loaded 4a_duration_estimator__d15360__w24
+  loaded 4b_duration_prior__d0__w6
+  loaded 4b_duration_prior__d60__w6
+  loaded 4b_duration_prior__d120__w6
+  loaded 4b_duration_prior__d240__w6
+  loaded 4b_duration_prior__d480__w6
+  loaded 4b_duration_prior__d960__w6
+  loaded 4b_duration_prior__d1920__w6
+  loaded 4b_duration_prior__d3840__w6
+  loaded 4b_duration_prior__d7680__w6
+  loaded 4b_duration_prior__d15360__w6
+  loaded 4b_duration_prior__d0__w12
+  loaded 4b_duration_prior__d60__w12
+  loaded 4b_duration_prior__d120__w12
+  loaded 4b_duration_prior__d240__w12
+  loaded 4b_duration_prior__d480__w12
+  loaded 4b_duration_prior__d960__w12
+  loaded 4b_duration_prior__d1920__w12
+  loaded 4b_duration_prior__d3840__w12
+  loaded 4b_duration_prior__d7680__w12
+  loaded 4b_duration_prior__d15360__w12
+  loaded 4b_duration_prior__d0__w24
+  loaded 4b_duration_prior__d60__w24
+  loaded 4b_duration_prior__d120__w24
+  loaded 4b_duration_prior__d240__w24
+  loaded 4b_duration_prior__d480__w24
+  loaded 4b_duration_prior__d960__w24
+  loaded 4b_duration_prior__d1920__w24
+  loaded 4b_duration_prior__d3840__w24
+  loaded 4b_duration_prior__d7680__w24
+  loaded 4b_duration_prior__d15360__w24
+  loaded 5_se_informed_policy__d0__w6
+  loaded 5_se_informed_policy__d60__w6
+  loaded 5_se_informed_policy__d120__w6
+  loaded 5_se_informed_policy__d240__w6
+  loaded 5_se_informed_policy__d480__w6
+  loaded 5_se_informed_policy__d960__w6
+  loaded 5_se_informed_policy__d1920__w6
+  loaded 5_se_informed_policy__d3840__w6
+  loaded 5_se_informed_policy__d7680__w6
+  loaded 5_se_informed_policy__d15360__w6
+  loaded 5_se_informed_policy__d0__w12
+  loaded 5_se_informed_policy__d60__w12
+  loaded 5_se_informed_policy__d120__w12
+  loaded 5_se_informed_policy__d240__w12
+  loaded 5_se_informed_policy__d480__w12
+  loaded 5_se_informed_policy__d960__w12
+  loaded 5_se_informed_policy__d1920__w12
+  loaded 5_se_informed_policy__d3840__w12
+  loaded 5_se_informed_policy__d7680__w12
+  loaded 5_se_informed_policy__d15360__w12
+  loaded 5_se_informed_policy__d0__w24
+  loaded 5_se_informed_policy__d60__w24
+  loaded 5_se_informed_policy__d120__w24
+  loaded 5_se_informed_policy__d240__w24
+  loaded 5_se_informed_policy__d480__w24
+  loaded 5_se_informed_policy__d960__w24
+  loaded 5_se_informed_policy__d1920__w24
+  loaded 5_se_informed_policy__d3840__w24
+  loaded 5_se_informed_policy__d7680__w24
+  loaded 5_se_informed_policy__d15360__w24
+    [S-g] paired delta F1 (138,519 builds) …
+    [S-g] paired delta F2 (138,519 builds) …
+    [S-g] paired delta F3 (138,519 builds) …
+    [S-g] paired delta F4 (138,519 builds) …
+    [S-g] paired delta F5 (138,519 builds) …
+    [S-g] paired delta F6 (138,519 builds) …
+    [S-g] resample 200/1000
+    [S-g] resample 400/1000
+    [S-g] resample 600/1000
+    [S-g] resample 800/1000
+    [S-g] resample 1000/1000
+wrote results/p3/sensitivity/g.json (1036s)

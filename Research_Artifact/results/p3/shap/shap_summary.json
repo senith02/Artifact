@@ -1,0 +1,624 @@
+{
+  "per_feature": {
+    "d_hat_log1p": {
+      "family": "control",
+      "mean_abs_shap": 0.31116103639684867,
+      "mean_signed_shap": -0.09940740665908909,
+      "monotonicity": {
+        "rho": 0.7347207971960784,
+        "ci_lo": 0.7302650358665481,
+        "ci_hi": 0.7387580143404583,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "src_churn": {
+      "family": "F1",
+      "mean_abs_shap": 0.009815735149464233,
+      "mean_signed_shap": -0.0012715956628239335,
+      "monotonicity": {
+        "rho": 0.10074332160721193,
+        "ci_lo": 0.09226036916795488,
+        "ci_hi": 0.10954640389842266,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "test_churn": {
+      "family": "F1",
+      "mean_abs_shap": 0.0,
+      "mean_signed_shap": 0.0,
+      "monotonicity": {
+        "rho": NaN,
+        "ci_lo": NaN,
+        "ci_hi": NaN,
+        "monotone": false,
+        "degenerate": true
+      }
+    },
+    "files_added": {
+      "family": "F1",
+      "mean_abs_shap": 0.02600286575665895,
+      "mean_signed_shap": 0.00017974692704690706,
+      "monotonicity": {
+        "rho": 0.4985599030220901,
+        "ci_lo": 0.4929774340779634,
+        "ci_hi": 0.5047007221891566,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "files_deleted": {
+      "family": "F1",
+      "mean_abs_shap": 0.009303693819930875,
+      "mean_signed_shap": -0.0027762252418594264,
+      "monotonicity": {
+        "rho": 0.1395069485736383,
+        "ci_lo": 0.13090841568248626,
+        "ci_hi": 0.1481427601740683,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "files_modified": {
+      "family": "F1",
+      "mean_abs_shap": 0.03428565363942496,
+      "mean_signed_shap": -0.014801952588764105,
+      "monotonicity": {
+        "rho": -0.4737450866156193,
+        "ci_lo": -0.4793457669731219,
+        "ci_hi": -0.46818330477186104,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "files_total": {
+      "family": "F1",
+      "mean_abs_shap": 0.027857913156213023,
+      "mean_signed_shap": -0.005783529191192232,
+      "monotonicity": {
+        "rho": 0.29524434603880667,
+        "ci_lo": 0.28923690346264325,
+        "ci_hi": 0.30030387906290873,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "tests_added": {
+      "family": "F3",
+      "mean_abs_shap": 0.0019832124886406638,
+      "mean_signed_shap": -0.0009418151843185726,
+      "monotonicity": {
+        "rho": 0.04083111758931573,
+        "ci_lo": 0.032243662589341325,
+        "ci_hi": 0.049891755516843724,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "tests_deleted": {
+      "family": "F3",
+      "mean_abs_shap": 0.011957575103780668,
+      "mean_signed_shap": -0.0021573299387017742,
+      "monotonicity": {
+        "rho": 0.21676103495606472,
+        "ci_lo": 0.20956832298778788,
+        "ci_hi": 0.22324606341717212,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "src_files": {
+      "family": "F2",
+      "mean_abs_shap": 0.006734016627406257,
+      "mean_signed_shap": -0.000665565029559447,
+      "monotonicity": {
+        "rho": 0.2934737706864396,
+        "ci_lo": 0.2873223338745349,
+        "ci_hi": 0.29974411105084253,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "doc_files": {
+      "family": "F2",
+      "mean_abs_shap": 7.647233730579012e-05,
+      "mean_signed_shap": 3.481633982038132e-05,
+      "monotonicity": {
+        "rho": -0.016768131746485723,
+        "ci_lo": -0.021311308768360685,
+        "ci_hi": -0.011391989800178273,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "other_files": {
+      "family": "F2",
+      "mean_abs_shap": 0.07342950509117958,
+      "mean_signed_shap": 0.004144580039745091,
+      "monotonicity": {
+        "rho": 0.87700426565576,
+        "ci_lo": 0.8751575418887363,
+        "ci_hi": 0.8787980887662983,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "is_docs_only": {
+      "family": "F2",
+      "mean_abs_shap": 5.024837679543037e-05,
+      "mean_signed_shap": -3.964573201107822e-05,
+      "monotonicity": {
+        "rho": -0.006577263223343338,
+        "ci_lo": -0.010399453803548342,
+        "ci_hi": 0.0,
+        "monotone": false,
+        "degenerate": false
+      }
+    },
+    "num_commits": {
+      "family": "F1",
+      "mean_abs_shap": 0.06739846579099802,
+      "mean_signed_shap": -0.004702667649628665,
+      "monotonicity": {
+        "rho": 0.6236603420913985,
+        "ci_lo": 0.6198299106617275,
+        "ci_hi": 0.62704530607166,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "commits_on_files_touched": {
+      "family": "F4",
+      "mean_abs_shap": 0.07064184415928222,
+      "mean_signed_shap": -0.013485827814111628,
+      "monotonicity": {
+        "rho": -0.544624929666415,
+        "ci_lo": -0.5490761638113194,
+        "ci_hi": -0.5399948791392989,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "sloc": {
+      "family": "F4",
+      "mean_abs_shap": 0.17486583622372645,
+      "mean_signed_shap": -0.06840083862698576,
+      "monotonicity": {
+        "rho": 0.22533858486599703,
+        "ci_lo": 0.21925617420612226,
+        "ci_hi": 0.23075588604001745,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "test_lines_per_kloc": {
+      "family": "F3",
+      "mean_abs_shap": 0.24657379060196982,
+      "mean_signed_shap": -0.0796870273479346,
+      "monotonicity": {
+        "rho": -0.2095512094709102,
+        "ci_lo": -0.21543648042945931,
+        "ci_hi": -0.2033956987916997,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "test_cases_per_kloc": {
+      "family": "F3",
+      "mean_abs_shap": 0.1649799362629312,
+      "mean_signed_shap": -0.019391014217476892,
+      "monotonicity": {
+        "rho": -0.046005035974929845,
+        "ci_lo": -0.05197357286229437,
+        "ci_hi": -0.03993861996344333,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "asserts_per_kloc": {
+      "family": "F3",
+      "mean_abs_shap": 0.17558664488411585,
+      "mean_signed_shap": -0.039577377051791,
+      "monotonicity": {
+        "rho": 0.06582435229965122,
+        "ci_lo": 0.05942697050931343,
+        "ci_hi": 0.07220264457536422,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "team_size": {
+      "family": "F5",
+      "mean_abs_shap": 0.1967619208257753,
+      "mean_signed_shap": -0.04236700368340435,
+      "monotonicity": {
+        "rho": -0.7626603879017437,
+        "ci_lo": -0.7648806646759949,
+        "ci_hi": -0.7603493304161741,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "by_core_member": {
+      "family": "F5",
+      "mean_abs_shap": 0.01870073426960131,
+      "mean_signed_shap": -0.002874759095059416,
+      "monotonicity": {
+        "rho": -0.2931055131591004,
+        "ci_lo": -0.2997063464693199,
+        "ci_hi": -0.28531835238427167,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "repo_age": {
+      "family": "F4",
+      "mean_abs_shap": 0.1788457756882191,
+      "mean_signed_shap": -0.09098123313798524,
+      "monotonicity": {
+        "rho": -0.07768820397408671,
+        "ci_lo": -0.083202258538548,
+        "ci_hi": -0.07204978114359385,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "repo_num_commits": {
+      "family": "F4",
+      "mean_abs_shap": 0.18466812620856113,
+      "mean_signed_shap": -0.08877002294335855,
+      "monotonicity": {
+        "rho": 0.27642551570556995,
+        "ci_lo": 0.2709829523656633,
+        "ci_hi": 0.2820284066627846,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "description_complexity": {
+      "family": "F2",
+      "mean_abs_shap": 0.03305345511473944,
+      "mean_signed_shap": -0.002931198601832018,
+      "monotonicity": {
+        "rho": -0.30550180700402096,
+        "ci_lo": -0.31222084378366,
+        "ci_hi": -0.29854560274688147,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "is_pr": {
+      "family": "F6",
+      "mean_abs_shap": 0.05460284931195479,
+      "mean_signed_shap": -0.015200894917797641,
+      "monotonicity": {
+        "rho": 0.6088121925617752,
+        "ci_lo": 0.6050431647525556,
+        "ci_hi": 0.6126984231285291,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "hour_of_day": {
+      "family": "F6",
+      "mean_abs_shap": 0.06372320672715405,
+      "mean_signed_shap": -0.03423267128724474,
+      "monotonicity": {
+        "rho": 0.42507625267182797,
+        "ci_lo": 0.42010938425685,
+        "ci_hi": 0.43040879070623084,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "day_of_week": {
+      "family": "F6",
+      "mean_abs_shap": 0.046674389207046016,
+      "mean_signed_shap": -0.0219549277360001,
+      "monotonicity": {
+        "rho": -0.45791182513187656,
+        "ci_lo": -0.4626247921160557,
+        "ci_hi": -0.45271814194270465,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "test_density_ratio": {
+      "family": "F2",
+      "mean_abs_shap": 0.0,
+      "mean_signed_shap": 0.0,
+      "monotonicity": {
+        "rho": NaN,
+        "ci_lo": NaN,
+        "ci_hi": NaN,
+        "monotone": false,
+        "degenerate": true
+      }
+    },
+    "lang=go": {
+      "family": "F4",
+      "mean_abs_shap": 0.031860416940419085,
+      "mean_signed_shap": -0.0065503516557021855,
+      "monotonicity": {
+        "rho": -0.5483606820366081,
+        "ci_lo": -0.5529803318484537,
+        "ci_hi": -0.5442757895967231,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "lang=java": {
+      "family": "F4",
+      "mean_abs_shap": 0.02049253289202247,
+      "mean_signed_shap": -0.0028833061831996703,
+      "monotonicity": {
+        "rho": -0.23990006098101943,
+        "ci_lo": -0.24639947703608678,
+        "ci_hi": -0.23341637236643983,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "lang=python": {
+      "family": "F4",
+      "mean_abs_shap": 0.04604864520824436,
+      "mean_signed_shap": -0.005823979723602803,
+      "monotonicity": {
+        "rho": -0.681342611293475,
+        "ci_lo": -0.6839115060313314,
+        "ci_hi": -0.6783547409251809,
+        "monotone": true,
+        "degenerate": false
+      }
+    },
+    "lang=ruby": {
+      "family": "F4",
+      "mean_abs_shap": 0.05948122736755487,
+      "mean_signed_shap": -0.010030236604156983,
+      "monotonicity": {
+        "rho": 0.7172846174027778,
+        "ci_lo": 0.7141712306914091,
+        "ci_hi": 0.7203350594684313,
+        "monotone": true,
+        "degenerate": false
+      }
+    }
+  },
+  "per_family": {
+    "control": {
+      "mean_abs_contribution": 0.31116103639684867,
+      "mean_signed_contribution": -0.09940740665908909
+    },
+    "F1": {
+      "mean_abs_contribution": 0.10312980177051463,
+      "mean_signed_contribution": -0.029156223407221453
+    },
+    "F2": {
+      "mean_abs_contribution": 0.08678208331215,
+      "mean_signed_contribution": 0.0005429870161629286
+    },
+    "F3": {
+      "mean_abs_contribution": 0.33084700007554346,
+      "mean_signed_contribution": -0.14175456374022283
+    },
+    "F4": {
+      "mean_abs_contribution": 0.4174948691303297,
+      "mean_signed_contribution": -0.28692579668910284
+    },
+    "F5": {
+      "mean_abs_contribution": 0.19781839307375854,
+      "mean_signed_contribution": -0.04524176277846376
+    },
+    "F6": {
+      "mean_abs_contribution": 0.11334869980041117,
+      "mean_signed_contribution": -0.07138849394104249
+    }
+  },
+  "variance_decomposition": {
+    "control": {
+      "between": 14528.748986897055,
+      "within": 5047.524994410356,
+      "total": 19576.27398130741,
+      "between_share": 0.7421610977027583,
+      "within_share": 0.2578389022972417,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F1": {
+      "between": 187.56222149719025,
+      "within": 2910.8545441600845,
+      "total": 3098.416765657275,
+      "between_share": 0.06053485882729601,
+      "within_share": 0.939465141172704,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F2": {
+      "between": 156.19124651309602,
+      "within": 1883.1765624416594,
+      "total": 2039.3678089547554,
+      "between_share": 0.07658807098320793,
+      "within_share": 0.923411929016792,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F3": {
+      "between": 12802.018514056861,
+      "within": 8981.33252661733,
+      "total": 21783.35104067419,
+      "between_share": 0.5876973882554959,
+      "within_share": 0.4123026117445041,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F4": {
+      "between": 10079.884153203802,
+      "within": 17280.213638335787,
+      "total": 27360.09779153959,
+      "between_share": 0.3684155016551421,
+      "within_share": 0.631584498344858,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F5": {
+      "between": 5490.479481838136,
+      "within": 2846.7450786104646,
+      "total": 8337.224560448602,
+      "between_share": 0.6585500296927003,
+      "within_share": 0.3414499703072997,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    },
+    "F6": {
+      "between": 177.02199518805332,
+      "within": 2094.3060790383806,
+      "total": 2271.328074226434,
+      "between_share": 0.07793765999583448,
+      "within_share": 0.9220623400041654,
+      "n_groups": 170,
+      "n": 138693,
+      "project_identity_coded": false
+    }
+  },
+  "project_identity_coded_threshold": 0.8,
+  "top10": [
+    {
+      "feature": "d_hat_log1p",
+      "family": "control",
+      "mean_abs_shap": 0.31116103639684867,
+      "mean_signed_shap": -0.09940740665908909,
+      "spearman_rho": 0.7347207971960784,
+      "direction": "increases risk"
+    },
+    {
+      "feature": "test_lines_per_kloc",
+      "family": "F3",
+      "mean_abs_shap": 0.24657379060196982,
+      "mean_signed_shap": -0.0796870273479346,
+      "spearman_rho": -0.2095512094709102,
+      "direction": "decreases risk"
+    },
+    {
+      "feature": "team_size",
+      "family": "F5",
+      "mean_abs_shap": 0.1967619208257753,
+      "mean_signed_shap": -0.04236700368340435,
+      "spearman_rho": -0.7626603879017437,
+      "direction": "decreases risk"
+    },
+    {
+      "feature": "repo_num_commits",
+      "family": "F4",
+      "mean_abs_shap": 0.18466812620856113,
+      "mean_signed_shap": -0.08877002294335855,
+      "spearman_rho": 0.27642551570556995,
+      "direction": "increases risk"
+    },
+    {
+      "feature": "repo_age",
+      "family": "F4",
+      "mean_abs_shap": 0.1788457756882191,
+      "mean_signed_shap": -0.09098123313798524,
+      "spearman_rho": -0.07768820397408671,
+      "direction": "decreases risk"
+    },
+    {
+      "feature": "asserts_per_kloc",
+      "family": "F3",
+      "mean_abs_shap": 0.17558664488411585,
+      "mean_signed_shap": -0.039577377051791,
+      "spearman_rho": 0.06582435229965122,
+      "direction": "increases risk"
+    },
+    {
+      "feature": "sloc",
+      "family": "F4",
+      "mean_abs_shap": 0.17486583622372645,
+      "mean_signed_shap": -0.06840083862698576,
+      "spearman_rho": 0.22533858486599703,
+      "direction": "increases risk"
+    },
+    {
+      "feature": "test_cases_per_kloc",
+      "family": "F3",
+      "mean_abs_shap": 0.1649799362629312,
+      "mean_signed_shap": -0.019391014217476892,
+      "spearman_rho": -0.046005035974929845,
+      "direction": "decreases risk"
+    },
+    {
+      "feature": "other_files",
+      "family": "F2",
+      "mean_abs_shap": 0.07342950509117958,
+      "mean_signed_shap": 0.004144580039745091,
+      "spearman_rho": 0.87700426565576,
+      "direction": "increases risk"
+    },
+    {
+      "feature": "commits_on_files_touched",
+      "family": "F4",
+      "mean_abs_shap": 0.07064184415928222,
+      "mean_signed_shap": -0.013485827814111628,
+      "spearman_rho": -0.544624929666415,
+      "direction": "decreases risk"
+    }
+  ],
+  "comparison_vs_calibration": {
+    "n_features_compared": 32,
+    "spearman_mean_abs_shap_calibration_vs_test": 0.995967002749771,
+    "top10_overlap": 10,
+    "top10_only_calibration": [],
+    "top10_only_test": [],
+    "per_family": {
+      "control": {
+        "calibration": 0.29405315782316466,
+        "test": 0.31116103639684867,
+        "rank_calibration": 3,
+        "rank_test": 3
+      },
+      "F1": {
+        "calibration": 0.09869559999144145,
+        "test": 0.10312980177051463,
+        "rank_calibration": 6,
+        "rank_test": 6
+      },
+      "F2": {
+        "calibration": 0.08691866443826149,
+        "test": 0.08678208331215,
+        "rank_calibration": 7,
+        "rank_test": 7
+      },
+      "F3": {
+        "calibration": 0.32317928159370213,
+        "test": 0.33084700007554346,
+        "rank_calibration": 2,
+        "rank_test": 2
+      },
+      "F4": {
+        "calibration": 0.44428847514587144,
+        "test": 0.4174948691303297,
+        "rank_calibration": 1,
+        "rank_test": 1
+      },
+      "F5": {
+        "calibration": 0.20801600736665415,
+        "test": 0.19781839307375854,
+        "rank_calibration": 4,
+        "rank_test": 4
+      },
+      "F6": {
+        "calibration": 0.11411137015131852,
+        "test": 0.11334869980041117,
+        "rank_calibration": 5,
+        "rank_test": 5
+      }
+    }
+  }
+}

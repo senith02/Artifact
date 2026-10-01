@@ -1,0 +1,28 @@
+{
+  "decision": "DL-027 \u00a71",
+  "rule": "median gh_build_started_at over train + calibration analytic builds; early = started < boundary, late = started >= boundary",
+  "boundary_utc": "2015-03-28T13:00:51+00:00",
+  "command": "python scripts/fix_temporal_boundary.py",
+  "run_date": "2026-09-25",
+  "splits_read": [
+    "calibration",
+    "train"
+  ],
+  "split_assignment_sha256": "be1d175f138139df4eece6c10a04e05498fbdbf5daf8fd2c2f0d9af96ddf26d3",
+  "test_split_builds_dropped_unread": 138693,
+  "builds_used": 783931,
+  "projects_used": 778,
+  "first_build_utc": "2011-04-16T17:37:39+00:00",
+  "last_build_utc": "2016-08-31T23:59:27+00:00",
+  "counts_by_period_and_split": {
+    "early": {
+      "calibration": 68426,
+      "train": 323539
+    },
+    "late": {
+      "calibration": 70261,
+      "train": 321705
+    }
+  },
+  "elapsed_s": 28.3
+}

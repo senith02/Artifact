@@ -1,0 +1,41 @@
+﻿Energy-Charts API endpoint list (fetched 2026-09-28 16:55:49Z from https://api.energy-charts.info/openapi.json, API version 2.0)
+Licence (per API description): CC BY 4.0, attribution to Energy-Charts.info
+Endpoints:
+/v2
+/v2/public_power
+/v2/public_power_forecast
+/v2/total_power
+/v2/installed_power
+/v2/frequency
+/v2/price
+/v2/price_current
+/v2/price_next_day
+/v2/cbet
+/v2/cbpf
+/v2/signal
+/v2/ren_share_forecast
+/v2/ren_share_daily_avg
+/v2/solar_share
+/v2/solar_share_daily_avg
+/v2/wind_onshore_share
+/v2/wind_onshore_share_daily_avg
+/v2/wind_offshore_share
+/v2/wind_offshore_share_daily_avg
+/public_power
+/public_power_forecast
+/total_power
+/installed_power
+/price
+/cbet
+/cbpf
+/signal
+/ren_share_forecast
+/ren_share_daily_avg
+/solar_share
+/solar_share_daily_avg
+/wind_onshore_share
+/wind_onshore_share_daily_avg
+/wind_offshore_share
+/wind_offshore_share_daily_avg
+/frequency
+Finding: no endpoint returns CO2 / carbon intensity; generation and price series only.

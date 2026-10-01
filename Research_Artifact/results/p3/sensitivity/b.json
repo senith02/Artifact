@@ -1,0 +1,293 @@
+{
+  "per_w": {
+    "w6": {
+      "w_max_hours": 6.0,
+      "setting_ids": {
+        "5": "5_se_informed_policy__d480__w6",
+        "1": "1_static",
+        "2": "2_blanket_carbon_aware__d0__w167",
+        "3": "3_eligibility_only__d0__w6",
+        "4a": "4a_duration_estimator__d480__w6"
+      },
+      "pairs": {
+        "5_minus_1": {
+          "carbon_per_1000_builds_g": {
+            "point": -52.957777528541556,
+            "ci_lo": -60.50116681793664,
+            "ci_hi": -47.73144817156765,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": 4.388277777777774,
+            "ci_lo": 4.31588715277778,
+            "ci_hi": 4.458287500000002,
+            "class": "higher"
+          }
+        },
+        "5_minus_2": {
+          "carbon_per_1000_builds_g": {
+            "point": 80.4234269249423,
+            "ci_lo": 76.84181968080382,
+            "ci_hi": 84.31344886859178,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -120.95279166666666,
+            "ci_lo": -123.94016354166666,
+            "ci_hi": -118.92646006944445,
+            "class": "lower"
+          }
+        },
+        "5_minus_3": {
+          "carbon_per_1000_builds_g": {
+            "point": 6.767395898671111,
+            "ci_lo": 6.48295361451311,
+            "ci_hi": 7.110280793390802,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -0.09195833333333248,
+            "ci_lo": -0.11019583333333278,
+            "ci_hi": -0.058108333333332984,
+            "class": "lower"
+          }
+        },
+        "5_minus_4a": {
+          "carbon_per_1000_builds_g": {
+            "point": -1.695592732726709,
+            "ci_lo": -2.1113808587179164,
+            "ci_hi": -1.279532499996219,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": -0.00890277777777726,
+            "ci_lo": -0.02972222222222156,
+            "ci_hi": 0.026955208333333994,
+            "class": "n.s."
+          }
+        }
+      },
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "n.s."
+      ]
+    },
+    "w12": {
+      "w_max_hours": 12.0,
+      "setting_ids": {
+        "5": "5_se_informed_policy__d480__w12",
+        "1": "1_static",
+        "2": "2_blanket_carbon_aware__d0__w167",
+        "3": "3_eligibility_only__d0__w12",
+        "4a": "4a_duration_estimator__d480__w12"
+      },
+      "pairs": {
+        "5_minus_1": {
+          "carbon_per_1000_builds_g": {
+            "point": -62.24751289329015,
+            "ci_lo": -69.90864445592851,
+            "ci_hi": -56.677755892400036,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": 7.709111111111115,
+            "ci_lo": 7.5337913194444255,
+            "ci_hi": 8.14815763888885,
+            "class": "higher"
+          }
+        },
+        "5_minus_2": {
+          "carbon_per_1000_builds_g": {
+            "point": 71.13369156019371,
+            "ci_lo": 67.87938249191463,
+            "ci_hi": 74.82240014449528,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -117.63195833333332,
+            "ci_lo": -120.55281527777781,
+            "ci_hi": -115.47783055555557,
+            "class": "lower"
+          }
+        },
+        "5_minus_3": {
+          "carbon_per_1000_builds_g": {
+            "point": 8.458063317310462,
+            "ci_lo": 8.11281331139146,
+            "ci_hi": 8.87775490701938,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -2.2179444444444396,
+            "ci_lo": -2.530902083333367,
+            "ci_hi": -1.929045833333402,
+            "class": "lower"
+          }
+        },
+        "5_minus_4a": {
+          "carbon_per_1000_builds_g": {
+            "point": -1.6710587302854947,
+            "ci_lo": -2.1143726920370796,
+            "ci_hi": -1.2337741681437933,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": -0.7463055555555478,
+            "ci_lo": -0.8591204861111259,
+            "ci_hi": -0.41257326388888915,
+            "class": "lower"
+          }
+        }
+      },
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "lower"
+      ]
+    },
+    "w24": {
+      "w_max_hours": 24.0,
+      "setting_ids": {
+        "5": "5_se_informed_policy__d480__w24",
+        "1": "1_static",
+        "2": "2_blanket_carbon_aware__d0__w167",
+        "3": "3_eligibility_only__d0__w24",
+        "4a": "4a_duration_estimator__d480__w24"
+      },
+      "pairs": {
+        "5_minus_1": {
+          "carbon_per_1000_builds_g": {
+            "point": -70.67811215404981,
+            "ci_lo": -78.5213114429441,
+            "ci_hi": -64.896585298558,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": 12.21401388888891,
+            "ci_lo": 11.668193749999997,
+            "ci_hi": 12.590901388888875,
+            "class": "higher"
+          }
+        },
+        "5_minus_2": {
+          "carbon_per_1000_builds_g": {
+            "point": 62.70309229943405,
+            "ci_lo": 59.94258031291495,
+            "ci_hi": 66.06564061823114,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -113.12705555555553,
+            "ci_lo": -116.01552743055572,
+            "ci_hi": -110.91442986111109,
+            "class": "lower"
+          }
+        },
+        "5_minus_3": {
+          "carbon_per_1000_builds_g": {
+            "point": 9.550710973907826,
+            "ci_lo": 9.174468325426563,
+            "ci_hi": 10.026203818162765,
+            "class": "higher"
+          },
+          "ttff_p95_h_failed": {
+            "point": -5.927263888888877,
+            "ci_lo": -6.491937500000008,
+            "ci_hi": -5.397368750000034,
+            "class": "lower"
+          }
+        },
+        "5_minus_4a": {
+          "carbon_per_1000_builds_g": {
+            "point": -1.9664314076298979,
+            "ci_lo": -2.4422971596275262,
+            "ci_hi": -1.4948784649774551,
+            "class": "lower"
+          },
+          "ttff_p95_h_failed": {
+            "point": -0.1809305555555305,
+            "ci_lo": -0.6201614583333352,
+            "ci_hi": 0.1648520833333134,
+            "class": "n.s."
+          }
+        }
+      },
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "n.s."
+      ]
+    }
+  },
+  "V4_by_w": {
+    "w6": {
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "n.s."
+      ],
+      "stable": true
+    },
+    "w12": {
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "lower"
+      ],
+      "stable": false
+    },
+    "w24": {
+      "classes": [
+        "lower",
+        "higher",
+        "higher",
+        "lower",
+        "higher",
+        "lower",
+        "lower",
+        "n.s."
+      ],
+      "stable": true
+    }
+  },
+  "banded_window": "not applicable \u2014 the banded shape maps a failure probability to a window, which exists only on the risk-adjusted path; the frozen spec admits no family (DL-030 \u00a72 S-b)",
+  "V2_V3": "not re-evaluated \u2014 the P3-T3 frontiers already span W \u2208 {6, 12, 24}",
+  "sweep": "b",
+  "command": "PYTHONPATH=. python scripts/sensitivity_analysis.py --sweep b",
+  "run_date": "2026-09-28",
+  "seed": 42,
+  "n_resamples": 1000,
+  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "decision_log": [
+    "DL-027",
+    "DL-029",
+    "DL-030"
+  ],
+  "runtime_s": 52.1
+}

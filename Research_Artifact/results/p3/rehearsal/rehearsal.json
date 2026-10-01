@@ -1,0 +1,160 @@
+{
+  "mode": "calibration rehearsal \u2014 reproduces P1; not a test result",
+  "command": "PYTHONPATH=. python scripts/evaluate_test.py --split calibration",
+  "run_date": "2026-09-25",
+  "n_resamples": 1000,
+  "fingerprint": "da77d6cab337326851089deaf8f0d34b0133af05e4ee176d9239a559ca7b746a",
+  "seed": 42,
+  "library_versions": {
+    "python": "3.11.1",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.2.0"
+  },
+  "elapsed_s": 4326.7,
+  "all_checks_pass": true,
+  "n_checks": 32,
+  "n_failed": 0,
+  "checks": {
+    "arm_metrics:xgboost:control": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:full": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:logreg:control": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:logreg:full": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:random_forest:control": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:random_forest:full": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F1": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F2": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F3": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F4": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F5": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "arm_metrics:xgboost:F6": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "family_delta:F1": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "family_delta:F2": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "family_delta:F3": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "family_delta:F4": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "family_delta:F5": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "family_delta:F6": {
+      "pass": true,
+      "detail": "exact incl. CIs"
+    },
+    "duration:4b_expanding:all_builds": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "duration:4b_expanding:project_rung_only": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "duration:4a_xgboost:all_builds": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "duration:4a_xgboost:project_rung_only": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "duration:4a_ridge:all_builds": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "duration:4a_ridge:project_rung_only": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:control": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F1": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F2": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F3": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F4": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F5": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_family:F6": {
+      "pass": true,
+      "detail": "exact"
+    },
+    "shap_monotonicity": {
+      "pass": true,
+      "detail": "exact"
+    }
+  },
+  "population": {
+    "analytic_builds_read": 922624,
+    "builds": 138687,
+    "projects": 150,
+    "failures": 39594,
+    "failure_rate_pct": 28.5492,
+    "other_splits_dropped_unread": {
+      "train": 645244,
+      "test": 138693
+    }
+  }
+}

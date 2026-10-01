@@ -235,6 +235,7 @@ honestly. Every number in this phase is final — there is no second pass.*
 - S3 SHAP on the test split → `results/p3/shap/`; top-10 attributions with direction; comparison against the calibration-split SHAP used for policy fitting.
 - S4 Context comparison vs literature framed explicitly as *context, not direct comparability* (different task/dataset/label).
 - S5 Write `results/p3/model_report.md`, every number copied from files generated in this task.
+- S6 **(DL-027 §3)** Persist per-build test-split scores for every arm (with `tr_build_id`, `gh_build_started_at`) so P3-T4 can stratify without re-scoring.
 - **DoD:** metrics computed **once** on test (re-running a model after seeing test results is a DL entry, not a routine fix); CIs real; SHAP saved; provenance footer lists commands + files; the report states the model-level RQ1/RQ2 answer including any negative finding.
 - **Gate Evidence:** `results/p3/model_report.md` + the calibration-vs-test replication table.
 - **Deliverable:** `results/p3/model_report.md`. **Deps:** P2-T5. **RQ:** **RQ1**, RQ2.
@@ -243,6 +244,7 @@ honestly. Every number in this phase is final — there is no second pass.*
 - S1 Run the simulator on the **test-project trace** with the **frozen** `policy_spec.yaml`. Full trace preferred; if compute-bound, a seeded, project-stratified sample with a DL entry justifying the size.
 - S2 Record every protocol metric per strategy: carbon/1,000 builds (abs + %), SCI per successful commit, latency (all / deferred-only), **TTFF for failed builds**, deferred count and proportion, missed failures + failure recall (⑥ only), gate-safety count, per-hour load.
 - S3 Record the **policy-path distribution** for ⑤ (how often the duration-only fallback fired) — a policy that mostly falls back is itself the finding.
+- S4 **(DL-027 §3)** Keep the full-grid test replay records (with `arrival_utc`) that P3-T4's per-period frontier comparison and second-grid re-run need.
 - **DoD:** results saved to `results/p3/strategy_results.*`; `validate_invariants.py` (independent path) reports **0 violations**; commands + seeds logged; all six strategies ran on byte-identical input (asserted, not assumed); the spec hash recorded matches the frozen P2-T5 spec.
 - **Gate Evidence:** the headline metrics table (six strategies × the protocol metrics) + the validator output.
 - **Deliverable:** `results/p3/strategy_results.*`. **Deps:** P3-T1. **RQ:** **RQ4**.
@@ -259,6 +261,7 @@ honestly. Every number in this phase is final — there is no second pass.*
 
 ### P3-T4 — Sensitivity analyses
 - S1 Sweeps per protocol: deferrable fraction; `W_max ∈ {6, 12, 24}` + banded shape (DL-008/A1.8); energy `P_avg ± 50%` (DL-007) and the `n_jobs`-scaled variant (DL-010).
+- S1b **(DL-027, predeclared before P3-T1)** Temporal robustness: stratify the P3-T1 family deltas and the P3-T3 frontier verdict at the fixed boundary in `results/p3/predeclared/temporal_boundary.json` (early / late); report stability. Second grid profile: first qualifying zone of {CAISO, Germany} under DL-027 §2's criteria, P3-T2 replay re-run under the frozen spec; report ranking invariance, RQ4 only.
 - S2 Policy-regime sweeps: the A1.7 materiality floors at ×0.5/×2 (does the conclusion survive a stricter or looser rule?); cold-start builds included vs excluded; per-project-prior control ④b as the null instead of ④a.
 - S3 Report the herding/per-hour load concentration as a threat if load concentrates into few green slots.
 - **DoD:** all sweeps saved with real numbers; each sweep states whether it changes the RQ2/RQ4 verdict; a verdict that flips under any sweep is reported prominently, not buried.

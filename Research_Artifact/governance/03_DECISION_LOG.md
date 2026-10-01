@@ -1457,4 +1457,467 @@ edit or delete past entries (supersede them with a new entry instead).
   `docs/research_state.json`, `code/scripts/update_research_guide.py`. Changed:
   `governance/00_SESSION_PROTOCOL.md` (gate step 1b).
 
-<!-- Append DL-026, DL-027, … below as the project progresses. -->
+### DL-026 — Proposed P4 artifact direction: carbon-aware CI *decision support* as a reusable GitHub Action (conditional on P3)
+
+- **Date:** 2026-09-25
+- **Status:** **Proposed / Conditional** (author directive of 2026-09-25, recorded at the M2 gate before
+  P3-T1 started). **Not accepted and not acted on.** It records an intended direction for Phase 4 only.
+  It must be confirmed, amended or withdrawn by a **new** DL entry after P3-T5 and before P4-T1 starts.
+  Until then, `development_plan.md` P4-T1..T3 and frozen spec §5 stand unchanged.
+- **Spec section affected:** none now. If it is later accepted, it would amend frozen spec §5 (artifact
+  definition) and `development_plan.md` P4-T1..T3. It would **not** amend §1–§4, Layer 0-A's RQs,
+  `eval_protocol.md`, the feature contract or the split.
+
+- **Context.** Spec §5 defines the artifact as a FastAPI `POST /decision` service (Must), a GitHub Action
+  with deferred re-dispatch (Should) and a dashboard (Could). The author prefers an artifact that
+  supports the developer's decision rather than rescheduling automatically. It would be a reusable
+  GitHub Actions integration that ends at a RUN NOW / DEFER recommendation, and it would add execution-
+  region awareness and forecast carbon intensity. The independent review's addendum (item 7, the
+  untracked `INDEPENDENT_REVIEW_REPORT.md`) separately recommends that the P4 contract be narrowed to
+  match the P3 verdict by a DL entry dated after P3-T5, before P4-T1. This entry records the direction
+  without taking that later decision early.
+
+- **Proposed direction (not yet decided).**
+  1. **Flow.** Workflow/commit → pre-execution commit metadata (+ SE features *only if P3 admits them*)
+     → commit-time expected-duration estimate → runner/location inference → current + forecast regional
+     carbon intensity → estimated build carbon → policy decision → RUN NOW / DEFER recommendation →
+     GitHub Step Summary.
+  2. **Displayed values.** Detected or estimated execution region; location confidence and source;
+     current intensity; forecast values; expected build duration; estimated carbon impact; the
+     recommendation and its reason.
+  3. **Region confidence hierarchy.** (i) explicitly configured region; (ii) a known cloud/runner region
+     where one is available; (iii) IP-based geolocation as a fallback. An IP-derived location is always
+     labelled an **estimate**, never ground truth about the physical datacenter.
+  4. **Scope boundary.** No automatic rescheduling or re-dispatch. The research contribution ends at the
+     decision/recommendation layer, and actual rescheduling is future work.
+
+- **Conditions and constraints (binding if the direction is adopted).**
+  1. **No null-path assumption.** The artifact's production inputs, model and request contract are
+     chosen from the **final P3 evidence** (P3-T5 verdicts), not from the calibration-split null of
+     P1-T7/P2-T5. Nothing in this entry presumes the duration-only path.
+  2. **Protocol untouched.** This entry changes no frozen feature, evaluation criterion, materiality
+     floor, grid, split or test-split handling. P3 runs exactly as `development_plan.md` and
+     `eval_protocol.md` specify.
+  3. **One shared core (invariant 5).** The recommendation must come from the identical
+     `scheduler_core.decide()` and the frozen `policy_spec.yaml`, including Stage 1 exactly as evaluated.
+     Richer live trigger context (e.g. `schedule` / `workflow_dispatch` events) may be displayed but may
+     not alter the decision unless a later DL entry says so.
+  4. **A1.2 still binds.** The current build's actual duration never reaches the decision. "Expected
+     build duration" and "estimated carbon" are commit-time estimates and are labelled as such.
+  5. **Declared gaps between evaluation and artifact** (to be stated wherever the artifact is presented):
+     the policy was fitted and evaluated on a UK national hour-of-week mean profile, so a live forecast
+     and any non-UK region are outside what was evaluated. The fitted thresholds are extrapolated there,
+     not validated.
+
+- **Open design questions deferred to the P4 DL** (recorded, not answered): how forecast values are
+  presented to `decide()` without forking it; which carbon providers and regions are supported and on
+  what licence/key terms; whether a thin API is kept to satisfy spec §5's "Must"; whether the decision is
+  exposed as step outputs; how live inputs are kept identical to the evaluated inputs (training/serving
+  parity), which depends on which path P3 supports.
+
+- **Rationale.** Recording the direction now keeps it visible while making it explicit that it cannot
+  influence P3. Keeping it Proposed/Conditional respects "fit before you look": the artifact contract
+  follows the evidence, never the other way round.
+
+- **Consequences.** None now: no code, plan, spec or results change. **Forward-binding on the P4 DL
+  entry** (after P3-T5, before P4-T1): accept, amend or withdraw this direction, citing the P3 verdicts
+  it rests on.
+
+### DL-027 — Two predeclared P3-T4 sensitivities: a within-corpus temporal robustness sweep and a second, higher-variance grid profile
+
+- **Date:** 2026-09-25
+- **Status:** Accepted. **Author decision** of 2026-09-25 ("adopt both"), taken **before P3-T1 opened
+  the test split**, on the recommendation of `INDEPENDENT_REVIEW_REPORT.md` addendum items 3 and 4.
+  Written before any test-split number exists; no test build was read to write it.
+- **Spec section affected:** frozen spec §6 (External validity: "a higher-variance zone may be added if
+  time permits"), which is **exercised, not amended**. `development_plan.md` P3-T4 gains two sweeps, and
+  P3-T1 and P3-T2 gain one persistence duty each (§3). No RQ, feature, floor, grid, split, frozen spec
+  value or headline verdict rule changes.
+
+- **Context.** The addendum identifies two viva-level weaknesses that can be turned into measured
+  results cheaply: (a) TravisTorrent's age (trace 2011-04-16 → 2016-08-31), and (b) the UK 2024–25
+  profile's low dynamic range (92.2–172.9 gCO₂/kWh, peak-to-trough 1.87×,
+  `results/p0/carbon_profile.md`). With that range, a panel cannot tell whether "⑤ does not dominate ④"
+  means SE carries no value or the grid cannot separate policies. Both sweeps are worthless unless
+  they are predeclared before the test split is opened.
+
+- **Decision.**
+
+  1. **Temporal robustness sweep (addendum item 3).**
+     - **Boundary, fixed now as a value:** `2015-03-28T13:00:51+00:00`. That is the median
+       `gh_build_started_at` over the 783,931 train + calibration analytic builds (test 138,693
+       dropped unread). Produced by `PYTHONPATH=. python scripts/fix_temporal_boundary.py` →
+       `results/p3/predeclared/temporal_boundary.json` (split file sha256 `be1d175f…`). The script
+       refuses to overwrite its output. **Early** = started < boundary, **late** = started ≥ boundary.
+     - **What is stratified (no refit, no new model):** a *stratification of the single test
+       evaluation*, as the addendum's design note allows. (i) The P3-T1 per-family ΔPR-AUC vs `{d̂}`,
+       paired bootstrap (B = 1000, seed 42), recomputed **within each period** from the P3-T1 test
+       scores, with the §A1.7 model-level rule applied within each period at ×0.5/×1/×2. (ii) The
+       P3-T3 ④a/④b/⑤ matched-point frontier comparison repeated within each period from the P3-T2
+       test replay records. Frozen models, frozen `d̂` and frozen `policy_spec.yaml` throughout.
+     - **Reported as:** whether the admitted set and the decision-level verdict are **stable** across
+       periods. A flip is reported prominently (P3-T4 DoD), and it does not replace the headline
+       verdict, which remains the unstratified P3-T1/P3-T3 result.
+
+  2. **Second, higher-variance grid profile (addendum item 4).**
+     - **Zone, fixed now by a predeclared ordered list:** (1) **California ISO (CAISO)**, with a
+       pronounced solar midday trough, then (2) **Germany**, with a solar trough and a heavier fossil
+       share. The first zone for which acceptance criteria (a)–(c) are met is used. (a) A free,
+       licence-compatible, public hourly (or finer) carbon-intensity series exists for 2024-01-01 →
+       2026-01-01, matching the UK span. (b) Coverage is ≥ 95% per year, as in P0-T3. (c) Its 168-slot
+       profile's peak-to-trough ratio **exceeds the UK's 1.87×**. The choice depends on data
+       availability and profile shape only, never on any replay result. **No zone outside this list may
+       be substituted after P3-T1.** If neither qualifies, the sensitivity is reported as *not run —
+       no qualifying data*, with the evidence.
+     - **Construction:** identical to P0-T3. The profile is a UTC hour-of-week, nan-aware 168-slot mean,
+       with gaps left NaN, and a `PROVENANCE.md` records source, licence, fetch time and coverage. It is
+       indexed in **UTC** like the UK profile, so a build is charged at the grid's intensity at the
+       build's own UTC instant.
+     - **What is run:** the P3-T2 test replay re-run with the second profile in place of the UK one,
+       under the **same frozen `policy_spec.yaml`** (not refitted for the new grid), the same trace and
+       the same sweep grid.
+     - **Reported as:** **ranking invariance** of the six strategies (carbon per 1,000 builds, TTFF
+       p95) and of the ④/⑤ frontier ordering, plus the new profile's peak-to-trough ratio and
+       perfect-shift ceiling. **It bears on RQ4 only.** It is never presented as evidence for or against
+       SE decision value (RQ2), which §A1.13 routes through TTFF, not carbon. The frozen thresholds are
+       extrapolated to this grid, and that is stated beside every number.
+
+  3. **Forward-binding persistence duties** (so P3-T4 stratifies instead of re-scoring):
+     - **P3-T1** persists its per-build test-split scores for every arm, with `tr_build_id` and
+       `gh_build_started_at`, beside its model report.
+     - **P3-T2** records `arrival_utc` on every replay record (already in the DL-023 schema) and
+       keeps the full-grid test replay records needed for the per-period frontier comparison.
+
+- **Rationale.** Fixing the boundary as a number and the zone by an ordered, availability-only rule
+  leaves no degree of freedom that a test result could steer. Stratifying the one test evaluation
+  rather than refitting keeps "fit before you look" intact. Restricting the grid sensitivity to ranking
+  invariance and RQ4 stops it from being over-read.
+
+- **Consequences.** New: `code/scripts/fix_temporal_boundary.py`,
+  `results/p3/predeclared/temporal_boundary.json`. `development_plan.md` P3-T4 S1 is extended by these
+  two sweeps, P3-T1 and P3-T2 carry the §3 persistence duties, and the P3-T4 "verdict stable / flips"
+  summary table gains two rows. Threats (P5-T4): each period has about half the test builds, so its CIs
+  are wider; per-period power is lower and a period-level null is weaker evidence than the pooled one.
+
+### DL-028 — The P3-T1 F1 finding is reported, not acted on; `test_scores.csv.gz` is tracked; P3-T2's headline operating points and replay method, predeclared
+
+- **Date:** 2026-09-26
+- **Status:** Accepted. **Items 1 and 2 are author decisions** taken at the P3-T1 gate
+  (2026-09-26). Items 3–5 are implementation-level, written **before the test trace was replayed**,
+  per R4 and "fit before you look".
+- **Spec section affected:** none in the frozen spec. `eval_protocol.md` §6/§9/§10 are **implemented,
+  not amended** (§10's `paired_bootstrap` signature is frozen there). No RQ, floor, grid, strategy
+  definition or frozen spec value changes.
+
+- **Context.** P3-T1 (`results/p3/model_report.md` §10) found that F1 clears the §A1.7 model-level
+  floor on test (ΔPR-AUC +0.013313 [+0.011924, +0.014733]) although it was rejected on calibration,
+  and that the admitted set is not stable across the floor sweep. P3-T2 now replays the test trace, and
+  three things are unfixed: what to do with that finding; which single setting represents each
+  strategy in RQ4's headline table; and how a replay roughly 11× larger than P2's is run on this
+  machine (11.7 GB RAM).
+
+- **Decision.**
+  1. **Option (a): report, do not act** *(author decision)*. The F1 test-split model-level result is
+     reported as a finding, a non-replication between project-disjoint splits, in P3-T5 and the
+     dissertation. **No post-hoc F1-informed arm** is added to the P3-T2/P3-T3 replay. The frozen
+     `policy_spec.yaml` (sha256 `34d689c9…07da3`, duration-only) is the only ⑤ evaluated, so ⑤ ≡ ④b.
+     The decision-level half of §A1.7 is therefore **not tested for F1**, and that is stated as a
+     limitation rather than filled in. This does not rule out a later exploratory analysis, but that
+     would need its own DL entry and must never be labelled confirmatory.
+  2. **`results/p3/test_scores.csv.gz` is tracked in git** *(author-approved recommendation)*. Unlike
+     the P2 replay traces (DL-024 §5), it cannot be regenerated without re-reading the test split,
+     which is now gated (`evaluate_test.py --rerun-under DL-xxx`). It is the only record of the one
+     test pass, P3-T4 depends on it (DL-027 §3), and it is 5.8 MB. Its sha256 is also recorded in
+     `model_report.md`.
+  3. **Headline operating points for RQ4** (the one row per strategy in P3-T2's headline table). All
+     102 settings are still reported in `strategy_results.csv`; the headline only selects rows:
+     - ① static and ② blanket (`d0`, `w167`): their single points.
+     - ③ eligibility-only: `d0` at the frozen spec's `w_max_hours` (24 h). ③ is "Stage 1 + fixed
+       window" and the frozen window is the policy's; this is ④ at `d = 0`, by construction.
+     - ④a, ④b and ⑤: the frozen spec's point, `d_threshold_seconds` 480 and `w_max_hours` 24
+       (DL-024 §Context 2).
+     - ⑥ risk-only skip: **no single point**. No rule for choosing τ was ever predeclared, and fitting
+       one now would use the test split. All seven τ points are reported, each beside its
+       missed-failure count and failure recall (§6, DL-005), as a characteristic (DL-024 §5).
+  4. **Replay method.**
+     - The **full** test trace is replayed (no sampling; the P3-T2 DoD prefers it). `d̂` for each test
+       build reads its own project's strictly-earlier builds (DL-014). `p̂` comes from the frozen
+       `xgboost:full` arm. Both are cross-checked against P3-T1's persisted per-build scores.
+     - Records are **aggregated and audited one setting (part file) at a time**. All 102 settings are
+       never held in memory together. Every check the P2 runner applies to the whole frame (identical
+       build sets, the independent validator, the skip audit, the DL-023 identities) is applied part
+       by part, against the same reference.
+     - **Rehearsal before test:** the same script runs on the frozen DL-023 §4 calibration sample
+       (12,000 builds) and must reproduce `results/p2/policy_fit/summary.csv` exactly, and its trace
+       sha256, before the test trace may be replayed. The test replay records a sentinel with its run
+       fingerprint. A re-run with the **same** fingerprint is a byte-identical reproduction and is
+       allowed; a different fingerprint needs a DL entry.
+     - `decisions.csv.gz` for the test trace is retained (DL-027 §3) but **not tracked** (it is large).
+       Its sha256 is pinned in `strategy_results.json`, as DL-024 §5 did for P2.
+  5. **Paired bootstrap (§9, §10 signature).** `replay/stats.py::paired_bootstrap` is implemented to
+     the frozen §10 signature: B = 1000, seed 42, 95% percentile CIs, resampling the shared build index,
+     with every pairwise strategy difference. P3-T2 applies it to the headline settings for: carbon per
+     1,000 builds, SCI per successful commit, latency mean (all builds), latency p95 (deferred builds),
+     TTFF mean and p95 (failed builds), and share deferred. P3-T3 reuses it at matched points.
+
+- **Rationale.** Choosing headline rows now, before any test replay exists, is the only way the
+  RQ4 table cannot be steered by its own numbers. Refusing to invent a τ for ⑥ keeps "no threshold
+  fitted on test" literal. The calibration rehearsal proves that the streaming aggregation equals the
+  P2 whole-frame aggregation, so moving to streaming changes no number.
+
+- **Consequences.** New: `code/scripts/run_test_replay.py`, `code/replay/stats.py`,
+  `code/tests/test_stats.py`, `code/tests/test_run_test_replay.py`; outputs under `results/p3/`.
+  Carried into P3-T5 and P5: F1's model-level non-replication, and the fact that its decision-level
+  value is untested (item 1).
+
+### DL-029 — How P3-T3's frontier test is computed: frontiers, matched points, area, floors, bands, oracle
+
+- **Date:** 2026-09-26
+- **Status:** Accepted (implementation-level). Written **before any frontier, matched-point or area
+  number was computed**, per R4. The author's instruction at the P3-T2 gate, "do not add anything
+  post-hoc", is binding: everything below is the machinery of analyses that `development_plan.md`
+  P3-T3 S1–S5 and `eval_protocol.md` §A1.5/§A1.7/§A1.9/§A1.10 already require. No new comparison,
+  arm, population or metric is introduced.
+- **Spec section affected:** `eval_protocol.md` §A1.5 (frontier dominance at matched points) and
+  §A1.7 (decision-level floors) are given the operational detail they lack; §A1.9/§A1.10 are applied as
+  written. No floor value, grid, strategy, RQ or frozen spec value changes.
+
+- **Context.** §A1.5 says: build swept frontiers in the (carbon saved, TTFF p95) plane, match
+  operating points by interpolation onto a common grid, paired-bootstrap each matched point, and report
+  the area between frontiers. §A1.7 sets the floors (≥ 5% relative TTFF p95 reduction at matched
+  carbon, or ≥ 1% relative carbon-saved increase at matched TTFF, at ≥ 3 matched points, CI excluding
+  0) with a ×0.5/×2 sweep. None of these fixes what a frontier is, which grid, or how "≥ 3 points" is
+  counted. Leaving them open until the curves exist would let the curves choose them.
+
+- **Decision.**
+  1. **Inputs.** The P3-T2 test replay part files (run fingerprint `d9e30163…`, each part's sha256
+     re-verified against its `.done` record), for ① and the 30 `(d_threshold, w_max)` points of each
+     of ④a, ④b and ⑤. Nothing is re-replayed except the §A1.10 oracle arm (item 7). Before any
+     frontier is formed, every recomputed per-setting point must equal P3-T2's `strategy_results.csv`:
+     carbon per 1,000 builds and TTFF p95 to 1e-12 relative, and carbon saved to 1e-9 percentage
+     points absolute. *(Amended 2026-09-26, before any frontier number existed. The first run stopped
+     on an all-relative 1e-12 check of carbon saved. Near-zero savings amplify floating-point
+     summation-order noise of about 1e-15 relative into about 4e-10 relative, so the check is now
+     stated on the underlying quantities. The CSV is read with `float_precision="round_trip"`.)*
+  2. **Coordinates.** `saving = −(carbon per 1,000 builds vs ①) in %`, and `TTFF p95` = the 95th
+     percentile (numpy linear) of TTFF over failed, accountable builds, exactly as `simulator.summarise`
+     computes them. Both are recomputed from per-build values, so the bootstrap can resample them.
+  3. **Frontier.** For each strategy, the Pareto-efficient subset of its 30 points: a point is kept
+     unless another point has saving ≥ and TTFF p95 ≤ with at least one strict. Among exact duplicates
+     one is kept. Sorted by saving, this gives TTFF p95 non-decreasing. The frontier is
+     **piecewise-linear** between its points, with no extrapolation outside its own range.
+  4. **Matched points.** Two grids, each over the **overlap** of the two frontiers' ranges on that
+     axis: **K = 10 interior points**, `linspace(lo, hi, 12)[1:-1]`. Endpoints are excluded, so a
+     relative difference is never taken against a zero saving. At matched carbon the comparison is
+     `ΔTTFF = TTFF_④(s) − TTFF_⑤(s)` (positive favours ⑤), relative to `TTFF_④(s)`. At matched TTFF it
+     is `ΔS = S_⑤(t) − S_④(t)` (positive favours ⑤), relative to `S_④(t)`. If the overlap is empty or
+     degenerate on an axis, that axis has no matched points and this is reported.
+  5. **Floors and the ≥ 3 rule.** A matched point **counts** for ⑤ iff its relative improvement meets
+     the floor (5% TTFF, or 1% carbon) **and** the 95% paired-bootstrap CI of its absolute difference
+     lies entirely above 0. The decision-level condition holds iff **≥ 3 points count on at least one
+     axis**. It is re-evaluated at ×0.5 and ×2 of **both** floors. §A1.9: ⑤ must meet it against
+     **both** ④a and ④b to be reported as adding value.
+  6. **Area between frontiers (headline scalar).** `∫ (TTFF_④(s) − TTFF_⑤(s)) ds` over the carbon
+     overlap, by trapezoid on 201 evenly spaced points. Its units are percentage points × hours, and
+     positive favours ⑤. It is reported with its 95% CI.
+  7. **§A1.10 oracle arm** (planned in P3-T3 S4; labelled *"oracle — unrealizable in deployment"*
+     wherever it appears; never in the headline table; never wired into `decide()` outside this
+     analysis). ④'s duration-only rule is replayed on the test trace with `d̂` replaced by the build's
+     observed duration, at the same 30 grid points. The 55 unaccountable builds, which have no observed
+     duration, keep their ④b estimate; they are excluded from carbon and TTFF anyway (DL-023 §3). The
+     trace is read from the tracked `results/p3/test_trace.csv.gz`. It is proved faithful first:
+     re-replaying one ordinary ④b setting from it must reproduce its P3-T2 part byte for byte. The
+     oracle frontier is compared with ④b and ⑤ by the same machinery, as a bound on how much of any
+     frontier gap estimator error could explain.
+  8. **Bootstrap.** §9's paired bootstrap: B = 1000, seed 42, percentile 95% CI. Each resample draws
+     the shared test-build index once, recomputes every setting's saving (against the same resample's
+     ①) and TTFF p95, rebuilds every frontier, and re-evaluates every matched point and the area. The
+     CIs therefore carry frontier-shape uncertainty as well as metric noise. The **matched grids are
+     fixed** from the full-trace frontiers and held across resamples. A resample whose frontier does not
+     reach a grid point leaves that point *undefined* in that resample (no extrapolation). A point's CI
+     uses its defined resamples, the undefined count is reported, and a point undefined in more than 5%
+     of resamples **cannot count** under item 5. The **area** in each resample is taken over that
+     resample's own carbon overlap, which is §A1.5's "overlapping carbon range", re-evaluated.
+  9. **Failure-rate bands (§A1.9, P3-T3 S4).** Each test project's failure rate is computed on its own
+     test builds, a descriptive stratification that fits nothing. Projects are split at the terciles
+     of that rate across the 170 test projects into low, mid and high bands. Items 3–8 are rerun within
+     each band, with ① recomputed within the band. The between/within-project variance decomposition
+     applies to **admitted families** (§A1.9); none is admitted in the frozen spec, so it is reported
+     as not applicable, and why.
+  10. **What the verdict can and cannot say.** Under the frozen spec ⑤ ≡ ④b (DL-023 §1, DL-028 §1), so
+      ⑤ − ④b is exactly 0 at every matched point by construction, and the condition cannot hold against
+      ④b. The ⑤-vs-④a comparison is between two **duration** controls and says nothing about SE
+      characteristics. The written verdict states this, and states that F1's decision-level value was
+      **not tested** (DL-028 §1).
+
+- **Rationale.** Every free choice (Pareto rule, K, interior grid, "counts", area range, bands) is
+  fixed before the curves exist. Choices are the simplest defensible ones and are stated so that a
+  reader can recompute them.
+
+- **Consequences.** New: `code/replay/frontier.py`, `code/scripts/frontier_analysis.py`,
+  `code/tests/test_frontier.py`; outputs `results/p3/incremental_value_decision.{md,json}` plus
+  figures. The oracle replay's parts live under `code/artifacts/replay_parts/` (gitignored).
+
+### DL-030 — How P3-T4's sensitivity sweeps are run, and what "the verdict flips" means
+
+- **Date:** 2026-09-28
+- **Status:** Accepted (implementation-level). Written **before any P3-T4 sweep was run**, per R4.
+  "No post-hoc additions" (the author's instruction at the P3-T2 gate) binds here too. Every sweep below
+  is one that `development_plan.md` P3-T4 S1–S3, `eval_protocol.md` §7/§8/§A1.7, DL-010, DL-020 §5,
+  DL-024 §3 or DL-027 already requires. This entry only makes each sweep operational.
+- **Spec section affected:** none. No frozen value, grid, floor or strategy changes. The frozen
+  `policy_spec.yaml` stays the policy of record; every sweep is a labelled what-if around it.
+
+- **Context.** P3-T4's DoD needs, per sweep, whether it "changes the RQ2/RQ4 verdict". The RQ2
+  verdicts are defined (§A1.7, DL-029). RQ4's is not: RQ4 is written up in P3-T5, and no document says
+  which RQ4 pattern must hold for a sweep to count as "stable". A definition chosen after the sweeps
+  had run could be fitted to them.
+
+- **Decision.**
+  1. **The verdicts tracked, fixed now.**
+     - **V1 — RQ2 model level:** the admitted set under §A1.7 at ×1, applied to the paired test-split
+       ΔPR-AUC of each family, as in P3-T1. It is evaluated only where a sweep changes the builds or the
+       label (temporal, cold-start).
+     - **V2 — RQ2 decision level:** "⑤ beats both ④a and ④b" at ×1 (DL-029 §5).
+     - **V3 — the secondary duration-control finding:** the §A1.7 condition for ④b over ④a at ×1
+       (P3-T3 §6b). This is tracked so that its robustness is reported, not assumed.
+     - **V4 — RQ4 sign pattern:** for ⑤ at its headline point against each of ①, ②, ③ and ④a (same
+       `W` as ⑤), the paired-bootstrap difference (B = 1000, seed 42) on carbon per 1,000 builds and on
+       TTFF p95. Each difference is classed *significantly lower*, *significantly higher* or *n.s.*
+       (CI spans 0). **V4 is stable iff all eight classes equal P3-T2's.** The magnitudes are reported
+       beside the classes.
+     - A sweep **flips** a verdict iff that verdict differs from its P3-T1/P3-T2/P3-T3 baseline. Every
+       flip is reported in the summary table and at the top of `results/p3/sensitivity.md`.
+  2. **The sweeps.** All use the test trace, the frozen models, the frozen `d̂` and the frozen spec.
+     Nothing is refitted. Where a re-replay is needed, it runs through the unchanged simulator. Parts
+     go under `code/artifacts/replay_parts/` (gitignored), and each re-replay is audited by the
+     independent validator.
+     - **S-a Deferrable fraction** (DL-020 §5). The full 102-setting replay is re-run under the stage-1
+       variant `protected_includes_integration`, with the spec otherwise frozen; the validator runs
+       under the same variant. V2–V4 are reported.
+     - **S-b `W_max ∈ {6, 12, 24}`** (§7, §A1.8). This uses the P3-T2 records only: ⑤, ④a and ③ at
+       each `W` with `d_threshold` 480 (③ at 0). V4 is reported at each `W`. The **banded window
+       shape** (§7) is **not applicable**: it maps a failure probability to a window, which exists only
+       on the risk-adjusted path, and the frozen spec admits no family. This is stated, not simulated.
+     - **S-c Energy `P_avg × {0.5, 1.5}`** (DL-007). Carbon is recomputed per build as carbon × m. This
+       is exact, because carbon is linear in `P_avg`. V2–V4 are recomputed. Percentage savings and
+       TTFF are invariant by construction, and that is stated as the result.
+     - **S-d `n_jobs`-scaled energy** (DL-010). Per build, `n_jobs` is the count of that build's job
+       rows in the release (DL-010), read from the test split's rows. Carbon becomes carbon × `n_jobs`,
+       which is exact for the same reason; TTFF and decisions are unchanged. V2–V4 are recomputed.
+     - **S-e Temporal robustness** (DL-027 §1). The boundary is `2015-03-28T13:00:51+00:00`, read from
+       `results/p3/predeclared/temporal_boundary.json`. Early and late test builds are taken by
+       `gh_build_started_at`. V1 per period comes from `results/p3/test_scores.csv.gz` (paired
+       bootstrap per family, §A1.7 floor sweep). V2 and V3 per period use DL-029's machinery on a
+       period mask.
+     - **S-f Second grid profile** (DL-027 §2). The first zone of {CAISO, Germany} that meets DL-027 §2
+       (a)–(c) is used, from the Electricity Maps hourly datasets (ODbL, attribution recorded in
+       `PROVENANCE.md`). The column used is the **direct** (operational) carbon intensity; the life-cycle
+       column is not used. The profile is built exactly as P0-T3's: UTC hour-of-week, nan-aware
+       168-slot mean, gaps left NaN. The full 102-setting replay is re-run with that profile. V2–V4 are
+       reported, framed as **ranking invariance for RQ4 only** (DL-027 §2). If no zone qualifies, the
+       sweep is reported as *not run — no qualifying data*, with the evidence.
+     - **S-g Cold-start builds excluded** (P3-T4 S2). Builds whose ④b `d̂` fell to the language or
+       global rung (`d_hat_4b_fallback != "project"`) are masked out. V1, V2 and V3 are reported on the
+       remaining builds.
+     - **S-h ④b trailing-50 form** (DL-024 §3; P1-T4's declared sensitivity). ④b is re-replayed at the
+       30 grid points with `d̂` from the trailing 50-build causal window (strictly earlier builds, same
+       fallback ladder, fitted parameters unchanged). Its frontier is compared with the frozen ④b and
+       with ④a by DL-029's machinery. It is labelled a **sensitivity of the control, not the policy of
+       record**.
+     - **S-i Floor sweep and ④b-as-null** (P3-T4 S2). Already computed in P3-T1 and P3-T3; collected
+       into the summary table, not recomputed.
+  3. **Herding (P3-T4 S3).** Per headline setting, the report gives the top-5 slot share, the largest
+     single-slot share and their ratio to ①'s. This is descriptive only. No threshold for calling
+     concentration a threat was predeclared, and none is introduced now. §6 already makes herding a
+     reported threat. The effect a real deployment would have on marginal intensity is stated as a
+     limitation.
+  4. **Reading the test trace.** Every read of `results/p3/test_trace.csv.gz` uses
+     `float_precision="round_trip"` (P3-T3 finding). Every re-replay first re-proves the trace by
+     reproducing one P3-T2 part byte for byte.
+
+- **Rationale.** Fixing V4 as a sign pattern with a CI rule, before any sweep exists, is the smallest
+  definition that lets "stable / flips" be decided mechanically. Recomputing energy variants exactly,
+  instead of re-replaying, avoids a spurious source of difference, because decisions do not depend on
+  energy.
+
+- **Consequences.** New: `code/scripts/sensitivity_analysis.py` (+ tests), `results/p3/sensitivity/`
+  (one JSON per sweep), `results/p3/sensitivity.md` (the summary, with the verdict table first),
+  figures. S-f waits on the author downloading the Electricity Maps CSVs, which needs a free account.
+
+### DL-031 — S-f's CAISO series comes from EIA-930, not Electricity Maps (source change, before any S-f result)
+
+- **Date:** 2026-09-28
+- **Status:** Accepted. **Author decision** 2026-09-28: no account with any data provider, and no paid
+  tools. Written **before** the second-grid profile was built, before its peak-to-trough ratio was
+  computed, and before any replay on it existed. Only the file's header row and its non-empty count for
+  2024–2025 had been read, to confirm the source is usable.
+- **Spec section affected:** amends DL-030 §2 S-f (the data source and column) only. DL-027 §2's zone
+  order (CAISO, then Germany), its criteria (a)–(c), the UTC hour-of-week construction, the
+  ranking-invariance framing and the RQ4-only scope are unchanged.
+
+- **Context.** DL-030 named Electricity Maps' hourly CSVs, which need a (free) account. The author
+  declined creating one. The U.S. Energy Information Administration's EIA-930 per-balancing-authority
+  workbook for California ISO downloads with no account or key. It carries hourly CO₂ intensity columns
+  derived by EIA from the fuel mix, with UTC timestamps, from 2015-07-01 onward.
+
+- **Decision.**
+  1. **Source.** `https://www.eia.gov/electricity/gridmonitor/knownissues/xls/CISO.xlsx`, fetched
+     2026-09-28 14:19 UTC, 97,058,485 bytes, sha256 `ada85f3a…7e3834`. It is stored read-only in
+     `Dataset/eia930/CISO.xlsx`. EIA's notes sheet states the data are preliminary and provided "as-is";
+     that is carried as a limitation. Citation: U.S. EIA, *Hourly Electric Grid Monitor* (Form EIA-930).
+  2. **Column.** Sheet "Published Hourly Data", **"CO2 Emissions Intensity for Consumed
+     Electricity"**. This is the consumption-based figure (it includes EIA's estimate of the emissions
+     of imported electricity), the nearest analogue of the consumption-based operational intensity that
+     DL-030 intended. The generated-electricity column is **not** used.
+  3. **Units.** EIA reports lb CO₂ per kWh, confirmed on the file (daily 95,918.74 t / 523,084 MWh =
+     0.18337 t/MWh = 0.40426 lb/kWh, matching its stated 0.40426). The conversion is × 453.59237 g/lb,
+     giving g CO₂/kWh.
+  4. **Timestamps.** EIA's "UTC time" (an Excel 1900-system serial) marks the **end** of each hour.
+     "Hour 1" local is 00:00–01:00, stamped 08:00 UTC in summer. Each value is shifted −1 h to
+     hour-*start*, matching P0-T3's UK series, and then placed on the same 2024-01-01 → 2026-01-01 UTC
+     hourly grid. Gaps stay NaN.
+  5. **Reading.** Standard library only (the `.xlsx` is a zip of XML); no new dependency enters the
+     pinned stack.
+  6. **Germany fallback.** Used only if CAISO fails DL-027 §2 (b) or (c). It would need its own source
+     under a further DL entry; it is not pre-chosen here.
+
+- **Rationale.** A public, account-free, government series keeps S-f inside the "free, public"
+  criterion. Choosing the column, units and time convention now, before seeing the profile or any
+  replay on it, keeps the sweep predeclared.
+
+- **Consequences.** `scripts/sensitivity_analysis.py` gains an EIA-930 reader used by S-f for CAISO,
+  with tests. The derived profile and a `PROVENANCE.md` are written under
+  `code/data/carbon/second_grid/`.
+
+### DL-032 — S-f (second grid) is reported as not run: no qualifying zone under DL-027 §2
+
+- **Date:** 2026-09-28
+- **Status:** Accepted. **Author decision** 2026-09-28 (option "report not run", chosen from three
+  presented: not run / free Electricity Maps account for Germany / derive Germany from the fuel mix).
+  No S-f replay was run, so no S-f result exists to have influenced the choice.
+- **Spec section affected:** closes DL-027 §2 and DL-030/DL-031 S-f by the rule DL-027 §2 already
+  stated: "If neither qualifies, the sensitivity is reported as *not run — no qualifying data*, with the
+  evidence."
+
+- **Evidence.**
+  1. **CAISO failed criterion (c).** On the DL-031 series (EIA-930, consumed-electricity intensity), the
+     168-slot profile's peak-to-trough ratio is **1.8669**, against the UK's **1.8746**, so it is not
+     higher. Criteria (a) and (b) passed (coverage 98.91% in 2024 and 98.90% in 2025). Recorded in
+     `results/p3/sensitivity/f.json`.
+  2. **Germany failed criterion (a) under the author's no-account constraint.** Electricity Maps
+     requires an account. The Energy-Charts API (CC BY 4.0, no key) publishes generation and price
+     series but no carbon-intensity series; its endpoint list is saved in
+     `results/p3/sensitivity/energy_charts_endpoints.txt`. Deriving an intensity from the fuel mix would
+     add new modelling choices and was declined.
+
+- **What is reported instead.** The CAISO profile statistics are reported as a descriptive by-product,
+  never as an S-f result. On an hour-of-week *mean* basis, a solar-heavy US grid measured with a
+  consumption-based intensity is **not** more variable than the UK 2024–25 grid. That weakens, but does
+  not answer, the review's concern that the UK grid might be too flat to separate policies. The ranking-
+  invariance question remains **untested**, and that is stated as a limitation in P3-T5 and P5.
+
+- **Consequences.** S-f appears in the P3-T4 table as *not run — no qualifying data*, with this entry
+  cited. No new data source, dependency or modelling choice enters the study.
+
+<!-- Append DL-033, DL-034, … below as the project progresses. -->

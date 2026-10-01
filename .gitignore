@@ -57,3 +57,6 @@ Research_Artifact/code/artifacts/replay_parts/
 # tracked beside it, and REGENERATE.md gives the command. Pinned, not stored.
 Research_Artifact/results/p2/sample_run/decisions.csv.gz
 Research_Artifact/results/p2/policy_fit/decisions.csv.gz
+# P3-T2 test-trace records (~14M rows). Not tracked (DL-028 §4); sha256 pinned in
+# results/p3/strategy_results.json. test_scores.csv.gz and test_trace.csv.gz ARE tracked.
+Research_Artifact/results/p3/decisions.csv.gz

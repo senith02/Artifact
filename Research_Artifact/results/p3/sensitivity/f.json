@@ -1,0 +1,65 @@
+{
+  "status": "not run \u2014 no qualifying data (DL-027 \u00a72, DL-032)",
+  "tried": [
+    {
+      "zone": "CAISO",
+      "zone_id": "US-CAL-CISO",
+      "source": "EIA-930 (DL-031)",
+      "url": "https://www.eia.gov/electricity/gridmonitor/knownissues/xls/CISO.xlsx",
+      "files": [
+        "CISO.xlsx"
+      ],
+      "file_sha256": {
+        "CISO.xlsx": "ada85f3a97677dcce50e36b4c50f57eb9349fd62368cac78c50fb19a057e3834"
+      },
+      "column_used": "CO2 Emissions Intensity for Consumed Electricity (lb/kWh \u00d7 453.59237 \u2192 g/kWh; hour-end \u22121 h)",
+      "coverage": {
+        "2024": {
+          "expected_hours": 8784,
+          "present_hours": 8688,
+          "gap_hours": 96,
+          "coverage_pct": 98.9071
+        },
+        "2025": {
+          "expected_hours": 8760,
+          "present_hours": 8664,
+          "gap_hours": 96,
+          "coverage_pct": 98.9041
+        }
+      },
+      "peak_to_trough": 1.8668692169589838,
+      "uk_peak_to_trough": 1.8746097137901128,
+      "criteria": {
+        "a_free_public_source": true,
+        "b_coverage_ge_95": true,
+        "c_peak_to_trough_gt_uk": false
+      },
+      "qualifies": false
+    },
+    {
+      "zone": "Germany",
+      "status": "no qualifying account-free source",
+      "criteria": {
+        "a_free_public_source": false
+      },
+      "evidence": "Electricity Maps requires an account (declined, DL-032); Energy-Charts API has no carbon-intensity endpoint \u2014 energy_charts_endpoints.txt sha256 e0a269834d35d569b43e2ec8e378f36f9844a034c81a153977348e7eae33c943"
+    }
+  ],
+  "by_product": {
+    "caiso_peak_to_trough": 1.8668692169589838,
+    "uk_peak_to_trough": 1.8746097137901128,
+    "reading": "descriptive only (DL-032): CAISO's consumed-intensity hour-of-week profile is not more variable than the UK's"
+  },
+  "sweep": "f",
+  "command": "PYTHONPATH=. python scripts/sensitivity_analysis.py --sweep f",
+  "run_date": "2026-09-28",
+  "seed": 42,
+  "n_resamples": 1000,
+  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "decision_log": [
+    "DL-027",
+    "DL-029",
+    "DL-030"
+  ],
+  "runtime_s": 26.0
+}

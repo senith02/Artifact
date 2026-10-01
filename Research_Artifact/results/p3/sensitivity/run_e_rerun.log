@@ -1,0 +1,117 @@
+﻿sweep e …
+  loaded 1_static
+  loaded 4a_duration_estimator__d0__w6
+  loaded 4a_duration_estimator__d60__w6
+  loaded 4a_duration_estimator__d120__w6
+  loaded 4a_duration_estimator__d240__w6
+  loaded 4a_duration_estimator__d480__w6
+  loaded 4a_duration_estimator__d960__w6
+  loaded 4a_duration_estimator__d1920__w6
+  loaded 4a_duration_estimator__d3840__w6
+  loaded 4a_duration_estimator__d7680__w6
+  loaded 4a_duration_estimator__d15360__w6
+  loaded 4a_duration_estimator__d0__w12
+  loaded 4a_duration_estimator__d60__w12
+  loaded 4a_duration_estimator__d120__w12
+  loaded 4a_duration_estimator__d240__w12
+  loaded 4a_duration_estimator__d480__w12
+  loaded 4a_duration_estimator__d960__w12
+  loaded 4a_duration_estimator__d1920__w12
+  loaded 4a_duration_estimator__d3840__w12
+  loaded 4a_duration_estimator__d7680__w12
+  loaded 4a_duration_estimator__d15360__w12
+  loaded 4a_duration_estimator__d0__w24
+  loaded 4a_duration_estimator__d60__w24
+  loaded 4a_duration_estimator__d120__w24
+  loaded 4a_duration_estimator__d240__w24
+  loaded 4a_duration_estimator__d480__w24
+  loaded 4a_duration_estimator__d960__w24
+  loaded 4a_duration_estimator__d1920__w24
+  loaded 4a_duration_estimator__d3840__w24
+  loaded 4a_duration_estimator__d7680__w24
+  loaded 4a_duration_estimator__d15360__w24
+  loaded 4b_duration_prior__d0__w6
+  loaded 4b_duration_prior__d60__w6
+  loaded 4b_duration_prior__d120__w6
+  loaded 4b_duration_prior__d240__w6
+  loaded 4b_duration_prior__d480__w6
+  loaded 4b_duration_prior__d960__w6
+  loaded 4b_duration_prior__d1920__w6
+  loaded 4b_duration_prior__d3840__w6
+  loaded 4b_duration_prior__d7680__w6
+  loaded 4b_duration_prior__d15360__w6
+  loaded 4b_duration_prior__d0__w12
+  loaded 4b_duration_prior__d60__w12
+  loaded 4b_duration_prior__d120__w12
+  loaded 4b_duration_prior__d240__w12
+  loaded 4b_duration_prior__d480__w12
+  loaded 4b_duration_prior__d960__w12
+  loaded 4b_duration_prior__d1920__w12
+  loaded 4b_duration_prior__d3840__w12
+  loaded 4b_duration_prior__d7680__w12
+  loaded 4b_duration_prior__d15360__w12
+  loaded 4b_duration_prior__d0__w24
+  loaded 4b_duration_prior__d60__w24
+  loaded 4b_duration_prior__d120__w24
+  loaded 4b_duration_prior__d240__w24
+  loaded 4b_duration_prior__d480__w24
+  loaded 4b_duration_prior__d960__w24
+  loaded 4b_duration_prior__d1920__w24
+  loaded 4b_duration_prior__d3840__w24
+  loaded 4b_duration_prior__d7680__w24
+  loaded 4b_duration_prior__d15360__w24
+  loaded 5_se_informed_policy__d0__w6
+  loaded 5_se_informed_policy__d60__w6
+  loaded 5_se_informed_policy__d120__w6
+  loaded 5_se_informed_policy__d240__w6
+  loaded 5_se_informed_policy__d480__w6
+  loaded 5_se_informed_policy__d960__w6
+  loaded 5_se_informed_policy__d1920__w6
+  loaded 5_se_informed_policy__d3840__w6
+  loaded 5_se_informed_policy__d7680__w6
+  loaded 5_se_informed_policy__d15360__w6
+  loaded 5_se_informed_policy__d0__w12
+  loaded 5_se_informed_policy__d60__w12
+  loaded 5_se_informed_policy__d120__w12
+  loaded 5_se_informed_policy__d240__w12
+  loaded 5_se_informed_policy__d480__w12
+  loaded 5_se_informed_policy__d960__w12
+  loaded 5_se_informed_policy__d1920__w12
+  loaded 5_se_informed_policy__d3840__w12
+  loaded 5_se_informed_policy__d7680__w12
+  loaded 5_se_informed_policy__d15360__w12
+  loaded 5_se_informed_policy__d0__w24
+  loaded 5_se_informed_policy__d60__w24
+  loaded 5_se_informed_policy__d120__w24
+  loaded 5_se_informed_policy__d240__w24
+  loaded 5_se_informed_policy__d480__w24
+  loaded 5_se_informed_policy__d960__w24
+  loaded 5_se_informed_policy__d1920__w24
+  loaded 5_se_informed_policy__d3840__w24
+  loaded 5_se_informed_policy__d7680__w24
+  loaded 5_se_informed_policy__d15360__w24
+  period early: 62,655 builds
+    [early] paired delta F1 (62,655 builds) …
+    [early] paired delta F2 (62,655 builds) …
+    [early] paired delta F3 (62,655 builds) …
+    [early] paired delta F4 (62,655 builds) …
+    [early] paired delta F5 (62,655 builds) …
+    [early] paired delta F6 (62,655 builds) …
+    [S-e early] resample 200/1000
+    [S-e early] resample 400/1000
+    [S-e early] resample 600/1000
+    [S-e early] resample 800/1000
+    [S-e early] resample 1000/1000
+  period late: 76,038 builds
+    [late] paired delta F1 (76,038 builds) …
+    [late] paired delta F2 (76,038 builds) …
+    [late] paired delta F3 (76,038 builds) …
+    [late] paired delta F4 (76,038 builds) …
+    [late] paired delta F5 (76,038 builds) …
+    [late] paired delta F6 (76,038 builds) …
+    [S-e late] resample 200/1000
+    [S-e late] resample 400/1000
+    [S-e late] resample 600/1000
+    [S-e late] resample 800/1000
+    [S-e late] resample 1000/1000
+wrote results/p3/sensitivity/e.json (1244s)

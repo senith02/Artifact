@@ -1,0 +1,203 @@
+﻿sweep a …
+  replaying 102 settings (fingerprint 4ef52a43997ee429) …
+  [  1/102] 1_static: 0 deferred, 0 skipped
+  [  2/102] 2_blanket_carbon_aware__d0__w167: 19,408 deferred, 0 skipped
+  [  3/102] 3_eligibility_only__d0__w6: 15,252 deferred, 0 skipped
+  [  4/102] 3_eligibility_only__d0__w12: 18,099 deferred, 0 skipped
+  [  5/102] 3_eligibility_only__d0__w24: 18,733 deferred, 0 skipped
+  [  6/102] 4a_duration_estimator__d0__w6: 15,252 deferred, 0 skipped
+  [  7/102] 4a_duration_estimator__d60__w6: 15,113 deferred, 0 skipped
+  [  8/102] 4a_duration_estimator__d120__w6: 14,212 deferred, 0 skipped
+  [  9/102] 4a_duration_estimator__d240__w6: 12,347 deferred, 0 skipped
+  [ 10/102] 4a_duration_estimator__d480__w6: 7,798 deferred, 0 skipped
+  [ 11/102] 4a_duration_estimator__d960__w6: 3,363 deferred, 0 skipped
+  [ 12/102] 4a_duration_estimator__d1920__w6: 409 deferred, 0 skipped
+  [ 13/102] 4a_duration_estimator__d3840__w6: 3 deferred, 0 skipped
+  [ 14/102] 4a_duration_estimator__d7680__w6: 0 deferred, 0 skipped
+  [ 15/102] 4a_duration_estimator__d15360__w6: 0 deferred, 0 skipped
+  [ 16/102] 4a_duration_estimator__d0__w12: 18,099 deferred, 0 skipped
+  [ 17/102] 4a_duration_estimator__d60__w12: 17,946 deferred, 0 skipped
+  [ 18/102] 4a_duration_estimator__d120__w12: 16,955 deferred, 0 skipped
+  [ 19/102] 4a_duration_estimator__d240__w12: 14,853 deferred, 0 skipped
+  [ 20/102] 4a_duration_estimator__d480__w12: 9,582 deferred, 0 skipped
+  [ 21/102] 4a_duration_estimator__d960__w12: 4,093 deferred, 0 skipped
+  [ 22/102] 4a_duration_estimator__d1920__w12: 499 deferred, 0 skipped
+  [ 23/102] 4a_duration_estimator__d3840__w12: 3 deferred, 0 skipped
+  [ 24/102] 4a_duration_estimator__d7680__w12: 0 deferred, 0 skipped
+  [ 25/102] 4a_duration_estimator__d15360__w12: 0 deferred, 0 skipped
+  [ 26/102] 4a_duration_estimator__d0__w24: 18,733 deferred, 0 skipped
+  [ 27/102] 4a_duration_estimator__d60__w24: 18,577 deferred, 0 skipped
+  [ 28/102] 4a_duration_estimator__d120__w24: 17,546 deferred, 0 skipped
+  [ 29/102] 4a_duration_estimator__d240__w24: 15,342 deferred, 0 skipped
+  [ 30/102] 4a_duration_estimator__d480__w24: 9,917 deferred, 0 skipped
+  [ 31/102] 4a_duration_estimator__d960__w24: 4,245 deferred, 0 skipped
+  [ 32/102] 4a_duration_estimator__d1920__w24: 510 deferred, 0 skipped
+  [ 33/102] 4a_duration_estimator__d3840__w24: 3 deferred, 0 skipped
+  [ 34/102] 4a_duration_estimator__d7680__w24: 0 deferred, 0 skipped
+  [ 35/102] 4a_duration_estimator__d15360__w24: 0 deferred, 0 skipped
+  [ 36/102] 4b_duration_prior__d0__w6: 15,252 deferred, 0 skipped
+  [ 37/102] 4b_duration_prior__d60__w6: 14,497 deferred, 0 skipped
+  [ 38/102] 4b_duration_prior__d120__w6: 12,848 deferred, 0 skipped
+  [ 39/102] 4b_duration_prior__d240__w6: 9,870 deferred, 0 skipped
+  [ 40/102] 4b_duration_prior__d480__w6: 6,786 deferred, 0 skipped
+  [ 41/102] 4b_duration_prior__d960__w6: 4,054 deferred, 0 skipped
+  [ 42/102] 4b_duration_prior__d1920__w6: 2,078 deferred, 0 skipped
+  [ 43/102] 4b_duration_prior__d3840__w6: 843 deferred, 0 skipped
+  [ 44/102] 4b_duration_prior__d7680__w6: 433 deferred, 0 skipped
+  [ 45/102] 4b_duration_prior__d15360__w6: 432 deferred, 0 skipped
+  [ 46/102] 4b_duration_prior__d0__w12: 18,099 deferred, 0 skipped
+  [ 47/102] 4b_duration_prior__d60__w12: 17,255 deferred, 0 skipped
+  [ 48/102] 4b_duration_prior__d120__w12: 15,273 deferred, 0 skipped
+  [ 49/102] 4b_duration_prior__d240__w12: 11,677 deferred, 0 skipped
+  [ 50/102] 4b_duration_prior__d480__w12: 7,978 deferred, 0 skipped
+  [ 51/102] 4b_duration_prior__d960__w12: 4,949 deferred, 0 skipped
+  [ 52/102] 4b_duration_prior__d1920__w12: 2,390 deferred, 0 skipped
+  [ 53/102] 4b_duration_prior__d3840__w12: 905 deferred, 0 skipped
+  [ 54/102] 4b_duration_prior__d7680__w12: 473 deferred, 0 skipped
+  [ 55/102] 4b_duration_prior__d15360__w12: 472 deferred, 0 skipped
+  [ 56/102] 4b_duration_prior__d0__w24: 18,733 deferred, 0 skipped
+  [ 57/102] 4b_duration_prior__d60__w24: 17,865 deferred, 0 skipped
+  [ 58/102] 4b_duration_prior__d120__w24: 15,785 deferred, 0 skipped
+  [ 59/102] 4b_duration_prior__d240__w24: 12,062 deferred, 0 skipped
+  [ 60/102] 4b_duration_prior__d480__w24: 8,262 deferred, 0 skipped
+  [ 61/102] 4b_duration_prior__d960__w24: 5,131 deferred, 0 skipped
+  [ 62/102] 4b_duration_prior__d1920__w24: 2,491 deferred, 0 skipped
+  [ 63/102] 4b_duration_prior__d3840__w24: 951 deferred, 0 skipped
+  [ 64/102] 4b_duration_prior__d7680__w24: 506 deferred, 0 skipped
+  [ 65/102] 4b_duration_prior__d15360__w24: 505 deferred, 0 skipped
+  [ 66/102] 5_se_informed_policy__d0__w6: 15,252 deferred, 0 skipped
+  [ 67/102] 5_se_informed_policy__d60__w6: 14,497 deferred, 0 skipped
+  [ 68/102] 5_se_informed_policy__d120__w6: 12,848 deferred, 0 skipped
+  [ 69/102] 5_se_informed_policy__d240__w6: 9,870 deferred, 0 skipped
+  [ 70/102] 5_se_informed_policy__d480__w6: 6,786 deferred, 0 skipped
+  [ 71/102] 5_se_informed_policy__d960__w6: 4,054 deferred, 0 skipped
+  [ 72/102] 5_se_informed_policy__d1920__w6: 2,078 deferred, 0 skipped
+  [ 73/102] 5_se_informed_policy__d3840__w6: 843 deferred, 0 skipped
+  [ 74/102] 5_se_informed_policy__d7680__w6: 433 deferred, 0 skipped
+  [ 75/102] 5_se_informed_policy__d15360__w6: 432 deferred, 0 skipped
+  [ 76/102] 5_se_informed_policy__d0__w12: 18,099 deferred, 0 skipped
+  [ 77/102] 5_se_informed_policy__d60__w12: 17,255 deferred, 0 skipped
+  [ 78/102] 5_se_informed_policy__d120__w12: 15,273 deferred, 0 skipped
+  [ 79/102] 5_se_informed_policy__d240__w12: 11,677 deferred, 0 skipped
+  [ 80/102] 5_se_informed_policy__d480__w12: 7,978 deferred, 0 skipped
+  [ 81/102] 5_se_informed_policy__d960__w12: 4,949 deferred, 0 skipped
+  [ 82/102] 5_se_informed_policy__d1920__w12: 2,390 deferred, 0 skipped
+  [ 83/102] 5_se_informed_policy__d3840__w12: 905 deferred, 0 skipped
+  [ 84/102] 5_se_informed_policy__d7680__w12: 473 deferred, 0 skipped
+  [ 85/102] 5_se_informed_policy__d15360__w12: 472 deferred, 0 skipped
+  [ 86/102] 5_se_informed_policy__d0__w24: 18,733 deferred, 0 skipped
+  [ 87/102] 5_se_informed_policy__d60__w24: 17,865 deferred, 0 skipped
+  [ 88/102] 5_se_informed_policy__d120__w24: 15,785 deferred, 0 skipped
+  [ 89/102] 5_se_informed_policy__d240__w24: 12,062 deferred, 0 skipped
+  [ 90/102] 5_se_informed_policy__d480__w24: 8,262 deferred, 0 skipped
+  [ 91/102] 5_se_informed_policy__d960__w24: 5,131 deferred, 0 skipped
+  [ 92/102] 5_se_informed_policy__d1920__w24: 2,491 deferred, 0 skipped
+  [ 93/102] 5_se_informed_policy__d3840__w24: 951 deferred, 0 skipped
+  [ 94/102] 5_se_informed_policy__d7680__w24: 506 deferred, 0 skipped
+  [ 95/102] 5_se_informed_policy__d15360__w24: 505 deferred, 0 skipped
+  [ 96/102] 6_risk_only_skip__t0: 0 deferred, 0 skipped
+  [ 97/102] 6_risk_only_skip__t0.05: 0 deferred, 11 skipped
+  [ 98/102] 6_risk_only_skip__t0.1: 0 deferred, 93 skipped
+  [ 99/102] 6_risk_only_skip__t0.15: 0 deferred, 161 skipped
+  [100/102] 6_risk_only_skip__t0.2: 0 deferred, 292 skipped
+  [101/102] 6_risk_only_skip__t0.25: 0 deferred, 482 skipped
+  [102/102] 6_risk_only_skip__t0.3: 0 deferred, 16,992 skipped
+  loaded 1_static
+  loaded 2_blanket_carbon_aware__d0__w167
+  loaded 3_eligibility_only__d0__w24
+  loaded 4a_duration_estimator__d0__w6
+  loaded 4a_duration_estimator__d60__w6
+  loaded 4a_duration_estimator__d120__w6
+  loaded 4a_duration_estimator__d240__w6
+  loaded 4a_duration_estimator__d480__w6
+  loaded 4a_duration_estimator__d960__w6
+  loaded 4a_duration_estimator__d1920__w6
+  loaded 4a_duration_estimator__d3840__w6
+  loaded 4a_duration_estimator__d7680__w6
+  loaded 4a_duration_estimator__d15360__w6
+  loaded 4a_duration_estimator__d0__w12
+  loaded 4a_duration_estimator__d60__w12
+  loaded 4a_duration_estimator__d120__w12
+  loaded 4a_duration_estimator__d240__w12
+  loaded 4a_duration_estimator__d480__w12
+  loaded 4a_duration_estimator__d960__w12
+  loaded 4a_duration_estimator__d1920__w12
+  loaded 4a_duration_estimator__d3840__w12
+  loaded 4a_duration_estimator__d7680__w12
+  loaded 4a_duration_estimator__d15360__w12
+  loaded 4a_duration_estimator__d0__w24
+  loaded 4a_duration_estimator__d60__w24
+  loaded 4a_duration_estimator__d120__w24
+  loaded 4a_duration_estimator__d240__w24
+  loaded 4a_duration_estimator__d480__w24
+  loaded 4a_duration_estimator__d960__w24
+  loaded 4a_duration_estimator__d1920__w24
+  loaded 4a_duration_estimator__d3840__w24
+  loaded 4a_duration_estimator__d7680__w24
+  loaded 4a_duration_estimator__d15360__w24
+  loaded 4b_duration_prior__d0__w6
+  loaded 4b_duration_prior__d60__w6
+  loaded 4b_duration_prior__d120__w6
+  loaded 4b_duration_prior__d240__w6
+  loaded 4b_duration_prior__d480__w6
+  loaded 4b_duration_prior__d960__w6
+  loaded 4b_duration_prior__d1920__w6
+  loaded 4b_duration_prior__d3840__w6
+  loaded 4b_duration_prior__d7680__w6
+  loaded 4b_duration_prior__d15360__w6
+  loaded 4b_duration_prior__d0__w12
+  loaded 4b_duration_prior__d60__w12
+  loaded 4b_duration_prior__d120__w12
+  loaded 4b_duration_prior__d240__w12
+  loaded 4b_duration_prior__d480__w12
+  loaded 4b_duration_prior__d960__w12
+  loaded 4b_duration_prior__d1920__w12
+  loaded 4b_duration_prior__d3840__w12
+  loaded 4b_duration_prior__d7680__w12
+  loaded 4b_duration_prior__d15360__w12
+  loaded 4b_duration_prior__d0__w24
+  loaded 4b_duration_prior__d60__w24
+  loaded 4b_duration_prior__d120__w24
+  loaded 4b_duration_prior__d240__w24
+  loaded 4b_duration_prior__d480__w24
+  loaded 4b_duration_prior__d960__w24
+  loaded 4b_duration_prior__d1920__w24
+  loaded 4b_duration_prior__d3840__w24
+  loaded 4b_duration_prior__d7680__w24
+  loaded 4b_duration_prior__d15360__w24
+  loaded 5_se_informed_policy__d0__w6
+  loaded 5_se_informed_policy__d60__w6
+  loaded 5_se_informed_policy__d120__w6
+  loaded 5_se_informed_policy__d240__w6
+  loaded 5_se_informed_policy__d480__w6
+  loaded 5_se_informed_policy__d960__w6
+  loaded 5_se_informed_policy__d1920__w6
+  loaded 5_se_informed_policy__d3840__w6
+  loaded 5_se_informed_policy__d7680__w6
+  loaded 5_se_informed_policy__d15360__w6
+  loaded 5_se_informed_policy__d0__w12
+  loaded 5_se_informed_policy__d60__w12
+  loaded 5_se_informed_policy__d120__w12
+  loaded 5_se_informed_policy__d240__w12
+  loaded 5_se_informed_policy__d480__w12
+  loaded 5_se_informed_policy__d960__w12
+  loaded 5_se_informed_policy__d1920__w12
+  loaded 5_se_informed_policy__d3840__w12
+  loaded 5_se_informed_policy__d7680__w12
+  loaded 5_se_informed_policy__d15360__w12
+  loaded 5_se_informed_policy__d0__w24
+  loaded 5_se_informed_policy__d60__w24
+  loaded 5_se_informed_policy__d120__w24
+  loaded 5_se_informed_policy__d240__w24
+  loaded 5_se_informed_policy__d480__w24
+  loaded 5_se_informed_policy__d960__w24
+  loaded 5_se_informed_policy__d1920__w24
+  loaded 5_se_informed_policy__d3840__w24
+  loaded 5_se_informed_policy__d7680__w24
+  loaded 5_se_informed_policy__d15360__w24
+    [S-a] resample 200/1000
+    [S-a] resample 400/1000
+    [S-a] resample 600/1000
+    [S-a] resample 800/1000
+    [S-a] resample 1000/1000
+wrote results/p3/sensitivity/a.json (2582s)
