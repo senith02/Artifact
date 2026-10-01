@@ -1920,4 +1920,314 @@ edit or delete past entries (supersede them with a new entry instead).
 - **Consequences.** S-f appears in the P3-T4 table as *not run — no qualifying data*, with this entry
   cited. No new data source, dependency or modelling choice enters the study.
 
-<!-- Append DL-033, DL-034, … below as the project progresses. -->
+### DL-033 — The DL-026 follow-up: P4 becomes a duration-history carbon-deferral *advisor* that embodies the P3 null (amends DL-026; proposed amendment to spec §5 and P4-T1..T3)
+
+- **Date:** 2026-10-01
+- **Status:** **Proposed — awaiting author decision** (draft revision 2, 2026-10-01: completed-history
+  contract per DL-034; §B9 operational/security contract added). Drafted at the author's request after
+  the P3-T5 gate (`4d9e128`). **Not accepted and not acted on.** Its §A facts are re-checked against
+  the DL-034 corrected results before acceptance: if the corrected chain admits an SE family, §B is
+  re-drafted. No code, plan, spec or Layer 0-A text changes until
+  the author accepts it, amends it, or chooses the alternatives in §D. This is the entry DL-026 made
+  forward-binding: "accept, amend or withdraw this direction, citing the P3 verdicts it rests on."
+- **Spec section affected (on acceptance).** Frozen spec §5 (artifact definition) is **amended through
+  Layer 0-A**, never edited below the frozen line. `development_plan.md` P4-T1..T3 are re-scoped, keeping
+  three tasks so `tasks_total` stays 28. DL-026 is **amended** (§C lists exactly what changes). Untouched:
+  §1–§4, the active RQs, `eval_protocol.md`, the feature contract, the split, the frozen
+  `policy_spec.yaml` and every P3 result.
+
+#### A. The P3 verdicts this rests on (`results/p3/evaluation_report.md`)
+
+1. **No SE feature is a decision input.** RQ2 is null and stable. The frozen spec's path is
+   `duration_only_fallback`, so ⑤ ≡ ④b (§2, §9). F1 is a non-replicating model-level candidate and was
+   never tested at the decision level (DL-028 §1).
+2. **What the frozen decision actually consumes** (§7; `code/scheduler_core/policy.py::decide`):
+   `gh_is_pr` and `git_branch` (Stage 1), `arrival_dow` / `arrival_hour`, and `d_hat_seconds`, plus a
+   168-slot hour-of-week carbon profile. `p_hat` is read only on an SE path the spec does not contain.
+3. **`d̂` (④b) is a per-project median of the durations of builds that had *finished* before the
+   scored build arrived** (DL-014 as corrected by **DL-034**; `duration_estimator.causal_project_history`).
+   Live, this needs the project's own completed-run durations, which the 28 commit features do not
+   carry. *(Draft revision 2, 2026-10-01: the first draft said "strictly-earlier", which repeated the
+   start-time defect that DL-034 corrects.)*
+4. **The evaluated regime is narrow.** It covers a UK national hour-of-week mean profile, Travis CI
+   builds from 2011–2016, and thresholds of d ≥ 480 s and W = 24 h (§5, limitations 1, 2, 11). Anything
+   else is extrapolation.
+5. **Duration estimation is the lever** (§4.2). Oracle headroom is +1.9290 pp·h; trailing-50 adds
+   +0.3538 over the frozen ④b.
+
+#### B. Proposed decision
+
+1. **What the artifact is.** A **carbon-deferral advisor for CI** that runs the identical
+   `scheduler_core.decide()` under the frozen `policy_spec.yaml`, using `require_fitted=True` (invariant
+   5; DL-024). It answers one question for one build: *run now, or defer to the greenest slot within
+   24 h, and why.* It visibly embodies the null: the reason string names the policy path and states that
+   SE features were evaluated and not admitted, citing `results/p1/incremental_value.md` and
+   `results/p3/evaluation_report.md`.
+2. **Input contract: narrowed to what `decide()` consumes.** This replaces P4-T1 S2's "28 commit
+   features only".
+   - Request: `is_pr`, `branch`, `arrival_utc` (→ dow/hour), plus *either* the project's
+     completed-build history *or* a repository identifier that the adapter resolves to that history.
+     A history entry is admissible only if it carries `started_at`, `duration_s` **and** a completion
+     time `finished_at < arrival_utc` (DL-034). In-progress, queued, cancelled or unknown-status runs
+     never enter. Where a live source lacks `finished_at`, `started_at + duration_s < arrival_utc` is
+     the floor, as in evaluation.
+   - `d̂` is computed **server-side** by the frozen estimator's ④b path, including its cold-start
+     ladder, so serving matches evaluation. The response reports `d̂`, `n_history` and the rung used.
+   - The schema is **closed**. It rejects any current-build outcome or duration field (A1.2, as P4-T1
+     already requires) and any SE-feature field. No SE feature is accepted, logged or displayed.
+3. **Carbon: the evaluated profile is the decision of record.** The decision uses the frozen UK
+   168-slot profile, exactly as in evaluation, so parity is exact. The live intensity from
+   carbonintensity.org.uk (with a cached fallback, as P4-T1 S2 already specifies) is **displayed beside
+   it** as `grid_gCO2_now`. It is labelled live and **does not change the decision**.
+   - A forecast-driven mode is admitted only as an **opt-in, labelled "extrapolated — not evaluated"**.
+     It fills the same 168-slot frame from the forecast, so `decide()` is not forked, and its output is
+     never presented as an evaluated result.
+   - The availability and terms of any forecast endpoint are verified in P4-T1 before use, not assumed
+     here.
+4. **Region: GB only.** DL-026's region-confidence hierarchy and IP geolocation are **withdrawn**. Only
+   GB was evaluated, and `research_state.json` already lists "IP geolocation identifies the data centre"
+   as not tested. Any other configured region returns `run_now`, with a reason stating that the region
+   is outside the evaluated regime. Multi-region support is future work.
+5. **Urgency stays deterministic and team-owned.** Stage 1 runs exactly as evaluated: the primary
+   variant, `gh_is_pr` + `git_branch` (DL-020). Live trigger context, such as `schedule` and
+   `workflow_dispatch` events, may be **displayed** but may not alter the decision (DL-026, condition
+   3). The DL-020 gap is stated in the documentation: manual and scheduled classes are unapproximated.
+6. **One core, three thin adapters.** No adapter contains decision logic. A test asserts each one
+   imports `decide()` from `scheduler_core` and loads the spec whose sha256 is `34d689c9…07da3`.
+   - **CLI** (`python -m scheduler_core.advise …`): the in-process path. It needs no server, so it is
+     the most viable path for a CI user.
+   - **REST API** (FastAPI `POST /decision`): spec §5's Must, retained and parity-tested.
+   - **GitHub Action**: calls the CLI in-process, and the API is optional. It writes the decision, the
+     reason, `d̂`, the history coverage, the window and the estimated carbon change to the **Step
+     Summary**, and exposes `action` / `defer_until` as **step outputs**.
+7. **Execution boundary.** The Action **recommends**. It does not pause or cancel anything (DL-026
+   §4). An **opt-in reference workflow** shows how a team can gate a non-urgent job on the
+   `action` output and re-dispatch it at `defer_until` through a scheduled
+   `workflow_dispatch`. It is documented plainly as *deferred re-dispatch, not pausing* (spec §5
+   note). The demo repo shows one real cycle of it. The core contribution still ends at the
+   recommendation.
+8. **Dashboard: an audit view, not an explanation surface** (Could, first to cut, §3.7). It shows the
+   decision log, the reason and policy path, history coverage and cold-start rung, the imposed delay,
+   *estimated* carbon change against run-now, and an independent-validator pass over the log
+   (`replay/validate_invariants.py`: zero non-deferrable builds deferred). It has **no SHAP panel**,
+   because the model it would explain was rejected as a decision input.
+
+9. **Operational and security contract** *(draft revision 2, from the revised independent review
+   §16/§21.6)*. This binds P4-T1/T2 and is tested where testable:
+   - **Fail closed to `run_now`.** Any missing or invalid input returns `run_now` with a reason that
+     names the failure, never `defer`. This covers no history, no completed history, a carbon source
+     that is down and lacks its cached profile, a spec hash mismatch, a non-GB region, and a schema
+     violation.
+   - **Least-privilege GitHub permissions.** The advisory job needs `contents: read` and
+     `actions: read` (for run history) only. The opt-in re-dispatch workflow additionally needs
+     `actions: write`, declared in that workflow alone. No `pull_request_target`. Fork PRs are always
+     `run_now` (Stage 1 already sends PR builds there) and are never given a token with write scope.
+   - **No injection.** Branch names and other event fields are passed as environment variables or
+     JSON, never interpolated into shell `run:` lines. The repository identifier is validated against
+     `owner/name`.
+   - **API.** It binds to localhost by default and has no CORS. It caps request size and history
+     length, uses a token header when exposed beyond localhost, and has no outbound requests except
+     to the configured carbon endpoint (no user-supplied URLs).
+   - **History source.** Paginated and rate-limit aware. Only `status: completed` runs are used,
+     with an explicit cap on history length. The cold-start rung used is always reported.
+   - **Re-dispatch is idempotent.** It is keyed by the original run's head SHA plus the workflow,
+     re-dispatches the same SHA, refuses if a run for that SHA has already succeeded, and does at most
+     one re-dispatch per decision.
+   - **Audit.** Every decision is logged with the spec sha256, inputs (no secrets), `d̂`, `n_history`,
+     rung, window and reason. The validator runs over the log.
+   - Anything here that cannot be tested in a demo repo is stated as untested, not implied.
+
+#### C. Exactly what changes in DL-026
+
+| DL-026 item | DL-033 |
+| :-- | :-- |
+| Flow: "SE features *only if P3 admits them*" | P3 did not admit them, so they are removed from the flow and the contract (§B2) |
+| Region inference: configured → cloud region → IP geolocation | **Withdrawn.** GB only, configured; other regions run now with a stated reason (§B4) |
+| Current + forecast regional intensity drives the decision | Evaluated profile drives the decision; live shown alongside; forecast mode opt-in and labelled (§B3) |
+| No automatic rescheduling | **Kept** as the core boundary, plus an opt-in, documented re-dispatch reference workflow (§B7) |
+| Open question: keep a thin API for spec §5's Must? | **Yes**, parity-tested; the CLI is the primary in-process path (§B6) |
+| Open question: step outputs? | **Yes**: `action`, `defer_until`, `reason`, `d_hat_seconds`, `n_history` (§B6) |
+| Conditions 1–5 | **All retained** |
+
+#### D. Author decision points (each has a recommendation; the alternative is recorded)
+
+1. **Decision of record, carbon.** *Recommended:* evaluated UK profile, with live/forecast displayed.
+   *Alternative:* forecast drives the decision, labelled extrapolated everywhere. That is more useful
+   live but makes parity approximate.
+2. **Execution.** *Recommended:* recommend, plus an opt-in re-dispatch reference workflow, keeping
+   P4-T2's "≥ 1 real deferral → re-dispatch cycle". *Alternative:* recommendation only, with that DoD
+   line replaced by "≥ 1 real DEFER recommendation captured".
+3. **Region.** *Recommended:* GB only. *Alternative:* keep a configured-region field for other zones,
+   always labelled extrapolated.
+4. **Duration-history source for the demo.** *Recommended:* the repository's own completed
+   GitHub Actions run history, read through the GitHub API, with the endpoint verified in P4-T1, and a
+   local JSON history file as the offline and test fixture. *Alternative:* a history file only.
+   Either way, GitHub Actions run duration is a **different construct** from Travis `tr_duration`. The
+   480 s threshold is applied there as an extrapolation and declared as such.
+
+#### E. Re-scoped P4 tasks (applied to `development_plan.md` only on acceptance)
+
+- **P4-T1 — Decision service: core advisor + CLI + REST API (Must).** The closed request schema of
+  §B2; server-side ④b `d̂` with cold-start provenance; live intensity displayed and never decisive.
+  **DoD:**
+  - **Parity:** a three-way test shows the same build record gives the identical `Decision` from
+    `decide()`, the CLI and the API.
+  - The spec sha256 is asserted.
+  - The schema rejects duration, outcome and SE fields.
+  - Error paths are covered: carbon API down → cached profile; no history → cold-start rung reported;
+    non-GB → `run_now` with reason.
+  - The reason string names the policy path and the null.
+- **P4-T2 — GitHub Action + demo repo (Should).** In-process CLI, Step Summary, step outputs, and the
+  opt-in re-dispatch reference workflow. **DoD:** captured demo-repo runs show ≥ 1 `run_now` (protected
+  branch), ≥ 1 `defer` (eligible branch, d̂ ≥ 480 s) and, under §D2's recommendation, one re-dispatch
+  cycle. The documentation states the evaluated regime and the extrapolations (§A4, §D4).
+- **P4-T3 — Audit dashboard (Could; first to cut).** §B8. **DoD:** it renders the real decision log
+  from P4-T2. Every carbon figure is labelled "estimated". The validator result is shown. There is no
+  SHAP.
+
+#### F. Rationale
+
+The artifact must not contradict the thesis it accompanies. A 28-feature SE contract and a SHAP
+rationale panel would do exactly that on the null path (`INDEPENDENT_REVIEW_REPORT.md` addendum
+item 7, advisory input). Narrowing the contract to what `decide()` consumes **reduces** P4 work and makes
+the null executable and auditable. One live decision then traces back to the frozen spec, and from
+there to the result files that fixed it. Decisions outside the evaluated regime are labelled, never
+silently trusted. Keeping three tasks and the same identifiers leaves progress accounting unchanged.
+
+#### G. Consequences (on acceptance)
+
+- A Layer 0-A note records that spec §5 is amended by DL-033. `development_plan.md` P4-T1..T3 are
+  rewritten per §E.
+- `context/` gains a short P4 interface reference: request/response schema, history format and
+  cold-start provenance.
+- `research_state.json` `artifact_components` are updated and the guide rebuilt (DL-025).
+- If the author rejects this entry, DL-026 stays Proposed/Conditional and P4-T1 remains blocked until
+  another follow-up entry is accepted.
+
+### DL-034 — ④b's history admits only builds that had *finished* before the scored build arrived; the full evidence chain is re-run under this entry (corrects DL-014 §Resolution 2)
+
+- **Date:** 2026-10-01
+- **Status:** **Accepted.** Author decision of 2026-10-01: approve the correction and re-run scope
+  option (a), the full chain, chosen from (a) full chain / (b) decision chain only / (c) report-only.
+  §B fixes every rule for the rerun **before any corrected number exists**. This entry, the code fix
+  and its tests are committed before the first rerun command is executed.
+- **Spec section affected.**
+  - DL-014 §Resolution 2 is **amended**: "strictly earlier builds" now means *builds that finished
+    strictly before t_b*.
+  - `context/duration_control_spec.md` §3.1/§3.3 are updated to match, with a pointer to this entry.
+  - `eval_protocol.md` A1.1 (the admissible information set) is **implemented more strictly, not
+    amended**: a duration not yet observed at t_b was never admissible under A1.1's own wording.
+  - Unchanged: every RQ, feature, family, split, floor, grid, strategy definition, seed, search
+    budget, the ρ = 0.90 rule, the headline-operating-point rules (DL-028 §3), the temporal boundary
+    (DL-027 §1, computed from start times only) and the S-f outcome (DL-032).
+
+#### A. The defect, as measured
+
+- **Source.** `INDEPENDENT_REVIEW_REPORT.md` (revised 2026-10-01; advisory input) §4/§6. It is
+  verified in the code: `causal_project_history()` orders history by `gh_build_started_at` only, and
+  no completion condition exists anywhere in `code/`. The code matched DL-014 exactly, so **the defect
+  is in the information rule, not in its implementation.** A deployed scheduler knows only the
+  durations of builds that have *finished*.
+- **Prevalence and effect on the test split.** Measured by `PYTHONPATH=. python
+  scripts/diagnose_history_overlap.py` → `results/corrections/dl034/history_overlap.{json,md}`.
+  - The script first reproduces the trace's recorded ④b exactly: max |Δ| 0.0 s, with `n_history`
+    equal on all 138,693 builds.
+  - 38,019 of 138,693 test builds (27.41%) have at least one unfinished build in their ④b history. In
+    37,000 (26.68%) the immediate predecessor was still running. The review's lower bound was 36,849.
+  - Typically one unfinished build is involved (median 1, p95 4, max 15).
+  - d̂ changes by a median of 0.00% (|·| p95 0.84%).
+  - At the frozen 480 s threshold, 5 of 27,027 Stage-1-eligible builds would cross it, and 7 would
+    move to the cold-start rung.
+  - Train and calibration are not measured there. The classifier arms also carry `d̂` as a feature
+    (`models.py`), so P1 is affected in the same way.
+- **Reading.** The effect on decisions is expected to be small, but the claim "strictly causal,
+  deployable history" is false as implemented. The P4 artifact would compute `d̂` from completed runs
+  only, so leaving the defect in place would also break evaluation/serving parity (invariant 5).
+  Option (a) was chosen to correct the evidence rather than argue the bound.
+
+#### B. Decision
+
+1. **The rule.** A build *j* of project *P* enters the ④b history of build *b* of *P* **iff** *j*
+   carries a usable label (spec §1.2) **and** `gh_build_started_at_j + tr_duration_j < gh_build_started_at_b`
+   (strict).
+   - **Completion proxy.** The release has no finish timestamp (`context/dataset_reference.md`), so
+     start + `tr_duration` (build wall-clock, max-aggregated over jobs, DL-009/DL-010) stands in for
+     completion. It is the *earliest possible* finish: queueing, or jobs starting after the build's
+     start, would make the true finish later. The corrected rule may therefore still admit a build
+     slightly early. That residual is declared and not measurable here.
+   - **Consequences of the rule.** Tied starts are excluded automatically (end > start). Unlabelled
+     builds never enter, as before. The trailing-50 sensitivity becomes *the 50 most recently
+     finished labelled builds*. `n_history` counts the admitted builds.
+2. **Implementation.**
+   - `causal_project_history(..., availability="completed")` becomes the default and the only rule a
+     real run may use.
+   - The superseded rule survives as `availability="started"`, solely so tests and the diagnostic can
+     reproduce the pre-DL-034 behaviour.
+   - `assert_history_is_causal()` **requires the durations** and rejects any history that counts a
+     build not finished by t_b (new check 3), in addition to its two existing checks.
+   - Every caller passes durations: `models.py`, `fit_duration_estimator.py`, `run_replay.py`,
+     `evaluate_test.py` and `sensitivity_analysis.py`.
+   - New tests cover overlapping runs, an exact finish-at-arrival boundary, a brute-force O(n²)
+     recomputation on overlapping data, the trailing window in completion order, and rejection of the
+     start-ordered rule.
+3. **Re-run scope: the full chain, in order, with the same scripts, seeds, budgets and grids.**
+   - P1-T4 `fit_duration_estimator.py`
+   - P1-T5 `train_models.py`
+   - P1-T6 `run_ablation.py`
+   - P1-T7 `apply_admission.py`
+   - P2-T4 sample run (`run_replay.py`, bootstrap-labelled as before)
+   - P2-T5 `fit_policy.py`
+   - P3-T1 `evaluate_test.py`: calibration rehearsal, then `--split test --open-test-split
+     --rerun-under DL-034`
+   - P3-T2 `run_test_replay.py`: `--mode rehearse`, then `--mode test --rerun-under DL-034`
+   - P3-T3 `frontier_analysis.py`
+   - P3-T4 every `sensitivity_analysis.py` sweep that ran before (S-f stays *not run*, DL-032), then
+     `--summary`
+   - P3-T5 the evaluation report revised
+   - Nothing else may change. In particular, no code change other than §B2 may enter between the
+     first and last command. A defect found mid-run stops the rerun and needs its own DL entry.
+4. **Mechanical outcomes are followed whatever they are.** If the corrected P1-T7 admits a family on
+   calibration, P2-T5 emits an SE-informed spec and P3 evaluates it. If the operating point moves,
+   the new point is frozen (new sha256). If any verdict flips, it is reported prominently. **There is
+   no override in either direction.**
+5. **The test split is read a second time, authorised by this entry** (`--rerun-under DL-034`, as
+   `evaluate_test.py` and `run_test_replay.py` require). This is defensible because:
+   - the correction was identified externally;
+   - it concerns the information regime, not a modelling or tuning choice;
+   - it leaves no free parameter;
+   - its rules are fixed here before any corrected number exists.
+   It is still declared as a threat: the author has seen the original test results.
+6. **Reporting.**
+   - The corrected results **supersede** the originals as the results of record, at the same paths.
+   - The originals are preserved in git: P1 at `2901d77`, P2 at `95c6d6d`, P3 at `1e38db7`, the
+     report at `4d9e128`.
+   - Before the rerun, the small headline JSON/MD files are copied to
+     `results/corrections/dl034/original/`.
+   - Afterwards, `results/corrections/dl034/comparison.md` tabulates original vs corrected for every
+     headline number and verdict, whether or not it changed.
+   - No result may be chosen between the two by its outcome.
+7. **What this entry does not do.** It narrows no claim wording, adds no temporal-forward
+   evaluation, and changes no RQ. The writing corrections the review asks for (frozen-policy null,
+   F1 unresolved, "estimated" carbon, cross-project retrospective scope, multiplicity) belong to the
+   P3-T5 revision. They are listed there, and no protocol change is implied.
+
+#### C. Rationale
+
+The study's central null is judged against ④b. A baseline that a live system could not compute
+would undermine the comparison and the artifact, however small the effect. The correction has a
+single, parameter-free answer, so re-running the predeclared pipeline costs compute (≈ 7.5 h from the
+recorded run times) but no researcher degrees of freedom.
+
+#### D. Consequences
+
+- New: `code/scripts/diagnose_history_overlap.py`, `results/corrections/dl034/`.
+- Changed on acceptance: `scheduler_core/duration_estimator.py`, its callers and
+  `tests/test_duration_estimator.py`, plus every P1–P3 result file regenerated by §B3.
+- New frozen identifiers are recorded as they are produced: the `d̂` fit id if it changes, the arm fit
+  ids, the `policy_spec.yaml` sha256 and the run fingerprints.
+- `PROGRESS.md` records the rerun as a correction gate (not a numbered task, so `tasks_total` stays
+  28). P4 remains blocked until the rerun is gated and DL-033 is accepted.
+- Threats for P5-T4: the second test pass; the completion proxy; and the unchanged temporal overlap
+  between the training and scored splits (DL-014 §Resolution 5).
+
+<!-- Append DL-035, DL-036, … below as the project progresses. -->

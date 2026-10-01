@@ -22,8 +22,13 @@ state:
   current_task: P4-T1    # REST API service — NOT started (author: stop after P3-T5 for review)
   next_task: P4-T2       # GitHub Action + demo repo
   current_phase: P4
-  blocked_on: author review of results/p3/evaluation_report.md, then the DL-026 follow-up DL entry
-                  (accept / amend / withdraw the P4 direction) — required before P4-T1 starts
+  blocked_on: (1) **DL-034 correction pass CR-1** — ④b history admitted builds still running at
+                  t_b; full-chain rerun (option a, author decision 2026-10-01) prepared, NOT started;
+                  (2) then author decision on **DL-033** (Proposed, draft rev. 2) — both required
+                  before P4-T1 starts
+  correction:     **CR-1 (DL-034)** — not a numbered task; tasks_total stays 28. P1-T4..P3-T5 stay ✅
+                  but their evidence is superseded once CR-1 gates. Originals: git 2901d77 / 95c6d6d /
+                  1e38db7 / 4d9e128 + results/corrections/dl034/original/ (MANIFEST.txt).
   last_gate_passed: P3-T5 (results synthesis; results/p3/evaluation_report.md)
   last_updated: 2026-10-01
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
@@ -168,7 +173,20 @@ Phase 3   [████████████████████] 100%   
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P3-T5 gated 2026-10-01; P4-T1 not started)*
+**CR-1 (DL-034) ⏳ prepared 2026-10-01** — full-chain rerun of P1-T4…P3-T5 under the
+completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
+- [x] Evidence: `scripts/diagnose_history_overlap.py` → `results/corrections/dl034/history_overlap.{json,md}`
+- [x] DL-034 written (Accepted, option a); DL-033 revised (draft rev. 2)
+- [x] Fix: `duration_estimator.causal_project_history(availability="completed")` + guard check 3; all
+      5 callers pass durations; spec text updated (`context/duration_control_spec.md` I3/§3.2/§4.1)
+- [x] Tests: +7 DL-034 tests; full suite **645 passed**; fixed function == independent recomputation on
+      all 138,693 test-trace builds; guard rejects the old rule (38,019 builds)
+- [x] Originals snapshotted: `results/corrections/dl034/original/` (15 files, MANIFEST.txt)
+- [ ] **Commit predeclaration** (DL-034 + fix + tests + diagnostic) — awaiting author go-ahead
+- [ ] P1-T4 fit_duration_estimator · [ ] P1-T5 train_models · [ ] P1-T6 run_ablation · [ ] P1-T7 apply_admission
+- [ ] P2-T4 sample run · [ ] P2-T5 fit_policy
+- [ ] P3-T1 rehearse + test `--rerun-under DL-034` · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
+- [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md
 
 ---
 

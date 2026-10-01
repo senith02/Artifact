@@ -8,7 +8,8 @@ combined test would leave one of them unproven (DL-014 §3).
 
 * **T1** blocklist assertion on the estimator's own matrix, incl. a
   duration-specific negative test;
-* **T2** temporal test — the strict ``< t_b`` window really binds;
+* **T2** temporal test — only builds that had *finished* before ``t_b`` enter
+  the window (DL-034), and the cut-off really binds;
 * **T2b** split test — train-only fitting really binds;
 * **T3** negative fixture — a deliberately leaky history (``≤ t_b``) is
   *rejected*, so the tests can actually fail;
@@ -239,6 +240,112 @@ def test_t2_trailing_window_sensitivity_reads_only_the_last_k_builds():
 
 
 # --------------------------------------------------------------------------- #
+# T2 (DL-034) — a build that is still running is not history yet
+# --------------------------------------------------------------------------- #
+
+def _timed(starts: list[str], durations_s: list[float], project: str = "org/p00"):
+    """One project's builds at explicit start times, with explicit durations."""
+    rows = [{"tr_build_id": f"b{i}", "gh_project_name": project, "gh_build_started_at": s,
+             "lang": "ruby"} for i, s in enumerate(starts)]
+    frame = _feature_frame(rows)
+    return frame, pd.Series(durations_s, index=frame.index, dtype="float64")
+
+
+def test_t2_a_build_still_running_at_arrival_is_excluded():
+    """A (00:00, 2 h) is still running when B arrives at 01:00; C at 03:00 sees both."""
+    frame, durations = _timed(["2014-01-01 00:00:00", "2014-01-01 01:00:00",
+                               "2014-01-01 03:00:00"], [7200.0, 600.0, 300.0])
+    hist = _history(frame, durations)
+    assert hist["n_history"].tolist() == [0, 0, 2]
+    assert np.isnan(hist["hist_median_log1p"].iloc[1])
+    assert hist["hist_median_log1p"].iloc[2] == pytest.approx(
+        float(np.median(np.log1p([7200.0, 600.0]))))
+    de.assert_history_is_causal(frame, hist, durations)
+
+
+def test_t2_finishing_exactly_at_arrival_is_not_yet_history():
+    """The rule is strict: start + duration must be < t_b, not ≤."""
+    frame, durations = _timed(["2014-01-01 00:00:00", "2014-01-01 01:00:00",
+                               "2014-01-01 01:00:01"], [3600.0, 60.0, 60.0])
+    hist = _history(frame, durations)
+    assert hist["n_history"].tolist() == [0, 0, 1]
+
+
+def test_t2_the_superseded_start_rule_admits_the_running_build_and_the_guard_rejects_it():
+    """`availability="started"` reproduces the pre-DL-034 rule; check 3 must catch it."""
+    frame, durations = _timed(["2014-01-01 00:00:00", "2014-01-01 01:00:00",
+                               "2014-01-01 03:00:00"], [7200.0, 600.0, 300.0])
+    started = _history(frame, durations, availability="started")
+    assert started["n_history"].tolist() == [0, 1, 2]       # B counted A while A ran
+    with pytest.raises(de.DurationLeakageError, match="still running"):
+        de.assert_history_is_causal(frame, started, durations)
+
+
+def test_t2_without_overlap_both_rules_agree_exactly():
+    """On the synthetic fixture no run outlasts the gap to the next, so DL-034 changes nothing."""
+    frame, durations, _ = _synthetic(n_projects=4, per=15)
+    done = _history(frame, durations)
+    started = _history(frame, durations, availability="started")
+    assert done["n_history"].tolist() == started["n_history"].tolist()
+    np.testing.assert_array_equal(done["hist_median_log1p"].to_numpy(),
+                                  started["hist_median_log1p"].to_numpy())
+
+
+def test_t2_completed_history_matches_a_brute_force_recomputation_with_overlaps():
+    """The vectorised DL-034 path must agree with the obvious O(n²) definition, on data
+    where runs genuinely overlap, ties exist and some labels are unusable."""
+    rng = np.random.default_rng(7)
+    rows, durs = [], []
+    base = pd.Timestamp("2014-01-01", tz="UTC")
+    for p in range(3):
+        offsets = np.sort(rng.integers(0, 6 * 3600, size=25))
+        offsets[5] = offsets[4]                                 # a tie
+        for i, off in enumerate(offsets):
+            rows.append({"tr_build_id": f"{p}-{i}", "gh_project_name": f"org/q{p}",
+                         "gh_build_started_at": (base + pd.Timedelta(seconds=int(off))
+                                                 ).strftime("%Y-%m-%d %H:%M:%S"),
+                         "lang": "ruby"})
+            durs.append(float(rng.integers(60, 5400)) if i % 9 else np.nan)
+    frame = _feature_frame(rows)
+    durations = pd.Series(durs, index=frame.index, dtype="float64")
+    hist = _history(frame, durations)
+    ts = features.parse_started_at(frame["gh_build_started_at"])
+    end = ts + pd.to_timedelta(durations, unit="s")
+    y = de.to_log1p(durations)
+    for i in range(len(frame)):
+        done = ((frame["gh_project_name"] == frame["gh_project_name"].iloc[i])
+                & y.notna() & (end < ts.iloc[i]))
+        assert hist["n_history"].iloc[i] == int(done.sum())
+        if done.any():
+            assert hist["hist_median_log1p"].iloc[i] == pytest.approx(
+                float(y[done.to_numpy()].median()))
+        else:
+            assert np.isnan(hist["hist_median_log1p"].iloc[i])
+    de.assert_history_is_causal(frame, hist, durations)
+    started = _history(frame, durations, availability="started")
+    assert (started["n_history"] > hist["n_history"]).any()   # the fixture really overlaps
+
+
+def test_t2_trailing_window_counts_the_most_recently_finished_builds():
+    """With overlap, the trailing window is ordered by finish time, not start time."""
+    # A starts first but finishes last; at D's arrival the 2 most recently finished
+    # labelled builds are A and C, not B and C.
+    frame, durations = _timed(["2014-01-01 00:00:00", "2014-01-01 00:10:00",
+                               "2014-01-01 00:20:00", "2014-01-01 02:00:00"],
+                              [6000.0, 60.0, 600.0, 60.0])
+    hist = _history(frame, durations, window=2)
+    assert hist["n_history"].tolist() == [0, 0, 1, 2]
+    assert hist["hist_median_log1p"].iloc[3] == pytest.approx(
+        float(np.median(np.log1p([600.0, 6000.0]))))
+
+
+def test_t2_an_unknown_availability_rule_is_refused():
+    frame, durations = _timed(["2014-01-01 00:00:00"], [60.0])
+    with pytest.raises(ValueError, match="availability"):
+        _history(frame, durations, availability="queued")
+
+
+# --------------------------------------------------------------------------- #
 # T2b — the split boundary binds (A1.1(ii), mechanism 1)
 # --------------------------------------------------------------------------- #
 
@@ -276,7 +383,7 @@ def test_t2b_within_project_state_is_permitted_on_calibration_and_test():
     """
     frame, durations, _ = _synthetic(n_projects=2, per=8, split="test")
     hist = _history(frame, durations)
-    de.assert_history_is_causal(frame, hist)
+    de.assert_history_is_causal(frame, hist, durations)
     assert (hist["n_history"] > 0).any()
 
 
@@ -289,13 +396,13 @@ def test_t3_leaky_history_is_rejected_by_the_causality_assertion():
     frame, durations, _ = _synthetic(n_projects=3, per=8)
     leaky = _history(frame, durations, strict=False)
     with pytest.raises(de.DurationLeakageError, match="earliest timestamp"):
-        de.assert_history_is_causal(frame, leaky)
+        de.assert_history_is_causal(frame, leaky, durations)
 
 
 def test_t3_the_shipped_history_passes_the_same_assertion():
     """The guard must pass on the real path — otherwise it proves nothing."""
     frame, durations, _ = _synthetic(n_projects=3, per=8)
-    de.assert_history_is_causal(frame, _history(frame, durations))
+    de.assert_history_is_causal(frame, _history(frame, durations), durations)
 
 
 def test_t3_history_that_disagrees_within_a_tie_block_is_rejected():
@@ -307,7 +414,7 @@ def test_t3_history_that_disagrees_within_a_tie_block_is_rejected():
     hist = _history(frame, durations)
     hist.loc[hist.index[2], "n_history"] = 2      # hand-corrupt one tie member
     with pytest.raises(de.DurationLeakageError, match="disagree on n_history"):
-        de.assert_history_is_causal(frame, hist)
+        de.assert_history_is_causal(frame, hist, durations)
 
 
 # --------------------------------------------------------------------------- #

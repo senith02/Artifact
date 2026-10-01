@@ -407,9 +407,11 @@ def _trailing_d_hat(ctx: Ctx) -> np.ndarray:
     matrix = features.build_feature_matrix(builds)
     keys = builds[list(features.KEY_COLUMNS)]
     est = de.DurationEstimator.load(rr.ARTIFACTS / "duration_estimator.joblib")
-    expanding = est.predict_4b(matrix, de.causal_project_history(keys, durations))
+    hist_exp = de.causal_project_history(keys, durations)
+    de.assert_history_is_causal(keys, hist_exp, durations)
+    expanding = est.predict_4b(matrix, hist_exp)
     hist50 = de.causal_project_history(keys, durations, window=50)
-    de.assert_history_is_causal(keys, hist50)
+    de.assert_history_is_causal(keys, hist50, durations)
     trailing = est.predict_4b(matrix, hist50)
     ids = builds["tr_build_id"].astype(str)
     exp_s = pd.Series(expanding["d_hat_seconds"].to_numpy(), index=ids)

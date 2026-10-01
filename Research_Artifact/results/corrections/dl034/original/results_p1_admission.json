@@ -1,0 +1,179 @@
+{
+  "provenance": {
+    "command": "PYTHONPATH=. python scripts/apply_admission.py",
+    "run_date": "2026-09-13",
+    "task": "P1-T7",
+    "inputs": {
+      "deltas": "results/p1/ablation/deltas.json",
+      "shap": "results/p1/shap/shap_summary.json"
+    },
+    "evidence_run": {
+      "command": "PYTHONPATH=. python scripts/run_ablation.py",
+      "run_date": "2026-09-12",
+      "algorithm": "xgboost",
+      "seed": 42,
+      "control_arm_fit_id": "5b6c9fd6e4762e25",
+      "full_arm_fit_id": "65fd81b1e952fd72",
+      "duration_control_fit_id": "1088d5546f47ff12",
+      "split_digest": "3d9a7947017c89e1eedc4da655719911b4a312926a865ce277550827c5935cde"
+    },
+    "split_used": "calibration",
+    "test_split_touched": false,
+    "rule": "eval_protocol \u00a7A1.7, model altitude: \u0394PR-AUC vs {d\u0302} \u2014 95% CI excludes 0 AND point estimate \u2265 0.01 absolute (improvement, not |\u0394| \u2014 the directional reading was fixed in DL-019 \u00a72 before these deltas existed).",
+    "nothing_was_fitted_here": true
+  },
+  "model_level_admission": {
+    "floor": 0.01,
+    "admitted": [],
+    "rejected": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6"
+    ],
+    "verdicts": {
+      "F1": {
+        "admitted": false,
+        "delta_pr_auc": -0.003678275280001919,
+        "ci_lo": -0.005309682494735371,
+        "ci_hi": -0.0019578700339908206,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.003678 is below the +0.010000 floor, and its 95% CI [-0.005310, -0.001958] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      },
+      "F2": {
+        "admitted": false,
+        "delta_pr_auc": -0.005525694246231949,
+        "ci_lo": -0.007217405075249012,
+        "ci_hi": -0.0038536109951977774,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.005526 is below the +0.010000 floor, and its 95% CI [-0.007217, -0.003854] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      },
+      "F3": {
+        "admitted": false,
+        "delta_pr_auc": -0.023332867648367894,
+        "ci_lo": -0.02657499636602649,
+        "ci_hi": -0.019858511028183035,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.023333 is below the +0.010000 floor, and its 95% CI [-0.026575, -0.019859] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      },
+      "F4": {
+        "admitted": false,
+        "delta_pr_auc": -0.06469371263020846,
+        "ci_lo": -0.06730397350535278,
+        "ci_hi": -0.06174682611105038,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.064694 is below the +0.010000 floor, and its 95% CI [-0.067304, -0.061747] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      },
+      "F5": {
+        "admitted": false,
+        "delta_pr_auc": -0.0663233218069107,
+        "ci_lo": -0.06920472547893501,
+        "ci_hi": -0.06337702272572368,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.066323 is below the +0.010000 floor, and its 95% CI [-0.069205, -0.063377] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      },
+      "F6": {
+        "admitted": false,
+        "delta_pr_auc": -0.002919678349536048,
+        "ci_lo": -0.004531434800921335,
+        "ci_hi": -0.0012633452869816226,
+        "floor": 0.01,
+        "ci_excludes_zero": true,
+        "ci_direction": "negative",
+        "meets_floor": false,
+        "decided_by": "\u0394PR-AUC -0.002920 is below the +0.010000 floor, and its 95% CI [-0.004531, -0.001263] lies entirely below 0 \u2014 the family is significantly *worse* than the control, not merely short of the floor",
+        "reason_short": "below floor; CI entirely below 0 (significantly worse)"
+      }
+    }
+  },
+  "floor_sweep": {
+    "base_floor": 0.01,
+    "multipliers": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "by_floor": {
+      "x0.5": {
+        "multiplier": 0.5,
+        "floor": 0.005,
+        "admitted": [],
+        "rejected": [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6"
+        ]
+      },
+      "x1": {
+        "multiplier": 1.0,
+        "floor": 0.01,
+        "admitted": [],
+        "rejected": [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6"
+        ]
+      },
+      "x2": {
+        "multiplier": 2.0,
+        "floor": 0.02,
+        "admitted": [],
+        "rejected": [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6"
+        ]
+      }
+    },
+    "stable": true,
+    "note": "Only the floor scales across the sweep; the CI-excludes-0 condition is not a floor and is held fixed (\u00a7A1.7)."
+  },
+  "admitted_family_members": {},
+  "policy_path": "duration_only_fallback",
+  "policy_path_note": "\u00a7A1.7: if no family passes, fit_policy.py emits a valid spec whose every path is the duration-only fallback (\u00a7A1.6), and that is reported as the principal finding (DL-012 \u00a75).",
+  "variance_decomposition_caveat": {
+    "threshold": 0.8,
+    "between_project_share": {
+      "F1": 0.04133862559164915,
+      "F2": 0.09708310903306473,
+      "F3": 0.6034809914351487,
+      "F4": 0.3531888111217108,
+      "F5": 0.6755932716158254,
+      "F6": 0.11477124960378937,
+      "control": 0.66491802854757
+    },
+    "note": "Measured on each family's summed SHAP contribution inside the frozen `full` arm, not on its standalone {d\u0302+F\u1d62} arm (DL-019 \u00a7Threats 2)."
+  },
+  "consumed_by": "scripts/fit_policy.py (P2-T5); the identical rule is re-applied to test-split deltas at P3-T1."
+}

@@ -297,9 +297,9 @@ def duration_quality(est: de.DurationEstimator, frame: pd.DataFrame, keys: pd.Da
                 "coverage": de.coverage_table(estimates)}
 
     history = de.causal_project_history(keys, durations)
-    de.assert_history_is_causal(keys, history)
+    de.assert_history_is_causal(keys, history, durations)
     hist_50 = de.causal_project_history(keys, durations, window=50)
-    de.assert_history_is_causal(keys, hist_50)
+    de.assert_history_is_causal(keys, hist_50, durations)
     return {
         "forms": {"4b_expanding": evaluate(est.predict_4b(frame, history)),
                   "4a_xgboost": evaluate(est.predict_4a(frame, history)),

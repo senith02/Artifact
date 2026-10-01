@@ -81,7 +81,7 @@ At the moment `b` is scored, the estimator may read **only** the following, and 
 | :-- | :-- | :-- | :-- |
 | **I1** | The **28 commit-time features** of `b` | exactly the contract in `feature_spec.md`; no additions, no substitutions | §A1.1(a), invariant 3 |
 | **I2** | **Fitted parameters** derived from **train-split projects** | regressor weights + hyperparameters; language prior; global prior | §A1.1(b), DL-014 §1 |
-| **I3** | **Strictly-earlier builds of `b`'s own project** | `gh_build_started_at < t_b`, same `gh_project_name`; online state, not a fitted parameter | §A1.1 sentence 2, DL-014 §2 |
+| **I3** | **Builds of `b`'s own project that had finished before `b` arrived** | `gh_build_started_at + tr_duration < t_b`, same `gh_project_name`; online state, not a fitted parameter. *(Corrected by **DL-034**, 2026-10-01: the original rule `gh_build_started_at < t_b` admitted builds still running at `t_b`.)* | §A1.1 sentence 2, DL-014 §2, DL-034 |
 
 Explicitly **inadmissible**, in every form and by every route:
 
@@ -120,7 +120,10 @@ Two mechanisms, bound differently — this is the substance of **DL-014**.
 
 ### 3.2 Mechanism 2 — within-project online state (④b's prior; the cold-start ladder's first rung)
 
-- Reads **only** builds of `b`'s own project with `gh_build_started_at < t_b` (strict; ties excluded per §2).
+- Reads **only** builds of `b`'s own project that had **finished** before `b` arrived:
+  `gh_build_started_at + tr_duration < t_b` (strict; ties excluded per §2) — **DL-034**. A build that
+  started earlier but was still running has no observed duration at `t_b`. The release has no finish
+  timestamp, so start + `tr_duration` is the earliest-possible-finish proxy (declared in DL-034 §B1).
 - Permitted for **calibration and test** projects, because it is online state a deployed scheduler holds,
   not a parameter estimated across the corpus (DL-014 §2). Without this, ④b degenerates to the language
   prior on every evaluation project and the §A1.9 project-identity control ceases to exist.
@@ -142,7 +145,8 @@ Both are implemented and both are reported; the **primary** is chosen by the rul
 
 ```text
 d̂_④b(b) = expm1( median{ log(1 + duration(h)) : h ∈ H(b) } )
-H(b) = builds of b's project with gh_build_started_at < t_b and a usable label (§1.2)
+H(b) = builds of b's project with gh_build_started_at + tr_duration < t_b and a usable label (§1.2)
+       (DL-034; was gh_build_started_at < t_b)
 ```
 
 - **Statistic:** median on the log1p scale — robust to the tail, and (being order-based) identical to

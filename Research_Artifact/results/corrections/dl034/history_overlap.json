@@ -1,0 +1,57 @@
+{
+  "decision": "DL-034 (evidence for)",
+  "command": "python scripts/diagnose_history_overlap.py",
+  "run_date": "2026-10-01",
+  "input": {
+    "file": "results/p3/test_trace.csv.gz",
+    "sha256": "84052037d811315991e250a6b83526482a58756341af2912f445e35c11fdcafe",
+    "columns_read": [
+      "replay_seq",
+      "gh_project_name",
+      "gh_is_pr",
+      "git_branch",
+      "arrival_utc",
+      "d_hat_4b_seconds",
+      "d_hat_4b_fallback",
+      "d_hat_4b_n_history",
+      "obs_duration_s"
+    ],
+    "outcome_columns_read": []
+  },
+  "rules": {
+    "start_ordered_shipped": "labelled builds of the project with start < t_b (ties excluded)",
+    "completion_ordered_dl034": "labelled builds of the project with start + tr_duration < t_b",
+    "completion_proxy": "start + tr_duration = earliest possible finish (no finish timestamp exists in the release)"
+  },
+  "validation": {
+    "project_rung_builds": 138519,
+    "max_abs_diff_recomputed_vs_trace_s": 0.0,
+    "n_history_equal_all_builds": true
+  },
+  "builds": 138693,
+  "immediate_predecessor_still_running": {
+    "n": 37000,
+    "pct": 26.68
+  },
+  "history_includes_unfinished_build": {
+    "n": 38019,
+    "pct": 27.41
+  },
+  "unfinished_builds_in_history_among_affected": {
+    "median": 1.0,
+    "p95": 4.0,
+    "max": 15
+  },
+  "d_hat_relative_change_among_affected": {
+    "n": 37993,
+    "median_pct": 0.0,
+    "abs_p95_pct": 0.84
+  },
+  "would_lose_all_completed_history": 26,
+  "stage1_eligible_builds": 27027,
+  "eligible_and_affected": 7277,
+  "eligible_crossing_d_threshold_480s": 5,
+  "eligible_moving_to_cold_start": 7,
+  "caveat": "Test split only; train and calibration are not measured here. The frozen threshold is applied to d\u0302 alone, so this bounds decision changes at the frozen point under the frozen spec \u2014 it is not a re-fitted result.",
+  "elapsed_s": 1.7
+}

@@ -1,0 +1,407 @@
+{
+  "provenance": {
+    "command": "PYTHONPATH=. python scripts/fit_duration_estimator.py",
+    "run_date": "2026-08-17",
+    "dataset_path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Dataset\\19314170\\final-2017-01-25.csv\\final-2017-01-25.csv",
+    "seed": 42,
+    "spec": "context/duration_control_spec.md (P1-T1); eval_protocol \u00a7A1.1/\u00a7A1.2; DL-014 (Accepted 2026-08-17)",
+    "elapsed_s": 948.4,
+    "estimator_artifact": "code\\artifacts\\duration_estimator.joblib",
+    "fit_id": "1088d5546f47ff12",
+    "split": "train",
+    "n_fit_builds": 644435,
+    "n_fit_projects": 628,
+    "n_builds_offered": 645244,
+    "n_builds_unusable_label": 809,
+    "fit_row_range": {
+      "first_build": "2011-04-16 17:37:39+00:00",
+      "last_build": "2016-08-31 23:59:27+00:00"
+    },
+    "internal_validation": {
+      "share": 0.2,
+      "n_fit": 515548,
+      "n_val": 128887,
+      "rule": "temporally-latest 20% of train builds by gh_build_started_at (eval_protocol \u00a73, spec \u00a73.1)",
+      "selection_metric": "MAE on log1p scale (spec \u00a74.2)"
+    },
+    "final_refit": "the selected configuration is refit on 100% of the usable train builds; the search itself never saw the internal-validation fold (spec \u00a73.1)",
+    "target": "log1p_duration_s",
+    "n_search_candidates": 40,
+    "lang_levels": [
+      "go",
+      "java",
+      "python",
+      "ruby"
+    ],
+    "xgb_best_params": {
+      "n_estimators": 524,
+      "max_depth": 9,
+      "learning_rate": 0.02206168018916195,
+      "subsample": 0.8123078362396214,
+      "colsample_bytree": 0.8424063282800044,
+      "min_child_weight": 13,
+      "gamma": 3.0155357866936283,
+      "internal_val_mae_log1p": 0.7467735625513559
+    },
+    "ridge_best_params": {
+      "alpha": 714.0590204667265,
+      "internal_val_mae_log1p": 1.182822262609412
+    },
+    "library_versions": {
+      "python": "3.11.1",
+      "numpy": "2.4.6",
+      "pandas": "3.0.3",
+      "scikit-learn": "1.9.0",
+      "xgboost": "3.2.0"
+    },
+    "mechanism": "1 \u2014 fitted parameters, train projects only (DL-014 \u00a7Resolution 1)"
+  },
+  "population": {
+    "analytic_builds_read": 922624,
+    "test_builds_dropped_unread": 138693,
+    "test_projects_dropped_unread": 170,
+    "train_builds": 645244,
+    "train_projects": 628,
+    "calibration_builds": 138687,
+    "calibration_projects": 150
+  },
+  "checks": {
+    "no_test_project_read": "PASS",
+    "fit_frame_train_only_T2b": "PASS",
+    "blocklist_assertion_T1": "PASS",
+    "history_causality_T2": "PASS",
+    "round_trip_T4": "PASS"
+  },
+  "selection": {
+    "rule": "lower calibration-split log1p MAE wins; ties to 4 d.p. resolve to \u2463b (duration_control_spec.md \u00a75)",
+    "mae_log1p_4a_xgboost": 1.1783185175366975,
+    "mae_log1p_4b_expanding": 0.6009576160663775,
+    "primary_form": "4b"
+  },
+  "calibration_split": {
+    "4b_expanding": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 0.6009576160663775,
+        "median_ae_log1p": 0.36261248124216294,
+        "mae_seconds": 1285.1231102758356,
+        "median_ae_seconds": 217.00000000000006,
+        "spearman_rho": 0.8690534715462298
+      },
+      "project_rung_only": {
+        "n": 138415,
+        "n_excluded_no_label": 120,
+        "mae_log1p": 0.599674417555128,
+        "median_ae_log1p": 0.3619799961684258,
+        "mae_seconds": 1285.9539051068973,
+        "median_ae_seconds": 216.9999999999999,
+        "spearman_rho": 0.8698129448583225
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 138535,
+            "pct": 99.8904
+          },
+          "language": {
+            "n": 152,
+            "pct": 0.1096
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    },
+    "4a_xgboost": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.1783185175366975,
+        "median_ae_log1p": 0.9464456896809281,
+        "mae_seconds": 2113.8887370743864,
+        "median_ae_seconds": 482.6127378859194,
+        "spearman_rho": 0.5258624591582172
+      },
+      "project_rung_only": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.1783185175366975,
+        "median_ae_log1p": 0.9464456896809281,
+        "mae_seconds": 2113.8887370743864,
+        "median_ae_seconds": 482.6127378859194,
+        "spearman_rho": 0.5258624591582172
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 138687,
+            "pct": 100.0
+          },
+          "language": {
+            "n": 0,
+            "pct": 0.0
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    },
+    "4a_ridge": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.2693294476501373,
+        "median_ae_log1p": 1.077109407749318,
+        "mae_seconds": 2222.4590682386142,
+        "median_ae_seconds": 514.3590045420451,
+        "spearman_rho": 0.3671628783943609
+      },
+      "project_rung_only": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.2693294476501373,
+        "median_ae_log1p": 1.077109407749318,
+        "mae_seconds": 2222.4590682386142,
+        "median_ae_seconds": 514.3590045420451,
+        "spearman_rho": 0.3671628783943609
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 138687,
+            "pct": 100.0
+          },
+          "language": {
+            "n": 0,
+            "pct": 0.0
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    }
+  },
+  "sensitivities": {
+    "4b_trailing_50": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 0.28863090576990497,
+        "median_ae_log1p": 0.1123933664136958,
+        "mae_seconds": 435.36415558968196,
+        "median_ae_seconds": 87.48438507805758,
+        "spearman_rho": 0.9299527138125174
+      },
+      "project_rung_only": {
+        "n": 138415,
+        "n_excluded_no_label": 120,
+        "mae_log1p": 0.28700923955974644,
+        "median_ae_log1p": 0.1121651627281075,
+        "mae_seconds": 435.2740687012555,
+        "median_ae_seconds": 87.00116076649624,
+        "spearman_rho": 0.9305445332912357
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 138535,
+            "pct": 99.8904
+          },
+          "language": {
+            "n": 152,
+            "pct": 0.1096
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 50.0,
+          "p50": 50.0,
+          "p75": 50.0,
+          "p95": 50.0,
+          "max": 50,
+          "zero": 152
+        }
+      }
+    },
+    "4b_min_history_5": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 0.6057766561629532,
+        "median_ae_log1p": 0.3653675542174515,
+        "mae_seconds": 1286.7143572389778,
+        "median_ae_seconds": 220.0,
+        "spearman_rho": 0.8661215935961911
+      },
+      "project_rung_only": {
+        "n": 137815,
+        "n_excluded_no_label": 120,
+        "mae_log1p": 0.6004246053413999,
+        "median_ae_log1p": 0.36321024330406715,
+        "mae_seconds": 1290.9263861758077,
+        "median_ae_seconds": 218.5003364739075,
+        "spearman_rho": 0.8695065021384412
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 137935,
+            "pct": 99.4578
+          },
+          "language": {
+            "n": 752,
+            "pct": 0.5422
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    },
+    "4b_min_history_20": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 0.6213776975090919,
+        "median_ae_log1p": 0.37520802290812494,
+        "mae_seconds": 1292.508758290055,
+        "median_ae_seconds": 231.00000000000728,
+        "spearman_rho": 0.8566670788776118
+      },
+      "project_rung_only": {
+        "n": 135643,
+        "n_excluded_no_label": 114,
+        "mae_log1p": 0.6037603362401224,
+        "median_ae_log1p": 0.36753805619610347,
+        "mae_seconds": 1309.0846862164765,
+        "median_ae_seconds": 225.00000000000034,
+        "spearman_rho": 0.8686207365353549
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 135757,
+            "pct": 97.8873
+          },
+          "language": {
+            "n": 2930,
+            "pct": 2.1127
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    },
+    "4a_ridge": {
+      "all_builds": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.2693294476501373,
+        "median_ae_log1p": 1.077109407749318,
+        "mae_seconds": 2222.4590682386142,
+        "median_ae_seconds": 514.3590045420451,
+        "spearman_rho": 0.3671628783943609
+      },
+      "project_rung_only": {
+        "n": 138565,
+        "n_excluded_no_label": 122,
+        "mae_log1p": 1.2693294476501373,
+        "median_ae_log1p": 1.077109407749318,
+        "mae_seconds": 2222.4590682386142,
+        "median_ae_seconds": 514.3590045420451,
+        "spearman_rho": 0.3671628783943609
+      },
+      "coverage": {
+        "n_builds": 138687,
+        "levels": {
+          "project": {
+            "n": 138687,
+            "pct": 100.0
+          },
+          "language": {
+            "n": 0,
+            "pct": 0.0
+          },
+          "global": {
+            "n": 0,
+            "pct": 0.0
+          }
+        },
+        "n_history": {
+          "min": 0,
+          "p25": 294.0,
+          "p50": 746.0,
+          "p75": 1587.0,
+          "p95": 5583.0,
+          "max": 9697,
+          "zero": 152
+        }
+      }
+    }
+  }
+}

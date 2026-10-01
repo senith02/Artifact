@@ -20,9 +20,11 @@ the *intended deployment information regime*):
 2. **Within-project online state** — ④b's rolling prior — is *strictly causal*
    and is available on **every** split, because it is information a deployed
    scheduler genuinely holds: its own repository's build history to date. The
-   admissible window is ``gh_build_started_at < t_b`` only; the scored build,
-   anything later, and anything **tied** on the timestamp are excluded
-   (:func:`causal_project_history`, guarded by
+   admissible window is the builds that had **finished** before the scored
+   build arrived, ``gh_build_started_at + tr_duration < t_b`` (**DL-034**, which
+   corrects the original start-time-only rule); the scored build, anything
+   still running, anything later, and anything **tied** on the timestamp are
+   excluded (:func:`causal_project_history`, guarded by
    :func:`assert_history_is_causal`, test T2/T3).
 
 No claim is made here or anywhere downstream about the *direction* of the
@@ -70,9 +72,17 @@ FALLBACK_LEVELS: tuple[str, str, str] = ("project", "language", "global")
 #: The two admissible forms (spec §4).
 FORMS: tuple[str, str] = ("4a", "4b")
 
-#: ④b's default history window: expanding (all strictly-earlier builds).
+#: ④b's default history window: expanding (all builds finished before t_b).
 #: An integer switches to the declared trailing-window sensitivity (spec §6.3.4).
 EXPANDING: None = None
+
+#: Which earlier builds a history may read (DL-034). ``"completed"`` — finished
+#: strictly before ``t_b`` — is the only rule a real run may use. ``"started"`` is
+#: the superseded pre-DL-034 rule (started before ``t_b``, possibly still running),
+#: kept solely so tests and the DL-034 diagnostic can reproduce it;
+#: :func:`assert_history_is_causal` rejects it whenever builds overlap.
+COMPLETED: str = "completed"
+AVAILABILITY_RULES: tuple[str, str] = (COMPLETED, "started")
 
 #: Column names the history helper works with (dataset_reference.md spellings).
 PROJECT_COL: str = "gh_project_name"
@@ -130,37 +140,49 @@ def causal_project_history(
     project_col: str = PROJECT_COL,
     time_col: str = TIME_COL,
     window: int | None = EXPANDING,
+    availability: str = COMPLETED,
     strict: bool = True,
 ) -> pd.DataFrame:
-    """Per-build view of the project's **strictly earlier** build history.
+    """Per-build view of the project's build history **as known at** ``t_b``.
 
     For every row this returns what a deployed scheduler would already know
-    about that repository at ``t_b`` and nothing more:
+    about that repository at ``t_b`` and nothing more (DL-034):
 
     ``n_history``
-        count of builds of the same project with ``gh_build_started_at < t_b``
-        that carry a usable label (§1.2);
+        count of builds of the same project that carry a usable label (§1.2)
+        and had **finished** before ``t_b``:
+        ``gh_build_started_at_j + tr_duration_j < t_b``;
     ``hist_median_log1p``
         median of ``log(1 + duration)`` over exactly those builds — the ④b
         estimate (spec §4.1). Order-based, so it is identical to the median of
         raw seconds under the monotone transform.
 
+    **Completion, not start.** A build that started before ``b`` but was still
+    running at ``t_b`` has no observed duration yet, so it is excluded. The
+    release has no finish timestamp; start + ``tr_duration`` is the *earliest*
+    possible finish, which DL-034 declares as the proxy.
+
     **Ties are excluded.** Builds of the same project sharing ``b``'s exact
-    timestamp are *not* strictly earlier — a same-second sibling's duration is
-    not knowable before ``b`` starts (spec §2). Every row of a tie block
-    therefore sees the identical history: everything before the block.
+    timestamp cannot have finished before ``b`` starts (spec §2), so every row
+    of a tie block sees the identical history.
 
     Parameters
     ----------
     window:
         ``None`` (default) = expanding, the primary form. An integer selects the
-        declared trailing-window sensitivity of spec §6.3(4) — secondary, never
-        allowed to change the primary.
+        declared trailing-window sensitivity of spec §6.3(4): the ``window``
+        most recently **finished** labelled builds. Secondary, never allowed to
+        change the primary.
+    availability:
+        ``"completed"`` (default) is the DL-034 rule and the only one a real run
+        may use. ``"started"`` reproduces the superseded start-ordered rule
+        (``gh_build_started_at < t_b``) for tests and the DL-034 diagnostic.
     strict:
-        ``False`` builds the window with ``≤ t_b`` instead of ``< t_b``, i.e. it
-        lets the scored build into its own history. **This is the deliberately
-        leaky fixture of test T3 and exists only so the tests can fail.** It is
-        never used on a real run; :func:`assert_history_is_causal` rejects it.
+        ``False`` builds a start-ordered window with ``≤ t_b`` instead of
+        ``< t_b``, i.e. it lets the scored build into its own history. **This is
+        the deliberately leaky fixture of test T3 and exists only so the tests
+        can fail.** It is never used on a real run; :func:`assert_history_is_causal`
+        rejects it.
     """
     for col in (project_col, time_col):
         if col not in frame.columns:
@@ -169,7 +191,72 @@ def causal_project_history(
         raise ValueError(
             f"durations ({len(durations)}) and frame ({len(frame)}) differ in length"
         )
+    if availability not in AVAILABILITY_RULES:
+        raise ValueError(f"availability must be one of {AVAILABILITY_RULES}, "
+                         f"got {availability!r}")
+    if strict and availability == COMPLETED:
+        return _completion_ordered_history(frame, durations, project_col=project_col,
+                                           time_col=time_col, window=window)
+    return _start_ordered_history(frame, durations, project_col=project_col,
+                                  time_col=time_col, window=window, strict=strict)
 
+
+def _epoch_seconds(parsed: pd.Series) -> np.ndarray:
+    """UTC timestamps → float seconds since the epoch, independent of the
+    datetime unit pandas chose (pandas 3 defaults to microseconds)."""
+    return (parsed - pd.Timestamp("1970-01-01", tz="UTC")).dt.total_seconds().to_numpy(
+        dtype="float64")
+
+
+def _completion_ordered_history(frame: pd.DataFrame, durations: pd.Series, *,
+                                project_col: str, time_col: str,
+                                window: int | None) -> pd.DataFrame:
+    """The DL-034 rule: labelled builds with ``start + duration < t_b``."""
+    parsed = features.parse_started_at(frame[time_col])
+    if parsed.isna().any():
+        raise ValueError(
+            f"{int(parsed.isna().sum()):,} build(s) have no parseable {time_col!r}; "
+            "their history cannot be placed in time (the analytic funnel excludes them)")
+    ts = _epoch_seconds(parsed)
+    y = to_log1p(pd.Series(np.asarray(durations), index=frame.index)).to_numpy(dtype="float64")
+    dur = pd.to_numeric(pd.Series(np.asarray(durations)), errors="coerce").to_numpy(
+        dtype="float64")
+    end = ts + np.where(np.isnan(y), 0.0, dur)        # only read where y is a label
+
+    codes, _ = pd.factorize(frame[project_col].to_numpy(), use_na_sentinel=False)
+    n = len(frame)
+    n_hist = np.zeros(n, dtype="int64")
+    med = np.full(n, np.nan)
+    order = np.argsort(codes, kind="stable")
+    sorted_codes = codes[order]
+    bounds = np.flatnonzero(np.r_[True, sorted_codes[1:] != sorted_codes[:-1], True])
+    for a, b in zip(bounds[:-1], bounds[1:]):
+        idx = order[a:b]
+        lab = idx[~np.isnan(y[idx])]
+        if lab.size == 0:
+            continue
+        # Order the project's labelled builds by finish time; ties in finish time
+        # break on input position, so the trailing window is deterministic.
+        by_end = lab[np.lexsort((lab, end[lab]))]
+        ends = end[by_end]
+        ys = pd.Series(y[by_end])
+        prefix = (ys.expanding().median() if window is None
+                  else ys.rolling(window, min_periods=1).median()).to_numpy()
+        k = np.searchsorted(ends, ts[idx], side="left")     # finished strictly before t_b
+        n_hist[idx] = k if window is None else np.minimum(k, window)
+        have = k > 0
+        med[idx[have]] = prefix[k[have] - 1]
+    return pd.DataFrame({"n_history": n_hist, "hist_median_log1p": med}, index=frame.index)
+
+
+def _start_ordered_history(frame: pd.DataFrame, durations: pd.Series, *,
+                           project_col: str, time_col: str, window: int | None,
+                           strict: bool) -> pd.DataFrame:
+    """The superseded pre-DL-034 rule (``start < t_b``), and the T3 leaky fixture.
+
+    Retained unchanged so the original behaviour stays reproducible; never the
+    default, and rejected by :func:`assert_history_is_causal` on overlapping runs.
+    """
     parsed = features.parse_started_at(frame[time_col])
     y = to_log1p(pd.Series(np.asarray(durations), index=frame.index))
 
@@ -251,24 +338,35 @@ def _block_start_positions(groups: np.ndarray, times: np.ndarray) -> np.ndarray:
 def assert_history_is_causal(
     frame: pd.DataFrame,
     history: pd.DataFrame,
+    durations: pd.Series,
     *,
     project_col: str = PROJECT_COL,
     time_col: str = TIME_COL,
 ) -> None:
-    """Fail if the history window admitted the scored build, a tie, or later.
+    """Fail if the history window admitted the scored build, a tie, an unfinished
+    build, or anything later.
 
-    Two structural invariants, both cheap and both violated by the ``≤ t_b``
-    fixture (test T3):
+    Three structural invariants:
 
     1. **Every build in a project's earliest timestamp block has
        ``n_history == 0``** — there is nothing before it, so anything above zero
-       means the row counted itself or a same-second sibling.
+       means the row counted itself or a same-second sibling (the ``≤ t_b``
+       fixture of test T3 violates this).
     2. **``n_history`` is constant within every ``(project, timestamp)``
        block** — tie members are not strictly earlier than one another, so they
        must all see the identical history.
+    3. **No build counts more history than had finished by** ``t_b`` (DL-034) —
+       ``n_history`` may not exceed the number of the project's labelled builds
+       with ``start + duration < t_b``. The superseded start-ordered rule
+       violates this wherever runs overlap.
+
+    ``durations`` is required: without it check 3 cannot run, and a history
+    guard that cannot see completion is the defect DL-034 corrects.
     """
     if len(history) != len(frame):
         raise ValueError("history and frame differ in length")
+    if len(durations) != len(frame):
+        raise ValueError("durations and frame differ in length")
 
     parsed = features.parse_started_at(frame[time_col])
     chk = pd.DataFrame({
@@ -294,6 +392,28 @@ def assert_history_is_causal(
             f"{len(tied):,} build(s) sit in a (project, timestamp) block whose "
             "members disagree on n_history — timestamp-tied builds must all see "
             "the identical strictly-earlier history (spec §2)."
+        )
+
+    # Check 3 (DL-034): an upper bound on n_history from finish times alone,
+    # computed here independently of how the history frame was produced.
+    ts = _epoch_seconds(parsed)
+    y = to_log1p(pd.Series(np.asarray(durations), index=frame.index)).to_numpy(dtype="float64")
+    dur = pd.to_numeric(pd.Series(np.asarray(durations)), errors="coerce").to_numpy(
+        dtype="float64")
+    finished = pd.DataFrame({"proj": chk["proj"].to_numpy(),
+                             "end": ts + np.where(np.isnan(y), np.nan, dur)}).dropna()
+    ends_by_proj = {p: np.sort(g.to_numpy()) for p, g in finished.groupby("proj", sort=False)["end"]}
+    bound = np.zeros(len(frame), dtype="int64")
+    for p, pos in chk.groupby("proj", sort=False).indices.items():
+        ends = ends_by_proj.get(p)
+        if ends is not None:
+            bound[pos] = np.searchsorted(ends, ts[pos], side="left")
+    over = np.asarray(history["n_history"], dtype="int64") > bound
+    if over.any():
+        sample = chk.loc[over, "proj"].drop_duplicates().head(5).tolist()
+        raise DurationLeakageError(
+            f"{int(over.sum()):,} build(s) count more history than had finished by t_b — "
+            f"the window admits builds that were still running (DL-034). Projects: {sample}"
         )
 
 

@@ -201,7 +201,7 @@ def main() -> int:
     print(f"\nbuilding causal history for {len(calib):,} calibration builds …",
           flush=True)
     history = de.causal_project_history(calib_keys, calib_dur)
-    de.assert_history_is_causal(calib_keys, history)      # guard, not a comment
+    de.assert_history_is_causal(calib_keys, history, calib_dur)   # guard, not a comment
     print("  causality guard: PASS", flush=True)
 
     # --- score both forms on calibration ------------------------------------- #
@@ -225,7 +225,7 @@ def main() -> int:
     # --- declared sensitivities (§6.3(4)) — secondary, never selective ------- #
     print("\nsensitivities …", flush=True)
     hist_50 = de.causal_project_history(calib_keys, calib_dur, window=50)
-    de.assert_history_is_causal(calib_keys, hist_50)
+    de.assert_history_is_causal(calib_keys, hist_50, calib_dur)
     sensitivities = {
         "4b_trailing_50": evaluate(est.predict_4b(calib, hist_50), calib_dur),
         "4b_min_history_5": evaluate(

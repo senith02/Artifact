@@ -117,7 +117,7 @@ def attach_d_hat(
         )
 
     history = de.causal_project_history(key_frame, durations)
-    de.assert_history_is_causal(key_frame, history)
+    de.assert_history_is_causal(key_frame, history, durations)
     out = (estimator.predict_4b(feature_frame, history)
            if estimator.primary_form == "4b"
            else estimator.predict_4a(feature_frame, history))

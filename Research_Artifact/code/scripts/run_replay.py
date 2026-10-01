@@ -145,8 +145,8 @@ def build_trace(builds: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         raise SystemExit("FATAL: an analytic build has no label")
 
     keys = builds[list(features.KEY_COLUMNS)]
-    history = de.causal_project_history(keys, durations)      # strictly earlier only
-    de.assert_history_is_causal(keys, history)
+    history = de.causal_project_history(keys, durations)      # finished before t_b (DL-034)
+    de.assert_history_is_causal(keys, history, durations)
     est_4a = estimator.predict_4a(matrix, history)
     est_4b = estimator.predict_4b(matrix, history)
 
@@ -185,8 +185,9 @@ def build_trace(builds: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         "risk_arm_fit_id": arm.fit_id(),
         "risk_arm_sha256": sha(RISK_ARM_PATH),
         "duration_estimator_sha256": sha(ARTIFACTS / "duration_estimator.joblib"),
-        "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties "
-                        "excluded — computed over every calibration build before sampling (DL-014)",
+        "history_rule": "expanding, finished before arrival (gh_build_started_at + tr_duration "
+                        "< t_b), ties excluded — computed over every calibration build before "
+                        "sampling (DL-014, corrected by DL-034)",
     }
     return trace, prov
 
