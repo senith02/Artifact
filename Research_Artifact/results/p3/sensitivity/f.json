@@ -52,14 +52,14 @@
   },
   "sweep": "f",
   "command": "PYTHONPATH=. python scripts/sensitivity_analysis.py --sweep f",
-  "run_date": "2026-09-28",
+  "run_date": "2026-10-02",
   "seed": 42,
   "n_resamples": 1000,
-  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "spec_sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
   "decision_log": [
     "DL-027",
     "DL-029",
     "DL-030"
   ],
-  "runtime_s": 26.0
+  "runtime_s": 29.6
 }

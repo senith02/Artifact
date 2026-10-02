@@ -217,7 +217,15 @@ completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
       ⑤−④a TTFF p95 −0.16 [−0.61, +0.18]. **Changed:** ⑥ now saves more than ⑤ at τ 0.20/0.25
       (5.471%/6.457%, 680/1,156 missed failures) — new `xgboost:full` p̂. §5b re-authored.
       **Paused for author review 2026-10-02.** · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
-- [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md
+- [x] P3-T2 checkpoint commit `59ae57c`
+- [x] P3-T3 frontier_analysis (997 s, exit 0; fresh oracle replay 0 violations / 309,696 deferrals):
+      ⑤ vs ④b area +0.0000, "⑤ beats both" false ×0.5/×1/×2 (unchanged); ④b over ④a +2.4262
+      [+1.7281, +2.5624] (was +2.4308), condition true all floors; oracle vs ④b +1.9336; low band
+      −2.7027. Every verdict unchanged. §6b re-authored.
+- [ ] P3-T4 sweeps: baseline, a, b, c, d, e, f done (exit 0); first chain killed at the 2 h background
+      limit during g (g.json untouched); g, h, herding, summary restarted 2026-10-02
+- [x] `scripts/dl034_comparison.py` written (→ `results/corrections/dl034/comparison.md`); P1–P3-T3
+      sections tested · [ ] P3-T5 report revision + comparison.md
 
 ---
 

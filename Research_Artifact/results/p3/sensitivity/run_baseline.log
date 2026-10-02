@@ -1,7 +1,8 @@
-﻿sweep baseline …
+sweep baseline …
   loaded 1_static
   loaded 2_blanket_carbon_aware__d0__w167
   loaded 3_eligibility_only__d0__w24
   loaded 4a_duration_estimator__d480__w24
   loaded 5_se_informed_policy__d480__w24
 wrote results/p3/sensitivity/baseline.json (14s)
+exit=0

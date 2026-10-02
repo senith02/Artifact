@@ -1,10 +1,10 @@
 {
   "settings": {
     "5_se_informed_policy__d480__w24": {
-      "top5_share": 0.07690366492901589,
-      "max_slot_share": 0.018652707779051574,
-      "top5_ratio_to_static": 1.539994224660699,
-      "max_ratio_to_static": 1.7755662319835277
+      "top5_share": 0.07691087509823856,
+      "max_slot_share": 0.018638287440606232,
+      "top5_ratio_to_static": 1.5401386081432287,
+      "max_ratio_to_static": 1.7741935483870968
     },
     "1_static": {
       "top5_share": 0.04993763203622389,
@@ -31,23 +31,23 @@
       "max_ratio_to_static": 2.0700068634179822
     },
     "4b_duration_prior__d480__w24": {
-      "top5_share": 0.07690366492901589,
-      "max_slot_share": 0.018652707779051574,
-      "top5_ratio_to_static": 1.539994224660699,
-      "max_ratio_to_static": 1.7755662319835277
+      "top5_share": 0.07691087509823856,
+      "max_slot_share": 0.018638287440606232,
+      "top5_ratio_to_static": 1.5401386081432287,
+      "max_ratio_to_static": 1.7741935483870968
     }
   },
   "note": "descriptive only; no threshold was predeclared (DL-030 \u00a73)",
   "sweep": "herding",
   "command": "PYTHONPATH=. python scripts/sensitivity_analysis.py --sweep herding",
-  "run_date": "2026-09-28",
+  "run_date": "2026-10-02",
   "seed": 42,
   "n_resamples": 1000,
-  "spec_sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+  "spec_sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
   "decision_log": [
     "DL-027",
     "DL-029",
     "DL-030"
   ],
-  "runtime_s": 0.1
+  "runtime_s": 0.0
 }

@@ -1,4 +1,4 @@
-﻿loading 91 P3-T2 part files from d9e30163609cc2a4 …
+loading 91 P3-T2 part files from dceda8254c22e713 …
   loaded 1_static
   loaded 4a_duration_estimator__d0__w6
   loaded 4a_duration_estimator__d60__w6
@@ -91,38 +91,38 @@
   loaded 5_se_informed_policy__d7680__w24
   loaded 5_se_informed_policy__d15360__w24
 tracked trace reproduces P3-T2 part 4b_duration_prior__d480__w24: True
-replaying the oracle arm (30 settings, fingerprint b4f3e3a23a093cc7) …
-  [  1/30] 4b_duration_prior__d0__w6: resumed
-  [  2/30] 4b_duration_prior__d60__w6: resumed
-  [  3/30] 4b_duration_prior__d120__w6: resumed
-  [  4/30] 4b_duration_prior__d240__w6: resumed
-  [  5/30] 4b_duration_prior__d480__w6: resumed
-  [  6/30] 4b_duration_prior__d960__w6: resumed
-  [  7/30] 4b_duration_prior__d1920__w6: resumed
-  [  8/30] 4b_duration_prior__d3840__w6: resumed
-  [  9/30] 4b_duration_prior__d7680__w6: resumed
-  [ 10/30] 4b_duration_prior__d15360__w6: resumed
-  [ 11/30] 4b_duration_prior__d0__w12: resumed
-  [ 12/30] 4b_duration_prior__d60__w12: resumed
-  [ 13/30] 4b_duration_prior__d120__w12: resumed
-  [ 14/30] 4b_duration_prior__d240__w12: resumed
-  [ 15/30] 4b_duration_prior__d480__w12: resumed
-  [ 16/30] 4b_duration_prior__d960__w12: resumed
-  [ 17/30] 4b_duration_prior__d1920__w12: resumed
-  [ 18/30] 4b_duration_prior__d3840__w12: resumed
-  [ 19/30] 4b_duration_prior__d7680__w12: resumed
-  [ 20/30] 4b_duration_prior__d15360__w12: resumed
-  [ 21/30] 4b_duration_prior__d0__w24: resumed
-  [ 22/30] 4b_duration_prior__d60__w24: resumed
-  [ 23/30] 4b_duration_prior__d120__w24: resumed
-  [ 24/30] 4b_duration_prior__d240__w24: resumed
-  [ 25/30] 4b_duration_prior__d480__w24: resumed
-  [ 26/30] 4b_duration_prior__d960__w24: resumed
-  [ 27/30] 4b_duration_prior__d1920__w24: resumed
-  [ 28/30] 4b_duration_prior__d3840__w24: resumed
-  [ 29/30] 4b_duration_prior__d7680__w24: resumed
-  [ 30/30] 4b_duration_prior__d15360__w24: resumed
-recomputed points vs strategy_results.csv: {'carbon_per_1000_rel': np.float64(9.491473266816759e-15), 'ttff_p95_rel': 0.0, 'saving_abs_pp': np.float64(8.530953721219703e-13)}
+replaying the oracle arm (30 settings, fingerprint 47295da382563114) …
+  [  1/30] 4b_duration_prior__d0__w6: 21,322 deferred, 0 skipped
+  [  2/30] 4b_duration_prior__d60__w6: 19,067 deferred, 0 skipped
+  [  3/30] 4b_duration_prior__d120__w6: 16,956 deferred, 0 skipped
+  [  4/30] 4b_duration_prior__d240__w6: 13,655 deferred, 0 skipped
+  [  5/30] 4b_duration_prior__d480__w6: 10,011 deferred, 0 skipped
+  [  6/30] 4b_duration_prior__d960__w6: 5,685 deferred, 0 skipped
+  [  7/30] 4b_duration_prior__d1920__w6: 2,778 deferred, 0 skipped
+  [  8/30] 4b_duration_prior__d3840__w6: 1,237 deferred, 0 skipped
+  [  9/30] 4b_duration_prior__d7680__w6: 449 deferred, 0 skipped
+  [ 10/30] 4b_duration_prior__d15360__w6: 354 deferred, 0 skipped
+  [ 11/30] 4b_duration_prior__d0__w12: 25,100 deferred, 0 skipped
+  [ 12/30] 4b_duration_prior__d60__w12: 22,402 deferred, 0 skipped
+  [ 13/30] 4b_duration_prior__d120__w12: 19,893 deferred, 0 skipped
+  [ 14/30] 4b_duration_prior__d240__w12: 15,981 deferred, 0 skipped
+  [ 15/30] 4b_duration_prior__d480__w12: 11,658 deferred, 0 skipped
+  [ 16/30] 4b_duration_prior__d960__w12: 6,726 deferred, 0 skipped
+  [ 17/30] 4b_duration_prior__d1920__w12: 3,233 deferred, 0 skipped
+  [ 18/30] 4b_duration_prior__d3840__w12: 1,379 deferred, 0 skipped
+  [ 19/30] 4b_duration_prior__d7680__w12: 488 deferred, 0 skipped
+  [ 20/30] 4b_duration_prior__d15360__w12: 384 deferred, 0 skipped
+  [ 21/30] 4b_duration_prior__d0__w24: 25,989 deferred, 0 skipped
+  [ 22/30] 4b_duration_prior__d60__w24: 23,184 deferred, 0 skipped
+  [ 23/30] 4b_duration_prior__d120__w24: 20,566 deferred, 0 skipped
+  [ 24/30] 4b_duration_prior__d240__w24: 16,484 deferred, 0 skipped
+  [ 25/30] 4b_duration_prior__d480__w24: 12,041 deferred, 0 skipped
+  [ 26/30] 4b_duration_prior__d960__w24: 6,961 deferred, 0 skipped
+  [ 27/30] 4b_duration_prior__d1920__w24: 3,350 deferred, 0 skipped
+  [ 28/30] 4b_duration_prior__d3840__w24: 1,433 deferred, 0 skipped
+  [ 29/30] 4b_duration_prior__d7680__w24: 518 deferred, 0 skipped
+  [ 30/30] 4b_duration_prior__d15360__w24: 412 deferred, 0 skipped
+recomputed points vs strategy_results.csv: {'carbon_per_1000_rel': np.float64(9.491473266816759e-15), 'ttff_p95_rel': 0.0, 'saving_abs_pp': np.float64(8.211209490127658e-13)}
 
 bootstrap, all test builds (B = 1000) …
     [all] resample 200/1000
@@ -149,4 +149,5 @@ bootstrap, high band …
     [high] resample 800/1000
     [high] resample 1000/1000
 
-wrote results/p3/incremental_value_decision.* (326s)
+wrote results/p3/incremental_value_decision.* (995s)
+exit=0

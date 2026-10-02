@@ -1,4 +1,4 @@
-﻿sweep b …
+sweep b …
   loaded 1_static
   loaded 2_blanket_carbon_aware__d0__w167
   loaded 3_eligibility_only__d0__w6
@@ -10,4 +10,5 @@
   loaded 5_se_informed_policy__d480__w6
   loaded 5_se_informed_policy__d480__w12
   loaded 5_se_informed_policy__d480__w24
-wrote results/p3/sensitivity/b.json (52s)
+wrote results/p3/sensitivity/b.json (61s)
+exit=0

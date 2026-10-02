@@ -1,34 +1,34 @@
-﻿sweep h …
+sweep h …
   computing the trailing-50 d̂ for every test build …
-  replaying 30 settings (fingerprint 52f1858f1b19b8b4) …
+  replaying 30 settings (fingerprint 5e8c203b7db46ec7) …
   [  1/30] 4b_duration_prior__d0__w6: 21,322 deferred, 0 skipped
-  [  2/30] 4b_duration_prior__d60__w6: 19,553 deferred, 0 skipped
-  [  3/30] 4b_duration_prior__d120__w6: 17,472 deferred, 0 skipped
-  [  4/30] 4b_duration_prior__d240__w6: 14,357 deferred, 0 skipped
-  [  5/30] 4b_duration_prior__d480__w6: 10,391 deferred, 0 skipped
-  [  6/30] 4b_duration_prior__d960__w6: 5,981 deferred, 0 skipped
-  [  7/30] 4b_duration_prior__d1920__w6: 2,753 deferred, 0 skipped
-  [  8/30] 4b_duration_prior__d3840__w6: 1,395 deferred, 0 skipped
+  [  2/30] 4b_duration_prior__d60__w6: 19,551 deferred, 0 skipped
+  [  3/30] 4b_duration_prior__d120__w6: 17,469 deferred, 0 skipped
+  [  4/30] 4b_duration_prior__d240__w6: 14,350 deferred, 0 skipped
+  [  5/30] 4b_duration_prior__d480__w6: 10,395 deferred, 0 skipped
+  [  6/30] 4b_duration_prior__d960__w6: 5,975 deferred, 0 skipped
+  [  7/30] 4b_duration_prior__d1920__w6: 2,751 deferred, 0 skipped
+  [  8/30] 4b_duration_prior__d3840__w6: 1,402 deferred, 0 skipped
   [  9/30] 4b_duration_prior__d7680__w6: 453 deferred, 0 skipped
   [ 10/30] 4b_duration_prior__d15360__w6: 422 deferred, 0 skipped
   [ 11/30] 4b_duration_prior__d0__w12: 25,100 deferred, 0 skipped
-  [ 12/30] 4b_duration_prior__d60__w12: 23,018 deferred, 0 skipped
-  [ 13/30] 4b_duration_prior__d120__w12: 20,534 deferred, 0 skipped
-  [ 14/30] 4b_duration_prior__d240__w12: 16,809 deferred, 0 skipped
-  [ 15/30] 4b_duration_prior__d480__w12: 12,113 deferred, 0 skipped
-  [ 16/30] 4b_duration_prior__d960__w12: 7,150 deferred, 0 skipped
-  [ 17/30] 4b_duration_prior__d1920__w12: 3,208 deferred, 0 skipped
-  [ 18/30] 4b_duration_prior__d3840__w12: 1,576 deferred, 0 skipped
+  [ 12/30] 4b_duration_prior__d60__w12: 23,016 deferred, 0 skipped
+  [ 13/30] 4b_duration_prior__d120__w12: 20,531 deferred, 0 skipped
+  [ 14/30] 4b_duration_prior__d240__w12: 16,801 deferred, 0 skipped
+  [ 15/30] 4b_duration_prior__d480__w12: 12,116 deferred, 0 skipped
+  [ 16/30] 4b_duration_prior__d960__w12: 7,143 deferred, 0 skipped
+  [ 17/30] 4b_duration_prior__d1920__w12: 3,205 deferred, 0 skipped
+  [ 18/30] 4b_duration_prior__d3840__w12: 1,583 deferred, 0 skipped
   [ 19/30] 4b_duration_prior__d7680__w12: 497 deferred, 0 skipped
   [ 20/30] 4b_duration_prior__d15360__w12: 462 deferred, 0 skipped
   [ 21/30] 4b_duration_prior__d0__w24: 25,989 deferred, 0 skipped
-  [ 22/30] 4b_duration_prior__d60__w24: 23,824 deferred, 0 skipped
-  [ 23/30] 4b_duration_prior__d120__w24: 21,212 deferred, 0 skipped
-  [ 24/30] 4b_duration_prior__d240__w24: 17,329 deferred, 0 skipped
-  [ 25/30] 4b_duration_prior__d480__w24: 12,509 deferred, 0 skipped
-  [ 26/30] 4b_duration_prior__d960__w24: 7,402 deferred, 0 skipped
-  [ 27/30] 4b_duration_prior__d1920__w24: 3,334 deferred, 0 skipped
-  [ 28/30] 4b_duration_prior__d3840__w24: 1,647 deferred, 0 skipped
+  [ 22/30] 4b_duration_prior__d60__w24: 23,822 deferred, 0 skipped
+  [ 23/30] 4b_duration_prior__d120__w24: 21,209 deferred, 0 skipped
+  [ 24/30] 4b_duration_prior__d240__w24: 17,322 deferred, 0 skipped
+  [ 25/30] 4b_duration_prior__d480__w24: 12,512 deferred, 0 skipped
+  [ 26/30] 4b_duration_prior__d960__w24: 7,392 deferred, 0 skipped
+  [ 27/30] 4b_duration_prior__d1920__w24: 3,331 deferred, 0 skipped
+  [ 28/30] 4b_duration_prior__d3840__w24: 1,655 deferred, 0 skipped
   [ 29/30] 4b_duration_prior__d7680__w24: 530 deferred, 0 skipped
   [ 30/30] 4b_duration_prior__d15360__w24: 495 deferred, 0 skipped
   loaded 1_static
@@ -127,4 +127,5 @@
     [S-h] resample 600/1000
     [S-h] resample 800/1000
     [S-h] resample 1000/1000
-wrote results/p3/sensitivity/h.json (900s)
+wrote results/p3/sensitivity/h.json (976s)
+exit=0

@@ -1,4 +1,4 @@
-﻿sweep e …
+sweep e …
   loaded 1_static
   loaded 4a_duration_estimator__d0__w6
   loaded 4a_duration_estimator__d60__w6
@@ -114,4 +114,5 @@
     [S-e late] resample 600/1000
     [S-e late] resample 800/1000
     [S-e late] resample 1000/1000
-wrote results/p3/sensitivity/e.json (1050s)
+wrote results/p3/sensitivity/e.json (1475s)
+exit=0

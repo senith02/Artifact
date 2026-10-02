@@ -1,4 +1,4 @@
-﻿sweep d …
+sweep d …
   loaded 1_static
   loaded 2_blanket_carbon_aware__d0__w167
   loaded 3_eligibility_only__d0__w24
@@ -98,4 +98,5 @@
     [S-d] resample 600/1000
     [S-d] resample 800/1000
     [S-d] resample 1000/1000
-wrote results/p3/sensitivity/d.json (280s)
+wrote results/p3/sensitivity/d.json (324s)
+exit=0
