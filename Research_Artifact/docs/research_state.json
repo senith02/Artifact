@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-10-01",
+    "last_updated": "2026-10-02",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -30,7 +30,7 @@
         "P1-T7",
         "P3-T1"
       ],
-      "status": "answered (P3-T5): no SE family shown to carry decision information beyond d-hat; F1 is a non-replicating, floor-sensitive model-level candidate, untested at the decision level"
+      "status": "answered (P3-T5, revised under DL-034): no SE family shown to carry decision information beyond d-hat; F1 is an unresolved candidate (non-replicating, floor-sensitive, below the floor in the late test period, untested at the decision level)"
     },
     {
       "id": "RQ2",
@@ -39,7 +39,7 @@
         "P1-T7 (model level)",
         "P3-T3 (decision level, headline)"
       ],
-      "status": "answered (P3-T5): no — strategy 5 is identical to 4b under the frozen spec and fails the decision condition at every floor; null by construction of the predeclared pipeline"
+      "status": "answered (P3-T5, revised under DL-034): no, for the calibration-frozen policy (strategy 5 is identical to 4b and fails the decision condition at every floor); a frozen-policy null"
     },
     {
       "id": "RQ3",
@@ -47,7 +47,7 @@
       "answered_by": [
         "P2-T5"
       ],
-      "status": "answered (P2-T5, synthesised P3-T5): mechanical, reproducible fitting yields the duration-only spec (d480/w24); the SE-informed branch was never exercised"
+      "status": "answered: mechanical, reproducible fitting yields the duration-only spec (d480/w24), unchanged by the DL-034 correction; the SE-informed branch was never exercised"
     },
     {
       "id": "RQ4",
@@ -57,7 +57,7 @@
         "P3-T4",
         "P3-T5"
       ],
-      "status": "answered (P3-T5): modest carbon saving vs immediate at a bounded feedback cost; far lower feedback cost than blanket carbon-aware; identical to 4b; robust in sign except one class at 12 h"
+      "status": "answered (P3-T5, revised under DL-034): modest estimated carbon reduction vs immediate at a bounded feedback cost; far lower feedback cost than blanket carbon-aware; identical to 4b"
     }
   ],
   "propositions": [
@@ -542,9 +542,9 @@
         "file": "results/p3/pytest_p3_t5.txt"
       },
       "inputs": "The P3-T1..T4 result files and the P1/P2 evidence they rest on. No dataset read; the test split was not re-opened.",
-      "outputs": "results/p3/evaluation_report.md: one evidenced paragraph per RQ, the robustness summary, thirteen restated limitations, claims the evidence does not support, and the facts the P4 direction decision (DL-026 follow-up) must rest on.",
-      "decisions": "None. DL-026 remains Proposed/Conditional; its follow-up entry is due before P4-T1.",
-      "evidence": "Every numeric token in the report was found in its cited source files (mechanical check, 0 misses). The principal finding is the null: the duration-only policy is the defensible result. {{evidence.tests.P3-T5.passed}} tests passed.",
+      "outputs": "results/p3/evaluation_report.md, revised under DL-034: corrected numbers, frozen-policy wording for RQ2, F1 unresolved, estimated carbon, cross-project retrospective scope, and a section on what the correction changed.",
+      "decisions": "DL-034 (correction and rerun); DL-033 remains Proposed.",
+      "evidence": "Every numeric token was found in its cited source files (mechanical check, 0 misses). results/corrections/dl034/comparison.md lists every original-vs-corrected value. {{evidence.tests.P3-T5.passed}} tests passed.",
       "why": "The study's answer has to be stated once, at the strength the CIs support, with every limitation beside it, before the artifact contract is decided.",
       "files": [
         "results/p3/evaluation_report.md"
@@ -827,6 +827,18 @@
       "title": "S-f (second grid) is reported as not run: no qualifying zone under DL-027 §2",
       "date": "2026-09-28",
       "summary": "Second grid reported as not run: California was not more variable than the UK, and Germany had no account-free series (author decision)."
+    },
+    {
+      "id": "DL-033",
+      "title": "The DL-026 follow-up: P4 becomes a duration-history carbon-deferral advisor that embodies the P3 null (amends DL-026; proposed amendment to spec §5 and P4-T1..T3)",
+      "date": "2026-10-01",
+      "summary": "Proposed, not yet accepted: narrow the artifact to what decide() consumes (no SE features), completed-run history only, GB only, recommend-first, fail closed to run_now, with a security and idempotency contract."
+    },
+    {
+      "id": "DL-034",
+      "title": "④b's history admits only builds that had finished before the scored build arrived; the full evidence chain is re-run under this entry (corrects DL-014 §Resolution 2)",
+      "date": "2026-10-01",
+      "summary": "An independent review found the duration control counted builds still running. Fixed and re-ran P1 to P3 under predeclared rules (author option a). No RQ verdict changed; F1's late-period admission and strategy 6's mid-tau ordering did."
     }
   ],
   "artifact_components": [
@@ -924,7 +936,7 @@
     {
       "claim": "The tested SE families add material model-level value beyond d-hat",
       "category": "tested_null",
-      "detail": "All six families were rejected on calibration (CIs below 0). On test only F1 clears the floor, and it does not replicate from calibration and is empty at x2 of the floor (P3-T1)."
+      "detail": "All six families were rejected on calibration (CIs below 0). On test only F1 clears the floor; it does not replicate, is empty at x2, and falls below the floor in the late test period (P3-T1, P3-T4, DL-034)."
     },
     {
       "claim": "SE characteristics add decision-level value (frontier dominance)",
@@ -1118,6 +1130,10 @@
     {
       "date": "2026-10-01",
       "event": "P3-T5 gated. Evaluation report written; all four RQs answered. RQ1/RQ2 null (F1 a non-replicating model-level candidate), RQ3 duration-only spec, RQ4 modest and robust in sign. Phase 3 complete. P4 waits on the DL-026 follow-up decision."
+    },
+    {
+      "date": "2026-10-02",
+      "event": "CR-1 (DL-034) gated. Duration history corrected to finished builds only; P1 to P3 re-run under predeclared rules. No RQ verdict changed; F1's late-period admission flipped to empty and strategy 6 now beats 5 on estimated carbon at mid tau. Evaluation report revised."
     }
   ],
   "progress": {
@@ -1142,8 +1158,8 @@
     },
     "current_task": "P4-T1",
     "next_task": "P4-T2",
-    "last_gate_passed": "P3-T5 (results synthesis; results/p3/evaluation_report.md)",
-    "progress_md_updated": "2026-10-01",
+    "last_gate_passed": "CR-1 (DL-034 correction pass; evaluation_report.md revised)",
+    "progress_md_updated": "2026-10-02",
     "test_split_opened": true
   },
   "evidence": {
@@ -2399,11 +2415,11 @@
       "unusable_labels": 809,
       "primary": "4b",
       "f4b": {
-        "mae_log1p": 0.6009576160663775,
-        "median_ae_log1p": 0.36261248124216294,
-        "mae_s": 1285.1231102758356,
-        "median_ae_s": 217.00000000000006,
-        "rho": 0.8690534715462298,
+        "mae_log1p": 0.6018564232399453,
+        "median_ae_log1p": 0.3633316603269714,
+        "mae_s": 1286.069922601532,
+        "median_ae_s": 217.50076923258987,
+        "rho": 0.8687936959178018,
         "n": 138565
       },
       "f4a": {
@@ -2415,15 +2431,15 @@
         "n": 138565
       },
       "trailing50": {
-        "mae_log1p": 0.28863090576990497,
-        "median_ae_log1p": 0.1123933664136958,
-        "mae_s": 435.36415558968196,
-        "median_ae_s": 87.48438507805758,
-        "rho": 0.9299527138125174,
+        "mae_log1p": 0.2908087222172872,
+        "median_ae_log1p": 0.11367189305463654,
+        "mae_s": 441.1117518826813,
+        "median_ae_s": 88.02381102371649,
+        "rho": 0.929390908996251,
         "n": 138565
       },
-      "coverage_project_pct": 99.8904,
-      "coverage_language_n": 152,
+      "coverage_project_pct": 99.8753,
+      "coverage_language_n": 173,
       "checks": {
         "no_test_project_read": "PASS",
         "fit_frame_train_only_T2b": "PASS",
@@ -2442,7 +2458,7 @@
     },
     "models": {
       "source": "results/p1/model_training.json",
-      "run_date": "2026-08-18",
+      "run_date": "2026-10-01",
       "n_iter": 20,
       "arms": {
         "xgboost_control": {
@@ -2450,129 +2466,129 @@
           "arm": "control",
           "n_features": 1,
           "calibrator": "isotonic",
-          "pr_auc": 0.3903574367340774,
-          "roc_auc": 0.6507118729629673,
-          "brier": 0.19216902179148526,
-          "f1": 0.490397825260881,
-          "tau": 0.2663073241710663
+          "pr_auc": 0.39147705075077627,
+          "roc_auc": 0.6504967467925957,
+          "brier": 0.19213315160582506,
+          "f1": 0.4916094303825394,
+          "tau": 0.27538615465164185
         },
         "logreg_control": {
           "algorithm": "logreg",
           "arm": "control",
           "n_features": 1,
           "calibrator": "isotonic",
-          "pr_auc": 0.3883038034944576,
-          "roc_auc": 0.6540760032179549,
-          "brier": 0.19152932281567173,
-          "f1": 0.4925292741774823,
-          "tau": 0.24735802044849226
+          "pr_auc": 0.3881771877816067,
+          "roc_auc": 0.6540036102394416,
+          "brier": 0.19154023269198608,
+          "f1": 0.4925065857923981,
+          "tau": 0.24726148030413658
         },
         "random_forest_control": {
           "algorithm": "random_forest",
           "arm": "control",
           "n_features": 1,
           "calibrator": "isotonic",
-          "pr_auc": 0.377358371982067,
-          "roc_auc": 0.6387251756418033,
-          "brier": 0.19391556069103819,
-          "f1": 0.4818639859602585,
-          "tau": 0.24245989304812834
+          "pr_auc": 0.3776682664265572,
+          "roc_auc": 0.6395417037673896,
+          "brier": 0.1938548779853508,
+          "f1": 0.48249934273946193,
+          "tau": 0.2779783393501805
         },
         "xgboost_full": {
           "algorithm": "xgboost",
           "arm": "full",
           "n_features": 29,
           "calibrator": "isotonic",
-          "pr_auc": 0.3285523357829936,
-          "roc_auc": 0.5395081056547231,
-          "brier": 0.2017098572971861,
-          "f1": 0.44478232223404796,
-          "tau": 0.24174372851848602
+          "pr_auc": 0.3105661781350955,
+          "roc_auc": 0.548655561511939,
+          "brier": 0.201951877776678,
+          "f1": 0.45201560468140445,
+          "tau": 0.22900763154029846
         },
         "logreg_full": {
           "algorithm": "logreg",
           "arm": "full",
           "n_features": 29,
           "calibrator": "isotonic",
-          "pr_auc": 0.30721865722950464,
-          "roc_auc": 0.5449022199465534,
-          "brier": 0.20194290279212698,
-          "f1": 0.45169879646394717,
-          "tau": 0.23353293413173654
+          "pr_auc": 0.307124470416581,
+          "roc_auc": 0.5446884119909132,
+          "brier": 0.20195447267267613,
+          "f1": 0.4516720814766157,
+          "tau": 0.23357664233576642
         },
         "random_forest_full": {
           "algorithm": "random_forest",
           "arm": "full",
           "n_features": 29,
           "calibrator": "isotonic",
-          "pr_auc": 0.3781199987423242,
-          "roc_auc": 0.612635647093141,
-          "brier": 0.19578963551356252,
-          "f1": 0.4643336456407789,
-          "tau": 0.23390663390663388
+          "pr_auc": 0.3653660294455085,
+          "roc_auc": 0.6039935035696736,
+          "brier": 0.19638562144786345,
+          "f1": 0.46013444951801113,
+          "tau": 0.234274444675109
         }
       }
     },
     "ablation": {
       "source": "results/p1/ablation/deltas.json",
-      "run_date": "2026-09-12",
+      "run_date": "2026-10-01",
       "families": {
         "F1": {
           "n": 7,
-          "delta": -0.003678275280001919,
-          "lo": -0.005309682494735371,
-          "hi": -0.0019578700339908206,
-          "d_roc": -0.002475812568014213,
-          "d_brier": 0.00046813773907578016,
-          "treatment_pr_auc": 0.3866791614540755
+          "delta": -0.0034564788225504572,
+          "lo": -0.005189027112659486,
+          "hi": -0.0017278064748866375,
+          "d_roc": -0.0025431369701045536,
+          "d_brier": 0.0005619876866391205,
+          "treatment_pr_auc": 0.3880205719282258
         },
         "F2": {
           "n": 6,
-          "delta": -0.005525694246231949,
-          "lo": -0.007217405075249012,
-          "hi": -0.0038536109951977774,
-          "d_roc": -0.007099548483876839,
-          "d_brier": 0.0008112025440240311,
-          "treatment_pr_auc": 0.38483174248784546
+          "delta": -0.006543810594289601,
+          "lo": -0.008137766834026993,
+          "hi": -0.005010044454435949,
+          "d_roc": -0.007247714596311683,
+          "d_brier": 0.0008692575564059335,
+          "treatment_pr_auc": 0.38493324015648667
         },
         "F3": {
           "n": 5,
-          "delta": -0.023332867648367894,
-          "lo": -0.02657499636602649,
-          "hi": -0.019858511028183035,
-          "d_roc": -0.06481801201228121,
-          "d_brier": 0.001145581296256748,
-          "treatment_pr_auc": 0.3670245690857095
+          "delta": -0.03308199746126356,
+          "lo": -0.03642573765786171,
+          "hi": -0.02966898470266872,
+          "d_roc": -0.06541043241897915,
+          "d_brier": 0.003803396436124873,
+          "treatment_pr_auc": 0.3583950532895127
         },
         "F4": {
           "n": 5,
-          "delta": -0.06469371263020846,
-          "lo": -0.06730397350535278,
-          "hi": -0.06174682611105038,
-          "d_roc": -0.08819264355017264,
-          "d_brier": 0.0077071681030589645,
-          "treatment_pr_auc": 0.32566372410386896
+          "delta": -0.06648954872894425,
+          "lo": -0.06937123389542724,
+          "hi": -0.06326116554154886,
+          "d_roc": -0.09528901603370743,
+          "d_brier": 0.008609042692421714,
+          "treatment_pr_auc": 0.324987502021832
         },
         "F5": {
           "n": 2,
-          "delta": -0.0663233218069107,
-          "lo": -0.06920472547893501,
-          "hi": -0.06337702272572368,
-          "d_roc": -0.08016290583801355,
-          "d_brier": 0.008126639000518826,
-          "treatment_pr_auc": 0.3240341149271667
+          "delta": -0.07285084289844579,
+          "lo": -0.07566171494618941,
+          "hi": -0.06972719167867315,
+          "d_roc": -0.08494827394464266,
+          "d_brier": 0.008682025589109882,
+          "treatment_pr_auc": 0.3186262078523305
         },
         "F6": {
           "n": 3,
-          "delta": -0.002919678349536048,
-          "lo": -0.004531434800921335,
-          "hi": -0.0012633452869816226,
-          "d_roc": -0.010367974998509055,
-          "d_brier": 0.0015705792581832967,
-          "treatment_pr_auc": 0.38743775838454136
+          "delta": -0.008449346408078207,
+          "lo": -0.010149026981486732,
+          "hi": -0.00675439991192905,
+          "d_roc": -0.010863510445560332,
+          "d_brier": 0.0017316074154138938,
+          "treatment_pr_auc": 0.38302770434269806
         }
       },
-      "control_pr_auc": 0.3903574367340774
+      "control_pr_auc": 0.39147705075077627
     },
     "admission": {
       "source": "results/p1/admission.json",
@@ -2590,39 +2606,39 @@
       "source": "results/p1/shap/shap_summary.json",
       "families": {
         "control": {
-          "abs": 0.29405315782316466,
-          "signed": -0.017081345079818035,
-          "between": 0.66491802854757
+          "abs": 0.2591198182429436,
+          "signed": 0.010257270025065532,
+          "between": 0.7456558396028091
         },
         "F1": {
-          "abs": 0.09869559999144145,
-          "signed": -0.026989194964371764,
-          "between": 0.04133862559164915
+          "abs": 0.09354755286574953,
+          "signed": -0.008490488615824974,
+          "between": 0.06039718115926046
         },
         "F2": {
-          "abs": 0.08691866443826149,
-          "signed": -0.008925213134130324,
-          "between": 0.09708310903306473
+          "abs": 0.0431202148578773,
+          "signed": 0.00429845518978795,
+          "between": 0.0716613614870954
         },
         "F3": {
-          "abs": 0.32317928159370213,
-          "signed": -0.06641716315280283,
-          "between": 0.6034809914351487
+          "abs": 0.2686429754834513,
+          "signed": -0.051718025240581805,
+          "between": 0.6645330349752909
         },
         "F4": {
-          "abs": 0.44428847514587144,
-          "signed": -0.30162363296824546,
-          "between": 0.3531888111217108
+          "abs": 0.31293396898448717,
+          "signed": -0.08869503850539241,
+          "between": 0.4487702434681836
         },
         "F5": {
-          "abs": 0.20801600736665415,
-          "signed": -0.048460120154026724,
-          "between": 0.6755932716158254
+          "abs": 0.19267845774189288,
+          "signed": 0.0019160559710859162,
+          "between": 0.7491352610835178
         },
         "F6": {
-          "abs": 0.11411137015131852,
-          "signed": -0.06810529998818476,
-          "between": 0.11477124960378937
+          "abs": 0.049597951886541,
+          "signed": -0.016097399797478075,
+          "between": 0.12802002729635611
         }
       },
       "threshold": 0.8
@@ -3261,9 +3277,9 @@
           "d": 480.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 1142,
+          "deferred": 1141,
           "skipped": 0,
-          "saving_pct": 2.4080503995555524,
+          "saving_pct": 2.407896953408884,
           "ttff_p95_h": 6.557777777777778,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3274,9 +3290,9 @@
           "d": 960.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 743,
+          "deferred": 742,
           "skipped": 0,
-          "saving_pct": 2.2008180933765895,
+          "saving_pct": 2.200752631547119,
           "ttff_p95_h": 6.507500000000001,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3287,9 +3303,9 @@
           "d": 1920.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 549,
+          "deferred": 550,
           "skipped": 0,
-          "saving_pct": 1.9975755471646464,
+          "saving_pct": 1.9992977434705617,
           "ttff_p95_h": 6.437361111111111,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3313,10 +3329,10 @@
           "d": 7680.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 278,
+          "deferred": 277,
           "skipped": 0,
-          "saving_pct": 1.2393864292342511,
-          "ttff_p95_h": 6.228194444444444,
+          "saving_pct": 1.2347275679034113,
+          "ttff_p95_h": 6.248611111111112,
           "latency_p95_def_h": 6.0,
           "missed": 0
         },
@@ -3391,9 +3407,9 @@
           "d": 480.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 1348,
+          "deferred": 1347,
           "skipped": 0,
-          "saving_pct": 3.015075234394695,
+          "saving_pct": 3.014921788247992,
           "ttff_p95_h": 10.333125,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3404,9 +3420,9 @@
           "d": 960.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 884,
+          "deferred": 883,
           "skipped": 0,
-          "saving_pct": 2.7642708601077275,
+          "saving_pct": 2.764205398278269,
           "ttff_p95_h": 8.632847222222221,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3417,9 +3433,9 @@
           "d": 1920.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 649,
+          "deferred": 650,
           "skipped": 0,
-          "saving_pct": 2.4970159621384855,
+          "saving_pct": 2.499176220659767,
           "ttff_p95_h": 7.218055555555555,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3443,9 +3459,9 @@
           "d": 7680.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 334,
+          "deferred": 333,
           "skipped": 0,
-          "saving_pct": 1.5775393363417447,
+          "saving_pct": 1.572798368069217,
           "ttff_p95_h": 6.463125,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3495,9 +3511,9 @@
           "d": 120.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 2387,
+          "deferred": 2388,
           "skipped": 0,
-          "saving_pct": 3.7609880908569044,
+          "saving_pct": 3.7609936699747584,
           "ttff_p95_h": 21.062222222222225,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3521,9 +3537,9 @@
           "d": 480.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 1385,
+          "deferred": 1384,
           "skipped": 0,
-          "saving_pct": 3.475904722350901,
+          "saving_pct": 3.4757512762042095,
           "ttff_p95_h": 19.202708333333334,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3534,9 +3550,9 @@
           "d": 960.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 905,
+          "deferred": 904,
           "skipped": 0,
-          "saving_pct": 3.1983471753920396,
+          "saving_pct": 3.198281713562581,
           "ttff_p95_h": 15.10465277777778,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3547,9 +3563,9 @@
           "d": 1920.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 669,
+          "deferred": 670,
           "skipped": 0,
-          "saving_pct": 2.908848230607626,
+          "saving_pct": 2.9110084891289305,
           "ttff_p95_h": 11.382708333333335,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3573,9 +3589,9 @@
           "d": 7680.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 343,
+          "deferred": 342,
           "skipped": 0,
-          "saving_pct": 1.8951184938754178,
+          "saving_pct": 1.891836648990128,
           "ttff_p95_h": 6.974097222222222,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3651,9 +3667,9 @@
           "d": 480.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 1142,
+          "deferred": 1141,
           "skipped": 0,
-          "saving_pct": 2.4080503995555524,
+          "saving_pct": 2.407896953408884,
           "ttff_p95_h": 6.557777777777778,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3664,9 +3680,9 @@
           "d": 960.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 743,
+          "deferred": 742,
           "skipped": 0,
-          "saving_pct": 2.2008180933765895,
+          "saving_pct": 2.200752631547119,
           "ttff_p95_h": 6.507500000000001,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3677,9 +3693,9 @@
           "d": 1920.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 549,
+          "deferred": 550,
           "skipped": 0,
-          "saving_pct": 1.9975755471646464,
+          "saving_pct": 1.9992977434705617,
           "ttff_p95_h": 6.437361111111111,
           "latency_p95_def_h": 6.0,
           "missed": 0
@@ -3703,10 +3719,10 @@
           "d": 7680.0,
           "w": 6.0,
           "tau": null,
-          "deferred": 278,
+          "deferred": 277,
           "skipped": 0,
-          "saving_pct": 1.2393864292342511,
-          "ttff_p95_h": 6.228194444444444,
+          "saving_pct": 1.2347275679034113,
+          "ttff_p95_h": 6.248611111111112,
           "latency_p95_def_h": 6.0,
           "missed": 0
         },
@@ -3781,9 +3797,9 @@
           "d": 480.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 1348,
+          "deferred": 1347,
           "skipped": 0,
-          "saving_pct": 3.015075234394695,
+          "saving_pct": 3.014921788247992,
           "ttff_p95_h": 10.333125,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3794,9 +3810,9 @@
           "d": 960.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 884,
+          "deferred": 883,
           "skipped": 0,
-          "saving_pct": 2.7642708601077275,
+          "saving_pct": 2.764205398278269,
           "ttff_p95_h": 8.632847222222221,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3807,9 +3823,9 @@
           "d": 1920.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 649,
+          "deferred": 650,
           "skipped": 0,
-          "saving_pct": 2.4970159621384855,
+          "saving_pct": 2.499176220659767,
           "ttff_p95_h": 7.218055555555555,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3833,9 +3849,9 @@
           "d": 7680.0,
           "w": 12.0,
           "tau": null,
-          "deferred": 334,
+          "deferred": 333,
           "skipped": 0,
-          "saving_pct": 1.5775393363417447,
+          "saving_pct": 1.572798368069217,
           "ttff_p95_h": 6.463125,
           "latency_p95_def_h": 12.0,
           "missed": 0
@@ -3885,9 +3901,9 @@
           "d": 120.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 2387,
+          "deferred": 2388,
           "skipped": 0,
-          "saving_pct": 3.7609880908569044,
+          "saving_pct": 3.7609936699747584,
           "ttff_p95_h": 21.062222222222225,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3911,9 +3927,9 @@
           "d": 480.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 1385,
+          "deferred": 1384,
           "skipped": 0,
-          "saving_pct": 3.475904722350901,
+          "saving_pct": 3.4757512762042095,
           "ttff_p95_h": 19.202708333333334,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3924,9 +3940,9 @@
           "d": 960.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 905,
+          "deferred": 904,
           "skipped": 0,
-          "saving_pct": 3.1983471753920396,
+          "saving_pct": 3.198281713562581,
           "ttff_p95_h": 15.10465277777778,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3937,9 +3953,9 @@
           "d": 1920.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 669,
+          "deferred": 670,
           "skipped": 0,
-          "saving_pct": 2.908848230607626,
+          "saving_pct": 2.9110084891289305,
           "ttff_p95_h": 11.382708333333335,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -3963,9 +3979,9 @@
           "d": 7680.0,
           "w": 24.0,
           "tau": null,
-          "deferred": 343,
+          "deferred": 342,
           "skipped": 0,
-          "saving_pct": 1.8951184938754178,
+          "saving_pct": 1.891836648990128,
           "ttff_p95_h": 6.974097222222222,
           "latency_p95_def_h": 24.0,
           "missed": 0
@@ -4003,8 +4019,8 @@
           "w": null,
           "tau": 0.05,
           "deferred": 0,
-          "skipped": 0,
-          "saving_pct": 0.0,
+          "skipped": 1,
+          "saving_pct": 0.0005590224595875778,
           "ttff_p95_h": 5.492152777777777,
           "latency_p95_def_h": null,
           "missed": 0
@@ -4016,11 +4032,11 @@
           "w": null,
           "tau": 0.1,
           "deferred": 0,
-          "skipped": 4,
-          "saving_pct": 0.04392446798175504,
-          "ttff_p95_h": 5.4929166666666625,
+          "skipped": 20,
+          "saving_pct": 0.00897243802724121,
+          "ttff_p95_h": 5.493680555555554,
           "latency_p95_def_h": null,
-          "missed": 1
+          "missed": 2
         },
         {
           "strategy": "6_risk_only_skip",
@@ -4029,11 +4045,11 @@
           "w": null,
           "tau": 0.15,
           "deferred": 0,
-          "skipped": 8,
-          "saving_pct": 0.08167326270563967,
-          "ttff_p95_h": 5.4929166666666625,
+          "skipped": 64,
+          "saving_pct": 0.24972128106482,
+          "ttff_p95_h": 5.502083333333328,
           "latency_p95_def_h": null,
-          "missed": 1
+          "missed": 13
         },
         {
           "strategy": "6_risk_only_skip",
@@ -4042,11 +4058,11 @@
           "w": null,
           "tau": 0.2,
           "deferred": 0,
-          "skipped": 19,
-          "saving_pct": 0.2456032161759938,
-          "ttff_p95_h": 5.493680555555554,
+          "skipped": 248,
+          "saving_pct": 3.0485312783166614,
+          "ttff_p95_h": 5.513263888888888,
           "latency_p95_def_h": null,
-          "missed": 2
+          "missed": 56
         },
         {
           "strategy": "6_risk_only_skip",
@@ -4055,11 +4071,11 @@
           "w": null,
           "tau": 0.25,
           "deferred": 0,
-          "skipped": 48,
-          "saving_pct": 0.7794210905692421,
-          "ttff_p95_h": 5.497499999999999,
+          "skipped": 389,
+          "saving_pct": 4.6056533522771215,
+          "ttff_p95_h": 5.525138888888889,
           "latency_p95_def_h": null,
-          "missed": 7
+          "missed": 105
         },
         {
           "strategy": "6_risk_only_skip",
@@ -4068,17 +4084,17 @@
           "w": null,
           "tau": 0.3,
           "deferred": 0,
-          "skipped": 2322,
-          "saving_pct": 19.541231181280217,
-          "ttff_p95_h": 5.9111805555555526,
+          "skipped": 2413,
+          "saving_pct": 19.69615262731423,
+          "ttff_p95_h": 5.926944444444444,
           "latency_p95_def_h": null,
-          "missed": 778
+          "missed": 804
         }
       ],
       "validator": {
         "path": "C:\\Users\\senit\\Desktop\\Projects\\Research\\Artifact\\Research_Artifact\\results\\p2\\policy_fit\\decisions.csv.gz",
         "rows": 1224000,
-        "deferred": 117450,
+        "deferred": 117440,
         "violations": 0,
         "passed": true,
         "missing_columns": [],
@@ -4090,8 +4106,8 @@
         "6_at_tau0_equals_1_static_actions": true
       },
       "characteristics": {
-        "p_hat_distinct": 42,
-        "p_hat_in_025_030": 10461,
+        "p_hat_distinct": 34,
+        "p_hat_in_025_030": 9210,
         "skips_by_tau": [
           [
             0.0,
@@ -4099,45 +4115,45 @@
           ],
           [
             0.05,
-            0
+            1
           ],
           [
             0.1,
-            4
+            20
           ],
           [
             0.15,
-            8
+            64
           ],
           [
             0.2,
-            19
+            248
           ],
           [
             0.25,
-            48
+            389
           ],
           [
             0.3,
-            2322
+            2413
           ]
         ],
         "d4a_min": 24.98391056107172,
         "d4a_max": 4310.197000925079,
         "d4a_p99": 2788.5208401570526,
-        "d4b_max": 9469.000000000002,
+        "d4b_max": 9481.000000000007,
         "d4a_first_empty_d": 3840.0
       }
     },
     "policy": {
       "source": "code/scheduler_core/config/policy_spec.yaml; results/p2/policy_fit/selection.json",
-      "sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+      "sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
       "policy_path": "duration_only_fallback",
       "d_threshold_s": 480.0,
       "w_max_h": 24.0,
       "rho": 0.9,
       "best_saving_pct": 3.778732291378513,
-      "chosen_saving_pct": 3.475904722350901,
+      "chosen_saving_pct": 3.4757512762042095,
       "chosen_ttff_p95_h": 19.202708333333334,
       "n_admissible": 5,
       "n_points": 30,
@@ -4158,7 +4174,7 @@
         }
       ],
       "verify_identical": true,
-      "generated": "2026-09-25"
+      "generated": "2026-10-01"
     },
     "decide_examples": [
       {
@@ -4195,53 +4211,53 @@
     "p3_model": {
       "source": "results/p3/model_report.json; results/p3/replication_table.md",
       "label": "test split, opened once (P3-T1)",
-      "run_date": "2026-09-26",
+      "run_date": "2026-10-02",
       "builds": 138693,
       "projects": 170,
       "failure_rate_pct": 25.0359,
-      "control_pr_auc": 0.29422786305663995,
-      "full_pr_auc": 0.2863633706338368,
-      "control_ece": 0.05535990479248504,
+      "control_pr_auc": 0.2941340255406017,
+      "full_pr_auc": 0.2725234041267033,
+      "control_ece": 0.058681881648210046,
       "families": {
         "F1": {
-          "delta": 0.013312988721582875,
-          "lo": 0.011923524575020791,
-          "hi": 0.014733419489861191,
+          "delta": 0.013034788895368743,
+          "lo": 0.01163906001094286,
+          "hi": 0.014500206533615301,
           "admitted": true,
           "replicates": false
         },
         "F2": {
-          "delta": -0.0015561069367713287,
-          "lo": -0.0028708092476698974,
-          "hi": -0.0002372786106275949,
+          "delta": -0.0020047119675049574,
+          "lo": -0.0031974490208716857,
+          "hi": -0.0008015617481705054,
           "admitted": false,
           "replicates": true
         },
         "F3": {
-          "delta": -0.03365116762643827,
-          "lo": -0.03601787463623611,
-          "hi": -0.03154026469408347,
+          "delta": -0.03253509520207487,
+          "lo": -0.03481644795406012,
+          "hi": -0.0303458205266451,
           "admitted": false,
           "replicates": true
         },
         "F4": {
-          "delta": -0.019985953103741794,
-          "lo": -0.02215221173619812,
-          "hi": -0.017869311722116987,
+          "delta": -0.009682792809322216,
+          "lo": -0.012374138509154446,
+          "hi": -0.006850695630064416,
           "admitted": false,
           "replicates": true
         },
         "F5": {
-          "delta": -0.00622478711899993,
-          "lo": -0.008488501624085933,
-          "hi": -0.004032034472963152,
+          "delta": -0.00547189041156676,
+          "lo": -0.007618985499607622,
+          "hi": -0.003251508183548245,
           "admitted": false,
           "replicates": true
         },
         "F6": {
-          "delta": 0.0022574063444336656,
-          "lo": 0.0009815438387798566,
-          "hi": 0.0036826190016469723,
+          "delta": 0.0028313380851547887,
+          "lo": 0.0014826701421377865,
+          "hi": 0.004168634387478221,
           "admitted": false,
           "replicates": true
         }
@@ -4262,18 +4278,18 @@
       },
       "sweep_stable": false,
       "all_replicate": false,
-      "d4b_mae": 0.5717370241837719,
-      "d4b_rho": 0.8198952310111712,
-      "shap_rho": 0.995967002749771,
+      "d4b_mae": 0.5726556836817324,
+      "d4b_rho": 0.8194981673051551,
+      "shap_rho": 0.990467461044913,
       "shap_top10": 10
     },
     "p3_replay": {
       "source": "results/p3/strategy_results.json; results/p3/strategy_results.md",
       "label": "test split — frozen policy replayed once (P3-T2)",
-      "run_date": "2026-09-26",
+      "run_date": "2026-10-02",
       "n_records": 14146686,
       "violations": 0,
-      "deferrals": 1016092,
+      "deferrals": 1015974,
       "rows": {
         "1_static": {
           "saving_pct": 0.0,
@@ -4300,15 +4316,15 @@
           "missed": 0
         },
         "4b_duration_prior__d480__w24": {
-          "saving_pct": 2.4803236669232294,
-          "share_deferred_pct": 7.918207840338012,
-          "ttff_p95_h": 13.887666666666693,
+          "saving_pct": 2.4797873769826944,
+          "share_deferred_pct": 7.91892885726028,
+          "ttff_p95_h": 13.909416666666692,
           "missed": 0
         },
         "5_se_informed_policy__d480__w24": {
-          "saving_pct": 2.4803236669232294,
-          "share_deferred_pct": 7.918207840338012,
-          "ttff_p95_h": 13.887666666666693,
+          "saving_pct": 2.4797873769826944,
+          "share_deferred_pct": 7.91892885726028,
+          "ttff_p95_h": 13.909416666666692,
           "missed": 0
         },
         "6_risk_only_skip__t0": {
@@ -4318,47 +4334,47 @@
           "missed": 0
         },
         "6_risk_only_skip__t0_05": {
-          "saving_pct": 0.014109252287581732,
+          "saving_pct": 0.02005922560397118,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.6742638888888843,
-          "missed": 4
+          "ttff_p95_h": 1.675,
+          "missed": 44
         },
         "6_risk_only_skip__t0_1": {
-          "saving_pct": 0.39066979645932975,
+          "saving_pct": 0.1920831406314714,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.6683333333333332,
-          "missed": 34
+          "ttff_p95_h": 1.675444444444446,
+          "missed": 75
         },
         "6_risk_only_skip__t0_15": {
-          "saving_pct": 0.7362389691189907,
+          "saving_pct": 2.6310552100580575,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.6677916666666655,
-          "missed": 48
+          "ttff_p95_h": 1.665,
+          "missed": 219
         },
         "6_risk_only_skip__t0_2": {
-          "saving_pct": 1.321818577397239,
+          "saving_pct": 5.471173878560318,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.6558611111111086,
-          "missed": 88
+          "ttff_p95_h": 1.651555555555555,
+          "missed": 680
         },
         "6_risk_only_skip__t0_25": {
-          "saving_pct": 2.051451698389393,
+          "saving_pct": 6.4572277623308985,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.654597222222221,
-          "missed": 158
+          "ttff_p95_h": 1.6681666666666661,
+          "missed": 1156
         },
         "6_risk_only_skip__t0_3": {
-          "saving_pct": 14.532147800630085,
+          "saving_pct": 15.204725919546478,
           "share_deferred_pct": 0.0,
-          "ttff_p95_h": 1.9563472222222218,
-          "missed": 6689
+          "ttff_p95_h": 1.9859999999999856,
+          "missed": 7054
         }
       }
     },
     "p3_decision": {
       "source": "results/p3/incremental_value_decision.json; results/p3/incremental_value_decision.md",
       "label": "test split — decision-level frontiers (P3-T3)",
-      "run_date": "2026-09-26",
+      "run_date": "2026-10-02",
       "vs_4b": {
         "point": 0.0,
         "lo": 0.0,
@@ -4366,29 +4382,29 @@
         "cond_x1": false
       },
       "vs_4a": {
-        "point": 2.4307500783866933,
-        "lo": 1.7358144936942397,
-        "hi": 2.568361928610672,
+        "point": 2.426228418456698,
+        "lo": 1.7280632791575177,
+        "hi": 2.562396004896372,
         "cond_x1": true
       },
       "oracle_vs_4b": {
-        "point": 1.9290276506099249,
-        "lo": 1.762532030474678,
-        "hi": 2.3492122891552545,
+        "point": 1.9335708603288666,
+        "lo": 1.7688243650284454,
+        "hi": 2.3548249864281705,
         "cond_x1": true
       },
       "verdict_x1": false,
-      "low_band_vs_4a": -2.6750429577367654
+      "low_band_vs_4a": -2.702707437294614
     },
     "p3_sensitivity": {
       "source": "results/p3/sensitivity.md; results/p3/sensitivity/*.json",
       "label": "test split — sensitivity sweeps (P3-T4)",
-      "v3_late_area": 3.5694086596779737,
+      "v3_late_area": 3.5551665087380897,
       "v3_late_condition": false,
-      "v3_early_area": 0.7499754051566359,
-      "v3_njobs_area": 5.902570184638883,
+      "v3_early_area": 0.7450735828085149,
+      "v3_njobs_area": 5.895723570454013,
       "v4_w12_stable": false,
-      "trailing_vs_4b_area": 0.35383276088830146,
+      "trailing_vs_4b_area": 0.3621783782479899,
       "grid2_status": "not run — no qualifying data (DL-027 §2, DL-032)",
       "caiso_ptt": 1.8668692169589838,
       "uk_ptt": 1.8746097137901128,

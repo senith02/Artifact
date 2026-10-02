@@ -22,30 +22,35 @@ state:
   current_task: P4-T1    # REST API service — NOT started (author: stop after P3-T5 for review)
   next_task: P4-T2       # GitHub Action + demo repo
   current_phase: P4
-  blocked_on: (1) **DL-034 correction pass CR-1** — ④b history admitted builds still running at
-                  t_b; full-chain rerun (option a, author decision 2026-10-01) prepared, NOT started;
-                  (2) then author decision on **DL-033** (Proposed, draft rev. 2) — both required
-                  before P4-T1 starts
-  correction:     **CR-1 (DL-034)** — not a numbered task; tasks_total stays 28. P1-T4..P3-T5 stay ✅
-                  but their evidence is superseded once CR-1 gates. Originals: git 2901d77 / 95c6d6d /
-                  1e38db7 / 4d9e128 + results/corrections/dl034/original/ (MANIFEST.txt).
-  last_gate_passed: P3-T5 (results synthesis; results/p3/evaluation_report.md)
-  last_updated: 2026-10-01
+  blocked_on: author decision on **DL-033** (Proposed, draft rev. 2 — P4 as a duration-history
+                  carbon-deferral advisor) — required before P4-T1 starts. CR-1 is gated.
+  correction:     **CR-1 (DL-034) GATED 2026-10-02** — not a numbered task; tasks_total stays 28.
+                  Full-chain rerun P1-T4..P3-T5 under completion-causal ④b history. **No RQ verdict
+                  changed**; changed: F1 late-period V1 {F1} → ∅ (S-e late), ⑥ beats ⑤ on est. carbon
+                  at τ 0.20/0.25. Corrected-vs-original: results/corrections/dl034/comparison.md
+                  (182 rows, 57 changed). Originals: git 2901d77 / 95c6d6d / 1e38db7 / 4d9e128 +
+                  results/corrections/dl034/original/. **The per-task blocks below (p3_model_level …
+                  policy_fit) carry PRE-DL-034 values and are superseded by comparison.md.**
+  last_gate_passed: CR-1 (DL-034 correction pass; evaluation_report.md revised)
+  last_updated: 2026-10-02
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
-  test_split:     **OPENED ONCE** 2026-09-25T19:20:25Z UTC by P3-T1 (sentinel
-                  results/p3/test_split_opened.json, fingerprint da77d6ca…). A second pass of
-                  evaluate_test.py needs a DL entry (--rerun-under).
+  test_split:     **OPENED TWICE** — 2026-09-25T19:20:25Z (P3-T1) and 2026-10-01T19:01:59Z
+                  (`--rerun-under DL-034`); both chained in results/p3/test_split_opened.json and
+                  test_replay_opened.json. A further pass needs a new DL entry.
+  frozen_policy_now: policy_spec.yaml sha256 e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8
+                  (DL-034 refit; thresholds/path identical to 34d689c9…); xgboost:full fit id
+                  a09cc750e9db41b8; d̂ fit id 1088d5546f47ff12 (unchanged).
   open_decisions: none. Closed 2026-09-26 by author decision (DL-028): option (a), the F1
                   model-level finding is reported, no post-hoc F1 arm, frozen spec only;
                   test_scores.csv.gz tracked. Earlier: ④b trailing-50 (DL-024 §3); review
                   addendum items 3/4 adopted as DL-027.
                   DL-026 (P4 artifact direction) is Proposed/Conditional; P3-T5 is done, so its
                   follow-up DL entry is now due (before P4-T1). Inputs: evaluation_report.md §7.
-  p3_synthesis:   **P3-T5 — the four RQ verdicts** (results/p3/evaluation_report.md §2, §9).
-                  RQ1 null/modest (F1 non-replicating model-level candidate; attribution ≠
-                  incremental value). RQ2 no — ⑤ ≡ ④b, null by construction of the predeclared
-                  pipeline, stable. RQ3 duration-only spec d480/w24, ρ-sensitive, SE branch
-                  unexercised. RQ4 −2.480% vs ① at TTFF p95 13.89 h; robust in sign.
+  p3_synthesis:   **P3-T5 — the four RQ verdicts, revised under DL-034** (evaluation_report.md §2,
+                  §4, §10). RQ1 null/modest (F1 unresolved: non-replicating, floor-sensitive, below
+                  floor in the late period). RQ2 no, for the calibration-frozen policy (⑤ ≡ ④b,
+                  frozen-policy null). RQ3 duration-only d480/w24, unchanged by DL-034. RQ4 −2.480%
+                  est. carbon vs ① at TTFF p95 13.91 h; robust in sign.
   p3_model_level: **P3-T1 — calibration null does NOT fully replicate on test.** F1 ΔPR-AUC
                   +0.013313 [+0.011924, +0.014733] (calibration −0.003678); admitted at ×0.5/×1,
                   not ×2 (stable: False). F2–F5 rejected on both splits (CIs below 0); F6 +0.002257,
@@ -173,59 +178,7 @@ Phase 3   [████████████████████] 100%   
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-**CR-1 (DL-034) ⏳ prepared 2026-10-01** — full-chain rerun of P1-T4…P3-T5 under the
-completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
-- [x] Evidence: `scripts/diagnose_history_overlap.py` → `results/corrections/dl034/history_overlap.{json,md}`
-- [x] DL-034 written (Accepted, option a); DL-033 revised (draft rev. 2)
-- [x] Fix: `duration_estimator.causal_project_history(availability="completed")` + guard check 3; all
-      5 callers pass durations; spec text updated (`context/duration_control_spec.md` I3/§3.2/§4.1)
-- [x] Tests: +7 DL-034 tests; full suite **645 passed**; fixed function == independent recomputation on
-      all 138,693 test-trace builds; guard rejects the old rule (38,019 builds)
-- [x] Originals snapshotted: `results/corrections/dl034/original/` (15 files, MANIFEST.txt)
-- [x] **Commit predeclaration** `548141b` (DL-034 + fix + tests + diagnostic). Run locally (author
-      decision 2026-10-01: no Colab — CPU-only stack, locked env, repo-local guards); pause after each
-      phase (P1, P2, P3) for author review. `train_models.py`/`run_ablation.py` run with `--fresh`
-      (their checkpoint fingerprint keys on the d̂ fit id, not the history rule).
-- [x] P1-T4 fit_duration_estimator (530.7 s, exit 0; guard PASS; fit id unchanged `1088d5546f47ff12`,
-      joblib byte-identical; ④b calib MAE 0.600958 → 0.601856, ρ 0.8691 → 0.8688; primary ④b)
-- [x] P1-T5 train_models `--fresh` (2,381.6 s, exit 0; 6 arms, all round-trip PASS, isotonic everywhere;
-      calib PR-AUC control xgb 0.390357→0.391477, logreg 0.388304→0.388177, rf 0.377358→0.377668;
-      full xgb 0.328552→0.310566 (new search pick), logreg 0.307219→0.307124, rf 0.378120→0.365366;
-      full < control for every algorithm, as before)
-- [x] P1-T6 run_ablation `--fresh` (3,975.5 s, exit 0; frozen control/full re-verified exactly; ΔPR-AUC
-      vs {d̂}: F1 −0.003456, F2 −0.006544, F3 −0.033082, F4 −0.066490, F5 −0.072851, F6 −0.008449 —
-      all CIs below 0, no LOO arm triggered)
-- [x] P1-T7 apply_admission (exit 0): admitted set **empty** at ×0.5/×1/×2 (stable) →
-      `duration_only_fallback`, unchanged. **P1 phase paused for author review 2026-10-01.**
-- [x] P1 checkpoint commit `6c050bb`
-- [x] P2-T4 sample run `--fresh` ×2 (byte-identical, `determinism.json`); validator 0 violations / 117,440
-      deferrals (was 117,450); identities hold; validator CLI re-run; REGENERATE.md identifiers updated
-- [x] P2-T5 fit_policy `--fresh` + `--verify --fresh` (byte-identical refit): operating point **d480/w24
-      unchanged**; S* 3.778732% unchanged; chosen saving 3.475905% → 3.475751%, TTFF p95 19.2027 h
-      unchanged; ρ 0.80/0.95 alternatives unchanged; floor sweep duration-only at ×0.5/×1/×2. New spec
-      sha256 `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8` (only `command`/`generated`
-      lines differ). **P2 phase paused for author review 2026-10-01.**
-- [x] P2 checkpoint commit `19c7751`
-- [x] P3-T1 rehearse (32/32) + test `--rerun-under DL-034` (3,224.5 s, exit 0; sentinel chains both
-      openings). F1 ΔPR-AUC +0.013035 [+0.011639, +0.014500] (was +0.013313), admitted ×0.5/×1 not ×2
-      (unchanged); F2–F5 rejected CIs < 0; F6 +0.002831 below floor; full < control all 3 algorithms;
-      ④b test MAE 0.5727 ρ 0.8195; SHAP ρ 0.9905. §10 re-authored from corrected numbers.
-- [x] P3-T1 checkpoint commit `f2d5142`
-- [x] P3-T2 rehearse (byte-identical to P2-T5) + test `--rerun-under DL-034` (2,767 s, exit 0):
-      validator 0 / 1,015,974 deferrals / 14,146,686 rows; 0 of 39,453 skips non-deferrable; identities
-      hold. ⑤ ≡ ④b −2.480% vs ① (−70.7 g/1k), 10,983 deferred (7.92%), TTFF p95 13.91 h (was 13.89);
-      ⑤−④a TTFF p95 −0.16 [−0.61, +0.18]. **Changed:** ⑥ now saves more than ⑤ at τ 0.20/0.25
-      (5.471%/6.457%, 680/1,156 missed failures) — new `xgboost:full` p̂. §5b re-authored.
-      **Paused for author review 2026-10-02.** · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
-- [x] P3-T2 checkpoint commit `59ae57c`
-- [x] P3-T3 frontier_analysis (997 s, exit 0; fresh oracle replay 0 violations / 309,696 deferrals):
-      ⑤ vs ④b area +0.0000, "⑤ beats both" false ×0.5/×1/×2 (unchanged); ④b over ④a +2.4262
-      [+1.7281, +2.5624] (was +2.4308), condition true all floors; oracle vs ④b +1.9336; low band
-      −2.7027. Every verdict unchanged. §6b re-authored.
-- [ ] P3-T4 sweeps: baseline, a, b, c, d, e, f done (exit 0); first chain killed at the 2 h background
-      limit during g (g.json untouched); g, h, herding, summary restarted 2026-10-02
-- [x] `scripts/dl034_comparison.py` written (→ `results/corrections/dl034/comparison.md`); P1–P3-T3
-      sections tested · [ ] P3-T5 report revision + comparison.md
+*(empty — CR-1 (DL-034) gated 2026-10-02; P4-T1 not started, awaiting DL-033)*
 
 ---
 
@@ -309,3 +262,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-26 | P3-T3 Decision-level ④ vs ⑤ frontiers (headline RQ2) | **DL-029 written first** (Pareto frontier over the 30 swept points; K = 10 interior matched points per axis; area by trapezoid over the carbon overlap; §A1.7 "counts" = floor met + CI above 0 + ≤ 5% undefined resamples, ≥ 3 points on one axis; bands = terciles of test-project failure rate; §A1.10 oracle rule), per the author's "no post-hoc additions" instruction; its §1 numeric check was restated *before any frontier number existed*, after the first run stopped on a summation-order artefact. `replay/frontier.py` + `scripts/frontier_analysis.py` + `tests/test_frontier.py` (10) + `tests/test_frontier_analysis.py` (4) — **629 passed** overall, verbatim in `results/p3/pytest_p3_t3.txt`. Run `PYTHONPATH=. python scripts/frontier_analysis.py` (326 s, log `results/p3/frontier_run.log`): 91 P3-T2 parts sha256-verified; recomputed points equal `strategy_results.csv` (carbon/1k 9.5e-15 rel, TTFF p95 exact, saving 8.5e-13 pp); tracked trace reproduces a P3-T2 part byte for byte (after fixing the reader to `float_precision="round_trip"`: the default parser was one ulp off and flipped 7 threshold-edge decisions, caught by the probe before any oracle number existed); oracle arm 0 violations / 309,696 deferrals. **RQ2 decision level:** ⑤ vs ④b area **+0.0000 [+0.0000, +0.0000]**, condition false at ×0.5/×1/×2 → ⑤ does not beat both controls at any floor; the null is by construction (frozen spec admits no SE family) and F1's decision-level value is **untested** (DL-028 §1). **Secondary:** ④b dominates ④a, area **+2.4308 [+1.7358, +2.5684]** pp·h, condition true at every floor, concentrated at 1.29–1.63% saved (≈ 0 near the frozen point, +0.0360 [−1.7830, +0.7492] h); reverses in the low failure-rate band (−2.6750 [−4.2721, −1.3844]); mid +1.5637, high +2.1981. **Oracle (unrealizable)** vs ④b +1.9290 [+1.7625, +2.3492]. §A1.9 variance decomposition not applicable (no admitted family). Evidence: `results/p3/incremental_value_decision.{md,json}` (§6b states the verdict) + `figures/frontiers.png`, `figures/frontiers_by_band.png` (palette validated with the dataviz validator). | **DL-029** |
 | 2026-09-28 | P3-T4 Sensitivity analyses | **DL-030 written first** (nine sweeps S-a…S-i plus herding, and verdicts V1 model-level admitted set · V2 "⑤ beats both" · V3 ④b over ④a · V4 eight-class RQ4 sign pattern, fixed before any sweep ran). `scripts/sensitivity_analysis.py` + `scripts/sensitivity_report.py` + `tests/test_sensitivity_analysis.py` (9); `frontier_analysis.analyse` generalised behaviour-preservingly — **638 passed** overall, verbatim in `results/p3/pytest_p3_t4.txt`. V4 baseline recomputed from the P3-T2 parts matches P3-T2's stored classes exactly. Re-replays audited: S-a 0 violations / 764,602 deferrals / 14,146,686 rows, identities hold; S-h 0 / 318,837. **Results:** V2 stable everywhere (and cannot flip: ⑤ ≡ ④b). V1 {F1} stable early (+0.0127), late (+0.0101, marginal), cold-start excluded (+0.0128); empty at ×2 as in P3-T1. V3 direction holds in every sweep (areas +0.7500 … +5.9026, all CIs > 0); **counting condition flips in the late period** (area +3.5694 [+1.7615, +4.3448]; strongest matched points undefined in 9–34% of resamples, over the predeclared 5%). **V4 flips one class at W = 12 h** (⑤−④a TTFF p95 n.s. → significantly lower); stable under S-a (deferrable 14.02%), S-c ×0.5/×1.5 (invariant by construction), S-d n_jobs. S-h trailing-50 vs frozen ④b +0.3538 [+0.2370, +0.7650] (condition ×0.5/×1). Herding: ② largest slot 18.77× static, ⑤ 1.78×. **S-f second grid: DL-031** switched the source to account-free EIA-930 (CAISO, consumed intensity), **DL-032** (author decision): not run — CAISO peak/trough 1.8669 < UK 1.8746 (criterion c), Germany no account-free series (Energy-Charts endpoint list saved as evidence); ranking invariance untested. Evidence: `results/p3/sensitivity.md` (flips first) + `sensitivity/*.json` + `sensitivity/reading.md` + `figures/sensitivity_v3_area.png`. | **DL-030**, **DL-031**, **DL-032** |
 | 2026-10-01 | P3-T5 Results synthesis + the four RQ verdicts | **Pre-task:** checkpoint commit `1e38db7` ("Complete P3 test evaluation and sensitivity analyses", 93 files, P3-T1..T4 + DL-026..DL-032; `dissertation/proposed solution.md` and `results/p3/decisions.csv.gz` excluded; no attribution trailer, DL-011). `results/p3/evaluation_report.md` — **authored synthesis, no new run, no dataset read, test split not re-opened.** §0 one-paragraph answer; §2 one evidenced paragraph per active RQ; §3 robustness (both P3-T4 flips stated first-class); §4 the null written as a contribution (duration-only policy defensible; duration estimation is the lever — oracle +1.9290, trailing-50 +0.3538; carbon ∝ duration confound generalises; attribution ≠ incremental value — F4/F3 rank 1/2 by SHAP yet harmful additions); §5 thirteen limitations incl. hour-of-week alignment, estimator error, energy model, herding, project confound; §6 claims not supported; §7 facts for the DL-026 follow-up (frozen `decide()` consumes `gh_is_pr`, `git_branch`, arrival slot, `d_hat_seconds` only — no SE feature; ④b needs project build history live; tension with P4-T1 S2's "28 commit features only" schema); §10 provenance footer. **Verdicts:** RQ1 null/modest; RQ2 no (⑤ ≡ ④b, area +0.0000, fails at every floor; null by construction, F1 decision value untested); RQ3 duration-only d480/w24, ρ-sensitive, SE branch unexercised; RQ4 −2.480% vs ① at TTFF p95 13.89 h, robust in sign. **Number-trace check** (scratchpad script, every numeric token in §0–§9 searched in the cited sources, Unicode minus normalised): **230 distinct tokens, 0 misses** against 29 sources, and **0 misses** against the 24 results-only sources (decision log, spec, plan and code removed). Two family names first written from memory (F2, F6) were caught on review and corrected from `context/feature_spec.md`. `pytest` **638 passed** (`results/p3/pytest_p3_t5.txt`; project `.venv`). **Phase 3 complete → M3 (21/28, 75%).** P4-T1 not started (author instruction). | none (DL-026 follow-up due before P4-T1) |
+| 2026-10-02 | *CR-1 (DL-034) correction pass — not a numbered task* | Independent review (revised 2026-10-01) found ④b's history admitted builds still running at t_b. **Verified and measured first**: `scripts/diagnose_history_overlap.py` → `results/corrections/dl034/history_overlap.md` (reproduces recorded ④b exactly; 38,019 / 138,693 test builds affected, median d̂ change 0.00%). Predeclaration commit `548141b` (DL-034 + fix + 7 tests + snapshot of 15 original files). Rerun run **locally** (author: no Colab), paused per phase: P1 `6c050bb` (④b calib MAE 0.600958→0.601856; all six families still negative, CIs < 0; admitted ∅ at every floor), P2 `19c7751` (policy d480/w24 unchanged, byte-identical verify; spec sha256 34d689c9…→e43b004d…, thresholds identical), P3-T1 `f2d5142` (second test pass `--rerun-under DL-034`; F1 +0.013035, admitted ×0.5/×1 not ×2), P3-T2 `59ae57c` (⑤ −2.480%, TTFF p95 13.91 h; ⑥ now beats ⑤ at τ 0.20/0.25), P3-T3/T4 `2161ac0` (every frontier verdict unchanged; **new flip: S-e late V1 {F1}→∅**; first sweep chain hit the 2 h background limit during g, g re-run from start). Authored sections re-written from corrected numbers (model_report §10, strategy_results §5b, incremental_value_decision §6b, sensitivity/reading.md). `scripts/dl034_comparison.py` → `comparison.md` (182 rows, 57 changed, 125 unchanged). evaluation_report.md revised (corrected numbers + DL-034 §B7 wording: frozen-policy null, F1 unresolved, estimated carbon, cross-project retrospective scope, multiplicity, new §4); number trace **256 tokens, 0 misses** (full and results-only). `pytest` **645 passed** (`results/corrections/dl034/pytest_cr1.txt`). **No RQ verdict changed.** | **DL-034**; DL-033 revised (Proposed) |
