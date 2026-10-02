@@ -1,8 +1,8 @@
 # P3-T1 calibration rehearsal — the pipeline must reproduce P1 before test opens
 
-> `PYTHONPATH=. python scripts/evaluate_test.py --split calibration` on 2026-09-25, B = 1000, elapsed 4326.7 s. **Calibration split only; the test split was dropped unread.** Every check compares a freshly computed number with the value stored by the P1 task that produced it, for exact equality.
+> `PYTHONPATH=. python scripts/evaluate_test.py --split calibration` on 2026-10-01, B = 1000, elapsed 3544.4 s. **Calibration split only; the test split was dropped unread.** Every check compares a freshly computed number with the value stored by the P1 task that produced it, for exact equality.
 
-**32 / 32 checks pass** — all pass: **True**. Fingerprint `da77d6cab3373268…`.
+**32 / 32 checks pass** — all pass: **True**. Fingerprint `066cda00282e77af…`.
 
 | check | pass | detail |
 | :-- | :-: | :-- |

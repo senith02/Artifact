@@ -205,7 +205,12 @@ completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
       unchanged; ρ 0.80/0.95 alternatives unchanged; floor sweep duration-only at ×0.5/×1/×2. New spec
       sha256 `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8` (only `command`/`generated`
       lines differ). **P2 phase paused for author review 2026-10-01.**
-- [ ] P3-T1 rehearse + test `--rerun-under DL-034` · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
+- [x] P2 checkpoint commit `19c7751`
+- [x] P3-T1 rehearse (32/32) + test `--rerun-under DL-034` (3,224.5 s, exit 0; sentinel chains both
+      openings). F1 ΔPR-AUC +0.013035 [+0.011639, +0.014500] (was +0.013313), admitted ×0.5/×1 not ×2
+      (unchanged); F2–F5 rejected CIs < 0; F6 +0.002831 below floor; full < control all 3 algorithms;
+      ④b test MAE 0.5727 ρ 0.8195; SHAP ρ 0.9905. §10 re-authored from corrected numbers.
+- [ ] P3-T2 rehearse + test `--rerun-under DL-034` (pause after this for author review) · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
 - [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md
 
 ---

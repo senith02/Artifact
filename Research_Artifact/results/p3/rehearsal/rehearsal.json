@@ -1,9 +1,9 @@
 {
   "mode": "calibration rehearsal \u2014 reproduces P1; not a test result",
   "command": "PYTHONPATH=. python scripts/evaluate_test.py --split calibration",
-  "run_date": "2026-09-25",
+  "run_date": "2026-10-01",
   "n_resamples": 1000,
-  "fingerprint": "da77d6cab337326851089deaf8f0d34b0133af05e4ee176d9239a559ca7b746a",
+  "fingerprint": "066cda00282e77af154868977f520c643133e7a54774a8b58a504ff2eaf4d287",
   "seed": 42,
   "library_versions": {
     "python": "3.11.1",
@@ -12,7 +12,7 @@
     "scikit-learn": "1.9.0",
     "xgboost": "3.2.0"
   },
-  "elapsed_s": 4326.7,
+  "elapsed_s": 3544.4,
   "all_checks_pass": true,
   "n_checks": 32,
   "n_failed": 0,

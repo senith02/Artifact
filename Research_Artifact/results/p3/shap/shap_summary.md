@@ -9,31 +9,31 @@ Direction is the sign of the feature-value / SHAP-value Spearman ρ, and is stat
 
 | rank | feature | family | mean \|SHAP\| | mean signed SHAP | Spearman ρ | direction |
 | --: | :-- | :-- | --: | --: | --: | :-- |
-| 1 | `d_hat_log1p` | control | 0.311161 | -0.099407 | +0.7347 | increases risk |
-| 2 | `test_lines_per_kloc` | F3 | 0.246574 | -0.079687 | -0.2096 | decreases risk |
-| 3 | `team_size` | F5 | 0.196762 | -0.042367 | -0.7627 | decreases risk |
-| 4 | `repo_num_commits` | F4 | 0.184668 | -0.088770 | +0.2764 | increases risk |
-| 5 | `repo_age` | F4 | 0.178846 | -0.090981 | -0.0777 | decreases risk |
-| 6 | `asserts_per_kloc` | F3 | 0.175587 | -0.039577 | +0.0658 | increases risk |
-| 7 | `sloc` | F4 | 0.174866 | -0.068401 | +0.2253 | increases risk |
-| 8 | `test_cases_per_kloc` | F3 | 0.164980 | -0.019391 | -0.0460 | decreases risk |
-| 9 | `other_files` | F2 | 0.073430 | +0.004145 | +0.8770 | increases risk |
-| 10 | `commits_on_files_touched` | F4 | 0.070642 | -0.013486 | -0.5446 | decreases risk |
+| 1 | `d_hat_log1p` | control | 0.266093 | -0.047290 | +0.8062 | increases risk |
+| 2 | `test_lines_per_kloc` | F3 | 0.219917 | -0.111117 | -0.1888 | decreases risk |
+| 3 | `team_size` | F5 | 0.189853 | -0.016729 | -0.8177 | decreases risk |
+| 4 | `asserts_per_kloc` | F3 | 0.161415 | +0.019170 | -0.1042 | decreases risk |
+| 5 | `repo_num_commits` | F4 | 0.157587 | -0.052443 | +0.5899 | increases risk |
+| 6 | `test_cases_per_kloc` | F3 | 0.143692 | -0.019707 | +0.0700 | increases risk |
+| 7 | `repo_age` | F4 | 0.140322 | -0.003812 | -0.4503 | decreases risk |
+| 8 | `sloc` | F4 | 0.130547 | -0.041513 | +0.1221 | increases risk |
+| 9 | `num_commits` | F1 | 0.067208 | +0.001298 | +0.6533 | increases risk |
+| 10 | `lang=ruby` | F4 | 0.066220 | +0.006505 | +0.7897 | increases risk |
 
 ## 2. Per-family magnitude and project-identity share
 
 | family | mean \|Σ SHAP\| (test) | mean \|Σ SHAP\| (calibration) | rank test | rank calibration | between-project share (test) |
 | :-- | --: | --: | --: | --: | --: |
-| `control` | 0.311161 | 0.294053 | 3 | 3 | 0.7422 |
-| `F1` | 0.103130 | 0.098696 | 6 | 6 | 0.0605 |
-| `F2` | 0.086782 | 0.086919 | 7 | 7 | 0.0766 |
-| `F3` | 0.330847 | 0.323179 | 2 | 2 | 0.5877 |
-| `F4` | 0.417495 | 0.444288 | 1 | 1 | 0.3684 |
-| `F5` | 0.197818 | 0.208016 | 4 | 4 | 0.6586 |
-| `F6` | 0.113349 | 0.114111 | 5 | 5 | 0.0779 |
+| `control` | 0.266093 | 0.259120 | 3 | 3 | 0.7636 |
+| `F1` | 0.098066 | 0.093548 | 5 | 5 | 0.0688 |
+| `F2` | 0.042266 | 0.043120 | 7 | 7 | 0.0854 |
+| `F3` | 0.285956 | 0.268643 | 2 | 2 | 0.6256 |
+| `F4` | 0.290360 | 0.312934 | 1 | 1 | 0.4349 |
+| `F5` | 0.190752 | 0.192678 | 4 | 4 | 0.7595 |
+| `F6` | 0.051654 | 0.049598 | 6 | 6 | 0.1006 |
 
 ## 3. Calibration vs test (the SHAP used for policy fitting vs this one)
 
-- Spearman correlation of per-feature mean \|SHAP\|, calibration vs test: **0.9960** over 32 design columns.
+- Spearman correlation of per-feature mean \|SHAP\|, calibration vs test: **0.9905** over 32 design columns.
 - Top-10 overlap: **10 / 10**. Only in calibration's top 10: none. Only in test's: none.
 - `family_importance.png` plots the per-family column pair.

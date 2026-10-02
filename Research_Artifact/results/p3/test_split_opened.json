@@ -1,8 +1,15 @@
 {
-  "opened_at_utc": "2026-09-25T19:20:25.878240+00:00",
-  "command": "PYTHONPATH=. python scripts/evaluate_test.py --split test --open-test-split",
-  "fingerprint": "da77d6cab337326851089deaf8f0d34b0133af05e4ee176d9239a559ca7b746a",
-  "rehearsal_run_date": "2026-09-25",
-  "rerun_under": null,
-  "previous_opening": null
+  "opened_at_utc": "2026-10-01T19:01:59.662431+00:00",
+  "command": "PYTHONPATH=. python scripts/evaluate_test.py --split test --open-test-split --rerun-under DL-034",
+  "fingerprint": "066cda00282e77af154868977f520c643133e7a54774a8b58a504ff2eaf4d287",
+  "rehearsal_run_date": "2026-10-01",
+  "rerun_under": "DL-034",
+  "previous_opening": {
+    "opened_at_utc": "2026-09-25T19:20:25.878240+00:00",
+    "command": "PYTHONPATH=. python scripts/evaluate_test.py --split test --open-test-split",
+    "fingerprint": "da77d6cab337326851089deaf8f0d34b0133af05e4ee176d9239a559ca7b746a",
+    "rehearsal_run_date": "2026-09-25",
+    "rerun_under": null,
+    "previous_opening": null
+  }
 }
