@@ -1,9 +1,9 @@
 {
   "mode": "calibration-sample rehearsal \u2014 reproduces P2-T5; not a test result",
   "command": "PYTHONPATH=. python scripts/run_test_replay.py --mode rehearse",
-  "run_date": "2026-09-26",
-  "code_fingerprint": "51930b106b490ea9e68e7b123b59e11400858f5ffabb462562d96d914e575f79",
-  "run_fingerprint": "d08d15b7f28f10bdef39f0ec95e1dae6a46e76eadbe29ef33aced36ac30e7b03",
+  "run_date": "2026-10-02",
+  "code_fingerprint": "61d10126060ab37a901e59ea54cb160ee293d4b2bb862cfd7fe333b285007a36",
+  "run_fingerprint": "d4aad03235eda1f05dc5bb980a39842b37f8ae5811601d02d06436b9a613acaa",
   "grid_sha256": "151a4b360a70d96fa38249d31296eec6eb983e600a1a3a69763406b26c1013b9",
   "seed": 42,
   "energy": {
@@ -43,10 +43,10 @@
     "duration_control_fit_id": "1088d5546f47ff12",
     "duration_control_primary_form": "4b",
     "risk_arm": "xgboost:full",
-    "risk_arm_fit_id": "65fd81b1e952fd72",
-    "risk_arm_sha256": "315a31028401e356dc0b4e16a0f1d430402b44d5263e0fbd4400a8b4049df0b6",
+    "risk_arm_fit_id": "a09cc750e9db41b8",
+    "risk_arm_sha256": "c956607b048dd8949a99e288c3024ea57aabda9be217eada045e02839dc769f0",
     "duration_estimator_sha256": "ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0",
-    "history_rule": "expanding, strictly earlier (gh_build_started_at < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014)"
+    "history_rule": "expanding, finished before arrival (gh_build_started_at + tr_duration < t_b), ties excluded \u2014 computed over every calibration build before sampling (DL-014, corrected by DL-034)"
   },
   "n_resamples": 1000,
   "all_checks_pass": true,
@@ -58,13 +58,13 @@
     },
     "validator": {
       "rows": 1224000,
-      "deferred": 117450,
+      "deferred": 117440,
       "violations": 0,
       "violation_rows": [],
       "passed": true
     },
     "skip_audit": {
-      "skipped_rows": 2401,
+      "skipped_rows": 3135,
       "non_deferrable_skipped": 0,
       "examples": [],
       "passed": true
@@ -76,30 +76,30 @@
       "6_at_tau0_equals_1_static_actions": true
     },
     "bootstrap_points_equal_summary": {
-      "max_relative_difference": 2.6999903139364706e-15,
+      "max_relative_difference": 2.8173767183150127e-15,
       "mismatches": [],
       "passed": true
     },
     "spec": {
-      "sha256": "34d689c9fae03345e6964da97f74d8668c3766643f5696b8c1af73df92107da3",
+      "sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
       "require_fitted": true,
       "fitted": true,
       "grid_digest_matches": true
     },
     "reproduces_p2_t5": {
       "trace.csv": {
-        "this": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
-        "p2_t5": "9725a2242033a61593a2c6fde94ab3fff8ed944a9c31bac0b9dc4254423ccf9c",
+        "this": "44e1f0b55ab107ec5f83717f47feded3b42d682e593456f31e0de77a49539c50",
+        "p2_t5": "44e1f0b55ab107ec5f83717f47feded3b42d682e593456f31e0de77a49539c50",
         "identical": true
       },
       "summary.csv": {
-        "this": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
-        "p2_t5": "064eac0380239484f8dbaa02aa56ff53161de6470a01877602297994827cdc2f",
+        "this": "60349537f6fe4978d09833f6cd396faf1084a70e98536952fce1965f18012f18",
+        "p2_t5": "60349537f6fe4978d09833f6cd396faf1084a70e98536952fce1965f18012f18",
         "identical": true
       },
       "herding.csv": {
-        "this": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
-        "p2_t5": "ae4e612659842b01af8b7429b7714d4fafcbd7e318b7a0f7cdece7cea2bd2b18",
+        "this": "b5941ed1d3fc17f0b6663f2f09092ac71311ec8676562fc5aba69eb76997e41d",
+        "p2_t5": "b5941ed1d3fc17f0b6663f2f09092ac71311ec8676562fc5aba69eb76997e41d",
         "identical": true
       }
     },
@@ -129,5 +129,5 @@
       "language": 16
     }
   },
-  "runtime_s": 263.2
+  "runtime_s": 369.5
 }

@@ -1,10 +1,10 @@
-﻿test replay recorded in results\p3\test_replay_opened.json
+test replay recorded in results\p3\test_replay_opened.json
 reading C:\Users\senit\Desktop\Projects\Research\Artifact\Dataset\19314170\final-2017-01-25.csv\final-2017-01-25.csv (test) …
-  138,693 analytic test builds / 170 projects (32s)
+  138,693 analytic test builds / 170 projects (40s)
   trace: 138,693 builds / 170 projects; unaccountable 55; failure rate 25.0359%
   cross-check vs P3-T1 scores: {'builds_matched': 138693, 'p_hat_max_abs_diff': 9.71445146547012e-17, 'd_hat_4b_seconds_max_abs_diff': 6.548361852765083e-11, 'y_fail_equal': True, 'passed': True}
 
-replaying 102 settings × 138,693 builds (run fingerprint d9e30163609cc2a4) …
+replaying 102 settings × 138,693 builds (run fingerprint dceda8254c22e713) …
   [  1/102] 1_static: 0 deferred, 0 skipped
   [  2/102] 2_blanket_carbon_aware__d0__w167: 26,965 deferred, 0 skipped
   [  3/102] 3_eligibility_only__d0__w6: 21,322 deferred, 0 skipped
@@ -41,72 +41,72 @@ replaying 102 settings × 138,693 builds (run fingerprint d9e30163609cc2a4) …
   [ 34/102] 4a_duration_estimator__d7680__w24: 0 deferred, 0 skipped
   [ 35/102] 4a_duration_estimator__d15360__w24: 0 deferred, 0 skipped
   [ 36/102] 4b_duration_prior__d0__w6: 21,322 deferred, 0 skipped
-  [ 37/102] 4b_duration_prior__d60__w6: 19,158 deferred, 0 skipped
-  [ 38/102] 4b_duration_prior__d120__w6: 17,162 deferred, 0 skipped
-  [ 39/102] 4b_duration_prior__d240__w6: 13,384 deferred, 0 skipped
+  [ 37/102] 4b_duration_prior__d60__w6: 19,155 deferred, 0 skipped
+  [ 38/102] 4b_duration_prior__d120__w6: 17,158 deferred, 0 skipped
+  [ 39/102] 4b_duration_prior__d240__w6: 13,379 deferred, 0 skipped
   [ 40/102] 4b_duration_prior__d480__w6: 9,186 deferred, 0 skipped
-  [ 41/102] 4b_duration_prior__d960__w6: 4,638 deferred, 0 skipped
-  [ 42/102] 4b_duration_prior__d1920__w6: 2,078 deferred, 0 skipped
-  [ 43/102] 4b_duration_prior__d3840__w6: 843 deferred, 0 skipped
+  [ 41/102] 4b_duration_prior__d960__w6: 4,633 deferred, 0 skipped
+  [ 42/102] 4b_duration_prior__d1920__w6: 2,077 deferred, 0 skipped
+  [ 43/102] 4b_duration_prior__d3840__w6: 842 deferred, 0 skipped
   [ 44/102] 4b_duration_prior__d7680__w6: 433 deferred, 0 skipped
   [ 45/102] 4b_duration_prior__d15360__w6: 432 deferred, 0 skipped
   [ 46/102] 4b_duration_prior__d0__w12: 25,100 deferred, 0 skipped
-  [ 47/102] 4b_duration_prior__d60__w12: 22,533 deferred, 0 skipped
-  [ 48/102] 4b_duration_prior__d120__w12: 20,096 deferred, 0 skipped
-  [ 49/102] 4b_duration_prior__d240__w12: 15,566 deferred, 0 skipped
-  [ 50/102] 4b_duration_prior__d480__w12: 10,650 deferred, 0 skipped
-  [ 51/102] 4b_duration_prior__d960__w12: 5,666 deferred, 0 skipped
-  [ 52/102] 4b_duration_prior__d1920__w12: 2,390 deferred, 0 skipped
-  [ 53/102] 4b_duration_prior__d3840__w12: 905 deferred, 0 skipped
+  [ 47/102] 4b_duration_prior__d60__w12: 22,530 deferred, 0 skipped
+  [ 48/102] 4b_duration_prior__d120__w12: 20,092 deferred, 0 skipped
+  [ 49/102] 4b_duration_prior__d240__w12: 15,560 deferred, 0 skipped
+  [ 50/102] 4b_duration_prior__d480__w12: 10,651 deferred, 0 skipped
+  [ 51/102] 4b_duration_prior__d960__w12: 5,660 deferred, 0 skipped
+  [ 52/102] 4b_duration_prior__d1920__w12: 2,389 deferred, 0 skipped
+  [ 53/102] 4b_duration_prior__d3840__w12: 904 deferred, 0 skipped
   [ 54/102] 4b_duration_prior__d7680__w12: 473 deferred, 0 skipped
   [ 55/102] 4b_duration_prior__d15360__w12: 472 deferred, 0 skipped
   [ 56/102] 4b_duration_prior__d0__w24: 25,989 deferred, 0 skipped
-  [ 57/102] 4b_duration_prior__d60__w24: 23,330 deferred, 0 skipped
-  [ 58/102] 4b_duration_prior__d120__w24: 20,777 deferred, 0 skipped
-  [ 59/102] 4b_duration_prior__d240__w24: 16,065 deferred, 0 skipped
-  [ 60/102] 4b_duration_prior__d480__w24: 10,982 deferred, 0 skipped
-  [ 61/102] 4b_duration_prior__d960__w24: 5,863 deferred, 0 skipped
-  [ 62/102] 4b_duration_prior__d1920__w24: 2,491 deferred, 0 skipped
-  [ 63/102] 4b_duration_prior__d3840__w24: 951 deferred, 0 skipped
+  [ 57/102] 4b_duration_prior__d60__w24: 23,327 deferred, 0 skipped
+  [ 58/102] 4b_duration_prior__d120__w24: 20,773 deferred, 0 skipped
+  [ 59/102] 4b_duration_prior__d240__w24: 16,059 deferred, 0 skipped
+  [ 60/102] 4b_duration_prior__d480__w24: 10,983 deferred, 0 skipped
+  [ 61/102] 4b_duration_prior__d960__w24: 5,857 deferred, 0 skipped
+  [ 62/102] 4b_duration_prior__d1920__w24: 2,490 deferred, 0 skipped
+  [ 63/102] 4b_duration_prior__d3840__w24: 950 deferred, 0 skipped
   [ 64/102] 4b_duration_prior__d7680__w24: 506 deferred, 0 skipped
   [ 65/102] 4b_duration_prior__d15360__w24: 505 deferred, 0 skipped
   [ 66/102] 5_se_informed_policy__d0__w6: 21,322 deferred, 0 skipped
-  [ 67/102] 5_se_informed_policy__d60__w6: 19,158 deferred, 0 skipped
-  [ 68/102] 5_se_informed_policy__d120__w6: 17,162 deferred, 0 skipped
-  [ 69/102] 5_se_informed_policy__d240__w6: 13,384 deferred, 0 skipped
+  [ 67/102] 5_se_informed_policy__d60__w6: 19,155 deferred, 0 skipped
+  [ 68/102] 5_se_informed_policy__d120__w6: 17,158 deferred, 0 skipped
+  [ 69/102] 5_se_informed_policy__d240__w6: 13,379 deferred, 0 skipped
   [ 70/102] 5_se_informed_policy__d480__w6: 9,186 deferred, 0 skipped
-  [ 71/102] 5_se_informed_policy__d960__w6: 4,638 deferred, 0 skipped
-  [ 72/102] 5_se_informed_policy__d1920__w6: 2,078 deferred, 0 skipped
-  [ 73/102] 5_se_informed_policy__d3840__w6: 843 deferred, 0 skipped
+  [ 71/102] 5_se_informed_policy__d960__w6: 4,633 deferred, 0 skipped
+  [ 72/102] 5_se_informed_policy__d1920__w6: 2,077 deferred, 0 skipped
+  [ 73/102] 5_se_informed_policy__d3840__w6: 842 deferred, 0 skipped
   [ 74/102] 5_se_informed_policy__d7680__w6: 433 deferred, 0 skipped
   [ 75/102] 5_se_informed_policy__d15360__w6: 432 deferred, 0 skipped
   [ 76/102] 5_se_informed_policy__d0__w12: 25,100 deferred, 0 skipped
-  [ 77/102] 5_se_informed_policy__d60__w12: 22,533 deferred, 0 skipped
-  [ 78/102] 5_se_informed_policy__d120__w12: 20,096 deferred, 0 skipped
-  [ 79/102] 5_se_informed_policy__d240__w12: 15,566 deferred, 0 skipped
-  [ 80/102] 5_se_informed_policy__d480__w12: 10,650 deferred, 0 skipped
-  [ 81/102] 5_se_informed_policy__d960__w12: 5,666 deferred, 0 skipped
-  [ 82/102] 5_se_informed_policy__d1920__w12: 2,390 deferred, 0 skipped
-  [ 83/102] 5_se_informed_policy__d3840__w12: 905 deferred, 0 skipped
+  [ 77/102] 5_se_informed_policy__d60__w12: 22,530 deferred, 0 skipped
+  [ 78/102] 5_se_informed_policy__d120__w12: 20,092 deferred, 0 skipped
+  [ 79/102] 5_se_informed_policy__d240__w12: 15,560 deferred, 0 skipped
+  [ 80/102] 5_se_informed_policy__d480__w12: 10,651 deferred, 0 skipped
+  [ 81/102] 5_se_informed_policy__d960__w12: 5,660 deferred, 0 skipped
+  [ 82/102] 5_se_informed_policy__d1920__w12: 2,389 deferred, 0 skipped
+  [ 83/102] 5_se_informed_policy__d3840__w12: 904 deferred, 0 skipped
   [ 84/102] 5_se_informed_policy__d7680__w12: 473 deferred, 0 skipped
   [ 85/102] 5_se_informed_policy__d15360__w12: 472 deferred, 0 skipped
   [ 86/102] 5_se_informed_policy__d0__w24: 25,989 deferred, 0 skipped
-  [ 87/102] 5_se_informed_policy__d60__w24: 23,330 deferred, 0 skipped
-  [ 88/102] 5_se_informed_policy__d120__w24: 20,777 deferred, 0 skipped
-  [ 89/102] 5_se_informed_policy__d240__w24: 16,065 deferred, 0 skipped
-  [ 90/102] 5_se_informed_policy__d480__w24: 10,982 deferred, 0 skipped
-  [ 91/102] 5_se_informed_policy__d960__w24: 5,863 deferred, 0 skipped
-  [ 92/102] 5_se_informed_policy__d1920__w24: 2,491 deferred, 0 skipped
-  [ 93/102] 5_se_informed_policy__d3840__w24: 951 deferred, 0 skipped
+  [ 87/102] 5_se_informed_policy__d60__w24: 23,327 deferred, 0 skipped
+  [ 88/102] 5_se_informed_policy__d120__w24: 20,773 deferred, 0 skipped
+  [ 89/102] 5_se_informed_policy__d240__w24: 16,059 deferred, 0 skipped
+  [ 90/102] 5_se_informed_policy__d480__w24: 10,983 deferred, 0 skipped
+  [ 91/102] 5_se_informed_policy__d960__w24: 5,857 deferred, 0 skipped
+  [ 92/102] 5_se_informed_policy__d1920__w24: 2,490 deferred, 0 skipped
+  [ 93/102] 5_se_informed_policy__d3840__w24: 950 deferred, 0 skipped
   [ 94/102] 5_se_informed_policy__d7680__w24: 506 deferred, 0 skipped
   [ 95/102] 5_se_informed_policy__d15360__w24: 505 deferred, 0 skipped
   [ 96/102] 6_risk_only_skip__t0: 0 deferred, 0 skipped
-  [ 97/102] 6_risk_only_skip__t0.05: 0 deferred, 21 skipped
-  [ 98/102] 6_risk_only_skip__t0.1: 0 deferred, 189 skipped
-  [ 99/102] 6_risk_only_skip__t0.15: 0 deferred, 293 skipped
-  [100/102] 6_risk_only_skip__t0.2: 0 deferred, 563 skipped
-  [101/102] 6_risk_only_skip__t0.25: 0 deferred, 1,004 skipped
-  [102/102] 6_risk_only_skip__t0.3: 0 deferred, 24,258 skipped
+  [ 97/102] 6_risk_only_skip__t0.05: 0 deferred, 858 skipped
+  [ 98/102] 6_risk_only_skip__t0.1: 0 deferred, 1,308 skipped
+  [ 99/102] 6_risk_only_skip__t0.15: 0 deferred, 2,120 skipped
+  [100/102] 6_risk_only_skip__t0.2: 0 deferred, 4,193 skipped
+  [101/102] 6_risk_only_skip__t0.25: 0 deferred, 5,879 skipped
+  [102/102] 6_risk_only_skip__t0.3: 0 deferred, 25,095 skipped
 
 assembling decisions.csv.gz …
 aggregating part by part …
@@ -212,8 +212,9 @@ aggregating part by part …
   [100/102] aggregated 6_risk_only_skip__t0.2
   [101/102] aggregated 6_risk_only_skip__t0.25
   [102/102] aggregated 6_risk_only_skip__t0.3
-  validator 0 violations / 1,016,092 deferrals / 14,146,686 rows; skip audit 0; identities {'5_equals_4b_at_every_point': True, '3_equals_4b_at_d0': True, '6_at_tau0_equals_1_static_actions': True}
+  validator 0 violations / 1,015,974 deferrals / 14,146,686 rows; skip audit 0; identities {'5_equals_4b_at_every_point': True, '3_equals_4b_at_d0': True, '6_at_tau0_equals_1_static_actions': True}
 
 paired bootstrap over 13 headline settings (B = 1000) …
 
-wrote results/p3/strategy_results.* (2402s) — checks PASS
+wrote results/p3/strategy_results.* (2767s) — checks PASS
+exit=0

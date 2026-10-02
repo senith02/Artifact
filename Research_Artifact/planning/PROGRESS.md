@@ -210,7 +210,13 @@ completion-causal ④b rule. Order and rules fixed by DL-034 §B3.
       openings). F1 ΔPR-AUC +0.013035 [+0.011639, +0.014500] (was +0.013313), admitted ×0.5/×1 not ×2
       (unchanged); F2–F5 rejected CIs < 0; F6 +0.002831 below floor; full < control all 3 algorithms;
       ④b test MAE 0.5727 ρ 0.8195; SHAP ρ 0.9905. §10 re-authored from corrected numbers.
-- [ ] P3-T2 rehearse + test `--rerun-under DL-034` (pause after this for author review) · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
+- [x] P3-T1 checkpoint commit `f2d5142`
+- [x] P3-T2 rehearse (byte-identical to P2-T5) + test `--rerun-under DL-034` (2,767 s, exit 0):
+      validator 0 / 1,015,974 deferrals / 14,146,686 rows; 0 of 39,453 skips non-deferrable; identities
+      hold. ⑤ ≡ ④b −2.480% vs ① (−70.7 g/1k), 10,983 deferred (7.92%), TTFF p95 13.91 h (was 13.89);
+      ⑤−④a TTFF p95 −0.16 [−0.61, +0.18]. **Changed:** ⑥ now saves more than ⑤ at τ 0.20/0.25
+      (5.471%/6.457%, 680/1,156 missed failures) — new `xgboost:full` p̂. §5b re-authored.
+      **Paused for author review 2026-10-02.** · [ ] P3-T2 rehearse + test `--rerun-under DL-034`
 - [ ] P3-T3 frontier_analysis · [ ] P3-T4 sweeps + summary · [ ] P3-T5 report revision + comparison.md
 
 ---
