@@ -1923,7 +1923,11 @@ edit or delete past entries (supersede them with a new entry instead).
 ### DL-033 — The DL-026 follow-up: P4 becomes a duration-history carbon-deferral *advisor* that embodies the P3 null (amends DL-026; proposed amendment to spec §5 and P4-T1..T3)
 
 - **Date:** 2026-10-01
-- **Status:** **Proposed — awaiting author decision** (draft revision 2, 2026-10-01: completed-history
+- **Status:** **Accepted — revision 3** (author decision, 2026-10-04: "accept DL-033 v3"). Revision 3
+  is appended at the end of this entry ("Revision 3") and **supersedes §B–§G below**. The revision-2
+  text below is kept unedited as history (R4). Its R3-G consequences were applied on 2026-10-04 (Layer
+  0-A note, `development_plan.md` P4, `PROGRESS.md`). Implementation (P4-T1) has not started.
+- **Status as of revision 2 (history):** **Proposed — awaiting author decision** (draft revision 2, 2026-10-01: completed-history
   contract per DL-034; §B9 operational/security contract added). Drafted at the author's request after
   the P3-T5 gate (`4d9e128`). **Not accepted and not acted on.** Its §A facts are re-checked against
   the DL-034 corrected results before acceptance: if the corrected chain admits an SE family, §B is
@@ -2103,6 +2107,617 @@ silently trusted. Keeping three tasks and the same identifiers leaves progress a
 - `research_state.json` `artifact_components` are updated and the guide rebuilt (DL-025).
 - If the author rejects this entry, DL-026 stays Proposed/Conditional and P4-T1 remains blocked until
   another follow-up entry is accepted.
+
+#### Revision 3 (2026-10-03) — Direction B locked: a duration-based CI deferral advisor plus a Repo What-If Report
+
+> **Status of this revision: Accepted 2026-10-04 (author decision).** The author's directive
+> of 2026-10-03 fixed the direction (Direction B) and every constraint marked *(directive)* below. The
+> session drafted the text. Once accepted, this revision **supersedes §B–§G of revision 2 in full**.
+> Revision 2's §A stands, re-verified in R3-A. Until acceptance, **no code, plan, spec, Layer 0-A,
+> `context/` or results file changes.** Revision 2's text above is left unedited (R4).
+
+##### R3-A. Facts re-verified on 2026-10-03, against the DL-034 corrected chain
+
+1. **No SE family is admitted.**
+   - The calibration admitted set is ∅ at ×0.5, ×1 and ×2, and `policy_path` is
+     `duration_only_fallback` (`results/corrections/dl034/comparison.md`, P1 block).
+   - Revision 2's re-draft condition ("if the corrected chain admits an SE family") is therefore not
+     triggered. `results/p3/evaluation_report.md` §8 reaches the same conclusion.
+   - F1 remains an unresolved, non-replicating model-level candidate whose decision-level value was
+     never tested (evaluation_report §2, RQ1; DL-028 §1). It cannot enter the artifact.
+2. **The frozen spec on disk** is `code/scheduler_core/config/policy_spec.yaml`, sha256
+   `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8`. The hash was computed this
+   session and matches `PROGRESS.md` and evaluation_report §11.2.
+   - Contents: `schema_version: 2`, `stage1.variant: primary`, `d_threshold_seconds: 480.0`,
+     `w_max_hours: 24.0`.
+   - **Correction:** revision 2 §B6 pins the superseded pre-DL-034 hash `34d689c9…07da3`. That hash is
+     wrong for P4. Revision 3 pins `e43b004d…`.
+3. **What `decide()` consumes** (`scheduler_core/policy.py::decide`):
+   - `gh_is_pr` and `git_branch` (Stage 1, through `eligibility.classify`);
+   - `arrival_dow` and `arrival_hour`, an hour-of-week slot in **UTC**, derived from `arrival_utc` as
+     `replay/simulator.py` does;
+   - `d_hat_seconds`.
+   It reads `p_hat` only on the `se_informed` path, which the spec does not contain. It is pure and
+   clock-free. It raises on any blocklisted outcome column. `defer_until` is a **relative** offset.
+4. **④b.**
+   - `duration_estimator.causal_project_history(..., availability="completed")` admits a labelled
+     build only when `start + duration < t_b`. `predict_4b(min_history=1)` falls back from project to
+     language to global prior.
+   - Estimator fit id `1088d5546f47ff12`. The file `code/artifacts/duration_estimator.joblib` has
+     sha256 `ccc5bb2431404f416ca9f23eaeab7d97ddd7a2723404cba85cd1254f01241fc0`, is tracked in git and is
+     9.6 MB.
+5. **Carbon of record.** `code/data/carbon/hour_of_week_profile.csv` (`carbon.DEFAULT_PROFILE_PATH`),
+   sha256 `efdc9f3847258d21a12cbb11f8ca79e98a3303302fb1f0f69c6cf0163e5e4239`, tracked. It is the GB
+   national 2024–2025 hour-of-week mean profile (P0-T3).
+6. **The evaluated behaviour the artifact embodies.** ⑤ ≡ ④b at d480/w24. On the test trace this gave
+   −2.480% estimated carbon vs ①, 7.92% of builds deferred and failed-build TTFF p95 13.91 h
+   (evaluation_report §2, RQ4). These are replay results on Travis CI 2011–2016 under the UK profile.
+   The artifact **demonstrates** them; it does not re-establish them.
+7. **External facts**, checked against public documentation on 2026-10-03. These are documentation
+   claims, not tested behaviour. P4 re-checks each one on the first real call, and any discrepancy is
+   logged as a DL entry, not worked around.
+   - **GitHub REST API.** `GET /repos/{owner}/{repo}/actions/runs` and the per-workflow variant:
+     - accept `status=completed`, up to 100 results per page;
+     - each run carries `created_at`, `updated_at` and `run_started_at`;
+     - `GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing` returns `run_duration_ms`;
+     - public repositories need only read access.
+   - **UK Carbon Intensity API.** Licensed CC BY 4.0. The documentation states no key requirement and
+     no rate limit. It provides national and regional current intensity and `fw24h`/`fw48h` forecasts.
+   - **Runner location.** GitHub-hosted runners run in US Azure regions, and the region is not
+     selectable. A GB location requires a self-hosted runner, or Azure private networking in
+     UkSouth/UkWest.
+   - **Scheduled workflows.** They can be delayed or dropped under load. In public repositories they
+     are disabled after 60 days without repository activity.
+
+##### R3-B. Decision
+
+1. **Artifact identity *(directive)*. A duration-based CI deferral advisor**, built from three things:
+   - the shared `scheduler_core.decide()` under the frozen duration-only spec;
+   - a **GitHub Action** that reports `RUN NOW` or `DEFER RECOMMENDED`;
+   - a **Repo What-If Report** in place of the dashboard.
+   The artifact embodies the P3 null: its inputs are exactly what the frozen policy consumes.
+2. **No SE features, no SE model, no SHAP, no risk scoring *(directive)*.**
+   - The request schema rejects all 28 feature names in `features.FAMILIES` and every
+     `features.is_blocklisted` column.
+   - No `p_hat` is computed, accepted, logged or displayed.
+   - The `xgboost:*` failure arms are not loaded by any P4 component. A test asserts this on the
+     import graph.
+3. **One core, no forked logic (invariant 5).**
+   - Every decision passes through `scheduler_core.decide()`, loaded with `require_fitted=True` and
+     with spec sha256 `e43b004d…` asserted.
+   - `d̂` is computed by the frozen estimator's own `causal_project_history` + `predict_4b`, fed from
+     live history. It is never re-implemented.
+   - P4 changes no line of `scheduler_core/` decision code. New code lives only in adapters.
+4. **Completed-history semantics *(directive; DL-034)*.** A history run is admissible only if all of
+   the following hold:
+   - `status == completed`;
+   - its conclusion is `success` or `failure`;
+   - it belongs to the same repository **and the same workflow file** as the scored run;
+   - it is a different run;
+   - it finished before arrival: `max(updated_at, run_started_at + duration_s) < arrival_utc`.
+
+   Rules for the inputs to that test:
+   - **Excluded runs.** Queued, in-progress, cancelled, skipped, neutral, stale, `action_required` and
+     `timed_out` runs never enter. `timed_out` is excluded because its duration is censored.
+   - **Duration.** `run_duration_ms / 1000` from the timing endpoint. Where that is unavailable,
+     `updated_at − run_started_at`, recorded as `duration_source`.
+   - **Arrival** is the scored run's `created_at`, in UTC.
+   - **Construct mapping, declared.** "Project" in ④b becomes the (repository, workflow file) pair.
+     Run wall-clock replaces Travis `tr_duration`, which is a different construct.
+5. **Carbon: GB only, with compute location as an explicit assumption *(directive)*.**
+   - **Decision of record.** The decision uses the frozen GB hour-of-week profile, with sha256
+     `efdc9f38…` asserted, exactly as in evaluation.
+   - **Compute location must be declared.** The team must set `compute_region: GB` explicitly; there
+     is no default and no detection. A missing or non-GB value gives `RUN NOW` with a stated reason.
+   - **The assumption is always printed.** Every output carries: *"Assumed compute location: GB
+     (declared, not detected). The GB carbon signal applies only to runners physically located in
+     Great Britain. GitHub-hosted runners run in US regions."*
+   - **Live intensity is display only.** Current GB intensity from the Carbon Intensity API is shown as
+     `grid_gco2_live` and never changes the decision.
+   - **Forecast mode is withdrawn from P4** (it was opt-in in revision 2) and recorded as future work.
+     DL-026's IP-geolocation and region hierarchy stay withdrawn.
+6. **Team-owned eligibility and urgency *(directive)*, as a monotone veto layer.**
+   - Stage 1 runs exactly as evaluated (DL-020, primary variant).
+   - On top of it, the team's config may only turn a `defer` into `RUN NOW`, never the reverse:
+     - **Opt-in.** Only workflows listed in `enabled_workflows` are advised. Every other workflow gets
+       `RUN NOW (not opted in)`.
+     - **Urgency vetoes:**
+       - extra protected-branch patterns;
+       - tag refs;
+       - `workflow_dispatch` and `schedule` events, which are vetoed by default because DL-020's
+         manual and scheduled classes are unapproximated;
+       - a commit-message or PR-label marker (default `[urgent]`);
+       - re-dispatched runs.
+   - **Implementation.** The layer runs **after** `decide()` returns. It never alters `decide()`'s
+     inputs and never searches for another slot. Both `policy_action` and `final_action` are logged.
+   - **Property, tested.** Whenever the advisor recommends deferral, `decide()` recommended the same
+     deferral with the identical `defer_until`.
+7. **Max delay and deadline *(directive)*.**
+   - The team may set `max_delay_hours` in (0, 24]. A value above 24 is rejected as invalid config,
+     which fails safe, because it exceeds the evaluated `w_max`.
+   - A per-run `deadline_utc` may also be supplied.
+   - If the recommended delay exceeds either limit, the result is `RUN NOW (delay exceeds team
+     limit)`. **The window is not re-optimised.** A shorter window would be an operating point other
+     than the frozen one (S-b swept 6 h and 12 h as sensitivities only).
+8. **Recommendation-first *(directive)*.**
+   - The Action recommends. It never pauses, cancels or fails the user's pipeline: the advisory step
+     always exits 0 and publishes step outputs.
+   - Gating a downstream job on `action` is the team's own choice, shown only in the reference
+     workflow.
+   - **Re-dispatch is an optional reference demonstration, not autonomous scheduling.**
+     - It is off by default and enabled per repository.
+     - It needs a human-visible acceptance record: a `carbon-deferral` issue that a person can close to
+       cancel.
+     - It is idempotent and dispatches at most once per key (R3-C10).
+     - It is the first item cut if time is short.
+9. **Fail safe to `RUN NOW` *(directive)*.**
+   - Any missing, invalid or failed dependency gives `RUN NOW` with `fail_safe: true` and a reason
+     naming the failure (R3-C5). It never gives `defer`.
+   - The live carbon display is the only dependency whose failure does not change the outcome, because
+     it is never decisive. Its absence is shown as "live intensity unavailable".
+10. **What-If results are demonstration only *(directive)*.**
+    - They are never research evidence and never enter RQ1–RQ4, the evaluation report or the frozen
+      spec.
+    - Every What-If output carries the banner *"Demonstration — not research evidence"*.
+    - P5-T3's claims audit checks that no What-If number appears in any RQ1–RQ4 results or discussion
+      text.
+11. **Operational and security contract *(directive)*.** Revision 2's §B9 is retained and extended in
+    R3-C5 to R3-C10: least privilege, trusted events, idempotency, duplicate-run protection, input
+    validation, retries and rate limits, and audit logging.
+
+##### R3-C. Final P4 artifact contract
+
+**C1. Components** (all under `code/`; P4 adds files, and `scheduler_core/` decision code is unchanged)
+
+| component | path | role |
+| :-- | :-- | :-- |
+| core | `scheduler_core/` (unchanged) | `decide()`, eligibility, ④b estimator, carbon profile, accounting |
+| advisor | `advisor/` (new) | validate → history → `d̂` → `decide()` → veto → render → audit. The only orchestration layer |
+| history adapter | `advisor/history.py` | GitHub REST client plus a JSON-file fixture; completed-history filter |
+| CLI | `python -m advisor advise …` / `python -m advisor whatif …` | in-process path used by the Action |
+| REST API | `api/` (FastAPI) | `POST /decision` (spec §5 Must) and `GET /health`; calls the same advisor |
+| GitHub Action | `github-action/action.yml` (composite) | runs the CLI in-process; Step Summary + step outputs |
+| What-If report | `advisor/whatif.py` | replays a repo's completed runs through the same path |
+| reference workflows | `github-action/examples/` | basic advisory use; optional re-dispatch demo |
+
+**C2. Request schema — closed.** Unknown keys are rejected.
+
+- **Required:**
+  - `repository` (`owner/name`, regex `^[A-Za-z0-9-]{1,39}/[A-Za-z0-9._-]{1,100}$`);
+  - `workflow` (workflow file name);
+  - `event` (one of the trusted events, C7);
+  - `ref_type` (`branch` | `tag`);
+  - `branch` (≤ 255 chars, no control characters);
+  - `is_pr` (bool);
+  - `arrival_utc` (ISO-8601 with an offset, not in the future beyond a 5-minute skew allowance);
+  - `compute_region`.
+- **Optional:**
+  - `deadline_utc`;
+  - `head_sha` (40 hex);
+  - `run_id`, `run_attempt`;
+  - `redispatch_key`;
+  - `history`, a list of at most `history_cap` entries `{run_id, workflow, status, conclusion,
+    created_at, run_started_at, updated_at, duration_s}`. If absent, the adapter fetches the history.
+- **Rejected by name:** `tr_duration`, `tr_log_buildduration`, `tr_status`, any
+  `features.is_blocklisted` column, any of the 28 SE feature names, `p_hat`, and any field carrying the
+  current run's own duration or outcome.
+
+**C3. Order of operations (fixed)**
+
+1. Schema validation.
+2. Trusted-event check.
+3. Config and opt-in check.
+4. Spec, profile and estimator hash checks.
+5. History fetch, then completed-history filter.
+6. `d̂` via `causal_project_history` + `predict_4b`, with its rung reported.
+7. `scheduler_core.decide(build, profile, spec)`.
+8. Veto layer (team urgency, max delay, deadline).
+9. Render.
+10. Append the audit record.
+
+A failure at any step returns `RUN NOW` with `fail_safe: true` (C5) and is still audited.
+
+**C4. Response**
+
+- **Decision:**
+  - `action` (`run_now` | `defer`), shown as `RUN NOW` / `DEFER RECOMMENDED`;
+  - `policy_action`, `final_action`, `veto` (rule or null), `fail_safe` (bool);
+  - `reason` (`decide()`'s reason, plus any veto or fail-safe clause, plus the null statement);
+  - `defer_until` (relative offset and absolute UTC time, computed by the adapter from `arrival_utc`),
+    `delay_hours`, `window_hours`;
+  - `d_hat_seconds`, `d_hat_rung` (`project` | `language` | `global`), `n_history`,
+    `duration_source`.
+- **Carbon and estimates:**
+  - `grid_gco2_profile_now` and `grid_gco2_profile_scheduled` (profile, decision of record);
+  - `grid_gco2_live` (display, or null);
+  - `est_carbon_change_pct` (the estimate for `d̂` at the scheduled vs the arrival slot under the
+    energy model, labelled "estimated").
+- **Provenance:**
+  - `policy_path`, `spec_sha256`, `profile_sha256`, `estimator_fit_id`, `compute_region_assumed`,
+    `advisor_version`.
+
+The **null statement** always present in `reason`: "SE characteristics were evaluated and not admitted
+(results/p1/incremental_value.md; results/p3/evaluation_report.md) — this decision uses branch/PR
+status and a duration estimate from completed history only."
+
+**C5. Fail-safe matrix** (every row gives `RUN NOW`, `fail_safe: true` and a named reason, and is
+covered by a test)
+
+- **Input and config:**
+  - schema violation or invalid input;
+  - untrusted event;
+  - missing, invalid or non-GB `compute_region`;
+  - invalid team config, including `max_delay_hours` > 24;
+  - deadline unparseable or already past;
+  - arrival in the future beyond the skew allowance.
+- **Frozen artifacts:**
+  - spec missing or hash mismatch, or `require_fitted` refusal;
+  - profile missing or hash mismatch;
+  - estimator missing or fit-id mismatch.
+- **History:**
+  - API error after retries;
+  - rate limit exhausted;
+  - timeout;
+  - pagination cap reached before any admissible run *and* no prior rung available;
+  - malformed run records.
+- **Other:**
+  - REST API unreachable when the Action is configured for API mode;
+  - any unhandled exception in the advisor.
+- **Cold start is *not* a failure.** It uses the language or global rung, as evaluated, and is
+  reported. A repository language outside the fitted Travis levels falls to the global rung, declared
+  as an extrapolation.
+
+**C6. Team config** (`.github/carbon-advisor.yml`, validated, closed schema)
+
+- `compute_region` (required);
+- `enabled_workflows` (required, non-empty);
+- `extra_protected_branches`;
+- `urgent_markers` (default `["[urgent]"]`);
+- `veto_events` (default `[workflow_dispatch, schedule]`);
+- `max_delay_hours` (0 < x ≤ 24, default 24);
+- `history_cap` (design default 500 completed runs; not a result);
+- `redispatch` (`off` | `reference-demo`, default `off`).
+
+**C7. GitHub permissions and trusted events**
+
+- **Trusted events:** `push`, `pull_request` (always `RUN NOW` via Stage 1), `workflow_dispatch` and
+  `schedule` (vetoed by default).
+- **Refused:** `pull_request_target`, `workflow_run` and any other event. The advisor returns
+  `RUN NOW (untrusted event)` and makes no API call.
+- **Advisory job permissions:** `contents: read`, `actions: read`, nothing else.
+- **Re-dispatch demo only:** the advisor additionally gets `issues: write`. The dispatcher workflow
+  gets `actions: write` and `issues: write`, declared in that workflow alone.
+- **Forks.** Fork PRs never receive a write-scoped token.
+- **Injection.** Event fields are passed as environment variables or JSON, never interpolated into
+  `run:` lines.
+- **Supply chain.** Third-party actions are pinned by commit SHA. Python dependencies install from
+  `requirements.lock.txt`.
+
+**C8. Repo What-If Report** (`python -m advisor whatif --repo owner/name --workflow file`)
+
+1. **Input.** The last ≤ `history_cap` completed runs of one workflow, read only.
+2. **Per run.** Arrival is `created_at`. `d̂` is computed from runs that had finished before that
+   arrival, within the fetched window (C2 and §B4 rules). The run then goes through the same
+   `decide()` and the same veto layer.
+3. **Accounting.**
+   - The run's **observed** duration is used *after* the decision, for estimated energy and carbon
+     only (A1.2 role 1, as in the simulator): `accounting.energy_kwh` × profile intensity.
+   - This is done at the arrival slot (run now, ①) and at the scheduled slot (advisor), with the
+     ±50% `P_avg` band.
+4. **Reported:**
+   - runs fetched, analysed, and excluded (by reason);
+   - Stage-1-eligible share and deferred share, with run-now reasons broken down (PR, protected,
+     below threshold, no greener slot, vetoed, fail-safe);
+   - estimated carbon change vs run-now (% and g, with band);
+   - mean added delay over all runs;
+   - failed-run TTFF p95 = delay + observed duration over runs with `conclusion == failure`. This is
+     computed only when there are ≥ 20 failed runs (design default); otherwise it is reported as "not
+     computable (n = k)";
+   - `d̂` rung coverage, including the warm-up runs whose history is truncated by the window;
+   - threshold and window, spec/profile hashes, estimator fit id;
+   - the full assumptions and limitations block (C11).
+5. **Output.**
+   - Markdown, plus JSON with the same numbers, written to the Step Summary or a local path.
+   - **Never written into `results/p0`–`results/p3`.** Captured P4 evidence lives under `results/p4/`,
+     behind a README banner stating it is demonstration-only.
+6. **Which repositories.** The demo repository, plus public repositories chosen by a rule fixed
+   **before** any report is generated (R3-D, P4-T3 S1). This rules out picking a flattering
+   repository. No login, actor or personal field is stored. Only aggregates are published.
+
+**C9. Audit log.** Append-only JSON Lines, one record per decision, including fail-safe ones.
+
+- **Fields:** timestamp, idempotency key `(repository, workflow, head_sha, run_attempt)`, every C4 field
+  and the validated inputs.
+- **Never logged:** secrets, tokens or actor identities.
+- **Duplicate keys.** A repeated key returns the identical decision and is logged as `duplicate: true`.
+  It never creates a second deferral record.
+- **Validation.** `replay/validate_invariants.py` (or a thin wrapper that maps fields onto its schema)
+  runs over the log. Required result: 0 non-deferrable builds deferred.
+
+**C10. Re-dispatch reference demonstration** (optional; Could)
+
+- **Acceptance record.** On `DEFER RECOMMENDED` with `redispatch: reference-demo`, the advisor opens one
+  issue labelled `carbon-deferral` per key. The issue carries the key, `head_sha` and `defer_until`.
+  The gated job is skipped.
+- **Dispatcher.** An hourly scheduled workflow dispatches each open issue that is due, at the
+  **same SHA**, with `redispatch_key` set. The re-dispatched run is always `RUN NOW`.
+- **Closing out.** After dispatching, the dispatcher closes the issue. It refuses to dispatch if a
+  successful run for that SHA and workflow already exists, and it dispatches at most once per key.
+  Closing the issue manually cancels the deferral.
+- **Late cron.** A late cron run dispatches immediately once due. Anything past
+  `arrival + 24 h + 2 h grace` is dispatched with reason "deadline reached". **A deferred build is
+  never dropped.**
+- **Documentation.** This is documented as *deferred re-dispatch, not pausing*, along with the cron
+  delay and 60-day-disable caveats (R3-A7).
+
+**C11. Statements printed on every output** (Step Summary, API response notes, What-If report)
+
+- Recommendation-first.
+- Estimated, not measured, carbon.
+- GB-only evaluated regime, compute location assumed.
+- Thresholds of 480 s and 24 h were fitted on Travis CI 2011–2016 and are extrapolated to GitHub
+  Actions.
+- GitHub run wall-clock is not Travis `tr_duration`.
+- The Stage-1 gate is an unvalidated approximation (DL-020).
+- Manual and scheduled classes are vetoed by team policy, not detected.
+- What-If output is demonstration only.
+
+**C12. Out of scope for P4**
+
+- Forecast-driven decisions.
+- Non-GB regions; IP or runner-region detection.
+- Autonomous scheduling or pausing.
+- Any SE feature, risk score or SHAP.
+- A dashboard.
+- Any change to the frozen spec, `decide()`, the estimator or any P0–P3 result.
+
+##### R3-D. P4 task sequence (three tasks; IDs kept; `tasks_total` stays 28)
+
+- **P4-T1 — Advisor core, history adapter, CLI and REST API (Must).**
+  - S1 `context/p4_interface.md`: the C2/C4 schemas, history format, config schema and fail-safe
+    matrix, written before code.
+  - S2 `advisor/` validate → history → `d̂` → `decide()` → veto → audit, with the history adapter
+    (GitHub client with pagination, timeouts, bounded retries with backoff that honour `Retry-After`
+    and `X-RateLimit-*`, plus the JSON fixture). The first real call to each external endpoint
+    re-verifies R3-A7.
+  - S3 CLI.
+  - S4 FastAPI `POST /decision` and `GET /health`: localhost by default, request-size and history caps,
+    token header when exposed, no CORS, no user-supplied URLs.
+  - **Deps:** P2-T3, P2-T5, DL-034.
+- **P4-T2 — GitHub Action and demo repository (Should).**
+  - S1 Composite `action.yml`: in-process CLI, Step Summary, step outputs (`action`, `defer_until`,
+    `reason`, `d_hat_seconds`, `n_history`, `fail_safe`), C7 permissions, SHA-pinned dependencies.
+  - S2 A public demo repository using the Action with a `.github/carbon-advisor.yml`.
+  - S3 *(Could, first to cut)* The C10 re-dispatch reference demonstration.
+  - **Deps:** P4-T1.
+- **P4-T3 — Repo What-If Report (Should; replaces the dashboard).**
+  - S1 Before generating any report, write the public-repository selection rule into
+    `results/p4/whatif_selection.md`: public; one workflow with ≥ 200 completed runs in the last
+    90 days; the first N qualifying candidates from a stated GitHub search query. All selected
+    repositories are reported, whatever the outcome.
+  - S2 `advisor/whatif.py` per C8.
+  - S3 Run it on the demo repository and on the selected repositories, and capture the outputs under
+    `results/p4/`.
+  - **Deps:** P4-T1. It is independent of P4-T2, so it may run before P4-T2 if useful.
+
+##### R3-E. Definition of Done
+
+**DoD common to every P4 task**
+
+- `pytest` passes in full: the 645-test baseline (`results/corrections/dl034/pytest_cr1.txt`) plus all
+  new tests. Output is captured verbatim under `results/p4/`.
+- No file under `scheduler_core/` decision code, `policy_spec.yaml`, the estimator artifact, the carbon
+  profile or `results/p0`–`results/p3` changes. This is checked by `git diff --stat` at the gate, and
+  the three hashes are re-asserted.
+- No network access in the test suite. External calls are tested against recorded fixtures.
+- Every number shown at the gate comes from a captured run (R1).
+
+**P4-T1**
+
+- **Parity.** A three-way test shows that the same request gives an identical decision from
+  `decide()` called directly, from the CLI and from the API, on both deferral and run-now cases.
+- **Hashes.** Spec `e43b004d…`, profile `efdc9f38…` and estimator fit id `1088d5546f47ff12` are
+  asserted at load. A mismatch fails safe.
+- **`d̂` parity.** On a Travis fixture, the advisor's `d̂` and rung equal the estimator's
+  `causal_project_history` + `predict_4b` output exactly.
+- **Completed history.** A test feeds queued, in-progress, cancelled, timed-out, other-workflow and
+  finished-after-arrival runs and asserts that none enters the history.
+- **Schema.** The schema rejects duration and outcome fields, all 28 SE feature names, `p_hat` and
+  unknown keys. Tests cover branch-injection strings and invalid repository identifiers.
+- **Fail-safe matrix.** Every C5 row has a test asserting `run_now`, `fail_safe: true` and the named
+  reason. The live-carbon outage case asserts the decision is unchanged.
+- **Monotone veto.** A property test over generated inputs shows that whenever the advisor defers,
+  `decide()` defers with the identical `defer_until`. Vetoes and deadlines only produce `run_now`.
+- **Null statement and no failure model.** The `reason` always contains the null statement. An
+  import-graph test shows no P4 module loads a failure-model arm, SHAP or `p_hat`.
+- **API.** The API starts locally, and a real request/response pair is captured. Size caps and token
+  handling are tested.
+- **Gate evidence:** `context/p4_interface.md`, the captured request/response, and the parity,
+  fail-safe and hash-assertion test output.
+
+**P4-T2**
+
+- **Real runs.** Captured demo-repo runs (links plus Step Summary captures) show:
+  - ≥ 1 `RUN NOW` on a protected branch;
+  - ≥ 1 `RUN NOW` from a team veto or below-threshold `d̂`;
+  - ≥ 1 `DEFER RECOMMENDED` on an eligible branch with `d̂` ≥ 480 s;
+  - ≥ 1 fail-safe `RUN NOW` (for example a deliberately missing `compute_region`).
+- **Least privilege.** The workflow declares only C7's permissions. A `pull_request_target` trigger is
+  shown to be refused.
+- **Never blocks.** The advisory step exits 0 in every captured case. No user job is cancelled or
+  failed by it.
+- **Documentation.** It states recommendation-first, the GB-only assumed compute location, and every
+  C11 statement.
+- **Optional S3.** If done: one captured accepted-deferral → issue → dispatch cycle at the same SHA;
+  the re-dispatched run is `RUN NOW`; an idempotency test shows a second dispatch is refused. If cut,
+  this is recorded as cut at the gate.
+- **Gate evidence:** the demo-repo run links and captures, plus the audit log with its validator result
+  (0 violations).
+
+**P4-T3**
+
+- **Selection rule first.** `results/p4/whatif_selection.md` is committed *before* the first report
+  run, and every selected repository is reported.
+- **Reports.** A What-If report (Markdown + JSON) exists for the demo repository and for each selected
+  repository. Each contains:
+  - every C8 field;
+  - the excluded-run breakdown;
+  - rung coverage;
+  - TTFF either computed or explicitly marked not computable;
+  - the ±50% band;
+  - the banner *"Demonstration — not research evidence"*.
+- **Determinism.** Re-running against a saved history snapshot gives byte-identical JSON.
+- **Accounting boundary.** A test shows the observed duration reaches only accounting, after
+  `decide()`, using the simulator's spy/metamorphic pattern.
+- **No leakage into the evaluation.** No What-If number appears in `results/p3/` or the evaluation
+  report. P5-T3's claims audit gains an explicit check for this.
+- **Gate evidence:** `results/p4/whatif_selection.md`, the reports, and the determinism and
+  accounting-boundary test output.
+
+##### R3-F. What revision 3 changes relative to revision 2
+
+| revision 2 | revision 3 |
+| :-- | :-- |
+| §B6 spec hash `34d689c9…` | `e43b004d…` (DL-034 refit; thresholds identical) |
+| §B3 forecast mode opt-in, labelled | **Withdrawn**; live intensity is display only; forecasting is future work |
+| §B4 GB only | GB only **plus** an explicit, declared `compute_region` with no default, and the runner-location statement |
+| §B5 trigger context display-only | A team **monotone veto layer** (opt-in workflows, urgency markers, tag refs, `workflow_dispatch`/`schedule` vetoed by default) plus max delay and deadline; it can only produce `RUN NOW` |
+| §B7 re-dispatch kept in the P4-T2 DoD | Optional reference demonstration (Could, first cut), human-cancellable issue record, never-drop rule |
+| §B8 audit dashboard | **Replaced by the Repo What-If Report** (demonstration only) |
+| §B9 operational contract | Retained; extended to the explicit fail-safe matrix, trusted events, duplicate keys, SHA-pinned dependencies, and no network in tests |
+| §D decision points open | D1–D4 decided by the 2026-10-03 directive as above |
+
+##### R3-G. Consequences on acceptance
+
+- Layer 0-A gains a note that spec §5 is amended by DL-033 revision 3.
+- `development_plan.md` P4-T1..T3 are rewritten per R3-D/R3-E.
+- `context/p4_interface.md` is created in P4-T1 S1.
+- `research_state.json` `artifact_components` are updated and the guide rebuilt (DL-025).
+- DL-026 is amended as revision 2 §C states, with R3-F applied on top.
+- No RQ, result, threshold, split or evaluation rule changes.
+- If revision 3 is rejected, P4-T1 stays blocked until another follow-up is accepted.
+
+##### R3-H. Rationale
+
+The artifact must not contradict the thesis. Its inputs are exactly what the frozen policy consumes.
+Its rule is the frozen rule, the same lines of code. Everything it adds is either a safety restriction
+that can only reduce deferrals, or a labelled display. The What-If report turns the study's own method,
+trace-driven replay through the frozen policy, into a question a team can ask about its own repository:
+*is selective carbon-aware deferral worth it here, and at what delay?* It stays outside the evidence
+chain. The work is achievable on free, account-free or token-scoped services (R3-A7). It keeps three
+tasks, and the riskiest optional piece, re-dispatch, is the first to cut.
+
+##### R3-I. Clarification 1 (2026-10-04, author decision) — HTML view of the What-If report; where outputs live
+
+1. **HTML view (added to P4-T3).**
+   - **What it is.** The What-If report gains a **single self-contained static HTML page**, generated
+     from the report's own JSON.
+   - **No new content.** It adds no logic and no number: every value on the page is a field of that
+     JSON.
+   - **Charts.** Inline SVG drawn by Python. No JavaScript library and no network access when the page
+     is viewed. Same JSON in → byte-identical HTML out.
+     - run-now/defer reasons breakdown;
+     - estimated carbon per run, run-now vs advisor (with the ±50% band);
+     - the GB hour-of-week intensity heatmap with deferred runs' arrival and target slots marked;
+     - added-delay distribution.
+   - **Labels.** It carries the "Demonstration — not research evidence" banner, the C11 statements,
+     and the spec, profile and estimator provenance.
+   - **Where it is written.** `results/p4/whatif/` and, when run in CI, a workflow artifact.
+   - **Out of scope.** It is not a live dashboard: no server, no polling, no per-viewer state.
+2. **Where advisor outputs live.** This follows from R3-C7's `contents: read`: the advisor cannot
+   write to the repository and never commits.
+   - The recommendation goes to the run's **Step Summary** and step outputs.
+   - The per-run audit record (JSON Lines) is uploaded as a **workflow artifact**.
+   - The validator, or a What-If run, collects these artifacts through `actions: read`.
+3. **Unchanged.** Every other part of revision 3, including that What-If output is never research
+   evidence.
+
+##### R3-J. Clarification 2 (2026-10-04, author directive) — cold-start safety, regional display, a non-GB runner
+
+**Untouched by this clarification:** `scheduler_core/` (including `decide()`, eligibility and the
+estimator), `policy_spec.yaml` (`e43b004d…`), the estimator artifact, the GB profile and every P0–P3
+result.
+
+1. **Cold-start safety rule** (a new entry in the R3-B6 monotone veto layer).
+   - **Condition:** the scored workflow has **no admissible completed history** (`n_history == 0`, so
+     `d̂` came from the language or global rung).
+   - **Effect:** `decide()` still runs and its `policy_action` is still logged. The final answer is
+     `RUN NOW (cold start: no completed runs of this workflow to estimate from)`.
+   - **Default and opt-out:** on by default. A team may set `cold_start_run_now: false` to get the
+     evaluated ladder behaviour.
+   - **Like every veto, it can only turn a deferral into RUN NOW**, never the reverse. The R3-E
+     monotone-veto property test covers it.
+   - **Why.** The frozen fallbacks are Travis 2011–2016 typical durations, read from
+     `code/artifacts/duration_estimator.joblib` on 2026-10-04:
+     - global 589 s;
+     - java 691 s, python 577 s, ruby 798 s, go 222 s.
+
+     All but go exceed the 480 s threshold. Without this rule, a new repository's first eligible push
+     would be deferred on a guess that says nothing about that repository. In evaluation the fallbacks
+     were rare: 99.89% of calibration builds were on the project rung (P1-T4).
+   - **In the What-If report**, cold-start vetoes are counted and reported separately.
+2. **Regional intensity display** (GB-declared compute only; optional; display only).
+   - **Config.** An optional `grid_display_region` (an outward postcode or a Carbon Intensity API
+     region id) adds the live **regional** intensity next to the live national GB value. The endpoints
+     are `/regional/postcode/{postcode}` and `/regional/regionid/{id}` (R3-A7).
+   - **It must not affect the decision.** It never enters `decide()`, the veto layer or the estimated
+     carbon change. Those use the frozen national profile only.
+   - **Failure:** "regional intensity unavailable", with the decision unchanged.
+   - **Tests.** The decision is identical with the regional value present, absent and failing. An
+     invalid `grid_display_region` is ignored with a warning; it is display-only, so it is not a
+     fail-safe trigger.
+   - **Labels.** "Regional, live, display only — the decision uses the national GB hour-of-week
+     profile it was evaluated on."
+3. **The author's current Azure VM (East US) is non-GB.**
+   - **Configuration.** It is declared as non-GB (for example `compute_region: US-EAST`) and is never
+     declared `GB`.
+   - **Result.** Every advisory run on it returns `RUN NOW (fail-safe: compute region US-EAST is outside
+     the evaluated GB regime)`, with no GB carbon figures shown. The tool does not present a GB
+     recommendation for compute that is not in GB.
+   - **Tests.** The East US declaration is an explicit test case in the C5 fail-safe matrix.
+4. **Consequence for P4-T2's DEFER demonstration.** Real CI runs on the East US VM can only show RUN
+   NOW. The "≥ 1 DEFER RECOMMENDED" DoD line is therefore met by **one** of the following, in this
+   order of preference, and the gate records which one:
+   - **(a)** a run on a runner physically in GB, such as an Azure UK South/UK West VM or a machine in
+     GB;
+   - **(b)** if no GB runner is available, the same advisor invoked through the CLI or API on the
+     demo repository's real completed history, with the compute location stated as a **hypothetical
+     GB scenario**. Every output of (b) is labelled *"Scenario — not a real GB runner"*, and (b) is
+     never presented as a live CI result.
+
+   The East US runs remain in the evidence as the real non-GB RUN NOW case.
+
+##### R3-K. Clarification 3 (2026-10-04, author directive) — both demo scenarios; the GB scenario may run in CI (supersedes R3-J4)
+
+R3-J4 is **superseded** and left above as history.
+
+- **What was wrong with it.** It made the GB demonstration an *alternative* to the real non-GB case.
+  Its option (b) could only run through the CLI and "never [be] presented as a live CI result". That
+  kept the GB scenario off the GitHub run page, the place where a viewer actually sees the advisor.
+- **Unchanged.** R3-J1 to R3-J3 stand: the cold-start rule, the display-only regional value, and the
+  East US VM declared non-GB.
+
+1. **Both scenarios are required in P4-T2:**
+   - **Real non-GB.** The East US Azure VM, a self-hosted runner whose location is known, is declared
+     `US-EAST` and returns `RUN NOW (fail-safe: outside the evaluated GB regime)`.
+   - **GB.** A `DEFER RECOMMENDED` result, from **(a)** a runner physically in GB if one is available,
+     otherwise **(b)** a labelled GB **scenario**.
+2. **Scenario mode** (option b) may run **inside CI** and appear in the Step Summary, under these
+   rules:
+   - **Activation.** It is switched on explicitly per job with `scenario: gb-hypothetical`, together
+     with `compute_region: GB`. It is never a default, and never inferred.
+   - **Labelling.** The Step Summary opens with a banner: *"SCENARIO — this runner is NOT in Great
+     Britain. This shows what the advisor would recommend if the build ran on GB compute."* The action
+     is shown as `DEFER RECOMMENDED (scenario)` or `RUN NOW (scenario)`.
+   - **Outputs.** Step outputs carry `scenario: true`. The audit record is marked as a scenario. The
+     re-dispatch reference workflow **ignores** scenario outputs, so nothing acts on a hypothetical.
+   - **Decision logic.** Unchanged. The same `decide()`, frozen spec, completed history, veto layer and
+     fail-safe rules apply. Only the compute-location assumption is hypothetical, and it is stated.
+   - **Not a substitute.** A scenario run never stands in for the real-location evidence in item 1. A
+     GitHub-hosted runner is US-located, so in this demo it is used **only** in scenario mode, never
+     declared as real GB.
+3. **Unchanged.** The frozen research core, the policy, the estimator, the profile and every P0–P3
+   result.
 
 ### DL-034 — ④b's history admits only builds that had *finished* before the scored build arrived; the full evidence chain is re-run under this entry (corrects DL-014 §Resolution 2)
 

@@ -278,28 +278,110 @@ honestly. Every number in this phase is final — there is no second pass.*
 ---
 
 ## Phase 4 — Live Prototype  *(Week 11)*
-*Goal: demonstrate the SAME core — same `decide()`, same `policy_spec.yaml`, same duration estimator.
-Dashboard is the first cut if time is short (§3.7).*
+*Goal: demonstrate the SAME core — same `decide()`, same `policy_spec.yaml` (sha256 `e43b004d…`),
+same ④b duration estimator — as a **duration-based CI deferral advisor** (DL-033 revision 3, accepted
+2026-10-04; the full contract is in DL-033 R3-C). No SE features, failure model, SHAP or risk score.
+Carbon is GB only, with the compute location declared. The advisor recommends first and falls safe to
+`RUN NOW`. What-If output is demonstration only.*
 
-### P4-T1 — REST API service (Must)
-- S1 FastAPI `POST /decision` → `{action, defer_until, reason, grid_gCO2_now}` calling `scheduler_core.decide()` — the identical function the simulator used (one-core invariant; a test asserts the API imports from `scheduler_core` with no forked logic, **and** that it loads the same `policy_spec.yaml` version the evaluation used).
-- S2 Live carbon lookup from carbonintensity.org.uk with cached-series fallback; request schema = the 28 commit features **only** — a test asserts the schema **cannot** accept a duration field for the current build (A1.2).
-- **DoD:** API starts locally; a real request returns a real decision; the response matches `decide()` called directly with the same inputs (parity test); error paths tested (bad payload, carbon API down); the reason string names the policy path taken.
-- **Gate Evidence:** a captured request/response pair + the parity test output + the spec-version assertion.
-- **Deliverable:** `code/api/`. **Deps:** P2-T3, P2-T5. **RQ:** artifact.
+**DoD common to every P4 task (DL-033 R3-E):**
+- `pytest` passes in full: the 645-test baseline plus all new tests, captured under `results/p4/`.
+- No change to `scheduler_core/` decision code, `policy_spec.yaml`, the estimator artifact, the carbon
+  profile or `results/p0`–`p3` (`git diff --stat` at the gate; the hashes are re-asserted).
+- No network access in tests.
+- Every gate number comes from a captured run.
 
-### P4-T2 — GitHub Action + demo repo (Should)
-- S1 Action extracts commit features on push, calls the API, records the decision as a check/annotation showing the reason and the policy path.
-- S2 On `defer`: a scheduled workflow re-dispatches the build at the green slot (`workflow_dispatch`/`repository_dispatch`) — the honest *deferred re-dispatch* mechanism (spec §5 note), documented as such.
-- **DoD:** demo repo shows ≥ 1 real deferral → re-dispatch cycle (links/screenshots captured); documentation states plainly that this is re-dispatch, not pausing, and that every input is commit-time-available.
-- **Gate Evidence:** the demo-repo run links/screenshots.
-- **Deliverable:** `code/github-action/` + demo repo. **Deps:** P4-T1. **RQ:** artifact.
+### P4-T1 — Advisor core, history adapter, CLI and REST API (Must)
+- S1 `context/p4_interface.md`, written before code: the request/response schemas, history format,
+  team-config schema and fail-safe matrix (DL-033 R3-C2..C6).
+- S2 `code/advisor/` runs the fixed order of operations: validate → trusted event → config/opt-in →
+  hash checks → completed history → `d̂` (via `causal_project_history` + `predict_4b`) → `decide()` →
+  monotone veto layer → render → audit (R3-C3). It includes the history adapter, which is:
+  - a GitHub REST client with pagination, timeouts, and bounded retries that honour `Retry-After` and
+    `X-RateLimit-*`;
+  - a JSON fixture for tests;
+  - a live re-check of R3-A7 on the first real call.
+- S3 CLI `python -m advisor advise …`.
+- S4 FastAPI `POST /decision` + `GET /health`: localhost by default, size and history caps, a token
+  header when exposed, no CORS, no user-supplied URLs.
+- **DoD:**
+  - three-way parity: `decide()` == CLI == API;
+  - spec, profile and estimator hashes asserted;
+  - `d̂` parity with the estimator on a Travis fixture;
+  - completed-history exclusion tests;
+  - the closed schema rejects duration, outcome, the 28 SE feature names, `p_hat` and unknown keys,
+    with injection and repository-id tests;
+  - every fail-safe-matrix row tested, including an East US compute declaration (DL-033 R3-J3);
+  - a monotone-veto property test, including the cold-start rule (no completed history → RUN NOW;
+    on by default; R3-J1);
+  - regional intensity is display-only: the decision is identical with the regional value present,
+    absent or failing (R3-J2);
+  - the null statement always present in `reason`;
+  - no P4 module loads a failure arm, SHAP or `p_hat`;
+  - a real API request/response captured.
+- **Gate Evidence:** `context/p4_interface.md` + the captured request/response + the parity, fail-safe
+  and hash-assertion test output.
+- **Deliverable:** `code/advisor/`, `code/api/`. **Deps:** P2-T3, P2-T5, DL-034. **RQ:** artifact.
 
-### P4-T3 — Monitoring dashboard (Could — first to cut, §3.7)
-- S1 Show live grid intensity, incoming decisions with reason + SHAP rationale + policy path, cumulative *estimated* carbon saved vs static (labelled as estimates).
-- **DoD:** renders real decision data from the API; every figure labelled "estimated".
-- **Gate Evidence:** screenshot of the dashboard on real data.
-- **Deliverable:** `code/dashboard/`. **Deps:** P4-T1. **RQ:** artifact (optional).
+### P4-T2 — GitHub Action + demo repository (Should)
+- S1 Composite `code/github-action/action.yml`:
+  - runs the CLI in-process and writes the Step Summary;
+  - step outputs `action`, `defer_until`, `reason`, `d_hat_seconds`, `n_history`, `fail_safe`;
+  - least-privilege permissions (`contents: read`, `actions: read`) and trusted events only;
+  - SHA-pinned dependencies.
+- S2 A public demo repository with `.github/carbon-advisor.yml` (`compute_region: GB` declared).
+- S3 *(Could — first to cut)* The opt-in re-dispatch reference demonstration (DL-033 R3-C10).
+- **DoD:**
+  - Captured runs show:
+    - ≥ 1 `RUN NOW` on a protected branch;
+    - ≥ 1 `RUN NOW` from a team veto or below-threshold `d̂`;
+    - **Both scenarios (DL-033 R3-K):**
+      - **real non-GB:** ≥ 1 `RUN NOW (fail-safe)` on the author's East US self-hosted runner,
+        declared `US-EAST`;
+      - **GB:** ≥ 1 `DEFER RECOMMENDED` on an eligible branch with `d̂` ≥ 480 s, from (a) a runner
+        physically in GB, otherwise (b) scenario mode in CI, with the SCENARIO banner in the Step
+        Summary and `scenario: true` in the outputs. The gate records which one;
+    - ≥ 1 other fail-safe `RUN NOW`;
+    - ≥ 1 cold-start `RUN NOW` on the demo repository's first run (R3-J1).
+  - `pull_request_target` is shown to be refused.
+  - The advisory step exits 0 in every case.
+  - The documentation carries every R3-C11 statement.
+  - The audit log passes the validator (0 violations).
+  - If S3 is done: one same-SHA re-dispatch cycle, and a second dispatch refused. If cut, this is
+    recorded as cut.
+- **Gate Evidence:** the demo-repository run links/captures + the audit log and its validator result.
+- **Deliverable:** `code/github-action/` + the demo repository. **Deps:** P4-T1. **RQ:** artifact.
+
+### P4-T3 — Repo What-If Report (Should — replaces the dashboard)
+- S1 Write the public-repository selection rule to `results/p4/whatif_selection.md` **before** any
+  report run (DL-033 R3-D).
+- S2 `code/advisor/whatif.py` per DL-033 R3-C8: completed runs → `d̂` from history → the same
+  `decide()` and veto → observed duration used for accounting only. It reports:
+  - eligible and deferred share, with reasons;
+  - estimated carbon change with the ±50% band;
+  - mean delay;
+  - failed-run TTFF p95 where n ≥ 20;
+  - rung coverage;
+  - the assumptions and limitations.
+- S3 Run it on the demo repository and on every selected repository; capture the outputs under
+  `results/p4/`.
+- S4 The **HTML view** (DL-033 R3-I): one self-contained static page generated from the report's
+  JSON, with inline-SVG charts (reasons breakdown, carbon run-now vs advisor, GB hour-of-week heatmap
+  with deferrals marked, delay distribution). No JavaScript library and no network access when
+  viewed. It is also uploaded as a workflow artifact when run in CI.
+- **DoD:**
+  - The selection rule is committed before the first run.
+  - A report exists for every selected repository, carrying the "Demonstration — not research
+    evidence" banner.
+  - The JSON is byte-identical when re-run on a saved snapshot, and the HTML is byte-identical when
+    regenerated from the same JSON.
+  - Every number on the HTML page is a field of the JSON. A test checks this.
+  - The accounting-boundary test passes.
+  - No What-If number appears in `results/p3/` or the evaluation report.
+- **Gate Evidence:** `results/p4/whatif_selection.md` + the reports (Markdown, JSON and HTML) + the
+  determinism and accounting-boundary test output.
+- **Deliverable:** `code/advisor/whatif.py` + `results/p4/whatif/`. **Deps:** P4-T1 (independent of
+  P4-T2). **RQ:** artifact.
 
 ---
 

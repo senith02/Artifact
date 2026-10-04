@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-04",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -552,38 +552,38 @@
     },
     {
       "id": "P4-T1",
-      "name": "REST API service",
+      "name": "Advisor core, history adapter, CLI and REST API",
       "rq": "artifact",
-      "purpose": "FastAPI POST /decision calling the identical scheduler_core.decide() with the frozen spec, parity-tested against the simulator.",
-      "will_produce": "code/api/ plus a parity test.",
-      "unknown": "Not started. The plan's request schema is the 28 commit features; the review report recommends narrowing it after P3 (needs a DL entry).",
+      "purpose": "Run the identical scheduler_core.decide() under the frozen duration-only spec, with d-hat computed from the repository's completed GitHub Actions runs, behind a CLI and a FastAPI POST /decision.",
+      "will_produce": "code/advisor/ + code/api/ + context/p4_interface.md, with three-way parity and fail-safe tests.",
+      "unknown": "Not started. Contract fixed by DL-033 revision 3 (accepted 2026-10-04): no SE features, GB only, fail-safe RUN NOW.",
       "status": "not_started",
       "completed_on": "",
-      "plan_heading": "REST API service (Must)",
+      "plan_heading": "Advisor core, history adapter, CLI and REST API (Must)",
       "tests": null
     },
     {
       "id": "P4-T2",
       "name": "GitHub Action + demo repo",
       "rq": "artifact",
-      "purpose": "Extract commit features on push, call the API, record the decision, and re-dispatch deferred builds.",
-      "will_produce": "code/github-action/ plus demo-repo runs.",
-      "unknown": "Not started. Deferral is re-dispatch, not pausing a queued job.",
+      "purpose": "A composite GitHub Action that reports RUN NOW / DEFER RECOMMENDED in the Step Summary and step outputs, with least-privilege permissions; re-dispatch only as an optional reference demo.",
+      "will_produce": "code/github-action/ plus captured demo-repository runs.",
+      "unknown": "Not started. Recommendation-first; the re-dispatch demonstration is first to cut.",
       "status": "not_started",
       "completed_on": "",
-      "plan_heading": "GitHub Action + demo repo (Should)",
+      "plan_heading": "GitHub Action + demo repository (Should)",
       "tests": null
     },
     {
       "id": "P4-T3",
-      "name": "Monitoring dashboard",
-      "rq": "artifact (optional)",
-      "purpose": "Show live intensity, decisions and estimated carbon. First to cut under scope pressure.",
-      "will_produce": "code/dashboard/.",
-      "unknown": "Not started. The plan includes a SHAP rationale; on the null path the review recommends removing it (DL entry needed).",
+      "name": "Repo What-If Report",
+      "rq": "artifact",
+      "purpose": "Replay a repository's recent completed runs through the same decide() to estimate deferral share, estimated carbon change and delay. Demonstration only, never research evidence.",
+      "will_produce": "code/advisor/whatif.py plus reports under results/p4/whatif/.",
+      "unknown": "Not started. Public repositories are chosen by a rule fixed before any report is run.",
       "status": "not_started",
       "completed_on": "",
-      "plan_heading": "Monitoring dashboard (Could — first to cut, §3.7)",
+      "plan_heading": "Repo What-If Report (Should — replaces the dashboard)",
       "tests": null
     },
     {
@@ -832,7 +832,7 @@
       "id": "DL-033",
       "title": "The DL-026 follow-up: P4 becomes a duration-history carbon-deferral advisor that embodies the P3 null (amends DL-026; proposed amendment to spec §5 and P4-T1..T3)",
       "date": "2026-10-01",
-      "summary": "Proposed, not yet accepted: narrow the artifact to what decide() consumes (no SE features), completed-run history only, GB only, recommend-first, fail closed to run_now, with a security and idempotency contract."
+      "summary": "Accepted 2026-10-04 (revision 3). P4 is a duration-based CI deferral advisor: shared decide() + GitHub Action + REST API + Repo What-If Report (replaces the dashboard). No SE features, SHAP or risk score; completed-run history only; GB only with a declared compute location; recommendation-first; fail-safe RUN NOW; What-If is demonstration only."
     },
     {
       "id": "DL-034",
@@ -846,25 +846,25 @@
       "name": "Commit / workflow event",
       "status": "planned",
       "where": "P4-T2 GitHub Action",
-      "note": "Not implemented."
+      "note": "Not implemented. Trusted events only; pull_request_target refused (DL-033 R3-C7)."
     },
     {
       "name": "Commit-time feature extraction",
       "status": "implemented",
       "where": "scheduler_core/features.py",
-      "note": "Runs on TravisTorrent columns. Live extraction from a GitHub event is P4-T2."
+      "note": "Runs on TravisTorrent columns for the research. The P4 advisor accepts no SE features (DL-033 R3-B2)."
     },
     {
       "name": "Stage-1 eligibility gate",
       "status": "implemented",
       "where": "scheduler_core/eligibility.py",
-      "note": "Experimental approximation (DL-020). In a live tool urgency should be declared by the team."
+      "note": "Experimental approximation (DL-020). In P4 the team may add urgency vetoes that can only turn a deferral into RUN NOW (DL-033 R3-B6)."
     },
     {
       "name": "Duration estimate d-hat (4a/4b)",
       "status": "implemented",
       "where": "scheduler_core/duration_estimator.py",
-      "note": "Fitted and frozen. A live tool needs a store of the repository's own completed build durations."
+      "note": "Fitted and frozen. P4 feeds 4b from the repository's completed GitHub Actions runs (DL-033 R3-B4)."
     },
     {
       "name": "SE-aware risk model",
@@ -876,7 +876,7 @@
       "name": "Carbon-intensity input",
       "status": "simulated",
       "where": "scheduler_core/carbon.py",
-      "note": "Replay uses a 168-slot UK hour-of-week profile. Live lookup is P4-T1."
+      "note": "Replay and the P4 decision both use the 168-slot GB hour-of-week profile; live intensity is display only in P4 (DL-033 R3-B5)."
     },
     {
       "name": "Energy / carbon accounting",
@@ -894,7 +894,7 @@
       "name": "Replay simulator (6 strategies)",
       "status": "implemented",
       "where": "replay/simulator.py",
-      "note": "Run on calibration only. The test replay is P3-T2."
+      "note": "Run on calibration (P2) and on the test trace (P3-T2)."
     },
     {
       "name": "Independent invariant validator",
@@ -905,26 +905,32 @@
     {
       "name": "RUN NOW / DEFER via REST API",
       "status": "planned",
-      "where": "P4-T1 code/api/",
-      "note": "Not implemented."
+      "where": "P4-T1 code/api/ + code/advisor/",
+      "note": "Not implemented. Parity-tested against decide() and the CLI."
     },
     {
       "name": "GitHub workflow summary / re-dispatch",
       "status": "planned",
       "where": "P4-T2",
-      "note": "Not implemented. The plan specifies a check/annotation; a GitHub Step Summary is the author's stated intent (see discrepancies)."
+      "note": "Not implemented. Step Summary + step outputs; re-dispatch is an optional reference demo."
     },
     {
       "name": "Region inference (IP-based)",
       "status": "not_planned",
-      "where": "author's concept (2026-09-25 brief)",
-      "note": "Not in development_plan.md, which uses the UK national series. Would be an estimated region, never data-centre ground truth."
+      "where": "withdrawn by DL-033",
+      "note": "Withdrawn. The compute location is declared by the team (GB only), never detected."
     },
     {
       "name": "Monitoring dashboard",
+      "status": "not_planned",
+      "where": "replaced by P4-T3 Repo What-If Report (DL-033)",
+      "note": "Withdrawn: no dashboard and no SHAP panel in the product."
+    },
+    {
+      "name": "Repo What-If Report",
       "status": "planned",
-      "where": "P4-T3 (first to cut)",
-      "note": "Not implemented."
+      "where": "P4-T3 code/advisor/whatif.py",
+      "note": "Not implemented. Demonstration only, never research evidence (DL-033 R3-B10)."
     }
   ],
   "limitations": [
@@ -1134,6 +1140,10 @@
     {
       "date": "2026-10-02",
       "event": "CR-1 (DL-034) gated. Duration history corrected to finished builds only; P1 to P3 re-run under predeclared rules. No RQ verdict changed; F1's late-period admission flipped to empty and strategy 6 now beats 5 on estimated carbon at mid tau. Evaluation report revised."
+    },
+    {
+      "date": "2026-10-04",
+      "event": "DL-033 revision 3 accepted. P4 re-scoped to a duration-based CI deferral advisor with a GitHub Action, a REST API and a Repo What-If Report in place of the dashboard; GB only, recommendation-first, fail-safe RUN NOW. Plan P4-T1..T3 rewritten; still 28 tasks."
     }
   ],
   "progress": {

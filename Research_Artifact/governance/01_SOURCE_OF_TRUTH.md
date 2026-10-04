@@ -177,6 +177,19 @@ reported as the honest, simplifying result. Significance alone is not success at
 > cannot reach. Comparing ④ and ⑤ at a single operating point measures how hard each was configured to
 > push, not which uses information better — hence frontier dominance at matched points.
 
+**Artifact amendment (DL-033 revision 3, accepted 2026-10-04).** Frozen spec §5 (the software artifact)
+is amended here, not below the line. The artifact is a **duration-based CI deferral advisor** that
+embodies the P3 null:
+- the shared `scheduler_core.decide()` under the frozen duration-only `policy_spec.yaml`;
+- a GitHub Action that reports `RUN NOW` / `DEFER RECOMMENDED`;
+- a REST API kept for §5's Must;
+- a **Repo What-If Report**, which replaces the dashboard.
+
+It uses no SE features, failure model, SHAP or risk score. The evaluated carbon regime is GB only, and
+the compute location is a declared assumption. It recommends first; re-dispatch is an optional
+reference demonstration. Every failure falls safe to `RUN NOW`. What-If results are demonstration only
+and never research evidence. The full contract is in DL-033 R3-C.
+
 **Where the detail lives.** `results/p0/eval_protocol.md` **Amendment A1** (duration control, ablation,
 materiality rule, strategy ④, paired comparison) · `context/feature_spec.md` (the three duration roles +
 the six feature families) · `planning/development_plan.md` (27 tasks).

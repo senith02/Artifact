@@ -17,13 +17,13 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-10-01 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_total: 28        # derived — recounted 2026-10-04 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
   tasks_done: 21
-  current_task: P4-T1    # REST API service — NOT started (author: stop after P3-T5 for review)
-  next_task: P4-T2       # GitHub Action + demo repo
+  current_task: P4-T1    # Advisor core + history adapter + CLI + REST API — NOT started
+  next_task: P4-T2       # GitHub Action + demo repo (P4-T3 What-If depends only on P4-T1)
   current_phase: P4
-  blocked_on: author decision on **DL-033** (Proposed, draft rev. 2 — P4 as a duration-history
-                  carbon-deferral advisor) — required before P4-T1 starts. CR-1 is gated.
+  blocked_on: none — **DL-033 revision 3 ACCEPTED 2026-10-04** (duration-based CI deferral advisor +
+                  Repo What-If Report; plan P4 rewritten). P4-T1 awaits the author's go-ahead.
   correction:     **CR-1 (DL-034) GATED 2026-10-02** — not a numbered task; tasks_total stays 28.
                   Full-chain rerun P1-T4..P3-T5 under completion-causal ④b history. **No RQ verdict
                   changed**; changed: F1 late-period V1 {F1} → ∅ (S-e late), ⑥ beats ⑤ on est. carbon
@@ -44,8 +44,7 @@ state:
                   model-level finding is reported, no post-hoc F1 arm, frozen spec only;
                   test_scores.csv.gz tracked. Earlier: ④b trailing-50 (DL-024 §3); review
                   addendum items 3/4 adopted as DL-027.
-                  DL-026 (P4 artifact direction) is Proposed/Conditional; P3-T5 is done, so its
-                  follow-up DL entry is now due (before P4-T1). Inputs: evaluation_report.md §7.
+                  DL-026's follow-up was closed by DL-033 revision 3 (accepted 2026-10-04).
   p3_synthesis:   **P3-T5 — the four RQ verdicts, revised under DL-034** (evaluation_report.md §2,
                   §4, §10). RQ1 null/modest (F1 unresolved: non-replicating, floor-sensitive, below
                   floor in the late period). RQ2 no, for the calibration-frozen policy (⑤ ≡ ④b,
@@ -172,13 +171,13 @@ state:
 Overall   [███████████████░░░░░]  75%   (21 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
 Phase 3   [████████████████████] 100%   Evaluation   (5 / 5 tasks)
 
-► CURRENT : P4-T1 — REST API service (not started; awaits the DL-026 follow-up decision)
+► CURRENT : P4-T1 — Advisor core + history adapter + CLI + REST API (not started; DL-033 r3 accepted)
 ○ NEXT    : P4-T2 — GitHub Action + demo repo
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — CR-1 (DL-034) gated 2026-10-02; P4-T1 not started, awaiting DL-033)*
+*(empty — DL-033 revision 3 accepted 2026-10-04; P4-T1 not started)*
 
 ---
 
@@ -209,9 +208,9 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T3 ④-vs-⑤ decision-level value | ✅ | `incremental_value_decision.*` | **RQ2** |
 | | P3-T4 Sensitivity sweeps | ✅ | `sensitivity.*` | RQ4 |
 | | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
-| **P4 Prototype** | P4-T1 REST API service | ► ⬜ | `code/api/` (parity-tested) | artifact |
+| **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ► ⬜ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
 | | P4-T2 GitHub Action + demo repo | ⬜ | `code/github-action/` | artifact |
-| | P4-T3 Monitoring dashboard | ⬜ | `code/dashboard/` | artifact |
+| | P4-T3 Repo What-If Report | ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
 | | P5-T3 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
@@ -263,3 +262,6 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-09-28 | P3-T4 Sensitivity analyses | **DL-030 written first** (nine sweeps S-a…S-i plus herding, and verdicts V1 model-level admitted set · V2 "⑤ beats both" · V3 ④b over ④a · V4 eight-class RQ4 sign pattern, fixed before any sweep ran). `scripts/sensitivity_analysis.py` + `scripts/sensitivity_report.py` + `tests/test_sensitivity_analysis.py` (9); `frontier_analysis.analyse` generalised behaviour-preservingly — **638 passed** overall, verbatim in `results/p3/pytest_p3_t4.txt`. V4 baseline recomputed from the P3-T2 parts matches P3-T2's stored classes exactly. Re-replays audited: S-a 0 violations / 764,602 deferrals / 14,146,686 rows, identities hold; S-h 0 / 318,837. **Results:** V2 stable everywhere (and cannot flip: ⑤ ≡ ④b). V1 {F1} stable early (+0.0127), late (+0.0101, marginal), cold-start excluded (+0.0128); empty at ×2 as in P3-T1. V3 direction holds in every sweep (areas +0.7500 … +5.9026, all CIs > 0); **counting condition flips in the late period** (area +3.5694 [+1.7615, +4.3448]; strongest matched points undefined in 9–34% of resamples, over the predeclared 5%). **V4 flips one class at W = 12 h** (⑤−④a TTFF p95 n.s. → significantly lower); stable under S-a (deferrable 14.02%), S-c ×0.5/×1.5 (invariant by construction), S-d n_jobs. S-h trailing-50 vs frozen ④b +0.3538 [+0.2370, +0.7650] (condition ×0.5/×1). Herding: ② largest slot 18.77× static, ⑤ 1.78×. **S-f second grid: DL-031** switched the source to account-free EIA-930 (CAISO, consumed intensity), **DL-032** (author decision): not run — CAISO peak/trough 1.8669 < UK 1.8746 (criterion c), Germany no account-free series (Energy-Charts endpoint list saved as evidence); ranking invariance untested. Evidence: `results/p3/sensitivity.md` (flips first) + `sensitivity/*.json` + `sensitivity/reading.md` + `figures/sensitivity_v3_area.png`. | **DL-030**, **DL-031**, **DL-032** |
 | 2026-10-01 | P3-T5 Results synthesis + the four RQ verdicts | **Pre-task:** checkpoint commit `1e38db7` ("Complete P3 test evaluation and sensitivity analyses", 93 files, P3-T1..T4 + DL-026..DL-032; `dissertation/proposed solution.md` and `results/p3/decisions.csv.gz` excluded; no attribution trailer, DL-011). `results/p3/evaluation_report.md` — **authored synthesis, no new run, no dataset read, test split not re-opened.** §0 one-paragraph answer; §2 one evidenced paragraph per active RQ; §3 robustness (both P3-T4 flips stated first-class); §4 the null written as a contribution (duration-only policy defensible; duration estimation is the lever — oracle +1.9290, trailing-50 +0.3538; carbon ∝ duration confound generalises; attribution ≠ incremental value — F4/F3 rank 1/2 by SHAP yet harmful additions); §5 thirteen limitations incl. hour-of-week alignment, estimator error, energy model, herding, project confound; §6 claims not supported; §7 facts for the DL-026 follow-up (frozen `decide()` consumes `gh_is_pr`, `git_branch`, arrival slot, `d_hat_seconds` only — no SE feature; ④b needs project build history live; tension with P4-T1 S2's "28 commit features only" schema); §10 provenance footer. **Verdicts:** RQ1 null/modest; RQ2 no (⑤ ≡ ④b, area +0.0000, fails at every floor; null by construction, F1 decision value untested); RQ3 duration-only d480/w24, ρ-sensitive, SE branch unexercised; RQ4 −2.480% vs ① at TTFF p95 13.89 h, robust in sign. **Number-trace check** (scratchpad script, every numeric token in §0–§9 searched in the cited sources, Unicode minus normalised): **230 distinct tokens, 0 misses** against 29 sources, and **0 misses** against the 24 results-only sources (decision log, spec, plan and code removed). Two family names first written from memory (F2, F6) were caught on review and corrected from `context/feature_spec.md`. `pytest` **638 passed** (`results/p3/pytest_p3_t5.txt`; project `.venv`). **Phase 3 complete → M3 (21/28, 75%).** P4-T1 not started (author instruction). | none (DL-026 follow-up due before P4-T1) |
 | 2026-10-02 | *CR-1 (DL-034) correction pass — not a numbered task* | Independent review (revised 2026-10-01) found ④b's history admitted builds still running at t_b. **Verified and measured first**: `scripts/diagnose_history_overlap.py` → `results/corrections/dl034/history_overlap.md` (reproduces recorded ④b exactly; 38,019 / 138,693 test builds affected, median d̂ change 0.00%). Predeclaration commit `548141b` (DL-034 + fix + 7 tests + snapshot of 15 original files). Rerun run **locally** (author: no Colab), paused per phase: P1 `6c050bb` (④b calib MAE 0.600958→0.601856; all six families still negative, CIs < 0; admitted ∅ at every floor), P2 `19c7751` (policy d480/w24 unchanged, byte-identical verify; spec sha256 34d689c9…→e43b004d…, thresholds identical), P3-T1 `f2d5142` (second test pass `--rerun-under DL-034`; F1 +0.013035, admitted ×0.5/×1 not ×2), P3-T2 `59ae57c` (⑤ −2.480%, TTFF p95 13.91 h; ⑥ now beats ⑤ at τ 0.20/0.25), P3-T3/T4 `2161ac0` (every frontier verdict unchanged; **new flip: S-e late V1 {F1}→∅**; first sweep chain hit the 2 h background limit during g, g re-run from start). Authored sections re-written from corrected numbers (model_report §10, strategy_results §5b, incremental_value_decision §6b, sensitivity/reading.md). `scripts/dl034_comparison.py` → `comparison.md` (182 rows, 57 changed, 125 unchanged). evaluation_report.md revised (corrected numbers + DL-034 §B7 wording: frozen-policy null, F1 unresolved, estimated carbon, cross-project retrospective scope, multiplicity, new §4); number trace **256 tokens, 0 misses** (full and results-only). `pytest` **645 passed** (`results/corrections/dl034/pytest_cr1.txt`). **No RQ verdict changed.** | **DL-034**; DL-033 revised (Proposed) |
+| 2026-10-04 | *(governance gate — not a numbered task)* | **DL-033 revision 3 accepted** (author decision). It was drafted 2026-10-03 against the DL-034 corrected chain: no SE family admitted; spec sha256 re-computed as `e43b004d…` (revision 2's pinned `34d689c9…` corrected); estimator `ccc5bb24…` and GB profile `efdc9f38…` hashed and confirmed tracked; external API facts checked against documentation. P4 is now a **duration-based CI deferral advisor**: shared `decide()` + GitHub Action (`RUN NOW` / `DEFER RECOMMENDED`) + REST API + **Repo What-If Report** (replaces the dashboard; demonstration only). GB only, compute location declared; recommendation-first; fail-safe `RUN NOW`. Applied: Layer 0-A artifact note, `development_plan.md` P4-T1..T3 rewritten (still 3 tasks; recount 28), this file. No code, no results, no dataset read. | **DL-033** (Proposed → Accepted, revision 3) |
+| 2026-10-04 | *(governance — DL-033 clarifications, not a numbered task)* | **R3-I** (author decision): the What-If report gains a self-contained static HTML view (inline SVG, generated from the report JSON, no new numbers). Advisor outputs live in the Step Summary, step outputs and workflow artifacts; nothing is committed to the repository. **R3-J** (author directive): (1) cold-start safety rule — no completed history → RUN NOW, on by default; it can only turn a deferral into RUN NOW. Frozen fallbacks read from the estimator: global 589 s, java 691, python 577, ruby 798, go 222. (2) Optional live regional GB intensity, display only, never decisive. (3) The author's East US Azure VM is declared non-GB → RUN NOW fail-safe. (4) The P4-T2 DEFER demo comes from a GB runner, or from a labelled hypothetical-GB scenario. Plan P4-T1/T2/T3 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-I, R3-J |
+| 2026-10-04 | *(governance — DL-033 clarification, not a numbered task)* | **R3-K** (author directive) supersedes R3-J4. P4-T2 must show **both** scenarios: the real non-GB case (East US self-hosted runner, declared `US-EAST` → RUN NOW fail-safe) and a GB `DEFER RECOMMENDED`, from a GB runner or from an explicit **scenario mode** that may run in CI. Scenario mode carries a SCENARIO banner in the Step Summary and `scenario: true`; it is ignored by re-dispatch; the decision logic is unchanged. Plan P4-T2 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-K |
