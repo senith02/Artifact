@@ -1,0 +1,12 @@
+# .github/carbon-advisor.yml — team config (context/p4_interface.md §5; closed schema).
+# Every key can only make the advisor safer: none widens what the frozen policy defers.
+compute_region: GB              # required; declared, never detected. Only GB is evaluated.
+enabled_workflows: [ci.yml]     # required; other workflows get RUN NOW (not opted in)
+extra_protected_branches: []    # fnmatch globs; a match vetoes a deferral
+urgent_markers: ["[urgent]"]    # a commit-message substring that vetoes a deferral
+veto_events: [workflow_dispatch, schedule]
+max_delay_hours: 24             # 0 < x <= 24; the evaluated window cannot be extended
+cold_start_run_now: true        # no completed history -> RUN NOW
+history_cap: 500                # completed runs read (design default, not a result)
+show_live_intensity: true       # live GB intensity, display only
+redispatch: "off"

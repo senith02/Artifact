@@ -336,8 +336,8 @@ Carbon is GB only, with the compute location declared. The advisor recommends fi
     - ≥ 1 `RUN NOW` on a protected branch;
     - ≥ 1 `RUN NOW` from a team veto or below-threshold `d̂`;
     - **Both scenarios (DL-033 R3-K):**
-      - **real non-GB:** ≥ 1 `RUN NOW (fail-safe)` on the author's East US self-hosted runner,
-        declared `US-EAST`;
+      - **real non-GB:** ≥ 1 `RUN NOW (fail-safe: region_not_gb)` on a GitHub-hosted runner declared
+        `GITHUB-HOSTED` (DL-036 §1; this replaces the East US self-hosted runner);
       - **GB:** ≥ 1 `DEFER RECOMMENDED` on an eligible branch with `d̂` ≥ 480 s, from (a) a runner
         physically in GB, otherwise (b) scenario mode in CI, with the SCENARIO banner in the Step
         Summary and `scenario: true` in the outputs. The gate records which one;

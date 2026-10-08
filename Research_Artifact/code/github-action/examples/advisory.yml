@@ -1,0 +1,41 @@
+# Reference workflow — basic advisory use (DL-033 R3-C1).
+#
+# The advisor job runs beside the build and publishes a recommendation in the
+# Step Summary and as job outputs. It never blocks the build.
+#
+# Do NOT gate the build on `action == 'defer'` with this workflow alone: nothing
+# here re-runs a skipped build later, so gating would drop deferred builds. The
+# re-dispatch reference demonstration (DL-033 R3-C10) was not built (DL-036 §8).
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  carbon-advisor:
+    runs-on: ubuntu-24.04
+    outputs:
+      action: ${{ steps.advisor.outputs.action }}
+      defer_until: ${{ steps.advisor.outputs.defer_until }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: .github
+          persist-credentials: false
+      - id: advisor
+        uses: senith02/Artifact/Research_Artifact/code/github-action@<full-commit-sha>
+        with:
+          compute-region: GB          # declared by the team; must match .github/carbon-advisor.yml
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: echo "your build here"

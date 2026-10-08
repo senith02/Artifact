@@ -1,0 +1,16 @@
+{
+  "arrival_utc": "2026-10-08T05:37:53Z",
+  "branch": "feature/wiring-check",
+  "compute_region": "GB",
+  "event": "push",
+  "head_commit_message": "wiring check",
+  "head_sha": "0123456789abcdef0123456789abcdef01234567",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "pallets/flask",
+  "run_attempt": 1,
+  "run_id": 1,
+  "scenario": "gb-hypothetical",
+  "workflow": "tests.yaml"
+}

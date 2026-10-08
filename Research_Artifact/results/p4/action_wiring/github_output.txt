@@ -1,0 +1,27 @@
+action<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+run_now
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+display<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+RUN NOW (scenario)
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+defer_until<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+reason<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=42.0s < d_threshold=480.0s -> not worth deferring. Running now at slot 77 (Thu 05:00, 140.1490 gCO2/kWh). | SE characteristics were evaluated and not admitted (results/p1/incremental_value.md; results/p3/evaluation_report.md) — this decision uses branch/PR status and a duration estimate from completed history only.
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+d_hat_seconds<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+42
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+n_history<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+251
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+fail_safe<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+false
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+fail_safe_code<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+scenario<<ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da
+true
+ADVISOR_EOF_0398447bb90843f59bdcec34d4bf80da

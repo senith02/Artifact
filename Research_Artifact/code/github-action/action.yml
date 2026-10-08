@@ -1,0 +1,130 @@
+# Carbon-deferral advisor — composite GitHub Action (DL-033 revision 3; DL-036).
+#
+# Recommendation only: this action never pauses, cancels or fails a build, and
+# its advisory step always exits 0. It runs the advisor CLI in-process over the
+# frozen research core (scheduler_core.decide(), policy_spec.yaml, the ④b
+# duration estimator, the GB hour-of-week profile). See README.md.
+#
+# Security (R3-C7):
+#   - third-party actions are pinned by full commit SHA;
+#   - no event field is interpolated into a run: line (run_advisor.py reads them);
+#   - the job needs only `contents: read` and `actions: read`.
+name: Carbon-deferral advisor
+description: >-
+  Recommends RUN NOW or DEFER RECOMMENDED for a CI run, from the frozen duration-only
+  policy of a carbon-aware scheduling study (GB regime). Recommendation only; never blocks.
+author: senith02
+
+inputs:
+  compute-region:
+    description: >-
+      Where this job's compute runs, declared by the team and never detected. GB is the only
+      evaluated region; any other value gives RUN NOW (fail-safe). Must equal the team
+      config's compute_region. Left empty, the advisor fails safe.
+    required: false
+    default: ""
+  scenario:
+    description: >-
+      Set to gb-hypothetical (with compute-region GB) to show what the advisor would recommend
+      on GB compute. Every output is then labelled SCENARIO (DL-033 R3-K).
+    required: false
+    default: ""
+  config:
+    description: Team config path, relative to the workspace. Check the repository out first.
+    required: false
+    default: .github/carbon-advisor.yml
+  deadline-utc:
+    description: Optional ISO-8601 deadline for this run; a later recommended slot gives RUN NOW.
+    required: false
+    default: ""
+  live-intensity:
+    description: Show the live GB intensity (display only; never part of the decision).
+    required: false
+    default: "true"
+  token:
+    description: Token used read-only to list this workflow's completed runs (needs actions read).
+    required: false
+    default: ${{ github.token }}
+  python-version:
+    description: Python for the advisor; 3.11 is the interpreter the research lockfile was resolved with.
+    required: false
+    default: "3.11"
+  artifact-name:
+    description: Name prefix of the uploaded audit artifact (unique per job).
+    required: false
+    default: carbon-advisor-${{ github.job }}
+
+outputs:
+  action:
+    description: run_now or defer
+    value: ${{ steps.advise.outputs.action }}
+  display:
+    description: RUN NOW or DEFER RECOMMENDED, with " (scenario)" in scenario mode
+    value: ${{ steps.advise.outputs.display }}
+  defer_until:
+    description: Recommended start time (UTC, ISO-8601) when action is defer; otherwise empty
+    value: ${{ steps.advise.outputs.defer_until }}
+  reason:
+    description: Why — decide()'s reason, any veto or fail-safe clause, and the null statement
+    value: ${{ steps.advise.outputs.reason }}
+  d_hat_seconds:
+    description: Expected duration estimated from completed history (empty when not computed)
+    value: ${{ steps.advise.outputs.d_hat_seconds }}
+  n_history:
+    description: Completed runs the estimate used (empty when not computed)
+    value: ${{ steps.advise.outputs.n_history }}
+  fail_safe:
+    description: true when an input or dependency failed and the answer fell back to RUN NOW
+    value: ${{ steps.advise.outputs.fail_safe }}
+  fail_safe_code:
+    description: The named fail-safe reason, or empty
+    value: ${{ steps.advise.outputs.fail_safe_code }}
+  scenario:
+    description: true in scenario mode; act on nothing marked as a scenario
+    value: ${{ steps.advise.outputs.scenario }}
+
+runs:
+  using: composite
+  steps:
+    - id: clock
+      shell: bash
+      run: echo "arrival_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+    - id: python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      continue-on-error: true
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - id: install
+      shell: bash
+      continue-on-error: true
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: >-
+        python -m pip install --disable-pip-version-check --no-input --no-deps --only-binary=:all:
+        -r "$ACTION_PATH/requirements.action.txt"
+
+    - id: advise
+      shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        GITHUB_TOKEN: ${{ inputs.token }}
+        ADVISOR_COMPUTE_REGION: ${{ inputs.compute-region }}
+        ADVISOR_SCENARIO: ${{ inputs.scenario }}
+        ADVISOR_CONFIG: ${{ inputs.config }}
+        ADVISOR_DEADLINE_UTC: ${{ inputs.deadline-utc }}
+        ADVISOR_LIVE: ${{ inputs.live-intensity }}
+        ADVISOR_ARRIVAL_UTC: ${{ steps.clock.outputs.arrival_utc }}
+        ADVISOR_INSTALL_OUTCOME: ${{ steps.install.outcome }}
+      run: python "$ACTION_PATH/run_advisor.py" || true
+
+    - id: upload
+      if: always()
+      continue-on-error: true
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: ${{ inputs.artifact-name }}-${{ github.run_attempt }}
+        path: ${{ runner.temp }}/carbon-advisor/
+        if-no-files-found: warn
+        retention-days: 90

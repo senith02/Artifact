@@ -19,7 +19,7 @@
 state:
   tasks_total: 28        # derived — recounted 2026-10-05 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
   tasks_done: 22
-  current_task: P4-T2    # GitHub Action + demo repo — NOT started (awaits author go-ahead)
+  current_task: P4-T2    # GitHub Action + demo repo — ⏳ in progress (started 2026-10-08)
   next_task: P4-T3       # Repo What-If Report (depends only on P4-T1)
   current_phase: P4
   blocked_on: none — P4-T1 gated 2026-10-05 (advisor core + CLI + REST API; DL-035).
@@ -174,13 +174,28 @@ state:
 Overall   [████████████████░░░░]  79%   (22 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
 Phase 4   [███████░░░░░░░░░░░░░]  33%   Prototype    (1 / 3 tasks)
 
-► CURRENT : P4-T2 — GitHub Action + demo repo (not started)
+► CURRENT : P4-T2 — GitHub Action + demo repo (⏳ in progress)
 ○ NEXT    : P4-T3 — Repo What-If Report
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P4-T1 gated 2026-10-05; P4-T2 not started)*
+**P4-T2 — GitHub Action + demo repo** (started 2026-10-08)
+
+- [x] DL-036 written before any Action code (GitHub-hosted runner replaces the East US VM; runtime
+      dependency subset; Action published at a SHA before the gate commit). Correction appended:
+      `narwhals` added (scikit-learn 1.9 hard requirement) → 12 packages
+- [x] S1 `code/github-action/` — `action.yml`, `run_advisor.py`, `requirements.action.txt`, README
+      (C11 statements), `examples/`; `tests/test_github_action.py` 25 tests (no network)
+- [x] Local verification: full `pytest` 788 passed (763 + 25); wrapper end-to-end in a clean scratch
+      venv from the 12-package subset, real read-only `pallets/flask` history → `results/p4/action_wiring/`
+- [ ] Action committed + pushed to `senith02/Artifact` (author authorized pushes 2026-10-08)
+- [ ] S2 demo repo `senith02/carbon-advisor-demo` built and pushed in scenario order
+- [ ] Captured runs: cold start · protected · DEFER (scenario) · veto/below-threshold · real non-GB
+      fail-safe · other fail-safe · `pull_request_target` refused
+- [ ] Audit logs collected → `results/p4/demo_runs/`; validator 0 violations
+- [ ] S3 re-dispatch — cut (Could, first to cut) unless the author asks for it
+- [ ] Gate: pytest captured, frozen hashes + `git diff --stat`, PROGRESS, research guide (DL-025)
 
 ---
 
@@ -212,7 +227,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T4 Sensitivity sweeps | ✅ | `sensitivity.*` | RQ4 |
 | | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
 | **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ✅ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
-| | P4-T2 GitHub Action + demo repo | ► ⬜ | `code/github-action/` | artifact |
+| | P4-T2 GitHub Action + demo repo | ► ⏳ | `code/github-action/` | artifact |
 | | P4-T3 Repo What-If Report | ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |

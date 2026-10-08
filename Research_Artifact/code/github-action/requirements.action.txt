@@ -1,0 +1,16 @@
+# Runtime subset for the GitHub Action (DL-036 §4), installed with --no-deps.
+# These are the packages the advisor imports, or needs to unpickle the frozen
+# duration estimator. Every version equals requirements.lock.txt, and
+# tests/test_github_action.py asserts that.
+joblib==1.5.3
+narwhals==2.22.1
+numpy==2.4.6
+pandas==3.0.3
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+scikit-learn==1.9.0
+scipy==1.17.1
+six==1.17.0
+threadpoolctl==3.6.0
+tzdata==2026.2
+xgboost==3.2.0

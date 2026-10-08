@@ -2899,4 +2899,91 @@ recorded run times) but no researcher degrees of freedom.
    - `requirements*.txt` gain the two packages, and `pip check` is run after installation.
    - The advisor's pins live in one module, `advisor/frozen.py`, with a test asserting them.
 
-<!-- Append DL-036, … below as the project progresses. -->
+### DL-036 — P4-T2: a GitHub-hosted runner replaces the East US VM as the real non-GB case; the Action's runtime dependencies; how the Action is published
+
+- **Date:** 2026-10-08
+- **Status:** **Accepted.** This is an author directive given on 2026-10-08: no self-hosted runner, if
+  GitHub-hosted minutes are enough. The condition was checked against GitHub's documentation the same
+  day (item 1). The entry is logged before any P4-T2 code exists (R4).
+- **Context.** On 2026-10-08 the author made `senith02/Artifact` public and created the public
+  repository `senith02/carbon-advisor-demo`.
+- **Spec section affected.** None of the research design. This entry refines:
+  - DL-033 R3-J3 and R3-K item 1, which named the author's East US self-hosted VM as the real
+    non-GB case;
+  - R3-C7's "install from `requirements.lock.txt`";
+  - the one-commit-per-task rule in `00_SESSION_PROTOCOL.md`, for P4-T2 only.
+
+  Untouched: `scheduler_core/`, the policy, the estimator, the profile, the advisor's decision path and
+  every P0–P3 result.
+
+1. **No self-hosted runner.**
+   - **Facts checked on 2026-10-08:**
+     - GitHub's billing documentation says: *"GitHub Actions usage is free for self-hosted runners and
+       for public repositories that use standard GitHub-hosted runners."*
+     - GitHub's security-hardening guide says: *"Self-hosted runners should almost never be used for
+       public repositories on GitHub, because any user can open pull requests against the repository
+       and compromise the environment."*
+     - So a public demo repository costs nothing on GitHub-hosted runners. Attaching the author's VM to
+       it would be the riskier choice.
+   - **The real non-GB case** is now a GitHub-hosted `ubuntu-24.04` job declared
+     `compute_region: GITHUB-HOSTED`.
+     - A workflow cannot choose or verify a hosted runner's region. The declaration therefore names
+       what is known, a GitHub-hosted runner not known to be in GB. It does not claim a region.
+     - The advisor returns `RUN NOW` (`fail_safe: true`, `region_not_gb`), as R3-J3 specified for the
+       VM.
+     - R3-J3's statement about the VM stays true if the VM is ever used. It is no longer part of the
+       demo.
+   - **P4-T2 DoD, real non-GB bullet** now reads: ≥ 1 `RUN NOW (fail-safe: region_not_gb)` on a
+     GitHub-hosted runner declared `GITHUB-HOSTED`.
+2. **The GB `DEFER RECOMMENDED` comes from R3-K option (b), scenario mode in CI.** No runner in GB is
+   available. All R3-K item 2 rules apply unchanged: explicit activation, the SCENARIO banner,
+   `scenario: true`, and the decision logic unchanged. The gate records "(b)".
+3. **The demo workload is synthetic, and labelled so.**
+   - The demo repository's build job runs a fixed-length CPU workload of about 9 minutes, standing in
+     for a longer test suite, so that its completed history gives `d̂` ≥ 480 s.
+   - Any `DEFER RECOMMENDED` shown is a consequence of that chosen workload length. It is
+     demonstration only, never evidence (R3-B10).
+4. **The Action installs a pinned runtime subset, with `--no-deps`.**
+   - `code/github-action/requirements.action.txt` lists the 11 packages the advisor imports or
+     unpickles at runtime: numpy, pandas, python-dateutil, six, tzdata, PyYAML, scikit-learn, scipy,
+     joblib, threadpoolctl and xgboost.
+   - Each is pinned to the exact version in `requirements.lock.txt`, and a test asserts the equality.
+   - It runs on Python 3.11, the interpreter the lock was resolved with (`results/p0/env.txt`).
+   - **Why not the whole lock.** The lock was resolved on Windows, and its research-only packages
+     (shap, matplotlib, fastapi, uvicorn, pytest, …) are never imported by the Action.
+   - **Why `--no-deps`.** Nothing unpinned is installed. If a Linux-only transitive requirement turns
+     out to be needed, the advisor cannot start and the step fails safe to `RUN NOW` (item 5). The
+     subset would then be corrected under this entry, with the evidence.
+5. **The Action never blocks.**
+   - A wrapper builds the request from the runner's environment and the event payload file. No event
+     field is interpolated into a `run:` line (R3-C7).
+   - The wrapper runs the CLI in-process and writes the Step Summary and step outputs.
+   - If the advisor cannot be imported or raises, the wrapper writes a fail-safe `RUN NOW`
+     (`internal_error`).
+   - The setup and install steps are `continue-on-error`.
+   - **Arrival time.** The default environment does not carry the run's creation time. `arrival_utc`
+     is therefore the UTC clock at the Action's first step, within minutes of the run's creation.
+6. **Publication.**
+   - The demo repository pins the Action by the full commit SHA of the public `senith02/Artifact`.
+     The Action's code must therefore be committed and pushed **before** the demo can run.
+   - P4-T2 is committed as one or more `P4-T2 (action)` commits that the demo pins, then one gate
+     commit with the evidence and `PROGRESS.md`. This is a recorded exception to one commit per task,
+     for P4-T2 only.
+   - Every push happens only with the author's authorization (DL-011).
+7. **Where the evidence lives.**
+   - Each advisory job uploads its audit record, request and response as a workflow artifact. Nothing
+     is committed to the demo repository (R3-I).
+   - The gate collects these artifacts into `results/p4/demo_runs/` and runs
+     `replay/validate_invariants.py` over the combined audit log.
+8. **S3 (re-dispatch) is expected to be cut.** It is the plan's "first to cut" item, and the cut is
+   recorded at the gate unless the author asks for it.
+9. **Consequences.** In `development_plan.md`, the P4-T2 DoD's real non-GB bullet is updated per
+   item 1. Nothing else in the plan changes.
+
+- **Correction (2026-10-08, before any CI run).** Item 4's list is incomplete. scikit-learn 1.9.0
+  declares `narwhals` as a hard requirement, and loads it when the estimator is unpickled. This was
+  found by `tests/test_github_action.py::test_the_subset_covers_everything_the_advisor_loads`, which
+  imports the advisor in a fresh interpreter. `narwhals==2.22.1`, the lock's pin, is added, so the
+  subset is **12** packages. Nothing else in item 4 changes.
+
+<!-- Append DL-037, … below as the project progresses. -->
