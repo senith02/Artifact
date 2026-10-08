@@ -1,0 +1,5 @@
+# Wiring evidence: real completed-run history from a public repository, read-only, unauthenticated.
+# The repository's runners are not in GB, so the request uses scenario mode (DL-033 R3-K).
+compute_region: GB
+enabled_workflows: [tests.yaml]
+history_cap: 100

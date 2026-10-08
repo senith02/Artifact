@@ -17,13 +17,12 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-10-04 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 21
-  current_task: P4-T1    # Advisor core + history adapter + CLI + REST API — NOT started
-  next_task: P4-T2       # GitHub Action + demo repo (P4-T3 What-If depends only on P4-T1)
+  tasks_total: 28        # derived — recounted 2026-10-05 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
+  tasks_done: 22
+  current_task: P4-T2    # GitHub Action + demo repo — NOT started (awaits author go-ahead)
+  next_task: P4-T3       # Repo What-If Report (depends only on P4-T1)
   current_phase: P4
-  blocked_on: none — **DL-033 revision 3 ACCEPTED 2026-10-04** (duration-based CI deferral advisor +
-                  Repo What-If Report; plan P4 rewritten). P4-T1 awaits the author's go-ahead.
+  blocked_on: none — P4-T1 gated 2026-10-05 (advisor core + CLI + REST API; DL-035).
   correction:     **CR-1 (DL-034) GATED 2026-10-02** — not a numbered task; tasks_total stays 28.
                   Full-chain rerun P1-T4..P3-T5 under completion-causal ④b history. **No RQ verdict
                   changed**; changed: F1 late-period V1 {F1} → ∅ (S-e late), ⑥ beats ⑤ on est. carbon
@@ -31,8 +30,12 @@ state:
                   (182 rows, 57 changed). Originals: git 2901d77 / 95c6d6d / 1e38db7 / 4d9e128 +
                   results/corrections/dl034/original/. **The per-task blocks below (p3_model_level …
                   policy_fit) carry PRE-DL-034 values and are superseded by comparison.md.**
-  last_gate_passed: CR-1 (DL-034 correction pass; evaluation_report.md revised)
-  last_updated: 2026-10-02
+  last_gate_passed: P4-T1 (advisor core, history adapter, CLI and REST API)
+  last_updated: 2026-10-05
+  p4_advisor:     **P4-T1** — `code/advisor/` + `code/api/`; 763 tests passed (645 + 118);
+                  pins spec e43b004d… / profile 2af9992e… (LF-normalised, DL-035 §2) /
+                  estimator fit 1088d5546f47ff12; real API + real GitHub-history captures in
+                  results/p4/ (demonstration evidence, never research evidence).
   active_framing: 01_SOURCE_OF_TRUTH.md Layer 0-A (DL-012)
   test_split:     **OPENED TWICE** — 2026-09-25T19:20:25Z (P3-T1) and 2026-10-01T19:01:59Z
                   (`--rerun-under DL-034`); both chained in results/p3/test_split_opened.json and
@@ -168,16 +171,16 @@ state:
 ```
 
 ```
-Overall   [███████████████░░░░░]  75%   (21 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
-Phase 3   [████████████████████] 100%   Evaluation   (5 / 5 tasks)
+Overall   [████████████████░░░░]  79%   (22 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
+Phase 4   [███████░░░░░░░░░░░░░]  33%   Prototype    (1 / 3 tasks)
 
-► CURRENT : P4-T1 — Advisor core + history adapter + CLI + REST API (not started; DL-033 r3 accepted)
-○ NEXT    : P4-T2 — GitHub Action + demo repo
+► CURRENT : P4-T2 — GitHub Action + demo repo (not started)
+○ NEXT    : P4-T3 — Repo What-If Report
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — DL-033 revision 3 accepted 2026-10-04; P4-T1 not started)*
+*(empty — P4-T1 gated 2026-10-05; P4-T2 not started)*
 
 ---
 
@@ -208,8 +211,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T3 ④-vs-⑤ decision-level value | ✅ | `incremental_value_decision.*` | **RQ2** |
 | | P3-T4 Sensitivity sweeps | ✅ | `sensitivity.*` | RQ4 |
 | | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
-| **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ► ⬜ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
-| | P4-T2 GitHub Action + demo repo | ⬜ | `code/github-action/` | artifact |
+| **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ✅ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
+| | P4-T2 GitHub Action + demo repo | ► ⬜ | `code/github-action/` | artifact |
 | | P4-T3 Repo What-If Report | ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
@@ -226,7 +229,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
 | P2 Core + simulator + policy | 5 / 5 | `[████████████████████]` 100% ✅ |
 | P3 Evaluation | 5 / 5 | `[████████████████████]` 100% ✅ |
-| P4 Prototype | 0 / 3 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
+| P4 Prototype | 1 / 3 | `[███████░░░░░░░░░░░░░]` 33% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 
 ---
@@ -265,3 +268,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-10-04 | *(governance gate — not a numbered task)* | **DL-033 revision 3 accepted** (author decision). It was drafted 2026-10-03 against the DL-034 corrected chain: no SE family admitted; spec sha256 re-computed as `e43b004d…` (revision 2's pinned `34d689c9…` corrected); estimator `ccc5bb24…` and GB profile `efdc9f38…` hashed and confirmed tracked; external API facts checked against documentation. P4 is now a **duration-based CI deferral advisor**: shared `decide()` + GitHub Action (`RUN NOW` / `DEFER RECOMMENDED`) + REST API + **Repo What-If Report** (replaces the dashboard; demonstration only). GB only, compute location declared; recommendation-first; fail-safe `RUN NOW`. Applied: Layer 0-A artifact note, `development_plan.md` P4-T1..T3 rewritten (still 3 tasks; recount 28), this file. No code, no results, no dataset read. | **DL-033** (Proposed → Accepted, revision 3) |
 | 2026-10-04 | *(governance — DL-033 clarifications, not a numbered task)* | **R3-I** (author decision): the What-If report gains a self-contained static HTML view (inline SVG, generated from the report JSON, no new numbers). Advisor outputs live in the Step Summary, step outputs and workflow artifacts; nothing is committed to the repository. **R3-J** (author directive): (1) cold-start safety rule — no completed history → RUN NOW, on by default; it can only turn a deferral into RUN NOW. Frozen fallbacks read from the estimator: global 589 s, java 691, python 577, ruby 798, go 222. (2) Optional live regional GB intensity, display only, never decisive. (3) The author's East US Azure VM is declared non-GB → RUN NOW fail-safe. (4) The P4-T2 DEFER demo comes from a GB runner, or from a labelled hypothetical-GB scenario. Plan P4-T1/T2/T3 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-I, R3-J |
 | 2026-10-04 | *(governance — DL-033 clarification, not a numbered task)* | **R3-K** (author directive) supersedes R3-J4. P4-T2 must show **both** scenarios: the real non-GB case (East US self-hosted runner, declared `US-EAST` → RUN NOW fail-safe) and a GB `DEFER RECOMMENDED`, from a GB runner or from an explicit **scenario mode** that may run in CI. Scenario mode carries a SCENARIO banner in the Step Summary and `scenario: true`; it is ignored by re-dispatch; the decision logic is unchanged. Plan P4-T2 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-K |
+| 2026-10-05 | P4-T1 Advisor core, history adapter, CLI and REST API | **DL-035 written first:** uvicorn + httpx added (pinned, `pip check` clean, lockfile dry-run resolves); pins line-ending-normalised (the profile's DL-033 hash `efdc9f38…` was the Windows CRLF working copy, which a Linux runner would never match; the pin is now `2af9992e…`, equal to the git blob); contract details (a)–(e), incl. `is_pr` accepted as the Stage-1 input although it is in F6. `context/p4_interface.md` written before code. External endpoints re-verified by real calls (`results/p4/endpoint_check/`, 2026-10-04T17:17:51Z): Carbon Intensity national/regional shapes; GitHub runs list, timing (`run_duration_ms` 40000 = wall-clock 40 s for the captured run), repo language. `code/advisor/` (13 modules) + `code/api/` (3): validate → trusted event → config/opt-in → region → pins → completed history → d̂ via the frozen `causal_project_history` + `predict_4b` → `decide()` → monotone veto layer → response/audit. `scheduler_core/` unchanged (`git diff` empty). **763 passed** (645 + 118; `results/p4/pytest_p4_t1.txt`). The property test's generator was rebalanced after a coverage check found only 4 / 250 standing deferrals; it now asserts ≥ 30 cases of each outcome. Real API capture on `127.0.0.1:8765` (synthetic history; illustrative): eligible → DEFER RECOMMENDED (d̂ 800 s, project rung, 14 runs); `main` → RUN NOW; `pull_request_target` → fail-safe. Real read-only GitHub run (`pallets/flask` tests.yaml, scenario mode, no token): 100 fetched, 99 admitted, d̂ 40 s → RUN NOW (below threshold). | **DL-035** |

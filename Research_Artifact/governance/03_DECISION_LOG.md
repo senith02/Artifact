@@ -2845,4 +2845,58 @@ recorded run times) but no researcher degrees of freedom.
 - Threats for P5-T4: the second test pass; the completion proxy; and the unchanged temporal overlap
   between the training and scored splits (DL-014 §Resolution 5).
 
-<!-- Append DL-035, DL-036, … below as the project progresses. -->
+### DL-035 — P4-T1 implementation decisions: two stack additions, line-ending-normalised pins, and four contract details
+
+- **Date:** 2026-10-04
+- **Status:** **Accepted** (implementation detail under DL-033 revision 3, accepted by the author on
+  2026-10-04). It is logged before any P4 code exists or any package is installed (R4). The author
+  may supersede it.
+- **Spec section affected.** None of the research design. Spec §3.2 (the stack) gains two packages,
+  and DL-033 R3-A5 / R3-C2 / R3-B4 are refined as below. Untouched: `scheduler_core/`, the policy,
+  the estimator, the profile and every P0–P3 result.
+
+1. **Stack additions** (pinned in `requirements.txt` / `requirements.lock.txt`).
+   - **`uvicorn`.** The ASGI server that runs the FastAPI service. Spec §5's REST Must cannot start
+     without a server, and FastAPI does not bundle one.
+   - **`httpx`.** Required by FastAPI's `TestClient`; used by the test suite only.
+   - **No HTTP client library is added for outbound calls.** The GitHub and Carbon Intensity clients
+     use the standard library's `urllib`, as `scripts/fetch_carbon.py` already does.
+2. **The pinned hashes are line-ending-normalised.**
+   - **The problem.** `data/carbon/hour_of_week_profile.csv` is stored with LF line endings in git
+     but checked out with CRLF on this Windows machine (`core.autocrlf=true`; `git ls-files --eol`
+     shows `i/lf w/crlf`). R3-A5's `efdc9f38…` is the hash of that CRLF working copy. A Linux runner
+     would therefore always see a different hash and fail safe.
+   - **The rule.** The advisor pins **SHA-256 over the content with CRLF converted to LF**:
+     - profile: `2af9992ee46c1d752df1e5b58e945e02d309a2234b2983c565ccf119548cf40d`. This equals the
+       hash of the git blob (`git show HEAD:… | sha256sum`), so it is identical on every platform;
+     - spec: `e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8`. It is LF on every
+       checkout, so its raw and normalised hashes are equal.
+   - **The estimator** (a binary, never converted) is pinned by fit id `1088d5546f47ff12` together
+     with its raw SHA-256 `ccc5bb24…1fc0`.
+3. **Contract details** (recorded in `context/p4_interface.md`).
+   - **(a) `repo_language`.** An optional request field holding the repository's primary language,
+     as GitHub reports it. The ④b cold-start ladder needs it (R3-A4). It is matched,
+     case-insensitively, to the estimator's fitted levels (go, java, python, ruby); anything else uses
+     the global rung. With R3-J1's cold-start rule on, such runs end as RUN NOW regardless.
+   - **(b) Duration source.**
+     - Run wall-clock (`updated_at − run_started_at`) is the default, recorded as
+       `duration_source: wallclock`.
+     - The timing endpoint's `run_duration_ms` is used only within an explicit per-invocation lookup
+       budget (`duration_source: timing`). Its default is 0 for advisory runs, because one timing
+       call per history run on every push would exhaust the token's rate limit.
+     - This reads R3-B4's "where that is unavailable" as including "not fetched, within budget". The
+       completion test `max(updated_at, run_started_at + duration_s) < arrival_utc` is unchanged.
+   - **(c) The REST API never fetches history.** A request must carry its own `history`. With no
+     history, the run is a cold start and gets RUN NOW. This keeps rev 2 §B9's rule: no outbound
+     request except to the carbon endpoint.
+   - **(d) Scenario mode is a request field.** `scenario: gb-hypothetical` is set per invocation
+     (the job, in CI) and requires `compute_region: GB` (R3-K). Any other value fails safe.
+   - **(e) `is_pr` is accepted; the other 27 SE feature names are rejected.** F6 includes `is_pr`,
+     but it is also the `gh_is_pr` input of the frozen Stage-1 gate, which `decide()` consumes
+     (DL-020). Rejecting it would make every request invalid. R3-B2's "rejects all 28 feature names"
+     therefore reads as all 28 except this Stage-1 input. Found while writing `advisor/contract.py`.
+4. **Consequences.**
+   - `requirements*.txt` gain the two packages, and `pip check` is run after installation.
+   - The advisor's pins live in one module, `advisor/frozen.py`, with a test asserting them.
+
+<!-- Append DL-036, … below as the project progresses. -->

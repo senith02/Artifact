@@ -14,3 +14,5 @@ fastapi
 pytest
 matplotlib
 pyyaml          # reads scheduler_core/config/policy_spec.yaml (DL-022); safe_load only
+uvicorn         # ASGI server for the P4 REST API (DL-035)
+httpx           # FastAPI TestClient, tests only (DL-035)

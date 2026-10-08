@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-05",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -556,11 +556,15 @@
       "rq": "artifact",
       "purpose": "Run the identical scheduler_core.decide() under the frozen duration-only spec, with d-hat computed from the repository's completed GitHub Actions runs, behind a CLI and a FastAPI POST /decision.",
       "will_produce": "code/advisor/ + code/api/ + context/p4_interface.md, with three-way parity and fail-safe tests.",
-      "unknown": "Not started. Contract fixed by DL-033 revision 3 (accepted 2026-10-04): no SE features, GB only, fail-safe RUN NOW.",
-      "status": "not_started",
-      "completed_on": "",
+      "unknown": "Done. Demonstration evidence only (results/p4/); never research evidence.",
+      "status": "done",
+      "completed_on": "2026-10-05",
       "plan_heading": "Advisor core, history adapter, CLI and REST API (Must)",
-      "tests": null
+      "tests": {
+        "passed": 763,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t1.txt"
+      }
     },
     {
       "id": "P4-T2",
@@ -839,6 +843,12 @@
       "title": "④b's history admits only builds that had finished before the scored build arrived; the full evidence chain is re-run under this entry (corrects DL-014 §Resolution 2)",
       "date": "2026-10-01",
       "summary": "An independent review found the duration control counted builds still running. Fixed and re-ran P1 to P3 under predeclared rules (author option a). No RQ verdict changed; F1's late-period admission and strategy 6's mid-tau ordering did."
+    },
+    {
+      "id": "DL-035",
+      "title": "P4-T1 implementation decisions: two stack additions, line-ending-normalised pins, and four contract details",
+      "date": "2026-10-04",
+      "summary": "uvicorn and httpx join the stack; the advisor pins LF-normalised hashes (the profile's CRLF working-copy hash would never match on Linux); repo_language, a wall-clock duration default with a budgeted timing lookup, an API that never fetches history, scenario mode as a request field, and is_pr accepted as the Stage-1 input."
     }
   ],
   "artifact_components": [
@@ -876,7 +886,7 @@
       "name": "Carbon-intensity input",
       "status": "simulated",
       "where": "scheduler_core/carbon.py",
-      "note": "Replay and the P4 decision both use the 168-slot GB hour-of-week profile; live intensity is display only in P4 (DL-033 R3-B5)."
+      "note": "Replay and the advisor decide on the 168-slot GB hour-of-week profile; live national/regional intensity is display only (P4-T1)."
     },
     {
       "name": "Energy / carbon accounting",
@@ -904,9 +914,9 @@
     },
     {
       "name": "RUN NOW / DEFER via REST API",
-      "status": "planned",
-      "where": "P4-T1 code/api/ + code/advisor/",
-      "note": "Not implemented. Parity-tested against decide() and the CLI."
+      "status": "implemented",
+      "where": "code/advisor/ + code/api/",
+      "note": "P4-T1: CLI and FastAPI over the frozen decide(); three-way parity, fail-safe matrix and monotone-veto property tested (763 tests)."
     },
     {
       "name": "GitHub workflow summary / re-dispatch",
@@ -1144,12 +1154,16 @@
     {
       "date": "2026-10-04",
       "event": "DL-033 revision 3 accepted. P4 re-scoped to a duration-based CI deferral advisor with a GitHub Action, a REST API and a Repo What-If Report in place of the dashboard; GB only, recommendation-first, fail-safe RUN NOW. Plan P4-T1..T3 rewritten; still 28 tasks."
+    },
+    {
+      "date": "2026-10-05",
+      "event": "P4-T1 gated: the advisor core, completed-run history adapter, CLI and REST API run the frozen decide() unchanged; 763 tests pass; real API and real GitHub-history captures recorded as demonstration evidence (DL-035)."
     }
   ],
   "progress": {
     "tasks_total": 28,
-    "tasks_done": 21,
-    "pct": 75,
+    "tasks_done": 22,
+    "pct": 79,
     "per_phase_total": {
       "P0": 4,
       "P1": 7,
@@ -1163,13 +1177,13 @@
       "P1": 7,
       "P2": 5,
       "P3": 5,
-      "P4": 0,
+      "P4": 1,
       "P5": 0
     },
-    "current_task": "P4-T1",
-    "next_task": "P4-T2",
-    "last_gate_passed": "CR-1 (DL-034 correction pass; evaluation_report.md revised)",
-    "progress_md_updated": "2026-10-02",
+    "current_task": "P4-T2",
+    "next_task": "P4-T3",
+    "last_gate_passed": "P4-T1 (advisor core, history adapter, CLI and REST API)",
+    "progress_md_updated": "2026-10-05",
     "test_split_opened": true
   },
   "evidence": {
@@ -4500,6 +4514,11 @@
         "passed": 638,
         "skipped": 0,
         "file": "results/p3/pytest_p3_t5.txt"
+      },
+      "P4-T1": {
+        "passed": 763,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t1.txt"
       }
     }
   }

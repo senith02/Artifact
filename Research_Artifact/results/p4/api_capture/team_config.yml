@@ -1,0 +1,4 @@
+# Demo team config for the P4-T1 API capture (wiring evidence, not a result).
+compute_region: GB
+enabled_workflows: [ci.yml]
+grid_display_region: EC1A

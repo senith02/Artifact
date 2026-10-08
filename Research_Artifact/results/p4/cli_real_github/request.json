@@ -1,0 +1,12 @@
+{
+ "repository": "pallets/flask",
+ "workflow": "tests.yaml",
+ "event": "push",
+ "ref_type": "branch",
+ "branch": "feature/hypothetical",
+ "is_pr": false,
+ "arrival_utc": "2026-10-05T09:34:15Z",
+ "compute_region": "GB",
+ "scenario": "gb-hypothetical",
+ "repo_language": "Python"
+}

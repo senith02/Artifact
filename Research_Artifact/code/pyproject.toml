@@ -11,7 +11,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["scheduler_core", "replay"]
+packages = ["scheduler_core", "replay", "advisor", "api"]
 
 [tool.pytest.ini_options]
 # Run pytest from the code/ directory; make the package importable without an

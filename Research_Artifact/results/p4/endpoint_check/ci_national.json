@@ -1,0 +1,11 @@
+{ 
+  "data":[{ 
+    "from": "2026-10-04T16:30Z",
+    "to": "2026-10-04T17:00Z",
+    "intensity": {
+      "forecast": 144,
+      "actual": 162,
+      "index": "moderate"
+    }
+  }]
+}
