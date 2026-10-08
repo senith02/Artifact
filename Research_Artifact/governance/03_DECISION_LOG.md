@@ -2986,4 +2986,103 @@ recorded run times) but no researcher degrees of freedom.
   imports the advisor in a fresh interpreter. `narwhals==2.22.1`, the lock's pin, is added, so the
   subset is **12** packages. Nothing else in item 4 changes.
 
-<!-- Append DL-037, … below as the project progresses. -->
+### DL-037 — P4-T3: the public-repository selection rule, and how the Repo What-If Report reads DL-033 R3-C8
+
+- **Date:** 2026-10-08
+- **Status:** **Accepted.** Item 1 is an author decision of 2026-10-08. Items 2–8 are implementation
+  readings of DL-033 R3-C8/R3-I under that revision's acceptance. All are logged before any What-If code
+  exists (R4).
+- **Spec section affected.** None of the research design. This entry fills in details that DL-033 R3-D
+  and R3-C8 leave open. Untouched: `scheduler_core/`, the policy, the estimator, the profile, every
+  P0–P3 result, and the advisor's decision path.
+
+1. **Selection rule** *(author decision, 2026-10-08)*.
+   - One public repository per language the duration estimator was fitted on: Go, Java, Python and
+     Ruby, the `lang_levels` of fit `1088d5546f47ff12`.
+   - **Search:** `language:<L> stars:>=1000 archived:false fork:false`, sorted by stars, descending.
+   - **Scan:** at most 30 candidates per language. The demo repository is excluded from the search,
+     because it is reported anyway.
+   - **Qualifying** (DL-033 R3-D): the repository has an active workflow under `.github/workflows/`
+     with ≥ 200 completed runs created in the 90 days before the selection date.
+     - The workflow analysed is the one with the most such runs, with ties going to the lowest
+       workflow id.
+     - GitHub caps this count at 1,000, which does not affect a ≥ 200 test.
+   - **Selected:** the first qualifying candidate per language. If none of the 30 qualifies, that
+     language is reported as "no qualifying repository".
+   - **Every selected repository is reported, whatever its outcome.**
+   - The rule is written to `results/p4/whatif_selection.md` and committed **before** any report run.
+     This commit is required by the P4-T3 DoD, so the task has an intermediate commit by design.
+2. **Team config used for a repository that has none.**
+   - `compute_region: GB` with `scenario: gb-hypothetical`. A What-If is by definition "what if this
+     workflow's runs had been advised on GB compute", so every output carries the SCENARIO banner.
+   - `enabled_workflows`: the analysed workflow.
+   - Every other key keeps its C6 default, including `cold_start_run_now: true` and
+     `urgent_markers: ["[urgent]"]`.
+   - The demo repository uses the same default, so all reports are comparable.
+3. **Per-run request.**
+   - **Fields taken from the run object:**
+     - `event`, `head_branch` as `branch`, `head_sha`, `id`, `run_attempt`;
+     - `head_commit.message`, used for urgency markers only;
+     - `created_at` as `arrival_utc` (R3-B4).
+   - **`is_pr`** is `event == pull_request`.
+   - **`ref_type` is assumed to be `branch`.** A run object does not say whether a push was to a tag.
+     This is a declared limitation: tag pushes would be vetoed in live use.
+   - **History.** Every fetched run is passed as history. The advisor's own completed-history filter
+     admits only runs that finished before the arrival.
+   - **Clock.** The advisor's clock is the snapshot's `fetched_at`, so a re-run is deterministic.
+   - **Live intensity** is off.
+   - **Events.** Events outside the trusted list (`pull_request_target`, `workflow_run`,
+     `merge_group`, …) get the advisor's own fail-safe RUN NOW, and are reported under "fail-safe".
+4. **Runs analysed and excluded.**
+   - **Analysed:** runs with `conclusion ∈ {success, failure}`, placeable timestamps and a positive
+     wall-clock duration (R3-B4). This mirrors which runs could ever be history.
+   - **Excluded:** everything else, counted by reason (`conclusion_cancelled`, `conclusion_skipped`,
+     `conclusion_timed_out`, …, `unplaceable`, `non_positive_duration`).
+   - **Duration:** run wall-clock, `updated_at − run_started_at`, recorded as
+     `duration_source: wallclock`. It is used after the decision, for accounting only (A1.2 role 1).
+5. **Metric definitions.**
+   - **Carbon.**
+     - Run now: each analysed run's observed duration at its arrival slot.
+     - Advisor: the same duration at the slot the final action implies (the target slot if
+       deferred, else the arrival slot).
+     - Both use `accounting.carbon_for_slot` on the frozen profile, at each `P_avg` of the ±50% band.
+       The change in % does not depend on `P_avg`, because carbon is linear in power, so the band
+       moves grams only.
+   - **Mean added delay:** over all analysed runs, with run-now runs counting as 0.
+   - **Failed-run TTFF:** final delay plus observed duration, over analysed runs with
+     `conclusion == failure`.
+     - p95 uses `numpy.percentile` (linear), as `replay/simulator.py` does.
+     - It is computed only when n ≥ 20; otherwise "not computable (n = k)".
+   - **Run-now reasons** come from the response alone, with no threshold re-implemented:
+     - `pull_request` and `protected_branch` from `stage1_rule`;
+     - `below_threshold`: eligible, policy run now, window 0;
+     - `no_greener_slot`: eligible, policy run now, window > 0;
+     - vetoes and fail-safes by their code;
+     - `not_advised`.
+   - **Rung coverage** counts project, language and global rungs over the analysed eligible runs. A
+     run with `n_history == 0` is a cold start.
+     - When the repository's total completed runs exceed those fetched, the window starts in the
+       middle of the history. The report then flags `window_truncated: true`, because its cold-start
+       and early-history runs are artefacts of the window.
+6. **Privacy and what is published** (R3-C8 item 6).
+   - **The history snapshot** holds per-run fields only:
+     - run id, workflow, event, branch, SHA, status and conclusion, the timestamps, the attempt;
+     - the commit message, with e-mail addresses redacted.
+     It holds no actor, login or author field.
+   - **The snapshot is kept locally** under `code/artifacts/whatif_snapshots/` (gitignored) and
+     pinned by its sha256 in the report. It is not published.
+   - **Published** under `results/p4/whatif/`: the aggregate report (JSON, Markdown, HTML) and the
+     determinism record.
+7. **The HTML view** (R3-I).
+   - Every number in the page text appears in the report JSON, and a test checks this.
+   - The carbon chart shows the mean estimated grams per run, run now vs advisor, with the ±50% band
+     as whiskers.
+   - The heatmap marks the arrival and target slots of deferred runs, with counts per slot.
+   - The delay chart is a histogram of added delay over deferred runs, in 2-hour bins.
+   - **CI.** An example workflow in `code/github-action/examples/` shows the What-If run in CI and
+     its upload as a workflow artifact. It is not exercised in P4-T3; the reports are generated
+     locally.
+8. **Outputs are refused under `results/p0`–`results/p3`.** `whatif` refuses an output directory
+   there, and a test checks the refusal.
+
+<!-- Append DL-038, … below as the project progresses. -->

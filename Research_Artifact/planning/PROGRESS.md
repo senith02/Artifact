@@ -19,7 +19,7 @@
 state:
   tasks_total: 28        # derived — recounted 2026-10-05 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
   tasks_done: 23
-  current_task: P4-T3    # Repo What-If Report — NOT started (awaits author go-ahead)
+  current_task: P4-T3    # Repo What-If Report — ⏳ in progress (started 2026-10-08)
   next_task: P5-T1       # Literature verification + Intro/LR
   current_phase: P4
   blocked_on: none — P4-T2 gated 2026-10-08 (GitHub Action + demo repository; DL-036).
@@ -179,13 +179,25 @@ state:
 Overall   [████████████████░░░░]  82%   (23 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
 Phase 4   [█████████████░░░░░░░]  67%   Prototype    (2 / 3 tasks)
 
-► CURRENT : P4-T3 — Repo What-If Report (not started)
+► CURRENT : P4-T3 — Repo What-If Report (⏳ in progress)
 ○ NEXT    : P5-T1 — Literature verification + Intro/LR
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P4-T2 gated 2026-10-08; P4-T3 not started)*
+**P4-T3 — Repo What-If Report** (started 2026-10-08)
+
+- [ ] DL-037 written before any What-If code (contract readings: default team config, snapshot privacy,
+      metric definitions, warm-up, ref type, intermediate commit of the selection rule)
+- [ ] S1 `results/p4/whatif_selection.md` — author rule (2026-10-08): one repo per estimator language
+      (Go/Java/Python/Ruby), first qualifying of ≤ 30 by stars; **committed before any report run**
+- [ ] S2 `code/advisor/whatif.py` + `python -m advisor whatif` (C8) + selection script
+- [ ] S4 HTML view (inline SVG, no JS, from the JSON only)
+- [ ] Tests: determinism (JSON + HTML byte-identical), every HTML number is in the JSON, accounting
+      boundary (spy + metamorphic), no write into results/p0–p3; full `pytest`
+- [ ] S3 selection applied; reports for the demo repo + every selected repo → `results/p4/whatif/`
+- [ ] Determinism re-run on saved snapshots; no What-If number in `results/p3/` or the evaluation report
+- [ ] Gate: pytest captured, frozen hashes + `git diff --stat`, PROGRESS, research guide (DL-025)
 
 ---
 
@@ -218,7 +230,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
 | **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ✅ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
 | | P4-T2 GitHub Action + demo repo | ✅ | `code/github-action/` | artifact |
-| | P4-T3 Repo What-If Report | ► ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
+| | P4-T3 Repo What-If Report | ► ⏳ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
 | | P5-T3 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
