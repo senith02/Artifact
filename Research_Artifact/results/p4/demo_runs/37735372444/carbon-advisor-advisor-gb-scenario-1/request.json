@@ -1,0 +1,16 @@
+{
+  "arrival_utc": "2026-10-08T06:01:47Z",
+  "branch": "feature/eligible-change",
+  "compute_region": "GB",
+  "event": "push",
+  "head_commit_message": "Add count_primes_below helper",
+  "head_sha": "347abb47b3af9d19eb3ca3d72dc3d44131822bb0",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 37735372444,
+  "scenario": "gb-hypothetical",
+  "workflow": "ci.yml"
+}

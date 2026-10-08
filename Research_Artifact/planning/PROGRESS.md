@@ -18,11 +18,11 @@
 ```yaml
 state:
   tasks_total: 28        # derived — recounted 2026-10-05 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 22
-  current_task: P4-T2    # GitHub Action + demo repo — ⏳ in progress (started 2026-10-08)
-  next_task: P4-T3       # Repo What-If Report (depends only on P4-T1)
+  tasks_done: 23
+  current_task: P4-T3    # Repo What-If Report — NOT started (awaits author go-ahead)
+  next_task: P5-T1       # Literature verification + Intro/LR
   current_phase: P4
-  blocked_on: none — P4-T1 gated 2026-10-05 (advisor core + CLI + REST API; DL-035).
+  blocked_on: none — P4-T2 gated 2026-10-08 (GitHub Action + demo repository; DL-036).
   correction:     **CR-1 (DL-034) GATED 2026-10-02** — not a numbered task; tasks_total stays 28.
                   Full-chain rerun P1-T4..P3-T5 under completion-causal ④b history. **No RQ verdict
                   changed**; changed: F1 late-period V1 {F1} → ∅ (S-e late), ⑥ beats ⑤ on est. carbon
@@ -30,8 +30,13 @@ state:
                   (182 rows, 57 changed). Originals: git 2901d77 / 95c6d6d / 1e38db7 / 4d9e128 +
                   results/corrections/dl034/original/. **The per-task blocks below (p3_model_level …
                   policy_fit) carry PRE-DL-034 values and are superseded by comparison.md.**
-  last_gate_passed: P4-T1 (advisor core, history adapter, CLI and REST API)
-  last_updated: 2026-10-05
+  last_gate_passed: P4-T2 (GitHub Action + demo repository)
+  last_updated: 2026-10-08
+  p4_action:      **P4-T2** — `code/github-action/` (composite; pinned by SHA 7c19b9c3… from the public
+                  demo `senith02/carbon-advisor-demo`); 789 tests passed (763 + 26). Seven real CI runs →
+                  results/p4/demo_runs/ (13 advisory decisions, validator 0 violations / 1 deferral).
+                  GB DEFER via scenario mode (b); real case GITHUB-HOSTED → region_not_gb (DL-036).
+                  Synthetic ~9-min demo workload. S3 re-dispatch CUT. Demonstration evidence only.
   p4_advisor:     **P4-T1** — `code/advisor/` + `code/api/`; 763 tests passed (645 + 118);
                   pins spec e43b004d… / profile 2af9992e… (LF-normalised, DL-035 §2) /
                   estimator fit 1088d5546f47ff12; real API + real GitHub-history captures in
@@ -171,31 +176,16 @@ state:
 ```
 
 ```
-Overall   [████████████████░░░░]  79%   (22 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
-Phase 4   [███████░░░░░░░░░░░░░]  33%   Prototype    (1 / 3 tasks)
+Overall   [████████████████░░░░]  82%   (23 / 28 tasks)   Milestone: ✅ M3 reached (P3 complete)
+Phase 4   [█████████████░░░░░░░]  67%   Prototype    (2 / 3 tasks)
 
-► CURRENT : P4-T2 — GitHub Action + demo repo (⏳ in progress)
-○ NEXT    : P4-T3 — Repo What-If Report
+► CURRENT : P4-T3 — Repo What-If Report (not started)
+○ NEXT    : P5-T1 — Literature verification + Intro/LR
 ```
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-**P4-T2 — GitHub Action + demo repo** (started 2026-10-08)
-
-- [x] DL-036 written before any Action code (GitHub-hosted runner replaces the East US VM; runtime
-      dependency subset; Action published at a SHA before the gate commit). Correction appended:
-      `narwhals` added (scikit-learn 1.9 hard requirement) → 12 packages
-- [x] S1 `code/github-action/` — `action.yml`, `run_advisor.py`, `requirements.action.txt`, README
-      (C11 statements), `examples/`; `tests/test_github_action.py` 25 tests (no network)
-- [x] Local verification: full `pytest` 788 passed (763 + 25); wrapper end-to-end in a clean scratch
-      venv from the 12-package subset, real read-only `pallets/flask` history → `results/p4/action_wiring/`
-- [ ] Action committed + pushed to `senith02/Artifact` (author authorized pushes 2026-10-08)
-- [ ] S2 demo repo `senith02/carbon-advisor-demo` built and pushed in scenario order
-- [ ] Captured runs: cold start · protected · DEFER (scenario) · veto/below-threshold · real non-GB
-      fail-safe · other fail-safe · `pull_request_target` refused
-- [ ] Audit logs collected → `results/p4/demo_runs/`; validator 0 violations
-- [ ] S3 re-dispatch — cut (Could, first to cut) unless the author asks for it
-- [ ] Gate: pytest captured, frozen hashes + `git diff --stat`, PROGRESS, research guide (DL-025)
+*(empty — P4-T2 gated 2026-10-08; P4-T3 not started)*
 
 ---
 
@@ -227,8 +217,8 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | | P3-T4 Sensitivity sweeps | ✅ | `sensitivity.*` | RQ4 |
 | | P3-T5 Results synthesis + RQ verdicts | ✅ | `evaluation_report.md` | RQ1–4 |
 | **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ✅ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
-| | P4-T2 GitHub Action + demo repo | ► ⏳ | `code/github-action/` | artifact |
-| | P4-T3 Repo What-If Report | ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
+| | P4-T2 GitHub Action + demo repo | ✅ | `code/github-action/` | artifact |
+| | P4-T3 Repo What-If Report | ► ⬜ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
 | | P5-T3 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
@@ -244,7 +234,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
 | P2 Core + simulator + policy | 5 / 5 | `[████████████████████]` 100% ✅ |
 | P3 Evaluation | 5 / 5 | `[████████████████████]` 100% ✅ |
-| P4 Prototype | 1 / 3 | `[███████░░░░░░░░░░░░░]` 33% |
+| P4 Prototype | 2 / 3 | `[█████████████░░░░░░░]` 67% |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 
 ---
@@ -284,3 +274,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-10-04 | *(governance — DL-033 clarifications, not a numbered task)* | **R3-I** (author decision): the What-If report gains a self-contained static HTML view (inline SVG, generated from the report JSON, no new numbers). Advisor outputs live in the Step Summary, step outputs and workflow artifacts; nothing is committed to the repository. **R3-J** (author directive): (1) cold-start safety rule — no completed history → RUN NOW, on by default; it can only turn a deferral into RUN NOW. Frozen fallbacks read from the estimator: global 589 s, java 691, python 577, ruby 798, go 222. (2) Optional live regional GB intensity, display only, never decisive. (3) The author's East US Azure VM is declared non-GB → RUN NOW fail-safe. (4) The P4-T2 DEFER demo comes from a GB runner, or from a labelled hypothetical-GB scenario. Plan P4-T1/T2/T3 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-I, R3-J |
 | 2026-10-04 | *(governance — DL-033 clarification, not a numbered task)* | **R3-K** (author directive) supersedes R3-J4. P4-T2 must show **both** scenarios: the real non-GB case (East US self-hosted runner, declared `US-EAST` → RUN NOW fail-safe) and a GB `DEFER RECOMMENDED`, from a GB runner or from an explicit **scenario mode** that may run in CI. Scenario mode carries a SCENARIO banner in the Step Summary and `scenario: true`; it is ignored by re-dispatch; the decision logic is unchanged. Plan P4-T2 DoD updated. No code, no frozen file, no result changed. | **DL-033** R3-K |
 | 2026-10-05 | P4-T1 Advisor core, history adapter, CLI and REST API | **DL-035 written first:** uvicorn + httpx added (pinned, `pip check` clean, lockfile dry-run resolves); pins line-ending-normalised (the profile's DL-033 hash `efdc9f38…` was the Windows CRLF working copy, which a Linux runner would never match; the pin is now `2af9992e…`, equal to the git blob); contract details (a)–(e), incl. `is_pr` accepted as the Stage-1 input although it is in F6. `context/p4_interface.md` written before code. External endpoints re-verified by real calls (`results/p4/endpoint_check/`, 2026-10-04T17:17:51Z): Carbon Intensity national/regional shapes; GitHub runs list, timing (`run_duration_ms` 40000 = wall-clock 40 s for the captured run), repo language. `code/advisor/` (13 modules) + `code/api/` (3): validate → trusted event → config/opt-in → region → pins → completed history → d̂ via the frozen `causal_project_history` + `predict_4b` → `decide()` → monotone veto layer → response/audit. `scheduler_core/` unchanged (`git diff` empty). **763 passed** (645 + 118; `results/p4/pytest_p4_t1.txt`). The property test's generator was rebalanced after a coverage check found only 4 / 250 standing deferrals; it now asserts ≥ 30 cases of each outcome. Real API capture on `127.0.0.1:8765` (synthetic history; illustrative): eligible → DEFER RECOMMENDED (d̂ 800 s, project rung, 14 runs); `main` → RUN NOW; `pull_request_target` → fail-safe. Real read-only GitHub run (`pallets/flask` tests.yaml, scenario mode, no token): 100 fetched, 99 admitted, d̂ 40 s → RUN NOW (below threshold). | **DL-035** |
+| 2026-10-08 | P4-T2 GitHub Action + demo repository | **DL-036 written first** (author directive: no self-hosted runner — GitHub's docs: public repos run free on standard GitHub-hosted runners, and self-hosted runners "should almost never be used for public repositories"). `code/github-action/` — composite `action.yml` (setup-python v7.0.0 / upload-artifact v7.0.2 pinned by SHA; setup + install `continue-on-error`; advisory step `|| true`), `run_advisor.py` (request from `GITHUB_*` + event payload file, nothing interpolated into `run:` lines; CLI in-process; 9 step outputs; fail-safe `internal_error` fallback), `requirements.action.txt` (12 packages = lock pins, `--no-deps`; `narwhals` added after the sufficiency test caught scikit-learn 1.9's hard requirement — DL-036 correction), README with every R3-C11 statement, `examples/`; `scripts/collect_demo_runs.py`; `tests/test_github_action.py` (26) — **789 passed** (`results/p4/pytest_p4_t2.txt`). Clean-venv wiring check from the subset alone → `results/p4/action_wiring/`. Action commit `7c19b9c` pushed and pinned by the public demo repo `senith02/carbon-advisor-demo` (author-authorized pushes; PR #1 opened via API with author consent, not merged). **Seven real runs** (`results/p4/demo_runs/decisions.md`): cold start `feature/first-run` → RUN NOW (scenario), veto `cold_start`, policy defer, d̂ 577 s language rung; `main` → RUN NOW (`protected:mainline`); `feature/eligible-change` → **DEFER RECOMMENDED (scenario)**, d̂ 549 s project rung n = 1, to 2026-10-09T02:00Z — GB case recorded as option **(b)** scenario mode; `feature/urgent-fix` → RUN NOW, veto `urgent_marker`; `demo/missing-region` → fail-safe `invalid_request`; real GitHub-hosted job on every run → fail-safe `region_not_gb`; `pull_request` → RUN NOW (`pr_blocking`); `pull_request_target` → fail-safe `untrusted_event`. Every advisory step and job concluded `success` (exit 0). Combined audit log: **0 violations / 13 records / 1 deferred** (`validator_result.json`). Demo build workload is **synthetic** (~9 min). **S3 re-dispatch CUT.** Frozen pins re-asserted; frozen paths unchanged since `386be51`. Demonstration evidence only. | **DL-036** |

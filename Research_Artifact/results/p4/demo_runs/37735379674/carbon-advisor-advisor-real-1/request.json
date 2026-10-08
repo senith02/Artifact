@@ -1,0 +1,15 @@
+{
+  "arrival_utc": "2026-10-08T06:01:51Z",
+  "branch": "feature/urgent-fix",
+  "compute_region": "GITHUB-HOSTED",
+  "event": "push",
+  "head_commit_message": "[urgent] Clarify the trial-division docstring",
+  "head_sha": "e472ba986441109c4de827b8ecfc2d66d200118b",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 37735379674,
+  "workflow": "ci.yml"
+}

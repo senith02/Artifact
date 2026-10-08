@@ -226,6 +226,31 @@ def test_outputs_refuse_a_value_containing_the_delimiter():
         run_advisor.format_outputs({"reason": "a DELIM b"}, delimiter="DELIM")
 
 
+def test_collected_runs_assemble_into_a_validated_audit_and_table(tmp_path):
+    """scripts/collect_demo_runs.assemble, offline, over artifacts the wrapper itself wrote."""
+    from scripts import collect_demo_runs
+
+    out, runs = tmp_path / "demo_runs", []
+    for run_id, ref in ((1, "feature/a"), (2, "main")):
+        env = _env(tmp_path / f"r{run_id}", ref_name=ref, GITHUB_RUN_ID=str(run_id), ADVISOR_SCENARIO="gb-hypothetical")
+        run_advisor.run(env, cli_main=_offline_cli())
+        dest = out / str(run_id) / "carbon-advisor-advisor-gb-scenario-1"
+        dest.mkdir(parents=True)
+        for f in (Path(env["RUNNER_TEMP"]) / "carbon-advisor").iterdir():
+            dest.joinpath(f.name).write_bytes(f.read_bytes())
+        step = "Run senith02/Artifact/Research_Artifact/code/github-action@" + "a" * 40
+        runs.append({"run_id": run_id, "html_url": f"https://example.invalid/{run_id}", "event": "push",
+                     "jobs": [{"name": "advisor", "steps": [{"name": step, "conclusion": "success"},
+                                                            {"name": "Post " + step, "conclusion": "success"}]}]})
+    validator = collect_demo_runs.assemble(out, runs)
+    assert validator["violations"] == 0 and validator["records"] == 2 and validator["deferred"] == 1
+    rows = json.loads((out / "decisions.json").read_text(encoding="utf-8"))
+    assert [r["display"] for r in rows] == ["DEFER RECOMMENDED (scenario)", "RUN NOW (scenario)"]
+    assert all(r["advisor_steps_success"] for r in rows)
+    table = (out / "decisions.md").read_text(encoding="utf-8")
+    assert "Demonstration — not research evidence" in table and "0 violations over 2 audit records" in table
+
+
 # --------------------------------------------------------------------------- #
 # The action file, the examples and the documentation.
 # --------------------------------------------------------------------------- #

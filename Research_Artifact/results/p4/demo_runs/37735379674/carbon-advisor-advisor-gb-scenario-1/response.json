@@ -1,0 +1,57 @@
+{
+  "action": "run_now",
+  "advisor_version": "0.1.0",
+  "compute_region_assumed": "GB",
+  "config_warnings": [],
+  "d_hat_rung": "project",
+  "d_hat_seconds": 548.9999999999998,
+  "defer_until": null,
+  "delay_hours": 0.0,
+  "display": "RUN NOW (scenario)",
+  "duplicate": false,
+  "eligible": true,
+  "est_carbon_change_pct": null,
+  "estimator_fit_id": "1088d5546f47ff12",
+  "fail_safe": false,
+  "fail_safe_code": null,
+  "grid_gco2_live_national": {
+    "from": "2026-10-08T05:30Z",
+    "gco2_per_kwh": 54.0,
+    "kind": "actual",
+    "to": "2026-10-08T06:00Z"
+  },
+  "grid_gco2_live_regional": null,
+  "grid_gco2_profile_now": 149.322,
+  "grid_gco2_profile_scheduled": 109.159,
+  "history_dropped": {},
+  "n_history": 1,
+  "outcome_kind": "veto",
+  "policy_action": "defer",
+  "policy_defer_until": {
+    "dow": 4,
+    "hour": 2,
+    "offset_hours": 20,
+    "slot": 98,
+    "utc": "2026-10-09T02:00:00+00:00"
+  },
+  "policy_path": "duration_only_fallback",
+  "profile_sha256": "2af9992ee46c1d752df1e5b58e945e02d309a2234b2983c565ccf119548cf40d",
+  "reason": "stage1[primary]: deferrable (push_to_unprotected_branch). stage2[duration_only_fallback]: d_hat=549.0s >= d_threshold=480.0s, window=24.0000h (flat w_max=24.0000). Greenest reachable slot is 98 (Fri 02:00, 109.1590 gCO2/kWh) at +20h, vs 149.3220 gCO2/kWh now -> deferring 20h. | veto: the commit message carries an urgency marker -> RUN NOW. | SE characteristics were evaluated and not admitted (results/p1/incremental_value.md; results/p3/evaluation_report.md) \u2014 this decision uses branch/PR status and a duration estimate from completed history only.",
+  "scenario": "gb-hypothetical",
+  "spec_sha256": "e43b004d3df0a680d5e5519f8ddceb54ffd2861f6eb3363c5c2ec7d3e45c8cf8",
+  "stage1_rule": "push_to_unprotected_branch",
+  "statements": [
+    "SCENARIO \u2014 this runner is NOT in Great Britain. This shows what the advisor would recommend if the build ran on GB compute.",
+    "Recommendation only: the advisor never pauses, cancels or fails a build.",
+    "Carbon figures are estimates under a constant-power energy model, not measurements.",
+    "Evaluated regime: Great Britain only. The compute location is declared by the team, not detected.",
+    "Thresholds (480 s, 24 h) were fitted on Travis CI 2011-2016 and are extrapolated to GitHub Actions.",
+    "GitHub Actions run wall-clock time is a different measure from Travis tr_duration.",
+    "The urgency gate (pull request / protected branch) is an unvalidated approximation (DL-020).",
+    "Manual and scheduled runs are vetoed by team policy, not detected as urgent."
+  ],
+  "vetoes": [
+    "urgent_marker"
+  ],
+  "window_hours": 24.0
+}

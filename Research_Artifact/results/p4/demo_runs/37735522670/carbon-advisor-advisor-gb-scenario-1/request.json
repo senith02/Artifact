@@ -1,0 +1,15 @@
+{
+  "arrival_utc": "2026-10-08T06:03:21Z",
+  "branch": "feature/eligible-change",
+  "compute_region": "GB",
+  "event": "pull_request",
+  "head_sha": "bf8da37e1ff0592e7fda051915db44b38ce151b8",
+  "is_pr": true,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 37735522670,
+  "scenario": "gb-hypothetical",
+  "workflow": "ci.yml"
+}

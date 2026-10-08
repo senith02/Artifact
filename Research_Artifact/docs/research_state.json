@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-10-05",
+    "last_updated": "2026-10-08",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -572,11 +572,15 @@
       "rq": "artifact",
       "purpose": "A composite GitHub Action that reports RUN NOW / DEFER RECOMMENDED in the Step Summary and step outputs, with least-privilege permissions; re-dispatch only as an optional reference demo.",
       "will_produce": "code/github-action/ plus captured demo-repository runs.",
-      "unknown": "Not started. Recommendation-first; the re-dispatch demonstration is first to cut.",
-      "status": "not_started",
-      "completed_on": "",
+      "unknown": "Done. Seven real runs on the public demo repository showed every required case: cold start, protected branch, GB-scenario DEFER, urgent veto, two fail-safes, pull_request_target refused. Re-dispatch was cut. Demonstration evidence only; the build workload is synthetic.",
+      "status": "done",
+      "completed_on": "2026-10-08",
       "plan_heading": "GitHub Action + demo repository (Should)",
-      "tests": null
+      "tests": {
+        "passed": 789,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t2.txt"
+      }
     },
     {
       "id": "P4-T3",
@@ -849,6 +853,12 @@
       "title": "P4-T1 implementation decisions: two stack additions, line-ending-normalised pins, and four contract details",
       "date": "2026-10-04",
       "summary": "uvicorn and httpx join the stack; the advisor pins LF-normalised hashes (the profile's CRLF working-copy hash would never match on Linux); repo_language, a wall-clock duration default with a budgeted timing lookup, an API that never fetches history, scenario mode as a request field, and is_pr accepted as the Stage-1 input."
+    },
+    {
+      "id": "DL-036",
+      "title": "P4-T2: a GitHub-hosted runner replaces the East US VM as the real non-GB case; the Action's runtime dependencies; how the Action is published",
+      "date": "2026-10-08",
+      "summary": "No self-hosted runner: public repositories run free on GitHub-hosted runners, and GitHub advises against self-hosted runners on public repositories. The real case declares GITHUB-HOSTED and fails safe; GB DEFER comes from labelled scenario mode. The Action installs a 12-package subset pinned to the lockfile, with --no-deps. The demo workload is synthetic. The Action was pushed before the gate so the demo could pin its SHA."
     }
   ],
   "artifact_components": [
@@ -920,9 +930,9 @@
     },
     {
       "name": "GitHub workflow summary / re-dispatch",
-      "status": "planned",
-      "where": "P4-T2",
-      "note": "Not implemented. Step Summary + step outputs; re-dispatch is an optional reference demo."
+      "status": "implemented",
+      "where": "code/github-action/ + github.com/senith02/carbon-advisor-demo",
+      "note": "P4-T2: composite Action writes the Step Summary and step outputs and always exits 0; seven captured demo runs, audit log 0 violations. The re-dispatch reference demo was cut (DL-036 section 8)."
     },
     {
       "name": "Region inference (IP-based)",
@@ -1158,12 +1168,16 @@
     {
       "date": "2026-10-05",
       "event": "P4-T1 gated: the advisor core, completed-run history adapter, CLI and REST API run the frozen decide() unchanged; 763 tests pass; real API and real GitHub-history captures recorded as demonstration evidence (DL-035)."
+    },
+    {
+      "date": "2026-10-08",
+      "event": "P4-T2 gated: the composite GitHub Action runs the advisor in CI. Seven runs on the public demo repository: cold start, protected branch, GB-scenario DEFER, urgent veto, two fail-safes, pull_request_target refused; audit log 0 violations; 789 tests pass. A GitHub-hosted runner replaces the East US VM; re-dispatch cut (DL-036)."
     }
   ],
   "progress": {
     "tasks_total": 28,
-    "tasks_done": 22,
-    "pct": 79,
+    "tasks_done": 23,
+    "pct": 82,
     "per_phase_total": {
       "P0": 4,
       "P1": 7,
@@ -1177,13 +1191,13 @@
       "P1": 7,
       "P2": 5,
       "P3": 5,
-      "P4": 1,
+      "P4": 2,
       "P5": 0
     },
-    "current_task": "P4-T2",
-    "next_task": "P4-T3",
-    "last_gate_passed": "P4-T1 (advisor core, history adapter, CLI and REST API)",
-    "progress_md_updated": "2026-10-05",
+    "current_task": "P4-T3",
+    "next_task": "P5-T1",
+    "last_gate_passed": "P4-T2 (GitHub Action + demo repository)",
+    "progress_md_updated": "2026-10-08",
     "test_split_opened": true
   },
   "evidence": {
@@ -4519,6 +4533,11 @@
         "passed": 763,
         "skipped": 0,
         "file": "results/p4/pytest_p4_t1.txt"
+      },
+      "P4-T2": {
+        "passed": 789,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t2.txt"
       }
     }
   }

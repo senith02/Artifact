@@ -1,0 +1,771 @@
+[
+  {
+    "run_id": 37734399927,
+    "workflow": "ci.yml",
+    "event": "push",
+    "head_branch": "feature/first-run",
+    "head_sha": "3c71814ac5bd66dab69a35f170536fa9a3bebd59",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734399927",
+    "created_at": "2026-10-08T05:50:24Z",
+    "run_started_at": "2026-10-08T05:50:24Z",
+    "updated_at": "2026-10-08T05:59:33Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734399927/job/113170561122",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734399927/job/113170561411",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734399927/job/113170561447",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-real-1",
+      "carbon-advisor-advisor-gb-scenario-1"
+    ]
+  },
+  {
+    "run_id": 37734618114,
+    "workflow": "ci.yml",
+    "event": "push",
+    "head_branch": "main",
+    "head_sha": "3c71814ac5bd66dab69a35f170536fa9a3bebd59",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734618114",
+    "created_at": "2026-10-08T05:52:56Z",
+    "run_started_at": "2026-10-08T05:52:56Z",
+    "updated_at": "2026-10-08T06:02:04Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734618114/job/113171231712",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734618114/job/113171231839",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37734618114/job/113171231896",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-real-1",
+      "carbon-advisor-advisor-gb-scenario-1"
+    ]
+  },
+  {
+    "run_id": 37735372444,
+    "workflow": "ci.yml",
+    "event": "push",
+    "head_branch": "feature/eligible-change",
+    "head_sha": "347abb47b3af9d19eb3ca3d72dc3d44131822bb0",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735372444",
+    "created_at": "2026-10-08T06:01:33Z",
+    "run_started_at": "2026-10-08T06:01:33Z",
+    "updated_at": "2026-10-08T06:10:41Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735372444/job/113173580490",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735372444/job/113173580579",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735372444/job/113173580637",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-gb-scenario-1",
+      "carbon-advisor-advisor-real-1"
+    ]
+  },
+  {
+    "run_id": 37735379674,
+    "workflow": "ci.yml",
+    "event": "push",
+    "head_branch": "feature/urgent-fix",
+    "head_sha": "e472ba986441109c4de827b8ecfc2d66d200118b",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735379674",
+    "created_at": "2026-10-08T06:01:38Z",
+    "run_started_at": "2026-10-08T06:01:38Z",
+    "updated_at": "2026-10-08T06:10:48Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735379674/job/113173603004",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735379674/job/113173603109",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735379674/job/113173603177",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-real-1",
+      "carbon-advisor-advisor-gb-scenario-1"
+    ]
+  },
+  {
+    "run_id": 37735385443,
+    "workflow": "ci.yml",
+    "event": "push",
+    "head_branch": "demo/missing-region",
+    "head_sha": "ae4713c0f393e1754334c10d4933313db16434cc",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735385443",
+    "created_at": "2026-10-08T06:01:41Z",
+    "run_started_at": "2026-10-08T06:01:41Z",
+    "updated_at": "2026-10-08T06:10:51Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735385443/job/113173621510",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735385443/job/113173621761",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735385443/job/113173621896",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-gb-scenario-1",
+      "carbon-advisor-advisor-real-1"
+    ]
+  },
+  {
+    "run_id": 37735522670,
+    "workflow": "ci.yml",
+    "event": "pull_request",
+    "head_branch": "feature/eligible-change",
+    "head_sha": "347abb47b3af9d19eb3ca3d72dc3d44131822bb0",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522670",
+    "created_at": "2026-10-08T06:03:12Z",
+    "run_started_at": "2026-10-08T06:03:12Z",
+    "updated_at": "2026-10-08T06:12:23Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "build",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522670/job/113174041371",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Unit tests",
+            "conclusion": "success"
+          },
+          {
+            "name": "Synthetic workload (stands in for a longer test suite)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (real location, GitHub-hosted)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522670/job/113174041599",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "advisor (GB scenario)",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522670/job/113174041616",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-gb-scenario-1",
+      "carbon-advisor-advisor-real-1"
+    ]
+  },
+  {
+    "run_id": 37735522706,
+    "workflow": "pr-target-probe.yml",
+    "event": "pull_request_target",
+    "head_branch": "feature/eligible-change",
+    "head_sha": "347abb47b3af9d19eb3ca3d72dc3d44131822bb0",
+    "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522706",
+    "created_at": "2026-10-08T06:03:12Z",
+    "run_started_at": "2026-10-08T06:03:12Z",
+    "updated_at": "2026-10-08T06:03:43Z",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "advisor",
+        "conclusion": "success",
+        "html_url": "https://github.com/senith02/carbon-advisor-demo/actions/runs/37735522706/job/113174042393",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run senith02/Artifact/Research_Artifact/code/github-action@7c19b9c319d807135d10f38ddf7df8c3f259bc3e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      "carbon-advisor-advisor-1"
+    ]
+  }
+]

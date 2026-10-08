@@ -1,0 +1,4 @@
+command (from code/, 2026-10-08):
+./.venv/Scripts/python.exe scripts/collect_demo_runs.py --repo senith02/carbon-advisor-demo --out ../results/p4/demo_runs --token-from-git-credential 37734399927 37734618114 37735372444 37735379674 37735385443 37735522670 37735522706
+output:
+7 runs; validator: 0 violations over 13 records
