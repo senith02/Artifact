@@ -30,3 +30,21 @@ so any deferral shown follows from that chosen length (DL-036 §3).
 
 The GB `DEFER RECOMMENDED` comes from labelled **scenario mode** (DL-033 R3-K option b). The real location of every
 run is a GitHub-hosted runner, declared `GITHUB-HOSTED`, which gives RUN NOW (fail-safe `region_not_gb`; DL-036 §1).
+
+## P4-T3 (2026-10-08)
+
+The Repo What-If Report (`code/advisor/whatif.py`, `whatif_html.py`). For each repository, it replays
+the last ≤ 500 completed runs of one workflow through the same `advise()`. The observed duration is
+used only after each decision, for estimated carbon and delay (DL-037).
+
+| path | what it is | produced by |
+| :-- | :-- | :-- |
+| `whatif_selection.md` | the public-repository selection rule, committed **before** any report (`e71effc`) | author decision 2026-10-08 (DL-037 §1) |
+| `whatif/selection_result.json` | the rule applied: every candidate checked, workflow run counts, the selection | `python scripts/select_whatif_repos.py --token-from-git-credential --out ../results/p4/whatif/selection_result.json` |
+| `whatif/<owner>__<repo>/report.{json,md,html}` | one report per selected repository plus the demo repository. Aggregates only; the HTML is static, with inline SVG | `python -m advisor whatif --repo R --workflow W --fetch --snapshot artifacts/whatif_snapshots/<slug>.json --out ../results/p4/whatif/<slug>` |
+| `whatif/determinism.json` | every report regenerated twice from its saved snapshot; JSON, HTML and Markdown byte-identical | the same command without `--fetch` |
+| `whatif/duration_check.md` | wall-clock vs the timing endpoint on 18 runs, including multi-day outliers: identical | `GitHubClient.run_duration_ms` |
+| `pytest_p4_t3.txt` | full test suite: 807 passed | `python -m pytest -p no:cacheprovider` (from `code/`) |
+
+The per-run snapshots stay local, under `code/artifacts/whatif_snapshots/` (gitignored). Each report
+pins its snapshot by sha256.

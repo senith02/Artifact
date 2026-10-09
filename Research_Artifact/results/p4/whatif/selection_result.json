@@ -1,0 +1,141 @@
+{
+  "rule": "results/p4/whatif_selection.md (DL-037 \u00a71)",
+  "selection_date_utc": "2026-10-08",
+  "created_cutoff": "2026-07-10",
+  "min_completed_runs": 200,
+  "max_candidates": 30,
+  "languages": {
+    "Go": {
+      "query": "language:Go stars:>=1000 archived:false fork:false",
+      "candidates_checked": [
+        {
+          "rank": 1,
+          "repository": "avelino/awesome-go",
+          "stars": 187508,
+          "workflows_checked": 6,
+          "best_workflow": {
+            "id": 189199136,
+            "file": "pr-quality-check.yaml",
+            "completed_runs_in_window": 532
+          },
+          "qualifies": true
+        }
+      ],
+      "selected": {
+        "repository": "avelino/awesome-go",
+        "workflow": "pr-quality-check.yaml",
+        "completed_runs_in_window": 532
+      }
+    },
+    "Java": {
+      "query": "language:Java stars:>=1000 archived:false fork:false",
+      "candidates_checked": [
+        {
+          "rank": 1,
+          "repository": "krahets/hello-algo",
+          "stars": 130672,
+          "workflows_checked": 13,
+          "best_workflow": {
+            "id": 73510203,
+            "file": "swift.yml",
+            "completed_runs_in_window": 5
+          },
+          "qualifies": false
+        },
+        {
+          "rank": 2,
+          "repository": "iluwatar/java-design-patterns",
+          "stars": 94768,
+          "workflows_checked": 4,
+          "best_workflow": {
+            "id": 137677298,
+            "file": "presubmit.yml",
+            "completed_runs_in_window": 162
+          },
+          "qualifies": false
+        },
+        {
+          "rank": 3,
+          "repository": "macrozheng/mall",
+          "stars": 84869,
+          "workflows_checked": 0,
+          "best_workflow": null,
+          "qualifies": false
+        },
+        {
+          "rank": 4,
+          "repository": "NationalSecurityAgency/ghidra",
+          "stars": 81653,
+          "workflows_checked": 4,
+          "best_workflow": {
+            "id": 272820187,
+            "file": "dependency-submission.yml",
+            "completed_runs_in_window": 58
+          },
+          "qualifies": false
+        },
+        {
+          "rank": 5,
+          "repository": "spring-projects/spring-boot",
+          "stars": 81575,
+          "workflows_checked": 17,
+          "best_workflow": {
+            "id": 170702969,
+            "file": "run-codeql-analysis.yml",
+            "completed_runs_in_window": 1285
+          },
+          "qualifies": true
+        }
+      ],
+      "selected": {
+        "repository": "spring-projects/spring-boot",
+        "workflow": "run-codeql-analysis.yml",
+        "completed_runs_in_window": 1285
+      }
+    },
+    "Python": {
+      "query": "language:Python stars:>=1000 archived:false fork:false",
+      "candidates_checked": [
+        {
+          "rank": 1,
+          "repository": "public-apis/public-apis",
+          "stars": 486917,
+          "workflows_checked": 5,
+          "best_workflow": {
+            "id": 18145845,
+            "file": "test_of_push_and_pull.yml",
+            "completed_runs_in_window": 1615
+          },
+          "qualifies": true
+        }
+      ],
+      "selected": {
+        "repository": "public-apis/public-apis",
+        "workflow": "test_of_push_and_pull.yml",
+        "completed_runs_in_window": 1615
+      }
+    },
+    "Ruby": {
+      "query": "language:Ruby stars:>=1000 archived:false fork:false",
+      "candidates_checked": [
+        {
+          "rank": 1,
+          "repository": "rails/rails",
+          "stars": 58811,
+          "workflows_checked": 12,
+          "best_workflow": {
+            "id": 65832016,
+            "file": "rails-new-docker.yml",
+            "completed_runs_in_window": 2500
+          },
+          "qualifies": true
+        }
+      ],
+      "selected": {
+        "repository": "rails/rails",
+        "workflow": "rails-new-docker.yml",
+        "completed_runs_in_window": 2500
+      }
+    }
+  }
+}

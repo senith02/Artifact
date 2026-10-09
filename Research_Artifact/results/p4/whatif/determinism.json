@@ -1,0 +1,126 @@
+{
+  "command": "python -m advisor whatif --repo R --workflow W --snapshot artifacts/whatif_snapshots/<slug>.json --out DIR  (no --fetch; run twice, compared byte for byte)",
+  "reports": [
+    {
+      "repository": "senith02/carbon-advisor-demo",
+      "workflow": "ci.yml",
+      "snapshot_sha256_file": "4d137b1166bfe5d88df794ee5a822ca030613efb098f112f1e29d77dbb26a9e8",
+      "exit": [
+        0,
+        0
+      ],
+      "files": {
+        "report.json": {
+          "first": "cbdb4bde87f0f6771e9371ad44d09adf06c753764df4db7ffcd4463598693719",
+          "rerun": "cbdb4bde87f0f6771e9371ad44d09adf06c753764df4db7ffcd4463598693719"
+        },
+        "report.html": {
+          "first": "2c8b7f58868cc0201d11dc5dc0eb44775ee615b9af363c565b121839aa1d05c9",
+          "rerun": "2c8b7f58868cc0201d11dc5dc0eb44775ee615b9af363c565b121839aa1d05c9"
+        },
+        "report.md": {
+          "first": "dce77e2ea9ae50ad0e811aef8537984250811d6561d2a7112d383052b8ca6261",
+          "rerun": "dce77e2ea9ae50ad0e811aef8537984250811d6561d2a7112d383052b8ca6261"
+        }
+      },
+      "byte_identical": true
+    },
+    {
+      "repository": "avelino/awesome-go",
+      "workflow": "pr-quality-check.yaml",
+      "snapshot_sha256_file": "5f8949f5c4e62843c17635e6cf8e1e7b9b48076866b471a23fca767b05a2848e",
+      "exit": [
+        0,
+        0
+      ],
+      "files": {
+        "report.json": {
+          "first": "fa1cba4d69e9d2e49c3db9020688da198c6b1383dbb2e9bf5056004b4bf2da00",
+          "rerun": "fa1cba4d69e9d2e49c3db9020688da198c6b1383dbb2e9bf5056004b4bf2da00"
+        },
+        "report.html": {
+          "first": "ee381f9344bc318d134a8799cb79b99f75a88ffb6fc3525042886541b5dd706c",
+          "rerun": "ee381f9344bc318d134a8799cb79b99f75a88ffb6fc3525042886541b5dd706c"
+        },
+        "report.md": {
+          "first": "9bccaf553436f4f9f1dff29f9d6d805a8b60eb6ce9604291d90ff093ac091e09",
+          "rerun": "9bccaf553436f4f9f1dff29f9d6d805a8b60eb6ce9604291d90ff093ac091e09"
+        }
+      },
+      "byte_identical": true
+    },
+    {
+      "repository": "spring-projects/spring-boot",
+      "workflow": "run-codeql-analysis.yml",
+      "snapshot_sha256_file": "354f6006d4ea787b92b410dce4e25790b2f78dc3f7c49b6827021a4199c68873",
+      "exit": [
+        0,
+        0
+      ],
+      "files": {
+        "report.json": {
+          "first": "a5a064714a9ad035fb828456b87f5a33847cd5b90392ca61fc28a909f4b21b2b",
+          "rerun": "a5a064714a9ad035fb828456b87f5a33847cd5b90392ca61fc28a909f4b21b2b"
+        },
+        "report.html": {
+          "first": "15f87523f62ec2c68cc95057148f63596b3081d671d020b6ecec9ecc5b1e766f",
+          "rerun": "15f87523f62ec2c68cc95057148f63596b3081d671d020b6ecec9ecc5b1e766f"
+        },
+        "report.md": {
+          "first": "e570d30a64759c1731782941ccb30a62f72fcd25e064f9c350918183df564758",
+          "rerun": "e570d30a64759c1731782941ccb30a62f72fcd25e064f9c350918183df564758"
+        }
+      },
+      "byte_identical": true
+    },
+    {
+      "repository": "public-apis/public-apis",
+      "workflow": "test_of_push_and_pull.yml",
+      "snapshot_sha256_file": "dc5eb6260f4dbe14a0e6b07848f9d849e89acac524f563241d3e4e9f8cd2a0d3",
+      "exit": [
+        0,
+        0
+      ],
+      "files": {
+        "report.json": {
+          "first": "bc2a9749d957941af4f7dbef1394c78f21f4f1f83ab42f32938f4d48677434af",
+          "rerun": "bc2a9749d957941af4f7dbef1394c78f21f4f1f83ab42f32938f4d48677434af"
+        },
+        "report.html": {
+          "first": "1f96849c540813669834ec6f1a3b9e3e7285c80b500ea413aaa7ea73efc40b2c",
+          "rerun": "1f96849c540813669834ec6f1a3b9e3e7285c80b500ea413aaa7ea73efc40b2c"
+        },
+        "report.md": {
+          "first": "dcafe6f6991b616d974d1ecb04cc7556e291db7220702c4a56c9968481984e5c",
+          "rerun": "dcafe6f6991b616d974d1ecb04cc7556e291db7220702c4a56c9968481984e5c"
+        }
+      },
+      "byte_identical": true
+    },
+    {
+      "repository": "rails/rails",
+      "workflow": "rails-new-docker.yml",
+      "snapshot_sha256_file": "c9696ce3c175c3532383f45fbf23809d2024bc560cba76acd0dc3d02eb125e94",
+      "exit": [
+        0,
+        0
+      ],
+      "files": {
+        "report.json": {
+          "first": "35efdb10a528aa2f8f5c74c8ebcd3ad2224943b4a0c1ca5638d0da89dd6c4d51",
+          "rerun": "35efdb10a528aa2f8f5c74c8ebcd3ad2224943b4a0c1ca5638d0da89dd6c4d51"
+        },
+        "report.html": {
+          "first": "352611ea20cb7ea7d9d6e98c620a38e513a3cd831aecebdfa104465bd18115f7",
+          "rerun": "352611ea20cb7ea7d9d6e98c620a38e513a3cd831aecebdfa104465bd18115f7"
+        },
+        "report.md": {
+          "first": "f0b33eb2c143734452bba89cabf90294bf74129fe56fd7acb89eb7538f637c19",
+          "rerun": "f0b33eb2c143734452bba89cabf90294bf74129fe56fd7acb89eb7538f637c19"
+        }
+      },
+      "byte_identical": true
+    }
+  ],
+  "all_byte_identical": true
+}

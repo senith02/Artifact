@@ -60,3 +60,7 @@ Research_Artifact/results/p2/policy_fit/decisions.csv.gz
 # P3-T2 test-trace records (~14M rows). Not tracked (DL-028 §4); sha256 pinned in
 # results/p3/strategy_results.json. test_scores.csv.gz and test_trace.csv.gz ARE tracked.
 Research_Artifact/results/p3/decisions.csv.gz
+
+# ── What-If history snapshots (per-run data; kept local, DL-037 §6) ─
+# Each report pins its snapshot by sha256; only aggregates are published.
+Research_Artifact/code/artifacts/whatif_snapshots/

@@ -588,11 +588,15 @@
       "rq": "artifact",
       "purpose": "Replay a repository's recent completed runs through the same decide() to estimate deferral share, estimated carbon change and delay. Demonstration only, never research evidence.",
       "will_produce": "code/advisor/whatif.py plus reports under results/p4/whatif/.",
-      "unknown": "Not started. Public repositories are chosen by a rule fixed before any report is run.",
-      "status": "not_started",
-      "completed_on": "",
+      "unknown": "Done. Reports for the demo repository and one repository per estimator language, chosen by a rule committed first; byte-identical on re-run; aggregates only. Demonstration evidence, never research evidence.",
+      "status": "done",
+      "completed_on": "2026-10-08",
       "plan_heading": "Repo What-If Report (Should — replaces the dashboard)",
-      "tests": null
+      "tests": {
+        "passed": 807,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t3.txt"
+      }
     },
     {
       "id": "P5-T1",
@@ -859,6 +863,12 @@
       "title": "P4-T2: a GitHub-hosted runner replaces the East US VM as the real non-GB case; the Action's runtime dependencies; how the Action is published",
       "date": "2026-10-08",
       "summary": "No self-hosted runner: public repositories run free on GitHub-hosted runners, and GitHub advises against self-hosted runners on public repositories. The real case declares GITHUB-HOSTED and fails safe; GB DEFER comes from labelled scenario mode. The Action installs a 12-package subset pinned to the lockfile, with --no-deps. The demo workload is synthetic. The Action was pushed before the gate so the demo could pin its SHA."
+    },
+    {
+      "id": "DL-037",
+      "title": "P4-T3: the public-repository selection rule, and how the Repo What-If Report reads DL-033 R3-C8",
+      "date": "2026-10-08",
+      "summary": "One repository per estimator language (Go, Java, Python, Ruby), first qualifying of 30 by stars, committed before any report (author decision). A GB-scenario default config; arrival is created_at; observed wall-clock used only after decide(); snapshots stay local and only aggregates are published; outputs refused under results/p0-p3."
     }
   ],
   "artifact_components": [
@@ -948,9 +958,9 @@
     },
     {
       "name": "Repo What-If Report",
-      "status": "planned",
-      "where": "P4-T3 code/advisor/whatif.py",
-      "note": "Not implemented. Demonstration only, never research evidence (DL-033 R3-B10)."
+      "status": "implemented",
+      "where": "code/advisor/whatif.py + whatif_html.py; results/p4/whatif/",
+      "note": "P4-T3: replays a workflow's completed runs through the same advise(); Markdown, JSON and a static inline-SVG HTML page. Five reports, byte-identical on re-run. Demonstration only, never research evidence (DL-037)."
     }
   ],
   "limitations": [
@@ -1172,12 +1182,16 @@
     {
       "date": "2026-10-08",
       "event": "P4-T2 gated: the composite GitHub Action runs the advisor in CI. Seven runs on the public demo repository: cold start, protected branch, GB-scenario DEFER, urgent veto, two fail-safes, pull_request_target refused; audit log 0 violations; 789 tests pass. A GitHub-hosted runner replaces the East US VM; re-dispatch cut (DL-036)."
+    },
+    {
+      "date": "2026-10-08",
+      "event": "P4-T3 gated: the Repo What-If Report replays a workflow's completed runs through the same advise(). Reports for the demo repository and four rule-selected public repositories (Go, Java, Python, Ruby); all byte-identical on re-run; aggregates only; 807 tests pass. Phase 4 complete (M4) (DL-037)."
     }
   ],
   "progress": {
     "tasks_total": 28,
-    "tasks_done": 23,
-    "pct": 82,
+    "tasks_done": 24,
+    "pct": 86,
     "per_phase_total": {
       "P0": 4,
       "P1": 7,
@@ -1191,12 +1205,12 @@
       "P1": 7,
       "P2": 5,
       "P3": 5,
-      "P4": 2,
+      "P4": 3,
       "P5": 0
     },
-    "current_task": "P4-T3",
-    "next_task": "P5-T1",
-    "last_gate_passed": "P4-T2 (GitHub Action + demo repository)",
+    "current_task": "P5-T1",
+    "next_task": "P5-T2",
+    "last_gate_passed": "P4-T3 (Repo What-If Report)",
     "progress_md_updated": "2026-10-08",
     "test_split_opened": true
   },
@@ -4538,6 +4552,11 @@
         "passed": 789,
         "skipped": 0,
         "file": "results/p4/pytest_p4_t2.txt"
+      },
+      "P4-T3": {
+        "passed": 807,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t3.txt"
       }
     }
   }

@@ -56,11 +56,54 @@ def build_parser() -> argparse.ArgumentParser:
     adv.add_argument("--audit-log", help="append a JSON Lines audit record here")
     adv.add_argument("--json-out", help="write the response JSON here (default: stdout)")
     adv.add_argument("--summary-out", help="write the Markdown summary here")
+
+    wi = sub.add_parser("whatif", help="replay a workflow's completed runs through the advisor (demonstration)")
+    wi.add_argument("--repo", required=True, help="owner/name")
+    wi.add_argument("--workflow", required=True, help="workflow file name, e.g. ci.yml")
+    wi.add_argument("--snapshot", required=True, help="history snapshot JSON; read it, or write it with --fetch")
+    wi.add_argument("--fetch", action="store_true",
+                    help="fetch the completed runs from GitHub first (read-only; token from GITHUB_TOKEN)")
+    wi.add_argument("--cap", type=int, default=500, help="completed runs to fetch (default 500, DL-033 R3-C6)")
+    wi.add_argument("--config", help="team config YAML (default: GB scenario, DL-037 §2)")
+    wi.add_argument("--out", required=True, help="output directory (refused under results/p0-p3)")
     return parser
+
+
+def _whatif(args: argparse.Namespace) -> int:
+    from datetime import datetime, timezone
+
+    from . import whatif
+    from .contract import _REPO_RE, _WORKFLOW_RE
+
+    if not _REPO_RE.match(args.repo) or not _WORKFLOW_RE.match(args.workflow):
+        print("error: --repo must be owner/name and --workflow a .yml/.yaml file name", file=sys.stderr)
+        return 2
+    try:
+        whatif.check_output_dir(args.out)
+        if args.fetch:
+            client = GitHubClient(os.environ.get("GITHUB_TOKEN"))
+            snapshot = whatif.fetch_snapshot(client, args.repo, args.workflow, cap=args.cap,
+                                             now=datetime.now(timezone.utc))
+            Path(args.snapshot).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.snapshot).write_text(whatif.canonical_json(snapshot), encoding="utf-8", newline="\n")
+        snapshot = whatif.load_snapshot(args.snapshot)
+        if (snapshot["repository"], snapshot["workflow"]) != (args.repo, args.workflow):
+            raise whatif.WhatIfError("the snapshot is for a different repository or workflow")
+        config = load_team_config(args.config) if args.config else None
+        records = whatif.replay(snapshot, config=config)
+        report = whatif.build_report(snapshot, records, config=config)
+        digests = whatif.write_report(report, args.out)
+    except (whatif.WhatIfError, ConfigError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps({"out": str(Path(args.out)), **digests}, indent=2))
+    return 0
 
 
 def main(argv: Sequence[str] | None = None, *, deps: Dependencies | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "whatif":
+        return _whatif(args)
     try:
         request = _read_json(args.request)
         if args.history_file:
