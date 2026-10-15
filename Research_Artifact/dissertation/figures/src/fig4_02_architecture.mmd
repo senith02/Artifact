@@ -1,0 +1,50 @@
+flowchart TB
+    subgraph DATA["Data layer (read-only)"]
+        TT[("Historical CI builds")]
+        CI[("GB grid carbon intensity<br/>2024–2025")]
+        SP[("Locked project split")]
+    end
+    subgraph EVID["Evidence layer (offline)"]
+        FE["Characteristics + split"] --> DE["Fit duration estimator"]
+        DE --> MT["Failure models<br/>train + calibrate"]
+        MT --> AB["Added value<br/>of each family"]
+        AB --> AD["Admission rule"]
+        AD --> FP["Policy fitting"]
+    end
+    subgraph CORE["Core layer: shared decision library"]
+        EL["Eligibility rules"] --> PO["Decision function<br/>decide()"]
+        CA["Carbon lookup<br/>168-hour GB profile"] --> PO
+        SPEC[["Frozen policy file"]] --> PO
+        EST[["Frozen duration estimator"]]
+        AC["Energy + carbon accounting<br/>(after the decision only)"]
+    end
+    subgraph EVAL["Evaluation layer"]
+        SIM["Replay simulator<br/>six strategies"]
+        VAL["Independent<br/>safety checker"]
+    end
+    subgraph ADVL["Advisor layer (prototype)"]
+        ADV["advise(): checks, completed history,<br/>expected duration, decide(),<br/>team vetoes, audit record"]
+    end
+    subgraph LIVE["Presentation layer (prototype)"]
+        GHA["GitHub Action"]
+        CLI["Command-line tool"]
+        API["REST API"]
+        WI["What-If report"]
+    end
+    TT --> FE
+    SP --> FE
+    CI --> CA
+    DE --> EST
+    FP --> SIM
+    FP --> SPEC
+    SIM --> PO
+    SIM --> AC
+    SIM --> VAL
+    GHA --> CLI
+    CLI --> ADV
+    API --> ADV
+    WI --> ADV
+    WI --> AC
+    ADV --> EST
+    ADV --> PO
+    ADV -. "display estimate only" .-> AC

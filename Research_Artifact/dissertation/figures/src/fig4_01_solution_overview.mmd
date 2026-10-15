@@ -1,0 +1,10 @@
+flowchart LR
+    C["Commit pushed"] --> G{"Step 1: pull request<br/>or protected branch?"}
+    G -- "yes, must run now" --> RN["Run now"]
+    G -- "no, may wait" --> D{"Step 2: expected duration<br/>≥ threshold?"}
+    D -- "no" --> RN
+    D -- "yes" --> Z{"A strictly cleaner hour<br/>within the window?"}
+    Z -- "no" --> RN
+    Z -- "yes" --> S["Delay to the cleanest hour"]
+    E[("Evidence pipeline:<br/>duration estimate,<br/>value of SE characteristics,<br/>admission rule")] -. "sets and freezes" .-> P[["Policy file"]]
+    P -. "drives" .-> D

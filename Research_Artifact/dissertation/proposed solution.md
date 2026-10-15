@@ -66,8 +66,8 @@ build-level information to timing.
 | NFR6 | **Explainability** | Every decision carries a plain-language reason. SHAP attributions explain the failure models in the analysis; the developer tool does not show them, because the policy did not adopt those models. |
 | NFR7 | **Single source of logic** | The evaluation and the developer-facing integration call the same decision function, so what is evaluated is exactly what is demonstrated. |
 | NFR8 | **Low cost** | Runs on one laptop CPU with free software and free public data. No GPU or paid cloud service. |
-| NFR9 | **Testability** | An automated test suite covers leakage, time ordering, safety, determinism and statistics; it had 645 passing tests at the time of writing. |
-| NFR10 | **Responsiveness** | The integration must return a recommendation within the first seconds of a CI job. *[Measured value to be added once the integration is built.]* |
+| NFR9 | **Testability** | An automated test suite covers leakage, time ordering, safety, determinism, statistics and the prototype; it had 807 passing tests at the time of writing. |
+| NFR10 | **Responsiveness** | The integration must return a recommendation early in a CI job. In the seven demonstration runs, the decision was recorded 13.89–21.43 s (median 18.24 s) after the Action's first step. That time includes setting up Python and installing dependencies, so the advisor itself is faster. |
 | NFR11 | **Security** | The integration needs only read access to the repository and its run history. It accepts only trusted CI events, never inserts event text into shell commands, and logs every decision without secrets. |
 | NFR12 | **Fail-safe operation** | When anything is missing or fails, the answer is always RUN NOW, never a delay. The integration never blocks or fails the developer's pipeline. |
 
@@ -97,8 +97,9 @@ The proposed solution is a **selective carbon-aware scheduling decision system**
 commit triggers a build, the system answers two questions in a fixed order.
 
 The first question is *may this build wait at all?* A fixed set of rules answers it from how the build
-was triggered. Pull-request builds and builds on protected branches (the main branch, release, hotfix
-and version-tag branches) always run immediately, because someone is waiting for their result.
+was triggered. Pull-request builds and builds on protected branches (for example the main branch, and
+release, hotfix and version-tag branches) always run immediately, because someone is waiting for their
+result.
 
 The second question applies only to builds that may wait: *is it worth waiting?* An evidence-derived
 policy answers it. The policy recommends delaying a build to the lowest-carbon hour inside a bounded
@@ -127,16 +128,7 @@ within the next 24 hours. The held-out evaluation of this policy is reported in 
 
 **Figure 4.1 — Solution overview: from commit to scheduling decision**
 
-```mermaid
-flowchart LR
-    C["Commit pushed"] --> G{"Step 1: may it wait?<br/>pull request or<br/>protected branch?"}
-    G -- "no, must run now" --> RN["Run now"]
-    G -- "yes, may wait" --> D{"Step 2: worth waiting?<br/>expected duration<br/>≥ threshold?"}
-    D -- "no" --> RN
-    D -- "yes" --> S["Delay to the cleanest hour<br/>within the window"]
-    E[("Evidence pipeline:<br/>duration estimate,<br/>value of SE characteristics,<br/>admission rule")] -. "sets and freezes" .-> P[["Policy file"]]
-    P -. "drives" .-> D
-```
+![Figure 4.1](figures/fig4_01_solution_overview.png)
 
 ---
 
@@ -152,83 +144,40 @@ because the evaluation is only meaningful if it tests exactly the logic that dev
 - **Evidence layer.** Offline steps that extract characteristics, split the data, estimate duration,
   train the models, measure added value, apply the admission rule and fit the policy. Each step saves
   its output so the next step loads it instead of re-creating it.
-- **Core layer.** The eligibility rules, the decision function and the carbon lookup. Energy and
-  carbon accounting sits in this layer but outside the decision path. That separation is deliberate:
-  it makes it impossible for a build's actual energy use to influence its own decision.
+- **Core layer.** The eligibility rules, the decision function, the carbon lookup and, at run time,
+  the frozen duration estimator. Energy and carbon accounting sits in this layer but outside the
+  decision path: no decision module imports it, and every caller uses it only after the decision has
+  been made. That separation is deliberate: it makes it impossible for a build's actual energy use to
+  influence its own decision.
 - **Evaluation layer.** The replay simulator and an independent safety checker.
-- **Presentation layer.** Thin adapters around the same core, with no decision logic of their own: a
+- **Advisor layer.** The advisor validates the request, checks the team's settings and the declared
+  region, and verifies the frozen files. It then reads the completed run history, estimates duration
+  with the frozen estimator and calls the decision function. Finally it applies the team's vetoes,
+  which can only turn a deferral into RUN NOW.
+- **Presentation layer.** Thin adapters around the advisor, with no decision logic of their own: a
   command-line tool, a REST API, a GitHub Action that shows RUN NOW or DEFER RECOMMENDED in the CI run
   summary, and the What-If report.
 
 **Figure 4.2 — Layered system architecture with a shared decision core**
 
-```mermaid
-flowchart TB
-    subgraph DATA["Data layer (read-only)"]
-        TT[("Historical CI builds")]
-        CI[("UK grid carbon intensity<br/>2024–2025")]
-        SP[("Locked project split")]
-    end
-    subgraph EVID["Evidence layer (offline)"]
-        FE["Characteristics + split"] --> DE["Duration estimate"]
-        DE --> MT["Failure models<br/>train + calibrate"]
-        MT --> AB["Added value<br/>of each family"]
-        AB --> AD["Admission rule"]
-        AD --> FP["Policy fitting"]
-    end
-    subgraph CORE["Core layer: shared decision library"]
-        EL["Eligibility rules"] --> PO["Decision function"]
-        CA["Carbon lookup<br/>by hour of week"] --> PO
-        SPEC[["Frozen policy file"]] --> PO
-        AC["Energy + carbon accounting<br/>(outside the decision path)"]
-    end
-    subgraph EVAL["Evaluation layer"]
-        SIM["Replay simulator<br/>six strategies"]
-        VAL["Independent<br/>safety checker"]
-    end
-    subgraph LIVE["Presentation layer (prototype)"]
-        GHA["GitHub Action,<br/>command-line tool, REST API"]
-        SUM["Recommendation summary<br/>shown in the CI run"]
-        WI["What-If report"]
-    end
-    TT --> FE
-    SP --> FE
-    CI --> CA
-    FP --> SPEC
-    SIM --> PO
-    SIM --> AC
-    SIM --> VAL
-    GHA --> PO
-    GHA --> SUM
-    WI --> PO
-```
+![Figure 4.2](figures/fig4_02_architecture.png)
 
-**Figure 4.3 — Deployment view of the prototype (planned)**
+**Figure 4.3 — Deployment view of the prototype**
 
-```mermaid
-flowchart LR
-    DEV["Developer"] -- "git push" --> GH["GitHub repository"]
-    GH -- "starts workflow" --> ACT["CI job with the<br/>advisor step"]
-    CFG[["Team settings:<br/>declared region (GB),<br/>opted-in workflows,<br/>urgency rules"]] --> ACT
-    ACT -- "completed earlier runs" --> GHAPI["GitHub API"]
-    ACT --> CORE["Shared decision library<br/>+ frozen policy file<br/>+ GB carbon profile"]
-    CORE --> ACT
-    ACT -. "current intensity<br/>(shown, not used)" .-> GRID["Grid carbon-intensity<br/>service"]
-    ACT -- "RUN NOW / DEFER RECOMMENDED<br/>+ reasons" --> SUMM["Summary shown<br/>in the CI run"]
-    ACT --> LOG[("Audit log")]
-    GHAPI -- "recent completed runs" --> WIF["What-If report"]
-    WIF --> CORE
-```
+![Figure 4.3](figures/fig4_03_deployment.png)
 
-> The prototype is **decision support**: it recommends, and the developer or team decides. It does
-> not pause or re-schedule GitHub jobs automatically, because GitHub Actions cannot pause a running
-> job for hours. An optional reference workflow shows how a team could re-run a delayed build later;
-> it is a demonstration, not automatic scheduling. If anything is missing or fails, the advisor says
-> RUN NOW.
+> The prototype is **decision support**: it recommends RUN NOW or DEFER RECOMMENDED, and the developer
+> or team decides. It never pauses, cancels, re-schedules or fails a build, and its step always
+> completes successfully. An optional workflow that would re-run a deferred build later was planned
+> but cut, so acting on a recommendation is left to the team. If any input, check or service fails,
+> the advisor answers RUN NOW and names the reason.
 >
-> The carbon data covers Great Britain only, so the team must declare where its builds run; the tool
-> never guesses. GitHub's own hosted runners are located in the United States, so the GB carbon signal
-> applies only to runners physically located in Great Britain.
+> The carbon data covers Great Britain only, so the team must declare where its builds run. The tool
+> never detects the location, and any region other than GB gives RUN NOW. A workflow cannot choose or
+> verify the region of a GitHub-hosted runner, so such a runner cannot honestly be declared to be in
+> GB. In the demonstration repository the real runs were therefore declared `GITHUB-HOSTED` and
+> received RUN NOW. The DEFER RECOMMENDED results shown were produced in an explicitly labelled
+> *scenario* mode, which shows what the advisor would recommend if the build ran on GB compute.
 
 ---
 
@@ -245,34 +194,14 @@ platform** runs the integration. The **researcher** runs the evidence pipeline a
 **grid data service** supplies carbon intensity. Nobody has to label builds as flexible by hand:
 flexibility is inferred from how the build was triggered. A team may optionally mark extra branches or
 commits as urgent, but such settings can only make a build run sooner, never later. That automatic
-inference is the gap in existing carbon-aware CI tools that this work addresses. The developer can
-also view a What-If report for their repository.
+inference is the gap in existing carbon-aware CI tools that this work addresses. A **team
+maintainer** declares where the team's builds run and which workflows are advised, and may shorten
+the maximum delay below 24 hours. None of these settings can make the advisor defer a build that the
+frozen policy would run now. The maintainer can also generate a What-If report for the repository.
 
-**Figure 4.4 — Use-case diagram** *(redraw in UML use-case notation)*
+**Figure 4.4 — Use-case diagram**
 
-```mermaid
-flowchart LR
-    Dev(["Developer"])
-    CIp(["CI platform"])
-    Res(["Researcher"])
-    Grid(["Grid data service"])
-    subgraph SYS["Selective carbon-aware decision system"]
-        U1(("Push commit"))
-        U2(("Read recommendation<br/>and its reasons"))
-        U3(("Request a decision<br/>for a build"))
-        U4(("Run evidence pipeline<br/>and fit the policy"))
-        U5(("Replay strategies<br/>and evaluate"))
-        U6(("Supply current<br/>grid intensity"))
-        U7(("View What-If report<br/>for a repository"))
-    end
-    Dev --- U1
-    Dev --- U2
-    Dev --- U7
-    CIp --- U3
-    Res --- U4
-    Res --- U5
-    Grid --- U6
-```
+![Figure 4.4](figures/fig4_04_use_cases.png)
 
 ### 4.5.2 Component view
 
@@ -286,75 +215,33 @@ matter most.
   decision components, and a test fails if any decision component ever depends on it. Actual energy
   use therefore cannot leak into a decision.
 
+Arrows show which component uses or feeds which. The command-line tool, GitHub Action, REST API and
+What-If report reach the decision function only through the advisor. The What-If report uses
+accounting only after each decision has been made.
+
 **Figure 4.5 — Component diagram**
 
-```mermaid
-flowchart TB
-    data["Data loader<br/>jobs → builds"] --> features["Characteristic extractor<br/>28 features, 6 families,<br/>forbidden-field list"]
-    features --> splits["Project split<br/>by project, in time order"]
-    features --> dur["Duration estimator<br/>project history or regressor"]
-    dur --> models["Failure models<br/>train + calibrate"]
-    models --> abl["Added-value statistics<br/>paired bootstrap"]
-    abl --> adm["Admission rule"]
-    elig["Eligibility rules"] --> pol["Decision function<br/>+ policy loader"]
-    carb["Carbon lookup<br/>cleanest hour in window"] --> pol
-    features -. "forbidden-field list" .-> pol
-    acc["Energy + carbon accounting"]
-    sim["Replay simulator"] --> pol
-    sim --> acc
-    live["GitHub integration<br/>(prototype)"] --> pol
-    pol -. "must never depend on" .-x acc
-```
+![Figure 4.5](figures/fig4_05_components.png)
 
 ### 4.5.3 Class view of the decision contract
 
-Figure 4.6 shows the three data structures that cross the decision boundary.
+Figure 4.6 uses the names in the code. The decision function `decide()` receives three things:
 
-- **Policy.** Loaded from a file with a *closed* format: unknown settings are rejected, the source of
-  every value must be recorded, and an unfitted draft policy is refused by default.
-- **Eligibility result.** The outcome of step 1, with the rule that fired.
-- **Decision.** What every caller receives. The delay is expressed as an offset in hours from the
-  build's arrival, so the decision engine never needs to read a clock.
+- a build mapping that holds only commit-time values: the pull-request flag, the branch, the arrival
+  weekday and hour, and the expected duration;
+- the 168-hour carbon profile;
+- a validated `PolicySpec`, loaded from a file with a *closed* format. Unknown settings are rejected,
+  the source of every value must be recorded, and an unfitted draft policy is refused by default.
+
+`Eligibility` is the step-1 verdict; `decide()` computes it internally and copies its rule into the
+decision. A `DurationEstimate` is produced outside the function, and only its value in seconds is
+passed in. `Decision` is what every caller receives. Its `defer_until` field is an offset in hours
+from the arrival hour, plus the target weekday and hour, so the decision function never needs to read
+a clock.
 
 **Figure 4.6 — Class diagram of the decision contract**
 
-```mermaid
-classDiagram
-    class Policy {
-        +int format_version
-        +str policy_path
-        +float duration_threshold_seconds
-        +float max_delay_hours
-        +Mapping provenance
-    }
-    class EligibilityResult {
-        +bool may_wait
-        +str rule_fired
-        +str reason
-    }
-    class DurationEstimate {
-        +float expected_seconds
-        +str method
-        +str fallback_level
-        +int history_size
-    }
-    class Decision {
-        +str action
-        +Mapping delay_until
-        +str reason
-        +float grid_intensity_now
-        +float grid_intensity_scheduled
-        +bool may_wait
-        +str rule_fired
-        +float expected_duration_seconds
-        +float window_hours
-        +float delay_hours
-        +int scheduled_hour_of_week
-    }
-    Policy --> Decision : parameterises
-    EligibilityResult --> Decision : step 1 result
-    DurationEstimate --> Decision : step 2 input
-```
+![Figure 4.6](figures/fig4_06_class_diagram.png)
 
 ### 4.5.4 Data-flow view of the evidence pipeline
 
@@ -365,55 +252,29 @@ by every later stage, so the baseline cannot shift between experiments.
 
 **Figure 4.7 — Level-1 data-flow diagram of the evidence pipeline**
 
-```mermaid
-flowchart LR
-    A[("Historical CI data<br/>3.88M job rows")] --> P1["1 Combine and clean"]
-    P1 -- "922,624 builds" --> P2["2 Extract characteristics"]
-    P2 --> P3["3 Split by project and lock"]
-    P3 -- "training 628 projects /<br/>calibration 150 projects" --> P4["4 Fit duration estimate<br/>(training only)"]
-    P3 -. "test 170 projects —<br/>kept closed" .-> T[("Test set")]
-    P4 --> P5["5 Train models (training),<br/>calibrate (calibration)"]
-    P5 --> P6["6 Measure added value<br/>(calibration)"]
-    P6 --> P7["7 Admission rule"]
-    P7 --> P8["8 Replay and fit policy<br/>(calibration)"]
-    P8 --> S[["Frozen policy file"]]
-    S --> P9["9 Final evaluation<br/>(test, once)"]
-    T --> P9
-```
+![Figure 4.7](figures/fig4_07_data_flow.png)
 
 ### 4.5.5 Sequence view of a live recommendation
 
-Figure 4.8 shows the planned run-time interaction of the prototype. The integration sends the
-decision engine only information that is available before the build runs. It cannot send the build's
-actual duration, because that is not known yet. The expected duration is computed from the
-repository's own earlier runs that had **finished** before this one started. The decision uses the
-same Great Britain carbon profile as the evaluation; the live grid intensity is only displayed. Every
-step has a safe fallback: if any check or service fails, the answer is RUN NOW.
+Figure 4.8 shows the run-time interaction of the built GitHub Action.
 
-**Figure 4.8 — Sequence diagram: live recommendation (planned)**
+- **Inputs.** The decision function receives only information available before the build runs; the
+  build's own duration and outcome are rejected if supplied.
+- **History.** Run history is read only when the eligibility rules say the build may wait.
+- **Expected duration.** It is computed by the frozen research estimator from completed runs of the
+  same workflow (successful or failed) that had **finished** before this run's arrival time. In the
+  Action, the arrival time is the UTC clock at the advisor's first step. With no such history, the
+  team's cold-start rule (on by default) gives RUN NOW.
+- **Carbon data.** The decision uses the same Great Britain carbon profile as the evaluation. The
+  live grid intensity is fetched afterwards and only displayed.
+- **Safety.** Team settings can only turn a deferral into RUN NOW. If any check or service fails,
+  the answer is RUN NOW, and the step never fails the pipeline.
+- **Outputs.** The result appears in the run's Step Summary and step outputs. The request, response
+  and audit record are uploaded as a workflow artifact.
 
-```mermaid
-sequenceDiagram
-    actor Dev as Developer
-    participant GH as GitHub
-    participant Step as Advisor step
-    participant Hist as GitHub API
-    participant Core as Decision library
-    participant Grid as Grid intensity service
-    Dev->>GH: git push
-    GH->>Step: start CI job
-    Step->>Step: check event, team settings, declared region (GB)
-    Step->>Hist: completed earlier runs of this workflow
-    Hist-->>Step: run history
-    Step->>Step: expected duration from finished runs only
-    Step->>Core: decide(build, GB carbon profile, frozen policy)
-    Core-->>Step: run now or defer + reason
-    Step->>Step: apply team urgency settings (can only force RUN NOW)
-    Step->>Grid: current intensity (display only)
-    Grid-->>Step: intensity value
-    Step->>GH: write summary + audit record
-    GH-->>Dev: RUN NOW or DEFER RECOMMENDED, with reasons
-```
+**Figure 4.8 — Sequence diagram: live recommendation**
+
+![Figure 4.8](figures/fig4_08_sequence.png)
 
 ---
 
@@ -432,8 +293,9 @@ The decision function is the centre of the solution. It works through five check
    saving.
 4. **Find the cleanest hour.** For a longer build, the function looks for the lowest-carbon hour
    within the permitted window.
-5. **Delay only if it helps.** If a cleaner hour exists, the build is delayed to it; if the current
-   hour is already the cleanest, it runs now.
+5. **Delay only if it helps.** The window is counted in whole hours, up to and including its end,
+   and ties go to the earliest hour. A build is therefore delayed only when some hour in the window
+   is strictly cleaner than now; otherwise it runs now.
 
 The design also supports a variant where the window shrinks as the predicted failure risk rises:
 window = maximum delay × (1 − failure probability). Risky builds would wait less, so their failure
@@ -443,24 +305,7 @@ confirms this.
 
 **Figure 4.9 — Flowchart of Algorithm 1 (the decision function)**
 
-```mermaid
-flowchart TD
-    S(["Start: build details, carbon profile, policy"]) --> L{"Actual duration or<br/>outcome present?"}
-    L -- "yes" --> X(["Refuse: leakage error"])
-    L -- "no" --> G["Step 1: eligibility rules"]
-    G --> E{"May wait?"}
-    E -- "no" --> R1(["Run now — reason names the rule"])
-    E -- "yes" --> DT{"Expected duration<br/>≥ threshold?"}
-    DT -- "no" --> R2(["Run now — too short to be worth waiting"])
-    DT -- "yes" --> PP{"Policy type"}
-    PP -- "duration-only" --> W1["window = maximum delay"]
-    PP -- "risk-adjusted (not used)" --> W2["window = maximum delay × (1 − failure risk)"]
-    W1 --> LS["Find cleanest hour within window"]
-    W2 --> LS
-    LS --> Z{"Cleaner than now?"}
-    Z -- "no" --> R3(["Run now — already the cleanest hour"])
-    Z -- "yes" --> DF(["Delay — target hour and reason"])
-```
+![Figure 4.9](figures/fig4_09_decide_flowchart.png)
 
 ### 4.6.2 Algorithm 2 — Eligibility rules
 
@@ -471,7 +316,8 @@ The dataset records only two usable trigger details: whether the build is for a 
 branch name. The rules are therefore an approximation of real urgency. A build may wait only if it is
 **not** a pull-request build **and** its branch matches none of a fixed list of protected patterns:
 main branch, production, release, stable, maintenance, hotfix, version tags, version series and
-pre-release. Anything that cannot be interpreted is treated as not delayable.
+pre-release. The pull-request check comes first, so a pull request into the main branch counts as a
+pull request. Anything that cannot be interpreted is treated as not delayable.
 
 On the development data (783,931 builds), 191,245 builds (24.4%) could wait. A stricter variant that
 also protects development-integration branches leaves 132,100 (16.9%), and it is used as a
@@ -484,27 +330,11 @@ no ground-truth record of which builds were truly urgent.
 
 **Figure 4.10 — Flowchart of Algorithm 2 (eligibility rules)**
 
-```mermaid
-flowchart TD
-    A(["Pull-request flag, branch name"]) --> B{"Values readable?"}
-    B -- "no" --> N0(["Must run now (fail safe)"])
-    B -- "yes" --> C{"Pull-request build?"}
-    C -- "yes" --> N1(["Must run now: pull request"])
-    C -- "no" --> D{"Branch matches a protected pattern?<br/>main, release, stable, hotfix,<br/>version tag, pre-release …"}
-    D -- "yes" --> N2(["Must run now: protected branch"])
-    D -- "no" --> Y(["May wait: push to an unprotected branch"])
-```
+![Figure 4.10](figures/fig4_10_eligibility_flowchart.png)
 
 **Figure 4.11 — Chart: eligibility outcome for 783,931 development builds**
 
-```mermaid
-pie showData
-    title Eligibility outcomes, 783,931 builds
-    "Main branch (must run now)" : 404533
-    "Unprotected push (may wait)" : 191245
-    "Pull request (must run now)" : 140506
-    "Other protected branches (must run now)" : 47647
-```
+![Figure 4.11](figures/fig4_11_eligibility_outcomes.png)
 
 ### 4.6.3 Model 1 — The expected-duration estimate (the baseline)
 
@@ -513,8 +343,9 @@ modelled on the logarithm of duration because build durations are heavily skewed
 specified before any code was written:
 
 - **Project history.** The median duration of the same project's builds that had *finished* before
-  this one arrived. If a project has no such builds, it falls back to the typical duration for the
-  programming language, and then to the overall typical duration. Both fallbacks are computed from
+  this one arrived. Arrival is the build's start time, and builds without a recorded duration do not
+  count. If a project has no such builds, the estimate falls back to the median duration for the
+  programming language, and then to the overall median duration. Both fallbacks are computed from
   training data only.
 
   This rule was tightened during the project. An earlier version also counted builds that had
@@ -539,18 +370,7 @@ is reported as a finding and tested as a sensitivity check.
 
 **Figure 4.12 — Flowchart: expected duration from project history, with fallbacks**
 
-```mermaid
-flowchart TD
-    A(["Build of project p, arriving at time t"]) --> H["History = builds of p that had finished before t"]
-    H --> Q{"Any history?"}
-    Q -- "yes" --> M["Median of log(1 + duration) over the history"]
-    Q -- "no" --> LQ{"Language known<br/>from training data?"}
-    LQ -- "yes" --> ML["Training median for that language"]
-    LQ -- "no" --> MG["Overall training median"]
-    M --> O(["Expected duration + which level was used"])
-    ML --> O
-    MG --> O
-```
+![Figure 4.12](figures/fig4_12_duration_estimate.png)
 
 ### 4.6.4 Model 2 — Calibrated failure-probability models (the candidate SE signal)
 
@@ -574,8 +394,8 @@ its own.
 builds fail). Gradient-boosted trees handle mixed-scale features, missing values and non-linear
 effects natively, and they run quickly on a CPU (Chen & Guestrin, 2016). Tree models also allow
 exact, efficient SHAP explanations (Lundberg & Lee, 2017), which the explainability requirement needs.
-Deep learning and large language models were deliberately excluded: on small tabular data they add
-cost and reproducibility problems with no expected accuracy gain.
+Deep learning and large language models were deliberately excluded: on tabular data of this kind they
+add cost and reproducibility problems with no expected accuracy gain.
 
 **How it was trained.** Settings were tuned only on the training projects, using the most recent 20%
 of training builds as a time-ordered validation set. The tuning was a seeded random search of 20
@@ -603,30 +423,25 @@ estimate. Its uncertainty comes from a **paired bootstrap** (Efron & Tibshirani,
 A family is **admitted** into the policy only if two conditions hold, and both were fixed before any
 result was seen.
 
-1. **Model level.** The confidence interval of its PR-AUC gain must exclude zero, and the gain must be
-   at least 0.01.
-2. **Decision level.** A policy using the family must reduce feedback time for failing builds, at the
-   same carbon saving, by at least 5% (or save at least 1% more carbon at the same feedback time). It
-   must do so at three or more comparison points.
+1. **Model level.** The 95% confidence interval of its PR-AUC gain must lie entirely above zero, and
+   the gain must be an improvement of at least 0.01.
+2. **Decision level.** A policy using the family must beat **both** duration-only policies (regressor
+   and project history), swept over the same grid. Their trade-off curves are compared at ten matched
+   points on each axis.
+   - **Size of the gain.** At equal carbon saving, the policy must cut the 95th-percentile feedback
+     time for failing builds by at least 5%. Alternatively, at equal feedback time, it must reach a
+     carbon saving at least 1% larger in relative terms (not one percentage point).
+   - **Confidence.** The improvement's paired-bootstrap 95% interval must lie above zero.
+   - **Count.** This must hold at three or more matched points on one axis. A point that cannot be
+     evaluated in more than 5% of resamples does not count.
 
-Every decision is repeated at half and at double these thresholds, to show how much the outcome
-depends on where they were set.
+Every decision is repeated at half and at double both floors, to show how much the outcome depends on
+where they were set. Because no family passed the model level, the decision-level test never had a
+candidate.
 
 **Figure 4.13 — Flowchart of Algorithm 3 (admission rule)**
 
-```mermaid
-flowchart TD
-    A(["Family of characteristics"]) --> B["Paired bootstrap of PR-AUC gain<br/>1,000 resamples"]
-    B --> C{"Interval excludes 0<br/>and gain ≥ 0.01?"}
-    C -- "no" --> R(["Reject"])
-    C -- "yes" --> D{"Policy with the family beats<br/>duration-only at ≥ 3 points?<br/>(≥ 5% faster feedback or ≥ 1% more carbon saved)"}
-    D -- "no" --> R
-    D -- "yes" --> AD(["Admit into the policy"])
-    R --> S{"Any family admitted?"}
-    AD --> S
-    S -- "no" --> F(["Policy = duration-only"])
-    S -- "yes" --> SE(["Policy = risk-adjusted"])
-```
+![Figure 4.13](figures/fig4_13_admission_rule.png)
 
 **Development-stage outcome.** All six families were rejected. Every family's PR-AUC change was
 negative, with its whole confidence interval below zero (Table 4.4). None was admitted even at half
@@ -643,17 +458,24 @@ the threshold.
 | F5 Developer and team | −0.0729 | −0.0757 to −0.0697 |
 | F6 Timing and trigger | −0.0084 | −0.0101 to −0.0068 |
 
-**Figure 4.14 — Chart: added value per family with 95% confidence intervals** *(draw as a horizontal
-dot-and-whisker chart from Table 4.4, with a vertical line at 0 and a second at +0.01)*
+**Figure 4.14 — Chart: added value per family with 95% confidence intervals**
 
-**Figure 4.15 — Chart: how much each family contributes inside the full model (SHAP)** *(horizontal
-bar chart of each family's average absolute SHAP contribution)*
+![Figure 4.14](figures/fig4_14_family_added_value.png)
+
+Figure 4.15 shows that a family can matter a great deal *inside* the full model and still add nothing
+when tested on its own. Project history (F4) and test activity (F3) carry the largest SHAP
+contributions, yet both made predictions worse in Table 4.4. Feature importance therefore cannot
+replace the admission rule.
+
+**Figure 4.15 — Chart: how much each family contributes inside the full model (SHAP)**
+
+![Figure 4.15](figures/fig4_15_shap_by_family.png)
 
 ### 4.6.6 Algorithm 4 — Fitting the policy's thresholds
 
 With no family admitted, the policy needs two numbers: the **duration threshold** and the **maximum
-delay window**. They were chosen by replaying 12,000 calibration builds over a fixed grid of
-candidates, set before any result was seen:
+delay window**. They were chosen by replaying 12,000 calibration builds under the project-history
+duration-only strategy, over a fixed grid of candidates set before any result was seen:
 
 - duration thresholds of 0, 60, 120, 240, 480, 960, 1,920, 3,840, 7,680 and 15,360 seconds;
 - windows of 6, 12 and 24 hours.
@@ -662,25 +484,20 @@ A **carbon-retention rule**, also fixed in advance, picked the operating point:
 
 1. Find the largest carbon saving any grid point achieves (here 3.78%).
 2. Keep the points that retain at least 90% of it.
-3. Among those, choose the one that returns feedback on failing builds fastest.
+3. Among those, choose the one with the lowest 95th-percentile feedback time for failing builds;
+   ties go to the larger threshold, then the shorter window.
 
-Five points qualified. The chosen point was **480 seconds and 24 hours**, saving 3.48% of carbon on
-the development sample. Refitting from scratch reproduced the policy file byte for byte.
+Five points qualified, all with a 24-hour window. The chosen point was **480 seconds and 24 hours**,
+saving 3.48% of carbon on the development sample. Refitting from scratch reproduced the policy file
+byte for byte.
 
 **Figure 4.16 — Flowchart of Algorithm 4 (choosing the operating point)**
 
-```mermaid
-flowchart TD
-    A(["Replay the 30 grid points on development data"]) --> B["Carbon saved vs running every build immediately"]
-    B --> C["Best saving S*"]
-    C --> D["Keep points saving ≥ 90% of S*"]
-    D --> E["Choose the one with the fastest failure feedback"]
-    E --> F["Ties: larger threshold, then shorter window"]
-    F --> G(["Write and freeze the policy file"])
-```
+![Figure 4.16](figures/fig4_16_policy_fitting.png)
 
-**Figure 4.17 — Chart: the development-stage trade-off** *(line chart: carbon saved on the x-axis,
-feedback time for failing builds on the y-axis, one line per window length, chosen point marked)*
+**Figure 4.17 — Chart: the development-stage trade-off (12,000 calibration builds)**
+
+![Figure 4.17](figures/fig4_17_development_tradeoff.png)
 
 ### 4.6.7 Algorithm 5 — The replay simulator
 
@@ -688,17 +505,20 @@ The simulator replays builds in the order they started, through six strategies, 
 builds**:
 
 1. **Static** — every build runs immediately, as CI does today.
-2. **Blanket carbon-aware** — every build that may wait goes to the cleanest hour of the whole week.
-3. **Eligibility-only** — every build that may wait is delayed within a fixed window, whatever its
-   duration.
+2. **Blanket carbon-aware** — every build that may wait goes to the cleanest hour within the next 167
+   hours (the whole weekly profile), whatever its duration.
+3. **Eligibility-only** — every build that may wait goes to the cleanest hour within a fixed window of
+   6, 12 or 24 hours, whatever its duration; this is duration-only with a zero threshold.
 4. **Duration-only** — only longer builds are delayed, in two versions: one using the
    commit-characteristic regressor and one using project history.
 5. **Proposed evidence-derived policy** — the frozen policy file. With no family admitted, it is
    identical to duration-only with project history.
-6. **Risk-only skip** — builds that may wait and look very unlikely to fail are not run at all; this
-   is a comparison from the build-skipping literature.
+6. **Risk-only skip** — builds that may wait and whose calibrated failure probability is below a
+   threshold τ (0 to 0.30) are not run at all, so their failures go unreported. Builds that must run
+   now are never skipped. This is a comparison from the build-skipping literature.
 
-Every scheduling strategy calls the same decision function. A build's actual duration is used only
+Strategies 2 to 5 call the same decision function. Strategy 1 runs everything immediately, and
+strategy 6 applies the same eligibility rules before skipping. A build's actual duration is used only
 *after* its decision is made, to account for energy and carbon:
 
 - energy (kWh) = average power (42.5 W) × duration;
@@ -710,18 +530,7 @@ independent checker confirms the safety count is zero.
 
 **Figure 4.18 — Flowchart of Algorithm 5 (replay loop)**
 
-```mermaid
-flowchart TD
-    A(["Builds in start-time order"]) --> B["For each strategy and setting"]
-    B --> C["For each build: decision → action and hour"]
-    C --> D["After the decision: energy = power × duration;<br/>carbon = energy × intensity at the scheduled hour"]
-    D --> E["Record action, delay, carbon, feedback time"]
-    E --> F{"More builds?"}
-    F -- "yes" --> C
-    F -- "no" --> G["Summarise each strategy"]
-    G --> H["Independent check: no must-run build delayed or skipped"]
-    H --> I(["Results + repeat-run identity check"])
-```
+![Figure 4.18](figures/fig4_18_replay_loop.png)
 
 ---
 
@@ -734,7 +543,8 @@ dataset is used both to train the models and to drive the replay. That avoids th
 arises when a model is trained on one dataset and applied to another with different fields.
 
 **Secondary dataset — UK grid carbon intensity.** This comes from the National Grid ESO Carbon
-Intensity API: the national hourly series for 2024 and 2025 (17,544 hours; 99.8% and 100% complete).
+Intensity API: the national hourly series for 2024 and 2025 (17,529 of 17,544 hours present; 99.8%
+and 100% complete).
 The build records are older than any freely available carbon data, so each build is matched to the
 grid by **hour of the week**: its weekday and hour are given the average intensity of that hour across
 the carbon series. This is a stated modelling assumption.
@@ -773,10 +583,12 @@ Moving a build from the dirtiest to the cleanest hour could therefore cut its ca
 | Remove exact duplicates | 3,881,992 | 3,881,992 |
 | Combine jobs into builds | 3,881,992 | 925,897 |
 | Remove builds with a missing or unusable label | 925,897 | 925,896 |
-| Remove cancelled builds | 925,896 | **922,624** |
+| Remove cancelled builds | 925,896 | 922,624 |
+| Remove builds with a missing start time | 922,624 | **922,624** |
 
-**Figure 4.19 — Chart: data-preparation funnel** *(bar chart of Table 4.5; a logarithmic axis or
-labelled bars work well because the first step is much larger)*
+**Figure 4.19 — Chart: data-preparation funnel**
+
+![Figure 4.19](figures/fig4_19_data_preparation_funnel.png)
 
 **Table 4.6 — Families of commit characteristics**
 
@@ -797,8 +609,10 @@ labelled bars work well because the first step is much larger)*
 | Calibration | 150 | 138,687 | 15.0% | 28.5% | calibrating models, measuring added value, fitting the policy |
 | Test | 170 | 138,693 | 15.0% | 25.0% | the single final evaluation (Chapter 5) |
 
-**Figure 4.20 — Chart: UK grid carbon intensity by hour of the week** *(heatmap: rows are days, columns
-are hours, colour is g CO₂/kWh from light to dark)*
+**Figure 4.20 — Chart: UK grid carbon intensity by hour of the week** *(outlined cells: the cleanest
+hour, Sunday 11:00, and the dirtiest, Wednesday 18:00)*
+
+![Figure 4.20](figures/fig4_20_carbon_hour_of_week.png)
 
 ---
 
@@ -815,11 +629,11 @@ are hours, colour is g CO₂/kWh from light to dark)*
 | **SHAP** (Lundberg & Lee, 2017) | Explaining models by characteristic and by family | Consistent explanations with an exact, fast method for tree models. |
 | **matplotlib** | All figures | Scriptable, so every figure is redrawn from saved results. |
 | **YAML (safe loading only)** | The policy file | Human-readable and easy to compare between versions; safe loading prevents code execution. |
-| **pytest** | Automated tests (645 at the time of writing) | Simple and flexible; the tests act as executable proof of the design rules. |
-| **National Grid ESO Carbon Intensity API** | Historical carbon series; current intensity shown in the prototype for information | Free, needs no key, openly licensed (CC BY 4.0), and covers Great Britain. |
+| **pytest** | Automated tests (807 at the time of writing) | Simple and flexible; the tests act as executable proof of the design rules. |
+| **Carbon Intensity API (NESO, formerly National Grid ESO)** | Historical carbon series; current intensity shown in the prototype for information | Free, needs no key, openly licensed (CC BY 4.0), and covers Great Britain. |
 | **CodeCarbon methodology** | The average-power figure of 42.5 W (an 85 W processor rating at 50% load) | A documented, citable default for a processor whose model is unknown. It is used as a configuration value, not as a running library. |
 | **Green Software Foundation SCI** | Reporting carbon per successful commit | A standard, comparable metric. |
-| **GitHub Actions** | The developer-facing integration *(prototype)* | The most widely used CI platform today. Its job summary page gives a natural place to show a recommendation. |
+| **GitHub Actions** | The developer-facing integration *(prototype)* | A widely used CI platform, free for public repositories. Its job summary page gives a natural place to show a recommendation. |
 | **GitHub REST API** | Reading a repository's completed run history *(prototype)* | Free; the token GitHub gives each workflow is enough, and it can filter for completed runs. |
 | **FastAPI** | The REST API around the decision library *(prototype)* | Lightweight Python web framework with automatic request validation. |
 | **Git and checksums** | Version control; locking the data split, policy file and candidate grid | Makes "fixed before results were seen" something that can be checked, not just claimed. |
@@ -836,9 +650,10 @@ Excluded on purpose:
 ## 4.9 Implementation
 
 **Environment.** The solution runs on Windows 11 in a Python 3.11 virtual environment, with a pinned
-list of 40 package versions (for example pandas 3.0, scikit-learn 1.9, XGBoost 3.2 and SHAP 0.51).
-Everything runs on a single laptop CPU. The heaviest steps were model training (about 40 minutes)
-and the per-family analysis (about 66 minutes).
+list of 47 package versions (for example pandas 3.0, scikit-learn 1.9, XGBoost 3.2 and SHAP 0.51).
+Everything runs on a single laptop CPU. The longest single step was the per-family analysis (about
+66 minutes). Training the six failure models took about 40 minutes, and the one-off test-set
+evaluation steps took 46–59 minutes each.
 
 **Structure.**
 
@@ -846,16 +661,21 @@ and the per-family analysis (about 66 minutes).
   estimator, models, statistics, admission rule, eligibility rules, carbon lookup, accounting and the
   decision function.
 - The simulator and the independent safety checker are separate components.
+- The prototype adds an advisor package (request validation, team settings, run history, vetoes and
+  audit), a REST API, a composite GitHub Action and the What-If report. All of them import the
+  decision library rather than copying it.
 - Each pipeline stage has one command that reproduces it, and each saves its outputs with a run log.
 
 **How correctness is checked.** Quality is judged by evidence that nothing leaked and that runs
 repeat exactly, not by a single accuracy number.
 
-- **Tests.** 645 automated tests pass. They include:
+- **Tests.** 807 automated tests pass. They include:
   - tests that forbidden fields are rejected;
   - tests that the duration estimate only uses earlier builds that had already finished;
   - a test showing the decision function sees only permitted inputs;
-  - a test showing that scrambling durations and outcomes changes no decision.
+  - a test showing that scrambling durations and outcomes changes no decision;
+  - parity tests showing that the advisor, the command-line tool and the REST API return identical
+    decisions, and that these equal the research decision function's own.
 - **Safety.** The independent checker found no must-run build delayed across all replay records.
 - **Reproducibility.** The replay and the policy fitting were repeated from scratch, and they
   produced identical files.
@@ -879,14 +699,22 @@ reported in Chapter 5.
 | Characteristics, data split, duration estimate, models, added-value analysis, admission rule | Complete |
 | Eligibility rules, accounting, decision function, simulator, frozen policy | Complete |
 | Final evaluation on the test set, including sensitivity analyses and the summary | Complete (re-run after the duration-history correction) |
-| Advisor core, command-line tool and REST API | *[In progress — update when built]* |
-| GitHub Action and demo repository | *[Not yet built]* |
-| What-If report | *[Not yet built]* |
+| Advisor core, command-line tool and REST API | Complete (parity-tested against the research decision function) |
+| GitHub Action and demo repository | Complete (seven real CI runs; the independent checker found 0 violations) |
+| What-If report | Complete (five repositories; every report regenerates byte for byte) |
 
-**Figure 4.21 — Screenshot: the recommendation summary in a GitHub Actions run** *[to be added]*
+**Figure 4.21 — Screenshot: a RUN NOW recommendation in a GitHub Actions run (protected branch)**
+*[Screenshot to insert: the Step Summary of the "advisor (GB scenario)" job in demo run 37734618114,
+https://github.com/senith02/carbon-advisor-demo/actions/runs/37734618114/job/113171231712]*
+
 **Figure 4.22 — Screenshot: a DEFER RECOMMENDED result for a delayable build, showing the expected
-duration, the delay window, the estimated carbon change and the reason** *[to be added]*
-**Figure 4.23 — Screenshot: a What-If report for a repository** *[to be added]*
+duration, the delay window, the estimated carbon change and the reason** *(GB scenario mode)*
+*[Screenshot to insert: the Step Summary of the "advisor (GB scenario)" job in demo run 37735372444,
+https://github.com/senith02/carbon-advisor-demo/actions/runs/37735372444/job/113173580637]*
+
+**Figure 4.23 — The What-If report for the demonstration repository (rendered from the saved report)**
+
+![Figure 4.23](figures/fig4_23_whatif_report_demo.png)
 
 ---
 
@@ -907,8 +735,9 @@ carbon-aware CI scheduling.
 
 On the development data, no family of SE characteristics met the admission rule, so the frozen
 policy is duration-only: delay builds expected to take at least 480 seconds, to the cleanest hour
-within 24 hours. Chapter 5 reports how this policy and the alternatives performed on the 170 projects
-held back for the final evaluation.
+within 24 hours. The same frozen policy runs, unchanged, inside a GitHub Action, a REST API and a
+What-If report. Chapter 5 reports how this policy and the alternatives performed on the 170 projects
+held back for the final evaluation, and how the prototype behaved in real CI runs.
 
 ---
 
@@ -944,7 +773,8 @@ Lundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model p
 Mhalla, A., & Saied, M. (2024). *Detecting continuous integration skip: A reinforcement learning-based
 approach* [Preprint]. arXiv. https://arxiv.org/html/2405.09657v1
 
-National Grid ESO. (n.d.). *Carbon Intensity API*. https://carbonintensity.org.uk/
+National Energy System Operator. (n.d.). *Carbon Intensity API* (formerly operated by National Grid
+ESO). https://carbonintensity.org.uk/
 
 Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M.,
 Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M.,
@@ -970,27 +800,32 @@ Data Mining* (pp. 694–699). ACM. https://doi.org/10.1145/775047.775151
 
 ## List of figures and tables
 
-| No. | Title | Type |
-| :-- | :-- | :-- |
-| Figure 4.1 | Solution overview: from commit to scheduling decision | Conceptual flow |
-| Figure 4.2 | Layered system architecture with a shared decision core | Architecture |
-| Figure 4.3 | Deployment view of the prototype (planned) | Deployment |
-| Figure 4.4 | Use-case diagram | UML use case |
-| Figure 4.5 | Component diagram | UML component |
-| Figure 4.6 | Class diagram of the decision contract | UML class |
-| Figure 4.7 | Level-1 data-flow diagram of the evidence pipeline | Data-flow diagram |
-| Figure 4.8 | Sequence diagram: live recommendation (planned) | UML sequence |
-| Figure 4.9 | Flowchart of Algorithm 1 (the decision function) | Flowchart |
-| Figure 4.10 | Flowchart of Algorithm 2 (eligibility rules) | Flowchart |
-| Figure 4.11 | Eligibility outcome for 783,931 development builds | Pie chart |
-| Figure 4.12 | Expected duration from project history, with fallbacks | Flowchart |
-| Figure 4.13 | Flowchart of Algorithm 3 (admission rule) | Flowchart |
-| Figure 4.14 | Added value per family with 95% confidence intervals | Dot-and-whisker chart |
-| Figure 4.15 | How much each family contributes inside the full model (SHAP) | Bar chart |
-| Figure 4.16 | Flowchart of Algorithm 4 (choosing the operating point) | Flowchart |
-| Figure 4.17 | The development-stage trade-off | Line chart |
-| Figure 4.18 | Flowchart of Algorithm 5 (replay loop) | Flowchart |
-| Figure 4.19 | Data-preparation funnel | Bar chart |
-| Figure 4.20 | UK grid carbon intensity by hour of the week | Heatmap |
-| Figures 4.21–4.23 | Prototype screenshots | Screenshots (to be added) |
-| Tables 4.1–4.9 | Requirements, input–process–output, added value, cleaning, families, data sets, technologies, status | Tables |
+Every figure is in `dissertation/figures/` as a 300-dpi PNG (for Word: Insert → Pictures) and an SVG
+(editable vector). Diagram sources are in `figures/src/`; charts are drawn from the results files by
+`code/scripts/make_dissertation_figures.py`.
+
+| No. | Title | Type | File |
+| :-- | :-- | :-- | :-- |
+| Figure 4.1 | Solution overview: from commit to scheduling decision | Conceptual flow | `fig4_01_solution_overview` |
+| Figure 4.2 | Layered system architecture with a shared decision core | Architecture | `fig4_02_architecture` |
+| Figure 4.3 | Deployment view of the prototype | Deployment | `fig4_03_deployment` |
+| Figure 4.4 | Use-case diagram | Use case | `fig4_04_use_cases` |
+| Figure 4.5 | Component diagram | Component | `fig4_05_components` |
+| Figure 4.6 | Class diagram of the decision contract | UML class | `fig4_06_class_diagram` |
+| Figure 4.7 | Level-1 data-flow diagram of the evidence pipeline | Data-flow diagram | `fig4_07_data_flow` |
+| Figure 4.8 | Sequence diagram: live recommendation | UML sequence | `fig4_08_sequence` |
+| Figure 4.9 | Flowchart of Algorithm 1 (the decision function) | Flowchart | `fig4_09_decide_flowchart` |
+| Figure 4.10 | Flowchart of Algorithm 2 (eligibility rules) | Flowchart | `fig4_10_eligibility_flowchart` |
+| Figure 4.11 | Eligibility outcome for 783,931 development builds | Bar chart | `fig4_11_eligibility_outcomes` |
+| Figure 4.12 | Expected duration from project history, with fallbacks | Flowchart | `fig4_12_duration_estimate` |
+| Figure 4.13 | Flowchart of Algorithm 3 (admission rule) | Flowchart | `fig4_13_admission_rule` |
+| Figure 4.14 | Added value per family with 95% confidence intervals | Dot-and-whisker chart | `fig4_14_family_added_value` |
+| Figure 4.15 | How much each family contributes inside the full model (SHAP) | Bar chart | `fig4_15_shap_by_family` |
+| Figure 4.16 | Flowchart of Algorithm 4 (choosing the operating point) | Flowchart | `fig4_16_policy_fitting` |
+| Figure 4.17 | The development-stage trade-off | Line chart | `fig4_17_development_tradeoff` |
+| Figure 4.18 | Flowchart of Algorithm 5 (replay loop) | Flowchart | `fig4_18_replay_loop` |
+| Figure 4.19 | Data-preparation funnel | Bar chart | `fig4_19_data_preparation_funnel` |
+| Figure 4.20 | UK grid carbon intensity by hour of the week | Heatmap | `fig4_20_carbon_hour_of_week` |
+| Figures 4.21–4.22 | Recommendation summaries in GitHub Actions | Screenshots (to capture from the demo runs) | — |
+| Figure 4.23 | What-If report for the demonstration repository | Screenshot | `fig4_23_whatif_report_demo` (PNG only) |
+| Tables 4.1–4.9 | Requirements, input–process–output, added value, cleaning, families, data sets, technologies, status | Tables | — |

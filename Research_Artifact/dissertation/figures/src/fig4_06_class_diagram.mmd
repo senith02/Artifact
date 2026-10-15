@@ -1,0 +1,63 @@
+classDiagram
+    direction LR
+    class BuildInput {
+        <<mapping>>
+        +bool gh_is_pr
+        +str git_branch
+        +int arrival_dow
+        +int arrival_hour
+        +float d_hat_seconds
+    }
+    class PolicySpec {
+        <<dataclass>>
+        +int schema_version
+        +str policy_path
+        +str stage1_variant
+        +Mapping duration_only
+        +Mapping se_informed
+        +Mapping provenance
+        +Path source_path
+        +fitted() bool
+        +active() Mapping
+    }
+    class HourOfWeekProfile {
+        <<table>>
+        +int slot
+        +float mean
+    }
+    class Eligibility {
+        <<dataclass>>
+        +bool eligible
+        +str rule
+        +str reason
+    }
+    class DurationEstimate {
+        <<dataclass>>
+        +float d_hat_log1p
+        +float d_hat_seconds
+        +str form
+        +str fallback_level
+        +int n_history
+    }
+    class Decision {
+        <<dataclass>>
+        +str action
+        +Mapping defer_until
+        +str reason
+        +float grid_gco2_now
+        +bool eligible
+        +str stage1_rule
+        +str policy_path
+        +float d_hat_seconds
+        +float p_hat
+        +float window_hours
+        +float delay_hours
+        +int scheduled_slot
+        +float grid_gco2_scheduled
+        +bool spec_fitted
+    }
+    DurationEstimate ..> BuildInput : caller copies d_hat_seconds
+    BuildInput --> Decision : decide() input
+    PolicySpec --> Decision : every threshold
+    HourOfWeekProfile --> Decision : 168 hourly intensities
+    Eligibility --> Decision : computed inside decide()

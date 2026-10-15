@@ -1,0 +1,33 @@
+sequenceDiagram
+    actor Dev as Developer
+    participant GH as GitHub
+    participant Step as Advisor step
+    participant Adv as Advisor
+    participant API as GitHub REST API
+    participant Core as Decision core
+    participant Grid as Carbon Intensity API
+    Dev->>GH: push commit
+    GH->>Step: start job on runner
+    Step->>Step: arrival time = UTC clock at first step
+    Step->>Adv: request built from environment and event file
+    Adv->>Adv: validate request, check trusted event
+    Adv->>Adv: team config, opt-in, declared region must be GB
+    Adv->>Adv: check hashes of policy, profile, estimator
+    opt eligibility rules say the build may wait
+        Adv->>API: completed runs of this workflow (read-only)
+        API-->>Adv: run history
+        Adv->>Adv: keep runs that finished before arrival
+        Adv->>Adv: expected duration from the frozen estimator
+    end
+    Adv->>Core: decide(build, GB profile, frozen policy)
+    Core-->>Adv: run now or defer, with reason
+    opt decide() returned defer
+        Adv->>Adv: team vetoes (cold start, urgency, max delay, deadline) can only give RUN NOW
+    end
+    Adv->>Grid: current GB intensity (display only)
+    Grid-->>Adv: value or nothing
+    Adv->>Adv: append audit record
+    Adv-->>Step: response
+    Step->>GH: Step Summary, step outputs, artifact upload
+    GH-->>Dev: RUN NOW or DEFER RECOMMENDED, with reasons
+    Note over GH,Core: Any failure gives a fail-safe RUN NOW. The step always exits successfully.

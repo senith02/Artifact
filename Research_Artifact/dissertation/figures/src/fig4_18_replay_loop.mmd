@@ -1,0 +1,15 @@
+flowchart TD
+    A(["Builds in start-time order,<br/>identical for every strategy"]) --> B["For each strategy and grid point"]
+    B --> C{"Strategy"}
+    C -- "1 static" --> C1["Run now"]
+    C -- "2 to 5" --> C2["decide(): action, target hour, delay"]
+    C -- "6 risk-only skip" --> C3["Eligibility rules, then skip the build if it<br/>may wait and its failure risk is below τ"]
+    C1 --> N{"More builds?"}
+    C2 --> N
+    C3 --> N
+    N -- "yes: next build" --> C
+    N -- "no" --> D["Only now read actual durations:<br/>energy = 42.5 W × duration;<br/>carbon = energy × intensity at the scheduled hour;<br/>a skipped build uses no energy and its feedback is lost"]
+    D --> E["Failure feedback time = delay + duration,<br/>for failed builds that ran"]
+    E --> G["Summarise each strategy and grid point"]
+    G --> H["Independent check: no must-run build delayed or skipped"]
+    H --> I(["Results + repeat-run identity check"])

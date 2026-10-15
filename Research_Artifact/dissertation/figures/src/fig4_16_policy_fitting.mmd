@@ -1,0 +1,7 @@
+flowchart TD
+    A(["Replay the 30 grid points of the project-history<br/>duration-only strategy on 12,000 calibration builds"]) --> B["Carbon saved vs running every build immediately"]
+    B --> C["Best saving S*"]
+    C --> D["Keep points saving ≥ 90% of S*"]
+    D --> E["Choose the one with the fastest failure feedback<br/>(lowest 95th-percentile time)"]
+    E --> F["Ties: larger threshold, then shorter window"]
+    F --> G(["Write and freeze the policy file"])

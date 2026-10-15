@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="411.301606pt" height="191.574539pt" viewBox="0 0 411.301606 191.574539" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-15T22:43:41.746038</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.0, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M -0 191.574539 
+L 411.301606 191.574539 
+L 411.301606 0 
+L -0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 27.708594 160.992 
+L 359.913894 160.992 
+L 359.913894 5.76 
+L 27.708594 5.76 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g clip-path="url(#p2073d49128)">
+    <image xlink:href="data:image/png;base64,
+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" id="image32ee5e09ee" transform="scale(1 -1) translate(0 -155.52)" x="27.36" y="-5.814539" width="332.64" height="155.52"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 179.969356 138.816 
+L 193.811244 138.816 
+L 193.811244 160.992 
+L 179.969356 160.992 
+L 179.969356 138.816 
+z
+" clip-path="url(#p2073d49128)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 276.862569 50.112 
+L 290.704456 50.112 
+L 290.704456 72.288 
+L 276.862569 72.288 
+L 276.862569 50.112 
+z
+" clip-path="url(#p2073d49128)" style="fill: none; stroke: #0b0b0b; stroke-width: 1.4; stroke-linejoin: miter"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="34.629537" y="171.044246" transform="rotate(-0 34.629537 171.044246)">00</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="62.313312" y="171.044246" transform="rotate(-0 62.313312 171.044246)">02</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="89.997087" y="171.044246" transform="rotate(-0 89.997087 171.044246)">04</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="117.680862" y="171.044246" transform="rotate(-0 117.680862 171.044246)">06</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="145.364637" y="171.044246" transform="rotate(-0 145.364637 171.044246)">08</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6"/>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="173.048412" y="171.044246" transform="rotate(-0 173.048412 171.044246)">10</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7"/>
+     <g id="text_7">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="200.732187" y="171.044246" transform="rotate(-0 200.732187 171.044246)">12</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_8"/>
+     <g id="text_8">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="228.415962" y="171.044246" transform="rotate(-0 228.415962 171.044246)">14</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_9"/>
+     <g id="text_9">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="256.099737" y="171.044246" transform="rotate(-0 256.099737 171.044246)">16</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_10"/>
+     <g id="text_10">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="283.783512" y="171.044246" transform="rotate(-0 283.783512 171.044246)">18</text>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_11"/>
+     <g id="text_11">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="311.467287" y="171.044246" transform="rotate(-0 311.467287 171.044246)">20</text>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_12"/>
+     <g id="text_12">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="339.151062" y="171.044246" transform="rotate(-0 339.151062 171.044246)">22</text>
+     </g>
+    </g>
+    <g id="text_13">
+     <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="193.811244" y="183.696727" transform="rotate(-0 193.811244 183.696727)">Hour of day (UTC)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_13"/>
+     <g id="text_14">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="20.124123" transform="rotate(-0 24.208594 20.124123)">Mon</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_14"/>
+     <g id="text_15">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="42.300123" transform="rotate(-0 24.208594 42.300123)">Tue</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_15"/>
+     <g id="text_16">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="64.531406" transform="rotate(-0 24.208594 64.531406)">Wed</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_16"/>
+     <g id="text_17">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="86.707406" transform="rotate(-0 24.208594 86.707406)">Thu</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_17"/>
+     <g id="text_18">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="108.841219" transform="rotate(-0 24.208594 108.841219)">Fri</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_18"/>
+     <g id="text_19">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="131.004123" transform="rotate(-0 24.208594 131.004123)">Sat</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_19"/>
+     <g id="text_20">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="24.208594" y="153.180123" transform="rotate(-0 24.208594 153.180123)">Sun</text>
+     </g>
+    </g>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 6.5px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #0b0b0b" x="186.8903" y="151.586129" transform="rotate(-0 186.8903 151.586129)">92.2</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 6.5px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="283.783512" y="62.882129" transform="rotate(-0 283.783512 62.882129)">172.9</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 366.944694 160.992 
+L 374.706294 160.992 
+L 374.706294 5.76 
+L 366.944694 5.76 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAAoAAADYCAYAAADSxHKZAAABHElEQVR4nO2X623EQBCCvztt/52libQReUgHJyJhsbazvxEID/Pw6+v7RxhvyYLBMnH8gVEeco0rPbO/GbmM40tjMnIjMyqaoZhHuUDC0mObkctI3IyKeVSaUcU8ygSKFvDotYKuYEYukDijTDNHLz2KJ/w4wYzSjJjA406bS3YJRy1p3WmkDHHGSVdmmrMnnkfRCu74QLWkdcIxLBOotLROOIblAglLq/fvOr0Vh90KuMDx3Cz8u0cmozzgm/ypMNu7XvESvi0U1zCz7Mrgrw/V8qgpmVn/efz0Fm4eFc8j8ebClx5TWtq9XdclzOAyzv6bC55YQorDnguYYf/7kV4JyX8e0iNF+ZjxyOZif9cU14f2P7ngkZWh5foXYPizECd6ofsAAAAASUVORK5CYII=" id="image353253cfa5" transform="scale(1 -1) translate(0 -155.52)" x="367.2" y="-5.76" width="7.2" height="155.52"/>
+   <g id="matplotlib.axis_3"/>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_8">
+     <g id="line2d_20"/>
+     <g id="text_23">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="378.206294" y="149.336419" transform="rotate(-0 378.206294 149.336419)">100</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_21"/>
+     <g id="text_24">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="378.206294" y="110.852644" transform="rotate(-0 378.206294 110.852644)">120</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_22"/>
+     <g id="text_25">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="378.206294" y="72.36887" transform="rotate(-0 378.206294 72.36887)">140</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_23"/>
+     <g id="text_26">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="378.206294" y="33.885096" transform="rotate(-0 378.206294 33.885096)">160</text>
+     </g>
+    </g>
+    <g id="text_27">
+     <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="403.423794" y="83.376" transform="rotate(-90 403.423794 83.376)">Mean g CO₂/kWh, 2024–2025</text>
+    </g>
+   </g>
+   <g id="LineCollection_1"/>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p2073d49128">
+   <rect x="27.708594" y="5.76" width="332.2053" height="155.232"/>
+  </clipPath>
+ </defs>
+</svg>

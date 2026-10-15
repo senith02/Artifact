@@ -1,0 +1,17 @@
+flowchart TB
+    DEV["Developer"] -- "push or pull request" --> GH["GitHub repository<br/>+ team config file"]
+    GH -- "starts workflow" --> RUN["CI runner: advisor job"]
+    subgraph ACT["Composite GitHub Action (pinned by commit SHA)"]
+        STEP["Wrapper step: request from<br/>runner environment + event file"]
+        ADV["Advisor CLI, in-process"]
+        CORE["decide() + frozen policy, GB profile,<br/>duration estimator (all hash-checked)"]
+        STEP --> ADV
+        ADV --> CORE
+    end
+    RUN --> STEP
+    CFG[["Team config: declared region,<br/>opted-in workflows, urgency rules"]] --> ADV
+    GH -.- CFG
+    ADV --> GHAPI["GitHub REST API<br/>(read-only: completed runs)"]
+    ADV -.-> GRID["Carbon Intensity API<br/>(live GB value, display only)"]
+    STEP --> OUT[("Outputs in the CI run:<br/>Step Summary and step outputs<br/>(RUN NOW or DEFER RECOMMENDED, with reasons);<br/>workflow artifact (request, response, audit record)")]
+    GHAPI --> WIF["What-If report, run locally from a saved<br/>snapshot (same advise() and decide())"]

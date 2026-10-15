@@ -1,0 +1,27 @@
+flowchart LR
+    Dev(["Developer"])
+    Team(["Team maintainer"])
+    CIp(["CI platform"])
+    Res(["Researcher"])
+    Grid(["Grid data service"])
+    subgraph SYS["Selective carbon-aware decision system"]
+        direction TB
+        U1(["Push commit"])
+        U2(["Read recommendation and its reasons"])
+        U3(["Declare region, opted-in workflows,<br/>urgency rules, maximum delay"])
+        U8(["Generate or view What-If report"])
+        U4(["Request a decision for a run"])
+        U5(["Supply completed run history"])
+        U6(["Run evidence pipeline and fit the policy"])
+        U7(["Replay strategies and evaluate"])
+        U9(["Supply carbon series and live intensity"])
+    end
+    Dev --- U1
+    Dev --- U2
+    Team --- U3
+    Team --- U8
+    CIp --- U4
+    CIp --- U5
+    Res --- U6
+    Res --- U7
+    Grid --- U9

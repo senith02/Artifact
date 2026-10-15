@@ -1,0 +1,7 @@
+{
+  "theme": "neutral",
+  "htmlLabels": false,
+  "flowchart": { "htmlLabels": false, "padding": 12, "nodeSpacing": 40, "rankSpacing": 45 },
+  "sequence": { "mirrorActors": false },
+  "themeVariables": { "fontFamily": "Segoe UI, Arial, sans-serif", "fontSize": "15px" }
+}

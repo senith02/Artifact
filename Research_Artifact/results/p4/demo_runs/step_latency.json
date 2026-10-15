@@ -1,0 +1,116 @@
+{
+  "command": "python scripts/advisor_step_latency.py",
+  "source": "results/p4/demo_runs/combined_audit.jsonl",
+  "measure": "audit_ts - inputs.arrival_utc (first Action step to recorded decision), seconds",
+  "includes": "setup-python, pinned dependency install, frozen-core load, GitHub history fetch, decide(), live-intensity fetch; arrival_utc has whole-second resolution",
+  "n_records": 13,
+  "min_s": 13.89,
+  "median_s": 18.24,
+  "max_s": 21.43,
+  "records": [
+    {
+      "run_id": 37734399927,
+      "branch": "feature/first-run",
+      "event": "push",
+      "scenario": "gb-hypothetical",
+      "display": "RUN NOW (scenario)",
+      "seconds": 19.95
+    },
+    {
+      "run_id": 37734399927,
+      "branch": "feature/first-run",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 19.09
+    },
+    {
+      "run_id": 37734618114,
+      "branch": "main",
+      "event": "push",
+      "scenario": "gb-hypothetical",
+      "display": "RUN NOW (scenario)",
+      "seconds": 21.04
+    },
+    {
+      "run_id": 37734618114,
+      "branch": "main",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 18.28
+    },
+    {
+      "run_id": 37735372444,
+      "branch": "feature/eligible-change",
+      "event": "push",
+      "scenario": "gb-hypothetical",
+      "display": "DEFER RECOMMENDED (scenario)",
+      "seconds": 21.43
+    },
+    {
+      "run_id": 37735372444,
+      "branch": "feature/eligible-change",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 17.86
+    },
+    {
+      "run_id": 37735379674,
+      "branch": "feature/urgent-fix",
+      "event": "push",
+      "scenario": "gb-hypothetical",
+      "display": "RUN NOW (scenario)",
+      "seconds": 13.89
+    },
+    {
+      "run_id": 37735379674,
+      "branch": "feature/urgent-fix",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 17.07
+    },
+    {
+      "run_id": 37735385443,
+      "branch": "demo/missing-region",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 18.24
+    },
+    {
+      "run_id": 37735385443,
+      "branch": "demo/missing-region",
+      "event": "push",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 18.1
+    },
+    {
+      "run_id": 37735522670,
+      "branch": "feature/eligible-change",
+      "event": "pull_request",
+      "scenario": "gb-hypothetical",
+      "display": "RUN NOW (scenario)",
+      "seconds": 19.23
+    },
+    {
+      "run_id": 37735522670,
+      "branch": "feature/eligible-change",
+      "event": "pull_request",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 18.12
+    },
+    {
+      "run_id": 37735522706,
+      "branch": "feature/eligible-change",
+      "event": "pull_request_target",
+      "scenario": null,
+      "display": "RUN NOW",
+      "seconds": 17.99
+    }
+  ]
+}

@@ -1,9 +1,10 @@
 # Chapter 5 — Evaluation
 
 > **Drafting notes (delete before submission).** Every number here comes from a project result file;
-> the sources are listed at the end of the chapter. Text marked **[PENDING P4]** depends on the
-> prototype and must be filled in only from real prototype runs. Sections 5.7 (User Evaluation) and
-> 5.8 (Usability Evaluation) are left out on purpose, because no user study was carried out.
+> the sources are listed at the end of the chapter. Prototype results (Section 5.4.7, Tables 5.8 and
+> 5.9) come from `results/p4/` and are demonstration evidence, not research evidence. Sections 5.7
+> (User Evaluation) and 5.8 (Usability Evaluation) are left out on purpose, because no user study was
+> carried out. Chapter 6 (Discussion) is in `chapter6_discussion.md`.
 
 ---
 
@@ -27,16 +28,17 @@ thresholds for a "meaningful" improvement were all fixed before the test project
 | Policy tested | The frozen policy: a build that is allowed to wait is delayed only if it is expected to take at least **8 minutes (480 s)**, to the cleanest hour within the next **24 hours** |
 | Carbon data | Great Britain's grid, 2024–2025, averaged for each of the 168 hours of the week (92.24 to 172.91 gCO₂/kWh) |
 | Energy model | Energy = 42.5 W × build duration; carbon = energy × grid intensity at the hour the build runs. All carbon figures are **estimates** |
-| Settings tested | 102 combinations of delay window (6, 12 or 24 hours), duration threshold and skip threshold, giving 14,146,686 replayed decisions |
+| Settings tested | 102 strategy settings: delay windows of 6, 12 or 24 hours (167 hours for blanket delay) combined with ten duration thresholds, plus seven skip thresholds and the immediate baseline. In total, 14,146,686 replayed decisions |
 | Uncertainty | 95% confidence intervals from a paired bootstrap with 1,000 resamples |
-| What counts as meaningful (fixed in advance) | A group of commit characteristics must raise PR-AUC by at least 0.01. At the decision level, it must give at least 5% faster failure feedback, or save at least 1% more carbon, at three or more comparable points. Every check is repeated at half and at double these thresholds |
+| What counts as meaningful (fixed in advance) | A group of commit characteristics must raise PR-AUC by at least 0.01. At the decision level, it must give at least 5% faster failure feedback, or a 1% relative increase in carbon saved, at three or more comparable points. Every check is repeated at half and at double these thresholds |
 
 **A correction made during the evaluation.** After the first test run, a review found a flaw in the
 duration estimate. It counted earlier builds that had started but **not yet finished**, which a real
 CI system could not know. The rules for the fix were written down before any new result existed. The
 whole analysis was then re-run, which meant opening the test data a second time. The fix touched
-27.41% of test builds but changed the typical (median) duration estimate by 0.00%, and **none of the
-research answers changed.** All results below are the corrected ones.
+27.41% of test builds (38,019 of 138,693), but the median change in an affected build's duration
+estimate was 0.00% (95th percentile 0.84%), and **none of the research answers changed.** All
+results below are the corrected ones.
 
 ---
 
@@ -71,8 +73,8 @@ The evaluation looks at six things:
 | Scheduling effectiveness | Saves carbon without unacceptable delay | Estimated carbon per 1,000 builds; share of builds delayed; average added delay; **failure feedback time**, the time until a failing build reports its result (typical value and 95th percentile) |
 | Robustness | Conclusions survive the planned changes in assumptions | Whether each conclusion stays the same or changes |
 | Functionality and correctness | Safe, leak-free, repeatable | Builds that must run now but were delayed (target zero); automated tests; identical results on re-runs |
-| Performance | Runs on one laptop; prototype answers within a CI step | Runtime of each stage; prototype response time **[PENDING P4]** |
-| Prototype | Gives a correct, explained recommendation and fails safely | Matches the research decision function; safe fallback cases; demo-repository runs **[PENDING P4]** |
+| Performance | Runs on one laptop; prototype answers early in a CI job | Runtime of each stage; time from the Action's first step to the recorded decision |
+| Prototype | Gives a correct, explained recommendation and fails safely | Agreement between the command-line tool, the REST API and the research decision function; fail-safe cases; real CI runs on a demonstration repository; What-If reports |
 
 ---
 
@@ -86,13 +88,13 @@ The system was checked against its own rules before any result was trusted.
 
 | Check | Result |
 | :-- | :-- |
-| Automated tests | 645 passed |
-| Builds that must run now but were delayed, checked by an independent checker | **0** out of 1,015,974 delays (14,146,686 decisions) |
-| Builds that must run now but were skipped | **0** out of 39,453 skips |
+| Automated tests | 645 passed at the end of the evaluation; 807 after the prototype was added |
+| Builds that must run now but were delayed, checked by an independent checker | **0** out of 1,015,974 delays (14,146,686 decisions, across all settings) |
+| Builds that must run now but were skipped | **0** out of 39,453 skips (across all skip settings) |
 | Eligibility rules compared with a separately written checker | No disagreement across 55,228 different combinations of pull-request flag and branch |
 | Every strategy saw exactly the same builds | Yes |
 | Policy rebuilt from scratch | Identical file, byte for byte |
-| Use of a build's real duration or outcome in its own decision | Refused by design; scrambling durations and outcomes changed no decision |
+| Use of a build's real duration or outcome in its own decision | Refused by design: the decision function rejects any build that carries its duration or outcome. A unit test that scrambles durations and flips outcomes changes no decision |
 
 These checks prove the system obeys its rules consistently. They cannot prove the eligibility rules
 are *right*: the data has no record of which builds were truly urgent.
@@ -146,16 +148,17 @@ duration estimate. The question was whether it predicted failures better.
 ### 5.4.4 Do commit characteristics improve scheduling decisions?
 
 This is the main test. For each strategy, the carbon saved was plotted against the failure feedback
-time across all its settings. The resulting curves were then compared at matching points. A positive
-gap means the first strategy gives faster feedback for the same carbon saving.
+time across all its settings. The resulting curves were then compared at matching points. The gap is
+the area between two curves, measured in percentage points of carbon saved × hours of feedback time.
+A positive gap means the first strategy gives faster feedback for the same carbon saving.
 
 **Table 5.6 — Comparing the decision curves (test projects)**
 
-| Comparison | Gap between curves [95% CI] | Meaningful? |
+| Comparison | Gap between curves, pp × h [95% CI] | Meaningful? |
 | :-- | :-- | :-- |
 | Proposed policy vs duration-only (project history) | **0.0000** [0.0000, 0.0000] | **No, at every threshold** |
-| Duration-only: project history vs regressor | +2.43 [+1.73, +2.56] | Yes |
-| Perfect knowledge of duration (theoretical) vs project history | +1.93 [+1.77, +2.35] | Yes |
+| Duration-only: project history vs regressor | +2.43 [+1.73, +2.56] | Yes, at every threshold |
+| Perfect knowledge of duration (theoretical) vs project history | +1.93 [+1.77, +2.35] | Yes (a bound, not a usable strategy) |
 | Last-50-builds estimate vs project history (extra check) | +0.36 [+0.24, +0.78] | Yes, at the normal and half thresholds |
 
 Because no group of characteristics was admitted, the proposed policy **is** the duration-only
@@ -163,14 +166,23 @@ policy, so their curves are identical. This is an honest "no" built into a pipel
 advance. It is not a separate head-to-head contest. The table also shows where real gains lie: **a
 better duration estimate improves decisions; commit characteristics did not.**
 
-**Figure 5.1 — Carbon saved vs failure feedback time for each strategy** *(insert
-`results/p3/figures/frontiers.png`)*
+Figure 5.1 draws each curve through the best settings of each strategy. The frozen policy (480 s,
+24 h) sits slightly above its own curve. On the test projects, another setting of the same strategy
+(no duration threshold, 12-hour window) reached the same saving (2.481% against 2.480%) with faster
+failure feedback (11.60 h against 13.91 h at the 95th percentile). It did so by delaying 18.10% of
+builds rather than 7.92%. The frozen point was chosen on calibration data before the test projects
+were opened. Re-choosing it now would be after-the-fact tuning, so the frozen policy is reported as
+it stands.
+
+**Figure 5.1 — Carbon saved vs failure feedback time for the duration-only strategies (test projects)**
+
+![Figure 5.1](figures/fig5_1_tradeoff_curves_test.png)
 
 ### 5.4.5 How well does the policy schedule builds?
 
 **Table 5.7 — The strategies at their chosen settings (test projects)**
 
-| Strategy | Builds delayed | Est. carbon change vs running immediately | Avg. added delay | Failure feedback, 95th percentile |
+| Strategy | Builds delayed | Est. carbon change vs running immediately | Avg. added delay (all builds) | Failure feedback, 95th percentile |
 | :-- | --: | --: | --: | --: |
 | Run immediately (today's CI) | 0% | — (2,849.6 g per 1,000 builds) | 0 h | 1.67 h |
 | Delay everything that may wait, up to a week | 19.44% | −4.681% | 17.48 h | 127.01 h |
@@ -186,11 +198,13 @@ What this means:
   13.91 h).
 - **Against "delay everything up to 24 h"**, the policy uses 9.6 g more carbon per 1,000 builds. In
   return it reports failures 5.91 h sooner at the 95th percentile.
-- **No strategy wins on both carbon and speed.** Each step towards more carbon saving costs developer
-  feedback time.
+- **Among running immediately, the proposed policy and the two blanket strategies, none wins on both
+  carbon and speed.** Each step towards more carbon saving costs developer feedback time. Against the
+  regressor-based duration strategy, the policy uses 2.0 g less carbon per 1,000 builds (95% CI
+  1.5–2.4), with no significant difference in failure feedback (−0.16 h [−0.61, +0.18]).
 - **Why the saving is modest.** Of the 138,693 test builds:
   - 111,666 must run immediately;
-  - 15,675 are too short to be worth delaying;
+  - 15,675 are expected to be too short to be worth delaying;
   - 369 have no cleaner hour available;
   - only 10,983 are actually delayed.
 
@@ -202,12 +216,15 @@ What this means:
 ### 5.4.6 Do the conclusions hold under different assumptions?
 
 The main conclusion, that commit characteristics do not beat the duration-only policy, held in
-**every** sensitivity test. Three smaller results changed, and none alters a research answer:
+**every** sensitivity test in which it could be evaluated. (It is not defined for the tests that fix
+a single window, and the second-grid test could not be run.) Three smaller results changed, and none
+alters a research answer:
 
 - In the later half of the test period, change size no longer clears the threshold. This
   **strengthens** the conclusion that it is unresolved.
-- In the same period, project history still beats the regressor, but no longer by enough at enough
-  points to pass the strict counting rule.
+- In the same period, project history still beats the regressor overall (area +3.56 [+1.75, +4.34]
+  pp × h), but the strict counting rule fails. Its strongest comparison points could not be computed
+  in more than the allowed 5% of bootstrap resamples, so too few points qualified.
 - With a 12-hour window, the policy reports failures **significantly faster** than the regressor
   version, a result in the policy's favour.
 
@@ -219,19 +236,73 @@ Results also held under:
 A second electricity grid could not be tested, because the only free alternative (California) varied
 less than Britain's. Whether the results hold on other grids is therefore still open.
 
-**Figure 5.2 — Robustness across the sensitivity tests** *(insert
-`results/p3/figures/sensitivity_v3_area.png`)*
+Figure 5.2 shows the one comparison with a measurable difference, project history against the
+regressor, under each sensitivity test. Its direction holds in every test, while its size varies.
 
-### 5.4.7 Prototype testing — [PENDING P4]
+**Figure 5.2 — Advantage of the project-history estimate over the regressor in each sensitivity test**
 
-**[PENDING P4 — fill in from real runs only.]** Planned evidence:
-- the research decision function, the command-line tool and the REST API give identical answers;
-- every failure case falls back to RUN NOW;
-- demo-repository runs show RUN NOW (protected branch), DEFER RECOMMENDED (eligible long build) and a
-  safe fallback;
-- What-If reports for the demo and selected public repositories, labelled as demonstrations, not
-  research evidence;
-- screenshots (Figures 4.21–4.23).
+![Figure 5.2](figures/fig5_2_sensitivity_project_history_vs_regressor.png)
+
+### 5.4.7 Prototype testing
+
+The prototype was tested as a demonstration of the decision model in real CI, not as research
+evidence. Its thresholds were fitted on Travis CI data from 2011–2016, and its carbon figures use the
+same Great Britain profile and energy model as the replay.
+
+**Correctness.**
+- **Parity.** The full suite of 807 automated tests passed. Its parity tests run the same cases
+  through the in-process advisor, the command-line tool and the REST API, and require identical
+  decisions. A further test requires those decisions to equal the research decision function's own.
+- **Duration estimate.** The advisor's duration estimate is checked against the frozen research
+  estimator on a Travis CI fixture.
+- **Fail-safe cases.** Fourteen fail-safe cases are implemented and tested. Each one returns RUN NOW
+  and names its reason; examples are an invalid request, an untrusted CI event, a region other than
+  GB, a missing or altered policy file, unavailable run history, and an internal error.
+
+**Real CI runs.** The GitHub Action was pinned by commit in a public demonstration repository, and
+seven real workflow runs were captured (Table 5.8). Six of them had two jobs; the seventh, a test of
+an untrusted event, had one:
+- a **real job**, declared `GITHUB-HOSTED` because a hosted runner's region cannot be chosen or
+  verified;
+- a **GB scenario job**, clearly labelled, showing what the advisor would recommend on Great Britain
+  compute.
+
+The build itself was a synthetic workload of about nine minutes. Across the 13 recorded decisions,
+the independent checker found **0** violations; one decision was a deferral. Every advisory step
+completed successfully, so the advisor never blocked the pipeline.
+
+**Table 5.8 — Demonstration runs of the GitHub Action**
+
+| Run | Event and branch | GB scenario job | Real job |
+| :-- | :-- | :-- | :-- |
+| 1 | push, `feature/first-run` | RUN NOW: cold-start veto (no completed history; the policy alone would defer) | RUN NOW, fail-safe: region not GB |
+| 2 | push, `main` | RUN NOW: protected branch | RUN NOW, fail-safe: region not GB |
+| 3 | push, `feature/eligible-change` | **DEFER RECOMMENDED**: expected duration 549 s from project history; delay to Fri 02:00 UTC | RUN NOW, fail-safe: region not GB |
+| 4 | push, `feature/urgent-fix` | RUN NOW: `[urgent]` marker in the commit message | RUN NOW, fail-safe: region not GB |
+| 5 | push, `demo/missing-region` | RUN NOW, fail-safe: invalid request (region not declared) | RUN NOW, fail-safe: region not GB |
+| 6 | pull request, `feature/eligible-change` | RUN NOW: pull request | RUN NOW, fail-safe: region not GB |
+| 7 | `pull_request_target` (single job) | RUN NOW, fail-safe: untrusted event | — |
+
+**What-If reports.** Four public repositories were selected by a rule fixed before any report was
+produced: the first qualifying repository by stars for each language the estimator knows (Go, Java,
+Python and Ruby). Up to the last 500 completed runs of one workflow in each were replayed through the
+same advisor, with the GB profile applied as a scenario (Table 5.9). All five reports, including the
+demonstration repository's, regenerated byte for byte from their saved snapshots.
+
+**Table 5.9 — What-If reports (demonstration only)**
+
+| Repository and workflow | Runs analysed | Allowed to wait | Delayed | Est. carbon change | Why runs were not delayed |
+| :-- | --: | --: | --: | --: | :-- |
+| senith02/carbon-advisor-demo · `ci.yml` | 6 | 4 (66.67%) | 2 (33.33%) | −9.147% | 1 protected branch, 1 pull request, 2 vetoed (cold start, urgency marker) |
+| avelino/awesome-go · `pr-quality-check.yaml` | 500 | 0 | 0 | 0.0% | 500 untrusted event (`pull_request_target`) |
+| spring-projects/spring-boot · `run-codeql-analysis.yml` | 479 | 24 (5.01%) | 0 | 0.0% | 259 protected branch, 196 pull request, 24 below the duration threshold |
+| public-apis/public-apis · `test_of_push_and_pull.yml` | 315 | 0 | 0 | 0.0% | 152 protected branch, 163 pull request |
+| rails/rails · `rails-new-docker.yml` | 499 | 64 (12.83%) | 0 | 0.0% | 77 protected branch, 358 pull request, 64 below the duration threshold |
+
+In the public repositories nothing was delayed. Most runs were pull requests or pushes to protected
+branches, and the runs that were allowed to wait all had an *estimated* duration below 480 s. This
+mirrors the replay result: the eligibility rules and the duration threshold, not the choice of hour,
+decide whether anything is delayed. Screenshots of the advisor's output appear in Figures 4.21–4.23.
 
 ---
 
@@ -239,7 +310,7 @@ less than Britain's. Whether the results hold on other grids is therefore still 
 
 Everything runs on a single laptop CPU, with free software and public data.
 
-**Table 5.8 — Runtime of the main stages**
+**Table 5.10 — Runtime of the main stages**
 
 | Stage | Time |
 | :-- | --: |
@@ -248,7 +319,11 @@ Everything runs on a single laptop CPU, with free software and public data.
 | Evaluate all models on the test data | about 54 min (3,224.5 s) |
 | Replay 14,146,686 scheduling decisions | about 46 min (2,767 s) |
 | Compare the decision curves | about 17 min (995 s) |
-| Prototype: time to return a recommendation | **[PENDING P4]** |
+| Prototype: Action's first step to the recorded decision (13 decisions in real CI runs) | 13.89–21.43 s (median 18.24 s) |
+
+The prototype time is an upper bound on the advisor's response. It includes setting up Python,
+installing dependencies, loading the frozen files and fetching the run history, not only the
+decision itself.
 
 ---
 
@@ -257,7 +332,8 @@ Everything runs on a single laptop CPU, with free software and public data.
 In this study the failure model is a **candidate signal** being tested, not the product. The key
 result is therefore the comparison with and without commit characteristics.
 
-**Table 5.9 — Failure prediction on the test projects (25.04% of builds failed)**
+**Table 5.11 — Failure prediction on the test projects (25.04% of builds failed); precision, recall
+and F1 at the threshold fixed on the calibration projects**
 
 | Model | PR-AUC | ROC-AUC | Precision | Recall | F1 |
 | :-- | --: | --: | --: | --: | --: |
@@ -268,25 +344,27 @@ result is therefore the comparison with and without commit characteristics.
 | Random forest, duration only | 0.294 | 0.577 | — | — | — |
 | Random forest, all 28 | 0.283 | 0.565 | — | — | — |
 
-- **Failures are hard to predict from commit information alone.** PR-AUC is about 0.27–0.30, against
+- **Failures are hard to predict from commit-time information.** PR-AUC is about 0.27–0.30, against
   0.25 for a random guess.
-- **Adding commit characteristics made every model worse**, not better.
-- **Scores dropped from the calibration projects to the test projects** (for XGBoost, from 0.391 to
-  0.294), showing that projects differ a lot from each other.
-- **Calibration.** The probabilities were reasonably calibrated: the calibration error was between
-  0.028 and 0.059 across these models.
+- **Adding all 28 commit characteristics made every model worse**, not better.
+- **Scores dropped from the calibration projects to the test projects** (for the duration-only
+  XGBoost model, from 0.391 to 0.294), showing that projects differ a lot from each other. Part of
+  the drop reflects the lower failure rate of the test projects.
+- **Calibration.** Out-of-sample calibration error was 0.028–0.059 across these models. However, the
+  decision thresholds chosen on the calibration projects were off-centre on the test projects: 49–94%
+  of builds were predicted to fail, against a true rate of 25%.
 
 ---
 
 ## 5.9 Comparison with Existing Solutions
 
 > **Before submission:** the entries for other studies follow how Chapter 2 describes them. Check each
-> against the original paper. Also make the Saavedra year consistent: Chapter 2 says 2024, while
-> Chapter 4's reference list gives a 2025 preprint.
+> against the original paper. Saavedra et al. is a 2025 preprint (arXiv 2510.26413); make Chapter 2,
+> which says 2024, agree.
 
-**Table 5.10 — Comparison with related work** (✓ yes · ✗ no · ◐ partly)
+**Table 5.12 — Comparison with related work** (✓ yes · ✗ no · ◐ partly)
 
-| No | Feature | Claßen et al. (2023) | Saavedra et al. | Mhalla & Saied (2024) | Rangari et al. (2025) | This system |
+| No | Feature | Claßen et al. (2023) | Saavedra et al. (2025) | Mhalla & Saied (2024) | Rangari et al. (2025) | This system |
 | :-: | :-- | :-: | :-: | :-: | :-: | :-: |
 | 1 | Moves CI work to cleaner grid hours | ✓ | ◐ (scheduled workflows only) | ✗ | ✗ | ✓ |
 | 2 | Decides automatically which builds may wait | ✗ (manual deadlines) | ✗ | ✗ | ✗ | ✓ |
@@ -294,7 +372,7 @@ result is therefore the comparison with and without commit characteristics.
 | 4 | Tests their value beyond a duration estimate | ✗ | ✗ | ✗ | ✗ | ✓ |
 | 5 | Measures the delay cost to developers | ◐ | ✗ | ✗ | ✗ | ✓ |
 | 6 | Tested on unseen projects with rules fixed in advance | ✗ | ✗ | ◐ | ◐ | ✓ |
-| 7 | Developer tool running the evaluated logic | ✓ | ✗ | ✗ | ✗ | **[PENDING P4]** |
+| 7 | Developer tool running the evaluated logic | ✓ | ✗ | ✗ | ✗ | ✓ (GitHub Action, advisory; demonstrated, not deployed) |
 
 This work does not offer a better scheduler. What is new is that it **tests whether** commit
 characteristics help choose *which* builds to delay, against a strong duration baseline, before
@@ -304,14 +382,14 @@ building them into a tool.
 
 ## 5.10 Results Related to Research Objectives
 
-**Table 5.11 — Research objectives and how they were met**
+**Table 5.13 — Research objectives and how they were met**
 
 | Objective | Evidence | Result |
 | :-- | :-- | :-- |
-| **1.** Identify and analyse commit-level characteristics that may influence selective carbon-aware scheduling | 28 characteristics in six groups, tested one group at a time with confidence intervals on two separate sets of projects, plus SHAP (Tables 5.5, 5.9) | **Achieved.** No group added meaningful value beyond the duration estimate; change size remains unresolved |
+| **1.** Identify and analyse commit-level characteristics that may influence selective carbon-aware scheduling | 28 characteristics in six groups, tested one group at a time with confidence intervals on two separate sets of projects, plus SHAP (Tables 5.5, 5.11) | **Achieved.** No group added meaningful value beyond the duration estimate; change size remains unresolved |
 | **2.** Develop a decision model that measures their contribution beyond expected build duration | Two-step model (urgency rules, then evidence-based policy) with an admission rule fixed in advance; decision-curve comparison (Table 5.6) | **Achieved.** Commit characteristics added no decision value; the policy equals the duration-only one |
-| **3.** Derive and refine an evidence-based policy using analysis, feature importance and ablation | Policy fitted automatically from calibration data only (8 min / 24 h), rebuilt identically, unchanged after the correction, tested for robustness | **Achieved.** A simple, reproducible duration-only policy |
-| **4.** Build and test a prototype that applies the model in a carbon-aware CI/CD workflow, using historical replay | Replay of all strategies on 138,693 unseen builds (Table 5.7); prototype tests **[PENDING P4]** | **Replay achieved:** 2.480% estimated carbon saving with failures reported within 13.91 h (95th percentile). **Prototype: [PENDING P4]** |
+| **3.** Derive and refine an evidence-based policy using analysis, feature importance and ablation | Thresholds fitted automatically on calibration data (8 min / 24 h), using models trained on the training projects; rebuilt identically, unchanged after the correction, tested for robustness | **Achieved.** A simple, reproducible duration-only policy |
+| **4.** Build and test a prototype that applies the model in a carbon-aware CI/CD workflow, using historical replay | Replay of all strategies on 138,693 unseen builds (Table 5.7); GitHub Action, REST API and What-If report sharing the same decision function, with 807 passing tests, seven real CI runs and five What-If reports (Tables 5.8, 5.9) | **Achieved.** Replay: 2.480% estimated carbon saving, with 95% of failing builds reporting within 13.91 h. Prototype: correct, explained and fail-safe in every demonstrated case; demonstrated, not deployed |
 
 ---
 
@@ -327,20 +405,54 @@ estimates**, not more commit characteristics.
 
 These are estimates from replaying Travis CI builds from 2011–2016 against a recent British grid
 profile. They are not measurements of real emissions, and they may not carry over directly to modern
-GitHub Actions. **[PENDING P4: one sentence on the prototype results.]**
+GitHub Actions. The prototype showed that the same decision function runs inside real GitHub Actions
+workflows, explains every recommendation and falls back safely. In real public repositories, however,
+almost no runs qualified for a delay.
 
 ---
 
 > **Sources for this chapter (for the claims audit; move to an appendix or delete).**
-> Table 5.1 and the correction: `results/p3/evaluation_report.md` §1, §4;
-> `results/corrections/dl034/history_overlap.md`, `comparison.md`; `results/p2/energy_model.md`.
-> Table 5.3: `results/corrections/dl034/pytest_cr1.txt`; `results/p3/strategy_results.md` §2;
-> `results/p2/policy_fit/verify.json`.
-> Table 5.4: `results/p3/model_report.md` §3. Tables 5.5 and 5.9: `results/p3/model_report.md` §2, §4;
-> `results/p3/replication_table.md`. Table 5.6: `results/p3/incremental_value_decision.md` §3, §5;
-> `results/p3/sensitivity.md` (S-h). Table 5.7 and the comparisons:
-> `results/p3/strategy_results.md` §3–§5. Section 5.4.6: `results/p3/sensitivity.md`;
-> `evaluation_report.md` §3. Table 5.8: `results/p1/model_training_run.log`,
-> `results/p1/ablation_run.log`, `results/p3/model_report.json`, `strategy_results.md`,
-> `incremental_value_decision.md`. Table 5.11: `evaluation_report.md` §2, §10;
-> `results/p2/policy_derivation.md`.
+> - **Table 5.1 and the correction:**
+>   - `results/p3/evaluation_report.md` §1, §4;
+>   - `results/corrections/dl034/history_overlap.md`, `comparison.md`;
+>   - `results/p3/strategy_replay_run.log`;
+>   - `results/p2/energy_model.md`.
+> - **Table 5.3:**
+>   - `results/corrections/dl034/pytest_cr1.txt`;
+>   - `results/p4/pytest_p4_t3.txt`;
+>   - `results/p3/strategy_results.md` §2;
+>   - `results/p2/policy_fit/verify.json`;
+>   - `results/p2/pytest_p2_t3.txt`.
+> - **Table 5.4:** `results/p3/model_report.md` §3.
+> - **Tables 5.5 and 5.11:**
+>   - `results/p3/model_report.md` §2, §4, §10;
+>   - `results/p3/replication_table.md`;
+>   - `results/p1/model_training.md` (calibration PR-AUC).
+> - **Table 5.6:**
+>   - `results/p3/incremental_value_decision.md` §3, §5;
+>   - `results/p3/sensitivity.md` (S-h).
+> - **Figure 5.1 and the d0/w12 comparison:**
+>   - `results/p3/incremental_value_decision.json`;
+>   - `results/p3/strategy_results.csv`.
+> - **Table 5.7 and the comparisons:** `results/p3/strategy_results.md` §3–§5;
+>   `evaluation_report.md` §3.
+> - **Section 5.4.6 and Figure 5.2:** `results/p3/sensitivity.md` and `sensitivity/*.json`.
+> - **Section 5.4.7 and Tables 5.8–5.9:**
+>   - `results/p4/README.md`;
+>   - `results/p4/demo_runs/decisions.md`, `validator_result.json`;
+>   - `context/p4_interface.md` §6.1 (fail-safe codes);
+>   - `results/p4/whatif_selection.md`;
+>   - `results/p4/whatif/*/report.md`, `determinism.json`;
+>   - DL-036, DL-037.
+> - **Table 5.10:**
+>   - `results/p1/model_training_run.log`;
+>   - `results/p1/ablation_run.log`;
+>   - `results/p3/model_report.json`;
+>   - `strategy_results.md`;
+>   - `incremental_value_decision.md`;
+>   - `results/p4/demo_runs/step_latency.md` (command `python scripts/advisor_step_latency.py`).
+> - **Table 5.13:**
+>   - `evaluation_report.md` §2, §10;
+>   - `results/p2/policy_derivation.md`;
+>   - `results/p4/`.
+> - **Figures:** `dissertation/figures/` (charts from `code/scripts/make_dissertation_figures.py`).

@@ -1,0 +1,11 @@
+flowchart TD
+    A(["Pull-request flag, branch name"]) --> B{"Pull-request flag<br/>readable?"}
+    B -- "no" --> N0(["Must run now: fail closed"])
+    B -- "yes" --> C{"Pull-request build?"}
+    C -- "yes" --> N1(["Must run now: pull request"])
+    C -- "no" --> B2{"Branch name<br/>present?"}
+    B2 -- "no" --> N0
+    B2 -- "yes" --> D{"Whole name matches<br/>a protected pattern?"}
+    D -- "yes" --> N2(["Must run now: first matching pattern named"])
+    D -- "no" --> Y(["May wait: push to an unprotected branch"])
+    P[["Protected patterns: main or master, production,<br/>release, stable, maintenance, hotfix,<br/>version tag or series, pre-release.<br/>Stricter variant adds develop, dev, devel, development"]] -.- D

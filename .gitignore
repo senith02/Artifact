@@ -64,3 +64,9 @@ Research_Artifact/results/p3/decisions.csv.gz
 # ── What-If history snapshots (per-run data; kept local, DL-037 §6) ─
 # Each report pins its snapshot by sha256; only aggregates are published.
 Research_Artifact/code/artifacts/whatif_snapshots/
+
+# ── Dissertation Word exports (build output) ────────────────────────
+# Regenerated from the chapter Markdown + figures by dissertation/build_word.py.
+Research_Artifact/dissertation/word/
+# Office lock files (left behind while a document is open)
+~$*

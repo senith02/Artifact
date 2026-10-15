@@ -1,0 +1,13 @@
+flowchart TD
+    A(["Each of the six families"]) --> B["Paired bootstrap of the PR-AUC gain<br/>over the duration-only model, 1,000 resamples"]
+    B --> C{"Model level: 95% interval<br/>entirely above 0 and<br/>gain ≥ 0.01?"}
+    C -- "no" --> R(["Reject the family"])
+    C -- "yes" --> D{"Decision level: beats BOTH<br/>duration-only policies?"}
+    D -- "no" --> R
+    D -- "yes" --> AD(["Admit the family"])
+    R --> S{"Any family admitted?"}
+    AD --> S
+    S -- "no" --> F(["Policy = duration-only fallback"])
+    S -- "yes" --> SE(["Policy = SE-informed, risk-adjusted window"])
+    N[["Decision-level test, at ≥ 3 of 10 matched points on one axis:<br/>≥ 5% lower failure-feedback time (95th pct.) at equal carbon saving,<br/>or a ≥ 1% larger carbon saving (relative) at equal feedback time;<br/>95% interval above 0; undefined in ≤ 5% of resamples"]] -.- D
+    T[["Both floors repeated at × 0.5 and × 2"]] -.- C

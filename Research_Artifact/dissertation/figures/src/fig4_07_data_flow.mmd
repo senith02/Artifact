@@ -1,0 +1,13 @@
+flowchart TB
+    A[("Historical CI data<br/>3.88M job rows")] --> P1["1 Combine and clean"]
+    P1 -- "922,624 builds" --> P2["2 Extract characteristics"]
+    P2 --> P3["3 Split by project and lock"]
+    P3 -- "training 628 projects,<br/>calibration 150 projects" --> P4["4 Fit duration estimate<br/>(training only)"]
+    P3 -. "test 170 projects,<br/>kept closed" .-> T[("Test set")]
+    P4 --> P5["5 Train models (training),<br/>calibrate (calibration)"]
+    P5 --> P6["6 Measure added value<br/>(calibration)"]
+    P6 --> P7["7 Admission rule"]
+    P7 --> P8["8 Replay and fit policy<br/>(12,000 calibration builds)"]
+    P8 --> S[["Frozen policy file"]]
+    S --> P9["9 Final evaluation<br/>(test, frozen policy)"]
+    T --> P9

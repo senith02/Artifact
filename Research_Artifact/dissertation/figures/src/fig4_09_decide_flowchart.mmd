@@ -1,0 +1,16 @@
+flowchart TD
+    S(["Start: build inputs, 168-hour carbon profile, policy file"]) --> L{"Build carries its own<br/>duration or outcome?"}
+    L -- "yes" --> X(["Refuse: leakage error"])
+    L -- "no" --> G["Step 1: eligibility rules"]
+    G --> E{"May wait?"}
+    E -- "no" --> R1(["Run now: reason names the rule.<br/>Step 2 not consulted"])
+    E -- "yes" --> DT{"Expected duration<br/>≥ threshold?"}
+    DT -- "no" --> R2(["Run now: too short to be worth waiting"])
+    DT -- "yes" --> PP{"Policy path"}
+    PP -- "duration-only (frozen policy)" --> W1["window = maximum delay"]
+    PP -- "risk-adjusted (not used)" --> W2["window = maximum delay × (1 − failure risk)"]
+    W1 --> LS["Scan each whole hour from now to now + window;<br/>keep the first hour with the lowest intensity"]
+    W2 --> LS
+    LS --> Z{"Is that hour<br/>later than now?"}
+    Z -- "no: nothing strictly cleaner" --> R3(["Run now: already the cleanest hour"])
+    Z -- "yes" --> DF(["Delay: offset in hours, target hour, reason"])

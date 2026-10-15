@@ -1,0 +1,10 @@
+flowchart TD
+    A(["Build of project p, starting at time t"]) --> H["History = earlier builds of p with a recorded duration<br/>whose start + duration is earlier than t"]
+    H --> Q{"At least one<br/>such build?"}
+    Q -- "yes" --> M["Median of log(1 + duration) over that history"]
+    Q -- "no" --> LQ{"Was p's language seen<br/>in the training projects?"}
+    LQ -- "yes" --> ML["Median for that language<br/>(training projects only)"]
+    LQ -- "no" --> MG["Median over all training builds"]
+    M --> O(["Expected duration in seconds,<br/>with the level used and the history size"])
+    ML --> O
+    MG --> O
