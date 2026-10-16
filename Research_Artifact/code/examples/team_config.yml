@@ -1,0 +1,7 @@
+# Example team config for trying the advisor locally (same schema as .github/carbon-advisor.yml).
+compute_region: GB              # declared, never detected; only GB is evaluated
+enabled_workflows: [ci.yml]     # other workflows get RUN NOW
+urgent_markers: ["[urgent]"]    # this text in the commit message vetoes a deferral
+veto_events: [workflow_dispatch, schedule]
+max_delay_hours: 24
+cold_start_run_now: true        # no completed history -> RUN NOW

@@ -9,6 +9,9 @@ logic of its own (DL-033 revision 3).
 > **Recommendation only.** The Action never pauses, cancels or fails a build. Its advisory step always
 > exits 0, and any missing input or failed dependency falls back to **RUN NOW**.
 
+**New here?** The [User Guide](../../USER_GUIDE.md) walks through trying the advisor locally, making
+commits that show RUN NOW and DEFER RECOMMENDED, and generating and viewing a What-If report.
+
 ## What it decides, and from what
 
 1. **Stage 1, the urgency gate.** Pull requests and protected branches (`main`, `master`, release

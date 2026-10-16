@@ -4,6 +4,7 @@ Not part of the research stack: needs `pip install pypandoc_binary python-docx p
 environment. Reads the chapter Markdown files and dissertation/figures/ (never modifies them) and
 writes dissertation/word/:
   - chapter4_proposed_solution.docx, chapter5_evaluation.docx, chapter6_discussion.docx
+    (chapter 6 is followed by the appendices from appendices.md, each on a new page)
   - figures_gallery.docx  (every figure with its caption, sized to fit an A4 text block)
 
 Run from dissertation/:  python build_word.py
@@ -28,10 +29,13 @@ CHAPTERS = {
     "chapter5_evaluation.md": "chapter5_evaluation.docx",
     "chapter6_discussion.md": "chapter6_discussion.docx",
 }
+# Extra Markdown files appended to a chapter's Word copy (the appendices follow Chapter 6; in the
+# thesis they go after the References).
+APPENDED = {"chapter6_discussion.md": ["appendices.md"]}
 MAX_W_CM, MAX_H_CM = 16.0, 20.0  # A4 with 2.5 cm margins, leaving room for the caption
 
 IMG = re.compile(r"!\[[^\]]*\]\((figures/[^)]+\.png)\)")
-CAPTION = re.compile(r"^\*\*(Figure \d+\.\d+ — .+?)\*\*(.*)$")
+CAPTION = re.compile(r"^\*\*(Figure [A-Z\d]+\.\d+ — .+?)\*\*(.*)$")
 
 
 def fit_cm(png: Path) -> tuple[float, float]:
@@ -41,7 +45,8 @@ def fit_cm(png: Path) -> tuple[float, float]:
 
 
 def chapter_docx(md_name: str, docx_name: str) -> None:
-    text = (HERE / md_name).read_text(encoding="utf-8")
+    sources = [md_name, *APPENDED.get(md_name, [])]
+    text = "\n\n".join((HERE / name).read_text(encoding="utf-8") for name in sources)
 
     def sized(m: re.Match) -> str:
         wcm, _ = fit_cm(HERE / m.group(1))
@@ -54,6 +59,13 @@ def chapter_docx(md_name: str, docx_name: str) -> None:
                               outputfile=str(OUT / docx_name), extra_args=[f"--resource-path={HERE}"])
     finally:
         Path(tmp.name).unlink()
+    if len(sources) > 1:
+        # Each appendix starts on a new page.
+        doc = Document(OUT / docx_name)
+        for p in doc.paragraphs:
+            if p.style.name == "Heading 1" and p.text.startswith("Appendi"):
+                p.paragraph_format.page_break_before = True
+        doc.save(OUT / docx_name)
 
 
 def gallery() -> int:
@@ -66,7 +78,7 @@ def gallery() -> int:
                       "Copy a figure and its caption into the thesis, or use Insert → Pictures on the "
                       "PNG or SVG file directly.")
     n = 0
-    for md_name in CHAPTERS:
+    for md_name in [name for md in CHAPTERS for name in (md, *APPENDED.get(md, []))]:
         lines = (HERE / md_name).read_text(encoding="utf-8").splitlines()
         pending = None
         for line in lines:

@@ -1,0 +1,168 @@
+{
+ "repository": "your-org/your-repo",
+ "workflow": "ci.yml",
+ "event": "push",
+ "ref_type": "branch",
+ "branch": "main",
+ "is_pr": false,
+ "arrival_utc": "2026-10-14T18:00:00Z",
+ "compute_region": "GB",
+ "head_commit_message": "Refactor the parser",
+ "repo_language": "Python",
+ "history": [
+  {
+   "run_id": 5000,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-11T18:00:00Z",
+   "run_started_at": "2026-10-11T18:00:00Z",
+   "updated_at": "2026-10-11T18:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5001,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-11T23:00:00Z",
+   "run_started_at": "2026-10-11T23:00:00Z",
+   "updated_at": "2026-10-11T23:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5002,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-12T04:00:00Z",
+   "run_started_at": "2026-10-12T04:00:00Z",
+   "updated_at": "2026-10-12T04:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5003,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-12T09:00:00Z",
+   "run_started_at": "2026-10-12T09:00:00Z",
+   "updated_at": "2026-10-12T09:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5004,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-12T14:00:00Z",
+   "run_started_at": "2026-10-12T14:00:00Z",
+   "updated_at": "2026-10-12T14:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5005,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-12T19:00:00Z",
+   "run_started_at": "2026-10-12T19:00:00Z",
+   "updated_at": "2026-10-12T19:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5006,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-13T00:00:00Z",
+   "run_started_at": "2026-10-13T00:00:00Z",
+   "updated_at": "2026-10-13T00:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5007,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-13T05:00:00Z",
+   "run_started_at": "2026-10-13T05:00:00Z",
+   "updated_at": "2026-10-13T05:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5008,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-13T10:00:00Z",
+   "run_started_at": "2026-10-13T10:00:00Z",
+   "updated_at": "2026-10-13T10:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5009,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-13T15:00:00Z",
+   "run_started_at": "2026-10-13T15:00:00Z",
+   "updated_at": "2026-10-13T15:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5010,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-13T20:00:00Z",
+   "run_started_at": "2026-10-13T20:00:00Z",
+   "updated_at": "2026-10-13T20:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5011,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-14T01:00:00Z",
+   "run_started_at": "2026-10-14T01:00:00Z",
+   "updated_at": "2026-10-14T01:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5012,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-14T06:00:00Z",
+   "run_started_at": "2026-10-14T06:00:00Z",
+   "updated_at": "2026-10-14T06:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  },
+  {
+   "run_id": 5013,
+   "workflow": "ci.yml",
+   "status": "completed",
+   "conclusion": "success",
+   "created_at": "2026-10-14T11:00:00Z",
+   "run_started_at": "2026-10-14T11:00:00Z",
+   "updated_at": "2026-10-14T11:10:00Z",
+   "duration_s": 600.0,
+   "duration_source": "wallclock"
+  }
+ ]
+}

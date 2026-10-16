@@ -3,7 +3,8 @@
 # Manual trigger only. It replays this repository's completed runs of one
 # workflow through the advisor and uploads the Markdown, JSON and static HTML
 # report as a workflow artifact. Demonstration only — never research evidence.
-# Not exercised in P4-T3, where the reports were generated locally.
+# Not exercised in P4-T3, where the reports were generated locally. First run in CI on
+# 2026-10-16 in senith02/carbon-advisor-demo (run 38890789432, all steps successful).
 name: carbon-whatif
 
 on:
@@ -45,6 +46,10 @@ jobs:
         run: >-
           python -m advisor whatif --repo "$WHATIF_REPO" --workflow "$WHATIF_WORKFLOW" --fetch
           --snapshot "$WHATIF_OUT/snapshot.json" --out "$WHATIF_OUT/report"
+      - name: Show the report in the run summary
+        env:
+          REPORT: ${{ runner.temp }}/whatif/report/report.md
+        run: cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: carbon-whatif-report

@@ -15,6 +15,9 @@ from the approved research design.
 
 ## Start here
 
+**Want to use or try the carbon-deferral advisor** (RUN NOW / DEFER RECOMMENDED in GitHub Actions,
+What-If reports)? Read the [User Guide](USER_GUIDE.md).
+
 If you are a Claude session, read [CLAUDE.md](CLAUDE.md) first — it is the boot-loader and tells you
 exactly which files to read and in what order.
 
