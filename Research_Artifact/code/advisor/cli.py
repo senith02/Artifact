@@ -8,6 +8,7 @@ that left no decision (e.g. an unreadable request file).
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import os
 import sys
@@ -17,7 +18,7 @@ from typing import Any, Sequence
 
 from . import carbon_live
 from .audit import AuditLog, advise_with_audit
-from .config import ConfigError, load_team_config
+from .config import ConfigError, TeamConfig, load_team_config
 from .core import Dependencies, _fail_safe
 from .github import GitHubClient, GitHubHistorySource
 from .render import render_markdown
@@ -36,6 +37,14 @@ def _post_to_api(url: str, payload: Any, token: str | None, timeout: float = 10.
                                      headers=headers, method="POST")
     with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310 - operator-configured URL
         return json.loads(response.read().decode("utf-8"))
+
+
+def _record_after(raw_request: Any, response: Any, *, config: TeamConfig, client: GitHubClient,
+                  now: Any, trusted_creator: str) -> dict[str, Any]:
+    from . import redispatch
+
+    return redispatch.record(raw_request, response, config=config, client=client, now=now(),
+                             trusted_creator=trusted_creator)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -66,7 +75,45 @@ def build_parser() -> argparse.ArgumentParser:
     wi.add_argument("--cap", type=int, default=500, help="completed runs to fetch (default 500, DL-033 R3-C6)")
     wi.add_argument("--config", help="team config YAML (default: GB scenario, DL-037 §2)")
     wi.add_argument("--out", required=True, help="output directory (refused under results/p0-p3)")
+
+    dp = sub.add_parser("dispatch", help="re-dispatch the due carbon-deferral issues (DL-038 §6; opt-in)")
+    dp.add_argument("--repo", required=True, help="owner/name")
+    dp.add_argument("--json-out", help="write the per-issue outcomes JSON here (default: stdout)")
+    dp.add_argument("--summary-out", help="write the Markdown summary here")
+    for p in (adv, dp):
+        p.add_argument("--trusted-creator", default=None,
+                       help="account whose deferral issues are trusted (default github-actions[bot])")
     return parser
+
+
+def _dispatch(args: argparse.Namespace, deps: Dependencies | None) -> int:
+    from . import redispatch
+    from .contract import _REPO_RE
+
+    if not _REPO_RE.match(args.repo):
+        print("error: --repo must be owner/name", file=sys.stderr)
+        return 2
+    deps = deps or Dependencies()
+    now = deps.now()
+    client = deps.github_client or GitHubClient(os.environ.get("GITHUB_TOKEN"))
+    try:
+        results = redispatch.dispatch_due(client, args.repo, now=now,
+                                          trusted_creator=args.trusted_creator or redispatch.TRUSTED_CREATOR)
+    except (redispatch.RedispatchError, ValueError, OSError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    except Exception as exc:  # e.g. the issue listing itself failed (HistoryError)
+        print(f"error: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 1
+    text = json.dumps({"repository": args.repo, "at": now.isoformat(), "results": results}, indent=2, sort_keys=True)
+    if args.json_out:
+        Path(args.json_out).write_text(text + "\n", encoding="utf-8")
+    else:
+        print(text)
+    if args.summary_out:
+        Path(args.summary_out).write_text(redispatch.render_dispatch_summary(args.repo, results, now),
+                                          encoding="utf-8")
+    return 0
 
 
 def _whatif(args: argparse.Namespace) -> int:
@@ -104,6 +151,8 @@ def main(argv: Sequence[str] | None = None, *, deps: Dependencies | None = None)
     args = build_parser().parse_args(argv)
     if args.command == "whatif":
         return _whatif(args)
+    if args.command == "dispatch":
+        return _dispatch(args, deps)
     try:
         request = _read_json(args.request)
         if args.history_file:
@@ -127,14 +176,22 @@ def main(argv: Sequence[str] | None = None, *, deps: Dependencies | None = None)
         except ConfigError as exc:
             config = exc
         deps = deps or Dependencies()
-        if args.github and deps.history_source is None:
-            deps.history_source = GitHubHistorySource(GitHubClient(os.environ.get("GITHUB_TOKEN")),
-                                                      timing_budget=args.timing_budget)
+        client = None
+        if args.github:
+            client = deps.github_client or GitHubClient(os.environ.get("GITHUB_TOKEN"))
+            if deps.history_source is None:
+                deps.history_source = GitHubHistorySource(client, timing_budget=args.timing_budget)
         if not args.no_live:
             deps.live_national = deps.live_national or carbon_live.fetch_national
             deps.live_regional = deps.live_regional or carbon_live.fetch_regional
+        after = None
+        if client is not None and isinstance(config, TeamConfig) and config.redispatch != "off":
+            from . import redispatch
+
+            after = functools.partial(_record_after, config=config, client=client, now=deps.now,
+                                      trusted_creator=args.trusted_creator or redispatch.TRUSTED_CREATOR)
         log = AuditLog(args.audit_log) if args.audit_log else None
-        response = advise_with_audit(request, config, deps, log)
+        response = advise_with_audit(request, config, deps, log, after=after)
 
     text = json.dumps(response, indent=2, sort_keys=True, default=str)
     if args.json_out:

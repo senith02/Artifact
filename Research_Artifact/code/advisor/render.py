@@ -54,6 +54,10 @@ def render_markdown(response: Mapping[str, Any], *, branch: str | None = None) -
     if regional:
         rows.append((f"Live regional — {regional.get('region')} (display only)",
                      f"{_fmt(regional['gco2_per_kwh'], ' gCO₂/kWh', 0)} ({regional['kind']})"))
+    redispatch = response.get("redispatch")
+    if isinstance(redispatch, Mapping) and redispatch.get("issue_number"):
+        rows.append(("Re-dispatch", f"recorded as issue #{int(redispatch['issue_number'])}"
+                                    f"{' (reused)' if redispatch.get('reused') else ''}; close it to cancel"))
     if response.get("vetoes"):
         rows.append(("Vetoes", ", ".join(response["vetoes"])))
     if response.get("fail_safe"):

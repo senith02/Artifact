@@ -25,7 +25,9 @@ HISTORY_CAP_MAX = 1000
 
 _POSTCODE_RE = re.compile(r"^[A-Z]{1,2}[0-9][A-Z0-9]?$")
 _REGION_ID_RANGE = range(1, 18)
-_REDISPATCH_MODES = ("off", "reference-demo")
+#: `scenario-demo` also records labelled SCENARIO deferrals, so the re-dispatch cycle can be
+#: shown on a runner outside GB (DL-038 §8, option A). Demo repositories only.
+REDISPATCH_MODES = ("off", "reference-demo", "scenario-demo")
 
 _KEYS = {
     "compute_region", "enabled_workflows", "extra_protected_branches", "urgent_markers",
@@ -105,8 +107,8 @@ def parse_team_config(raw: Any) -> TeamConfig:
         flags[key] = value
 
     redispatch = raw.get("redispatch", "off")
-    if redispatch not in _REDISPATCH_MODES:
-        raise ConfigError(f"redispatch must be one of {_REDISPATCH_MODES}")
+    if redispatch not in REDISPATCH_MODES:
+        raise ConfigError(f"redispatch must be one of {REDISPATCH_MODES}")
 
     # grid_display_region is display-only (R3-J2): an invalid value is ignored with a
     # warning, never a fail-safe, because it can never affect a decision.

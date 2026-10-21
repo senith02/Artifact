@@ -1,14 +1,18 @@
-# Carbon-deferral advisor — composite GitHub Action (DL-033 revision 3; DL-036).
+# Carbon-deferral advisor — composite GitHub Action (DL-033 revision 3; DL-036; DL-038).
 #
 # Recommendation only: this action never pauses, cancels or fails a build, and
-# its advisory step always exits 0. It runs the advisor CLI in-process over the
-# frozen research core (scheduler_core.decide(), policy_spec.yaml, the ④b
-# duration estimator, the GB hour-of-week profile). See README.md.
+# its step always exits 0. It runs the advisor CLI in-process over the frozen
+# research core (scheduler_core.decide(), policy_spec.yaml, the ④b duration
+# estimator, the GB hour-of-week profile). See README.md.
+#
+# One job is enough (DL-038 §2): with no config file, the team config is built
+# from these inputs, and the workflow that contains the job is the opt-in.
 #
 # Security (R3-C7):
 #   - third-party actions are pinned by full commit SHA;
 #   - no event field is interpolated into a run: line (run_advisor.py reads them);
-#   - the job needs only `contents: read` and `actions: read`.
+#   - advise needs `actions: read` (plus `issues: write` with re-dispatch on);
+#     dispatch needs `actions: write` and `issues: write`.
 name: Carbon-deferral advisor
 description: >-
   Recommends RUN NOW or DEFER RECOMMENDED for a CI run, from the frozen duration-only
@@ -16,11 +20,17 @@ description: >-
 author: senith02
 
 inputs:
+  mode:
+    description: >-
+      advise (default) advises on this run; whatif writes the Repo What-If Report for the
+      `workflow` input; dispatch re-dispatches due carbon-deferral issues (DL-038 §5).
+    required: false
+    default: advise
   compute-region:
     description: >-
       Where this job's compute runs, declared by the team and never detected. GB is the only
-      evaluated region; any other value gives RUN NOW (fail-safe). Must equal the team
-      config's compute_region. Left empty, the advisor fails safe.
+      evaluated region; any other value gives RUN NOW (fail-safe). Left empty, the advisor
+      fails safe. If a config file is used, it must equal the file's compute_region.
     required: false
     default: ""
   scenario:
@@ -29,10 +39,45 @@ inputs:
       on GB compute. Every output is then labelled SCENARIO (DL-033 R3-K).
     required: false
     default: ""
-  config:
-    description: Team config path, relative to the workspace. Check the repository out first.
+  show-gb-scenario:
+    description: >-
+      With a non-GB compute-region, also show a labelled SCENARIO answer for GB compute in the
+      same Step Summary. The step outputs stay the real answer (DL-038 §3).
     required: false
-    default: .github/carbon-advisor.yml
+    default: "false"
+  extra-protected-branches:
+    description: Comma-separated branch patterns that always RUN NOW (inline config only).
+    required: false
+    default: ""
+  urgent-markers:
+    description: Comma-separated commit-message markers that force RUN NOW (inline config; default [urgent]).
+    required: false
+    default: ""
+  max-delay-hours:
+    description: Longest delay the team accepts, in (0, 24] (inline config; default 24).
+    required: false
+    default: ""
+  grid-display-region:
+    description: Outward postcode or region id 1-17 for a display-only regional intensity (inline config).
+    required: false
+    default: ""
+  redispatch:
+    description: >-
+      true records each deferral as a carbon-deferral issue and sets `deferred`, so the build can
+      be skipped and re-run later by `mode: dispatch` (needs issues: write). Off by default.
+      scenario-demo also records SCENARIO deferrals, for demo repositories only (DL-038 §8).
+    required: false
+    default: "false"
+  workflow:
+    description: For mode whatif, the workflow file to replay (e.g. ci.yml).
+    required: false
+    default: ""
+  config:
+    description: >-
+      Optional team config file, relative to the workspace (check the repository out first). If
+      empty, .github/carbon-advisor.yml is used when present, else the inputs above.
+    required: false
+    default: ""
   deadline-utc:
     description: Optional ISO-8601 deadline for this run; a later recommended slot gives RUN NOW.
     required: false
@@ -42,7 +87,9 @@ inputs:
     required: false
     default: "true"
   token:
-    description: Token used read-only to list this workflow's completed runs (needs actions read).
+    description: >-
+      Token for the GitHub API: lists completed runs (actions read); with re-dispatch on, writes
+      the deferral issue (issues write); in mode dispatch, dispatches runs (actions write).
     required: false
     default: ${{ github.token }}
   python-version:
@@ -82,6 +129,20 @@ outputs:
   scenario:
     description: true in scenario mode; act on nothing marked as a scenario
     value: ${{ steps.advise.outputs.scenario }}
+  deferred:
+    description: >-
+      true only when a deferral was recorded as a carbon-deferral issue for re-dispatch; the only
+      output safe to skip a build on (DL-038 §6b)
+    value: ${{ steps.advise.outputs.deferred }}
+  build_sha:
+    description: The commit to build — the deferred SHA in a re-dispatched run, else this run's SHA
+    value: ${{ steps.advise.outputs.build_sha }}
+  scenario_display:
+    description: With show-gb-scenario, the labelled GB scenario's display text; otherwise empty
+    value: ${{ steps.advise.outputs.scenario_display }}
+  scenario_defer_until:
+    description: With show-gb-scenario, the GB scenario's recommended start (UTC); otherwise empty
+    value: ${{ steps.advise.outputs.scenario_defer_until }}
 
 runs:
   using: composite
@@ -110,8 +171,16 @@ runs:
       env:
         ACTION_PATH: ${{ github.action_path }}
         GITHUB_TOKEN: ${{ inputs.token }}
+        ADVISOR_MODE: ${{ inputs.mode }}
         ADVISOR_COMPUTE_REGION: ${{ inputs.compute-region }}
         ADVISOR_SCENARIO: ${{ inputs.scenario }}
+        ADVISOR_SHOW_GB_SCENARIO: ${{ inputs.show-gb-scenario }}
+        ADVISOR_EXTRA_PROTECTED_BRANCHES: ${{ inputs.extra-protected-branches }}
+        ADVISOR_URGENT_MARKERS: ${{ inputs.urgent-markers }}
+        ADVISOR_MAX_DELAY_HOURS: ${{ inputs.max-delay-hours }}
+        ADVISOR_GRID_DISPLAY_REGION: ${{ inputs.grid-display-region }}
+        ADVISOR_REDISPATCH: ${{ inputs.redispatch }}
+        ADVISOR_WORKFLOW: ${{ inputs.workflow }}
         ADVISOR_CONFIG: ${{ inputs.config }}
         ADVISOR_DEADLINE_UTC: ${{ inputs.deadline-utc }}
         ADVISOR_LIVE: ${{ inputs.live-intensity }}

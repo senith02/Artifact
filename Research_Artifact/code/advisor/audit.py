@@ -15,7 +15,7 @@ from typing import Any, Callable, Mapping
 
 from .config import TeamConfig
 from .contract import parse_request
-from .core import Dependencies, advise
+from .core import Dependencies, _fail_safe, advise
 
 #: Request fields copied into the audit record. `history` is summarised, not copied.
 _LOGGED_INPUTS = ("repository", "workflow", "event", "ref_type", "branch", "is_pr", "arrival_utc",
@@ -62,9 +62,22 @@ def audit_record(raw_request: Any, response: Mapping[str, Any], *, key: str | No
     }
 
 
+#: A post-decision step (the opt-in re-dispatch record, DL-038 §6b). It may only turn
+#: a ``defer`` into ``run_now``; :func:`advise_with_audit` enforces that.
+AfterDecision = Callable[[Any, Mapping[str, Any]], "dict[str, Any]"]
+
+
+def _monotone(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[str, Any]:
+    if after.get("action") == before.get("action") or after.get("action") == "run_now":
+        return dict(after)
+    out = _fail_safe("internal_error", "a post-decision step tried to create a deferral")
+    out.update(scenario=before.get("scenario"), deferred=False)
+    return out
+
+
 def advise_with_audit(raw_request: Any, config: TeamConfig | Exception | None, deps: Dependencies,
-                      log: AuditLog | None) -> dict[str, Any]:
-    """:func:`advise`, plus idempotency and one appended audit record.
+                      log: AuditLog | None, *, after: AfterDecision | None = None) -> dict[str, Any]:
+    """:func:`advise`, plus idempotency, the optional post-decision step, and one audit record.
 
     A request whose key (repository, workflow, head_sha, run_attempt) was
     already decided gets the earlier decision back, marked ``duplicate: true``,
@@ -85,6 +98,14 @@ def advise_with_audit(raw_request: Any, config: TeamConfig | Exception | None, d
             log.append(audit_record(raw_request, response, key=key, duplicate=True, now=now))
             return response
     response = advise(raw_request, config, deps)
+    if after is not None:
+        try:
+            response = _monotone(response, after(raw_request, response))
+        except Exception as exc:  # the step must not break the fail-safe contract
+            fallback = _fail_safe("internal_error", f"post-decision step failed ({type(exc).__name__})")
+            fallback.update(scenario=response.get("scenario"), deferred=False)
+            response = fallback
+    response.setdefault("deferred", False)
     response["duplicate"] = False
     if log is not None:
         log.append(audit_record(raw_request, response, key=key, duplicate=False, now=now))

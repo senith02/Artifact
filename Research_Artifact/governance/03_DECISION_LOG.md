@@ -3085,4 +3085,137 @@ recorded run times) but no researcher degrees of freedom.
 8. **Outputs are refused under `results/p0`–`results/p3`.** `whatif` refuses an output directory
    there, and a test checks the refusal.
 
-<!-- Append DL-038, … below as the project progresses. -->
+### DL-038 — P4-T4: one-job adoption of the Action, and the C10 re-dispatch built (a new task; amends DL-033 R3-B6/R3-C6/R3-C10 readings and DL-036 §8)
+
+- **Date:** 2026-10-21
+- **Status:** **Accepted** (2026-10-21). Items 1, 8 and 9 are author decisions taken that day:
+  "simplification + re-dispatch" as a new task P4-T4; option **(A)** for item 8; both repositories may be
+  pushed at the publication step. Everything else is an implementation reading. All of it is logged
+  before any P4-T4 code exists (R4).
+- **Context.** Adopting the advisor currently takes:
+  - a workflow job with a `checkout` step;
+  - a required `.github/carbon-advisor.yml`, whose `compute_region` must repeat the job's input and
+    whose `enabled_workflows` must repeat the workflow the job already sits in;
+  - for the What-If report, a separate ~60-line workflow that clones this repository and calls the CLI
+    by hand.
+
+  The demo repository needs two config files and two advisory jobs to show the real non-GB case beside
+  the GB scenario. A DEFER is advice only, because the C10 re-dispatch was cut (DL-036 §8). So nothing
+  runs a deferred build later, and a team cannot safely skip one.
+- **Spec section affected.** None of the research design. The entry amends how DL-033 R3-B6 (opt-in),
+  R3-C6 (config is a file) and R3-C10 (re-dispatch) are realised, and reverses DL-036 §8's cut.
+  **Untouched:** `scheduler_core/`, `policy_spec.yaml`, the estimator, the profile, the three pins,
+  `advisor.core.advise()`, the fail-safe matrix (one row added, item 6b), and every P0–P3 result.
+
+1. **A new task, P4-T4** *(author decision)*. `development_plan.md` gains P4-T4 "One-job adoption and the
+   re-dispatch reference demonstration" (Should). `tasks_total` 28 → 29; Phase 4 has 4 tasks.
+2. **The team config file becomes optional.**
+   - **File mode, unchanged.** If the `config` input names a file, or `.github/carbon-advisor.yml`
+     exists in the workspace, it is read exactly as before (R3-C6), including the region-match check.
+     An explicitly named file that is missing is still the `config_invalid` fail-safe.
+   - **Inline mode, new.** With no file, the Action builds the config from its own inputs.
+     - `compute_region` is the `compute-region` input. It is still required and has no default, so
+       R3-B5's "declared, never detected" holds. It is declared once, not twice.
+     - `enabled_workflows` is the workflow file that contains the job. **Placing the job in a workflow
+       is the opt-in.** This is the amended reading of R3-B6 in inline mode.
+     - Veto keys come from inputs: `extra-protected-branches`, `urgent-markers`, `max-delay-hours`,
+       `grid-display-region` and `redispatch`. Every other key keeps its C6 default.
+     - The generated config passes the same closed-schema validator, so an invalid input is still
+       `config_invalid`. It is written into the uploaded audit artifact, so every decision shows the
+       config it ran under.
+   - **Least privilege.** Inline mode needs no checkout and no `contents: read`, because nothing is read
+     from the repository. A public repository needs `actions: read` only; a private one also needs
+     `contents: read` (C7, unchanged).
+3. **`show-gb-scenario`.**
+   - When the declared region is not GB, the same step can also run a second request: `compute_region:
+     GB`, `scenario: gb-hypothetical`, otherwise identical. Its result is a labelled SCENARIO section in
+     the same Step Summary.
+   - The step outputs stay the **real** decision. The scenario adds `scenario_display` and
+     `scenario_defer_until` only.
+   - Its audit record goes to a separate file, because the idempotency key does not include the
+     scenario. It never sets `deferred` (item 6b) and is never re-dispatched (R3-K, unless item 8 is
+     accepted).
+4. **Run-page notice.** The step emits one `::notice` annotation carrying only the display text, the UTC
+   time and the outcome code. No request-derived free text appears in it, and `%`, CR and LF are escaped
+   as GitHub's workflow-command rules require.
+5. **One Action, three modes.** The input `mode` is `advise` (default), `whatif` or `dispatch`.
+   - `whatif` runs `python -m advisor whatif` for this repository and a named workflow. It writes the
+     report into the Step Summary and uploads it. That replaces the ~60-line example workflow; the C8
+     rules and DL-037 §2's GB-scenario config are unchanged.
+   - `dispatch` is the C10 dispatcher (item 6).
+6. **The C10 re-dispatch reference demonstration is built.** It is opt-in (`redispatch: true` input, or
+   `redispatch: reference-demo` in a file) and off by default. These are the readings of C10:
+   - **(a) Key.** One deferral per **(repository, workflow, head_sha)**. `run_attempt` is dropped
+     because each job's audit log starts empty, so the issue is the only durable record. A re-run attempt
+     finds the open issue for its key and reuses it rather than opening a second one.
+   - **(b) The only output safe to gate on is `deferred`.** It is `true` only when a real
+     (non-scenario) deferral was recorded as an open `carbon-deferral` issue. If recording fails
+     (permission, API error, issues disabled), the run becomes **RUN NOW with the new fail-safe code
+     `redispatch_unavailable`**, so a build is never skipped without a record. This post-decision step
+     sits in the audit wrapper, after `advise()`. It can only turn a `defer` into `run_now`, a property
+     a test asserts.
+   - **(c) "Same SHA".** GitHub's dispatch endpoint takes a branch or tag name, not a SHA (facts
+     below). The dispatcher therefore dispatches the workflow on the deferred run's **branch**, with the
+     input `carbon_redispatch_sha`. In the re-dispatched run, the Action outputs `build_sha` equal to
+     that SHA, and the reference workflow's build checks it out.
+     - **Declared limitation:** the workflow *definition* used is the branch head's, not the deferred
+       commit's.
+     - If the branch no longer exists, the dispatch falls back to the default branch, and the issue
+       records the fallback.
+   - **(d) C10's duplicate check, as written, would refuse every dispatch.** The deferring run itself
+     concludes `success`, because its build job is skipped and a skipped job does not fail a run. It is
+     therefore read as: refuse if a `workflow_dispatch` run of that workflow at that SHA was created at
+     or after the issue, which can only be an earlier dispatch of this key. The issue is then closed
+     without dispatching. This also covers a dispatcher that crashed between dispatching and closing.
+   - **(e) Trust.** Only open issues carrying the `carbon-deferral` label, created by
+     `github-actions[bot]`, with a body that parses under a closed schema (40-hex SHA, workflow-file
+     regex, branch rules of C2, ISO-8601 times), are dispatched. GitHub drops labels on issues from
+     users without push access (facts below), and the creator check adds a second guard.
+   - **(f) The re-dispatched run is always RUN NOW**, through the existing `redispatched_run` veto and
+     the default `workflow_dispatch` veto. It never defers again.
+   - **(g) Never dropped; human-cancellable.**
+     - A due issue is dispatched on the first dispatcher run at or after `defer_until`.
+     - Past `arrival + 24 h + 2 h` it is dispatched with reason "deadline reached".
+     - A failed dispatch leaves the issue open, so the next run retries it.
+     - Closing the issue by hand cancels the deferral, because only open issues are read.
+   - **(h) Permissions.** The advisory job needs `issues: write` only when re-dispatch is on. The
+     dispatcher workflow declares `actions: write` and `issues: write` in that workflow alone (C7).
+   - **Facts checked on 2026-10-21 against GitHub's documentation:**
+     - Triggering a workflow: *"events triggered by the `GITHUB_TOKEN` … will not create a new
+       workflow run, with the following exceptions: `workflow_dispatch` and `repository_dispatch`
+       events always create workflow runs."*
+     - Create a workflow dispatch event: *"The reference can be a branch or tag name"*; *"You must
+       configure your GitHub Actions workflow to run when the workflow_dispatch webhook event occurs"*;
+       at most 25 input properties.
+     - Schedule: *"Scheduled workflows will only run on the default branch"*; *"can be delayed during
+       periods of high loads … High load times include the start of every hour"*; *"In a public
+       repository, scheduled workflows are automatically disabled when no repository activity has
+       occurred in 60 days."*
+     - Create an issue: *"Only users with push access can set labels for new issues. Labels are
+       silently dropped otherwise."*; issues disabled gives HTTP 410.
+     - List repository issues: pull requests are included and are identified by the `pull_request`
+       key; `labels`, `state` and `creator` are query parameters.
+     - List workflow runs for a workflow: `event` and `head_sha` are supported filters.
+     - **Not stated by the pages read:** which permission the dispatch endpoint needs for
+       `GITHUB_TOKEN`, and whether a missing label is created on issue creation. `actions: write` is
+       declared, and the label is created explicitly (HTTP 422 = it already exists). The real run is the
+       check.
+7. **Documentation.** The README leads with the one-job setup. The re-dispatch section states
+   *deferred re-dispatch, not pausing*, the hourly cron with its load-delay and 60-day-disable caveats,
+   and limitation 6c.
+8. **The captured cycle on a GitHub-hosted runner** *(author decision 2026-10-21: option (A))*.
+   - **The problem.** R3-K says re-dispatch ignores scenario outputs. Under DL-036, the demo's only
+     `DEFER RECOMMENDED` is a scenario. So on GitHub-hosted runners no real deferral exists, and C10's
+     captured "deferral → issue → dispatch" cycle cannot happen.
+   - **Option (A), proposed.** Add the config value `redispatch: scenario-demo`, accepted only together
+     with `scenario: gb-hypothetical`.
+     - It records scenario deferrals too. Every issue title, issue body, dispatch comment and Step
+       Summary says SCENARIO.
+     - It is used in the demo repository only, and documented as not for real use.
+   - **Option (B).** Keep R3-K unchanged. The cycle is then shown only by fixture-driven tests, and the
+     gate records "cycle not captured live".
+9. **Publication.** As in DL-036 §6: the Action's code is committed and pushed as `P4-T4 (action)`
+   commit(s); the demo repository then pins that SHA; one gate commit follows. Every push needs the
+   author's authorization (DL-011).
+
+<!-- Append DL-039, … below as the project progresses. -->

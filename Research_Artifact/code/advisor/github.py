@@ -1,9 +1,12 @@
 """A minimal, standard-library GitHub REST client for completed-run history (DL-035 §1, §3b).
 
-- Read-only; the token needs only ``actions: read`` (``contents: read`` for private repositories).
+- History reads need only ``actions: read`` (``contents: read`` for private repositories).
 - Paginated (100 per page) up to an explicit cap; rate-limit aware: it honours ``Retry-After``
   and ``X-RateLimit-Reset`` within a bounded wait, and otherwise gives up.
 - The token is sent as a header and never appears in an error message or a log line.
+- :meth:`GitHubClient.send_json` is the write path, used only by the opt-in re-dispatch
+  (DL-038 §6). A write is retried only when it was rate limited, never after a 5xx, because
+  the server may already have created the issue or the dispatch.
 
 Endpoint shapes were re-verified against real responses on 2026-10-04
 (``results/p4/endpoint_check/``).
@@ -31,6 +34,14 @@ def _default_opener(request: urllib.request.Request, timeout: float) -> Any:
     return urllib.request.urlopen(request, timeout=timeout)  # noqa: S310 - fixed https host
 
 
+class GitHubHTTPError(HistoryError):
+    """A non-retryable HTTP status. ``status`` lets the re-dispatch tell 422 from 403."""
+
+    def __init__(self, message: str, status: int) -> None:
+        super().__init__(message)
+        self.status = status
+
+
 class GitHubClient:
     """Fetches completed workflow runs. Errors surface as :class:`HistoryError`."""
 
@@ -56,13 +67,18 @@ class GitHubClient:
 
     # -- transport ------------------------------------------------------------ #
 
-    def _request(self, path: str, params: Mapping[str, Any] | None = None) -> urllib.request.Request:
+    def _request(self, path: str, params: Mapping[str, Any] | None = None, *, method: str = "GET",
+                 body: Any = None) -> urllib.request.Request:
         url = API_ROOT + path + ("?" + urllib.parse.urlencode(params) if params else "")
         headers = {"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28",
                    "User-Agent": "carbon-deferral-advisor"}
         if self._token:
             headers["Authorization"] = f"Bearer {self._token}"
-        return urllib.request.Request(url, headers=headers, method="GET")
+        data = None
+        if body is not None:
+            data = json.dumps(body).encode("utf-8")
+            headers["Content-Type"] = "application/json"
+        return urllib.request.Request(url, data=data, headers=headers, method=method)
 
     def _wait_for(self, headers: Mapping[str, str] | None, attempt: int) -> float:
         headers = headers or {}
@@ -80,21 +96,33 @@ class GitHubClient:
         return float(2 ** attempt)
 
     def get_json(self, path: str, params: Mapping[str, Any] | None = None) -> Any:
+        return self._call("GET", path, params)
+
+    def send_json(self, method: str, path: str, body: Any) -> Any:
+        """POST/PATCH a JSON body. Returns the decoded body, or None for an empty one (HTTP 204)."""
+        return self._call(method, path, None, body)
+
+    def _call(self, method: str, path: str, params: Mapping[str, Any] | None = None, body: Any = None) -> Any:
+        write = method != "GET"
         last = "no attempt made"
         for attempt in range(self._max_attempts):
             self.requests_made += 1
             try:
-                with self._opener(self._request(path, params), self._timeout) as response:
-                    return json.loads(response.read().decode("utf-8"))
+                with self._opener(self._request(path, params, method=method, body=body), self._timeout) as response:
+                    raw = response.read().decode("utf-8")
+                    return json.loads(raw) if raw.strip() else None
             except urllib.error.HTTPError as exc:
                 status, headers = exc.code, exc.headers
                 rate_limited = status == 429 or (status == 403 and headers is not None
                                                  and headers.get("X-RateLimit-Remaining") == "0")
-                if not (rate_limited or status >= 500):
-                    raise HistoryError(f"GitHub API returned HTTP {status} for {path}") from None
+                if not (rate_limited or (status >= 500 and not write)):
+                    raise GitHubHTTPError(f"GitHub API returned HTTP {status} for {method} {path}", status) from None
                 last = f"HTTP {status}" + (" (rate limited)" if rate_limited else "")
                 wait = self._wait_for(headers, attempt)
             except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+                if write:
+                    # The request may have reached the server; a retry could act twice.
+                    raise HistoryError(f"GitHub API {type(exc).__name__} for {method} {path}") from None
                 last = type(exc).__name__
                 wait = float(2 ** attempt)
             if attempt == self._max_attempts - 1:

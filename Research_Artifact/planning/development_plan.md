@@ -19,7 +19,7 @@ deliverable. Sessions execute **one major task at a time** and gate after each
 - **Task IDs:** `P{phase}-T{task}` (the gate unit). Subtasks: `S{n}` — they run without stopping.
 - **Status legend:** ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD item unmet.
 - **Task total is derived, never cached:** the total = the count of `###` task headings in this file
-  (**currently 28**: P0:4 · P1:7 · P2:5 · P3:5 · P4:3 · P5:4). At every gate, *recount* before
+  (**currently 29**: P0:4 · P1:7 · P2:5 · P3:5 · P4:4 · P5:4; P4-T4 added 2026-10-21 by DL-038). At every gate, *recount* before
   computing percentages. If a cached number anywhere disagrees with the recount, the recount wins and
   the stale number is fixed. (`###` is reserved for task headings in this file — nothing else uses it.)
 - **A task is done only when every DoD line holds AND the Gate Evidence files exist.** Self-assessment
@@ -46,8 +46,10 @@ deliverable. Sessions execute **one major task at a time** and gate after each
 | M1 — Commit-time evidence complete; SE families admitted or rejected (RQ1, RQ2 model-level) | 11 / 28 | 39% | Wk 2–5 |
 | M2 — Core + simulator + **frozen** evidence-derived policy (RQ3) | 16 / 28 | 57% | Wk 6–8 |
 | M3 — Evaluation complete on test (RQ2 decision-level, RQ4) | 21 / 28 | 75% | Wk 9–10 |
-| M4 — Live prototype demo | 24 / 28 | 86% | Wk 11 |
-| M5 — Dissertation draft complete | 28 / 28 | 100% | Wk 12 |
+| M4 — Live prototype demo *(first reached 2026-10-08 at 24 / 28; re-opened by DL-038's P4-T4)* | 25 / 29 | 86% | Wk 11 |
+| M5 — Dissertation draft complete | 29 / 29 | 100% | Wk 12 |
+
+M0–M3 were reached when the total was 28 and are shown with that denominator.
 
 ## RQ → task map (active RQs, Layer 0-A)
 
@@ -382,6 +384,41 @@ Carbon is GB only, with the compute location declared. The advisor recommends fi
   determinism and accounting-boundary test output.
 - **Deliverable:** `code/advisor/whatif.py` + `results/p4/whatif/`. **Deps:** P4-T1 (independent of
   P4-T2). **RQ:** artifact.
+
+### P4-T4 — One-job adoption and the re-dispatch reference demonstration (Should — DL-038)
+- S1 **Inline config** (DL-038 §2): the config file becomes optional; without one, the Action builds
+  the config from its inputs, with `compute-region` still required and the containing workflow as the
+  opt-in. File mode stays exactly as before.
+- S2 **`show-gb-scenario`** (§3) and the **run-page notice** (§4).
+- S3 **`mode: whatif`** (§5): the What-If report from the same Action.
+- S4 **Re-dispatch** (§6, §8): `advisor/redispatch.py` (deferral issue, `deferred` and `build_sha`
+  outputs, the `redispatch_unavailable` fail-safe, and the dispatcher as `mode: dispatch`), plus the
+  `scenario-demo` value.
+- S5 README and examples lead with the one-job setup. The demo repository moves to one advisory job
+  and adds the dispatcher. Real runs are captured under `results/p4/p4t4_runs/`.
+- **DoD:**
+  - `pytest` passes in full: the 807-test baseline plus all new tests, captured verbatim. The suite
+    makes no network calls.
+  - An inline-mode job with no checkout and no config file gives the same decision as file mode on
+    the same inputs, shown by a test.
+  - The monotone property holds: the re-dispatch layer can only turn `defer` into `run_now`, and a
+    failed recording gives `redispatch_unavailable`. Both are tested.
+  - The dispatcher has tests for each case:
+    - not due, left alone;
+    - due, dispatched once;
+    - already dispatched, closed without dispatching;
+    - untrusted issue (wrong creator or body) refused;
+    - deadline reached;
+    - failed dispatch left open;
+    - branch gone, default-branch fallback.
+  - Captured real runs show one deferral → issue → dispatch cycle (scenario-demo, labelled), with the
+    re-dispatched run RUN NOW at the deferred SHA, and a second dispatcher run refusing to repeat it.
+  - Frozen pins re-asserted; `scheduler_core/`, the spec, the estimator, the profile and
+    `results/p0`–`p3` are unchanged (`git diff --stat`).
+- **Gate Evidence:** `results/p4/p4t4_runs/` (run links, Step Summary captures, issue record,
+  validator result) + the pytest output.
+- **Deliverable:** the updated `code/github-action/` + `code/advisor/redispatch.py`. **Deps:** P4-T2,
+  P4-T3. **RQ:** artifact.
 
 ---
 

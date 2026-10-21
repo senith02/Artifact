@@ -32,7 +32,7 @@ FAIL_SAFE_CODES: tuple[str, ...] = (
     "invalid_request", "untrusted_event", "config_invalid", "region_mismatch", "region_not_gb",
     "scenario_invalid", "deadline_invalid", "arrival_in_future", "spec_unavailable",
     "profile_unavailable", "estimator_unavailable", "history_unavailable", "api_unreachable",
-    "internal_error",
+    "redispatch_unavailable", "internal_error",
 )
 VETO_CODES: tuple[str, ...] = (
     "redispatched_run", "cold_start", "tag_ref", "event_vetoed", "extra_protected_branch",

@@ -48,6 +48,8 @@ class Dependencies:
     live_regional: LiveFetch | None = None
     now: Callable[[], datetime] = field(default=lambda: datetime.now(timezone.utc))
     energy_config: Callable[[], accounting.EnergyConfig] = accounting.load_energy_config
+    #: The GitHub client the CLI uses for history and the opt-in re-dispatch (DL-038 §6).
+    github_client: Any = None
 
 
 # --------------------------------------------------------------------------- #

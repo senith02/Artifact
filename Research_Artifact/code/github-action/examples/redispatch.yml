@@ -1,0 +1,55 @@
+# Reference workflow — skip a deferred build and re-run it later (DL-033 R3-C10; DL-038 §6).
+#
+# Deferred re-dispatch, not pausing. With `redispatch: true`, each deferral is recorded
+# as a `carbon-deferral` issue, and `deferred` becomes true. The build below is skipped
+# only then. The scheduled carbon-dispatch.yml later dispatches this workflow on the
+# same branch with `carbon_redispatch_sha`. The re-dispatched run is always RUN NOW,
+# and it checks out the deferred commit through `build_sha`.
+#
+# - Close the issue to cancel a deferral (nothing then re-runs the build).
+# - If the deferral cannot be recorded, the advisor answers RUN NOW and the build runs.
+# - The re-dispatched run uses the branch head's version of this workflow file.
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      carbon_redispatch_sha:
+        description: Set by the carbon advisor's dispatcher; leave empty for a manual run
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  carbon-advisor:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read                # private repositories only
+      actions: read                 # this workflow's completed runs
+      issues: write                 # record the deferral as an issue
+    outputs:
+      deferred: ${{ steps.advisor.outputs.deferred }}
+      build_sha: ${{ steps.advisor.outputs.build_sha }}
+    steps:
+      - id: advisor
+        uses: senith02/Artifact/Research_Artifact/code/github-action@<full-commit-sha>
+        with:
+          compute-region: GB
+          redispatch: true
+
+  build:
+    needs: carbon-advisor
+    # Runs unless a deferral was recorded; also runs if the advisor job itself failed.
+    if: ${{ !cancelled() && needs.carbon-advisor.outputs.deferred != 'true' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.carbon-advisor.outputs.build_sha || github.sha }}
+          persist-credentials: false
+      - run: echo "your build here"

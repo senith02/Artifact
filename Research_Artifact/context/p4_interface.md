@@ -91,7 +91,13 @@ Everything else is dropped and counted by reason.
 | `history_cap` | int | `500` | 1–1,000 completed runs read (design default, not a result) |
 | `grid_display_region` | str/int | – | outward postcode or region id 1–17; regional intensity is display only (R3-J2) |
 | `show_live_intensity` | bool | `true` | display the live national GB value |
-| `redispatch` | str | `off` | `off` or `reference-demo` (R3-C10) |
+| `redispatch` | str | `off` | `off`, `reference-demo` (R3-C10) or `scenario-demo` (also records SCENARIO deferrals; demo repositories only, DL-038 §8) |
+
+**Inline mode (DL-038 §2).** With no config file, the Action builds this mapping from its inputs:
+`compute_region` from `compute-region`; `enabled_workflows` = the workflow that contains the job; and
+`extra_protected_branches`, `urgent_markers`, `max_delay_hours`, `grid_display_region` and
+`redispatch` from the inputs of the same names. The same validator applies, and the generated file is
+saved in the audit artifact.
 
 ## 6. Order of operations and outcomes
 
@@ -104,7 +110,10 @@ Everything else is dropped and counted by reason.
 7. `d̂`.
 8. `decide()`.
 9. Vetoes.
-10. Render, then audit.
+10. Only with re-dispatch on: record the deferral as an issue, or turn it into RUN NOW
+    (`redispatch_unavailable`). This step runs after `advise()` and can never create a deferral
+    (DL-038 §6b).
+11. Render, then audit.
 
 `outcome_kind` is one of:
 - **`policy`:** `decide()`'s answer stands.
@@ -129,6 +138,7 @@ Everything else is dropped and counted by reason.
 | `estimator_unavailable` | estimator missing, fit-id or hash mismatch |
 | `history_unavailable` | GitHub error after retries, rate limit exhausted, timeout, malformed records |
 | `api_unreachable` | CLI in API mode and the API cannot be reached |
+| `redispatch_unavailable` | re-dispatch is on and the deferral could not be recorded as an issue (permission, API error, issues disabled, key already handled) — DL-038 §6b |
 | `internal_error` | any unhandled exception |
 
 **Cold start is not a fail-safe.** It is the `cold_start` veto (§6.2), and it is reported with its

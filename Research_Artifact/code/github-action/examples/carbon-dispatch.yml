@@ -1,0 +1,28 @@
+# Reference workflow — the re-dispatch dispatcher (DL-033 R3-C10; DL-038 §6).
+#
+# Hourly, it reads the open `carbon-deferral` issues, dispatches each one that is due,
+# then comments on and closes it. A failed dispatch leaves the issue open for the next
+# hour, so a deferral is never dropped. Past arrival + 26 h it dispatches anyway
+# ("deadline reached").
+#
+# GitHub's caveats: scheduled workflows run only on the default branch; they can be
+# delayed under load, especially at the start of the hour (hence minute 17); and in a
+# public repository they are disabled after 60 days without repository activity.
+name: carbon-dispatch
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write                    # dispatch the deferred workflow runs
+  issues: write                     # comment on and close the deferral issues
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: senith02/Artifact/Research_Artifact/code/github-action@<full-commit-sha>
+        with:
+          mode: dispatch

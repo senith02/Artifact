@@ -269,9 +269,13 @@ def test_the_action_is_composite_and_exposes_the_contract_outputs():
     assert "--no-deps" in steps["install"]["run"] and "--only-binary=:all:" in steps["install"]["run"]
 
 
+#: Every workflow-shaped file the Action ships (DL-038 added the re-dispatch pair).
+SHIPPED_YAML = [ACTION_DIR / "action.yml"] + [ACTION_DIR / "examples" / n for n in
+                                              ("advisory.yml", "whatif.yml", "redispatch.yml", "carbon-dispatch.yml")]
+
+
 def test_every_third_party_action_is_pinned_by_full_sha():
-    for path in [ACTION_DIR / "action.yml", ACTION_DIR / "examples" / "advisory.yml",
-                 ACTION_DIR / "examples" / "whatif.yml"]:
+    for path in SHIPPED_YAML:
         text = path.read_text(encoding="utf-8")
         for ref in re.findall(r"uses:\s*(\S+)", text):
             if ref.startswith("senith02/Artifact/"):
@@ -280,8 +284,7 @@ def test_every_third_party_action_is_pinned_by_full_sha():
 
 
 def test_no_expression_is_interpolated_into_a_run_line():
-    for path in [ACTION_DIR / "action.yml", ACTION_DIR / "examples" / "advisory.yml",
-                 ACTION_DIR / "examples" / "whatif.yml"]:
+    for path in SHIPPED_YAML:
         doc = yaml.safe_load(path.read_text(encoding="utf-8"))
         steps = doc["runs"]["steps"] if "runs" in doc else [s for j in doc["jobs"].values() for s in j["steps"]]
         for step in steps:
