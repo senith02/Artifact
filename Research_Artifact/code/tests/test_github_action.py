@@ -274,6 +274,12 @@ SHIPPED_YAML = [ACTION_DIR / "action.yml"] + [ACTION_DIR / "examples" / n for n 
                                               ("advisory.yml", "whatif.yml", "redispatch.yml", "carbon-dispatch.yml")]
 
 
+def test_the_dispatcher_is_serialised_and_dispatch_first():
+    doc = yaml.safe_load((ACTION_DIR / "examples" / "carbon-dispatch.yml").read_text(encoding="utf-8"))
+    assert doc["concurrency"] == {"group": "carbon-dispatch", "cancel-in-progress": False}
+    assert "workflow_dispatch" in doc[True] and doc[True]["schedule"] == [{"cron": "23 */6 * * *"}]
+
+
 def test_every_third_party_action_is_pinned_by_full_sha():
     for path in SHIPPED_YAML:
         text = path.read_text(encoding="utf-8")

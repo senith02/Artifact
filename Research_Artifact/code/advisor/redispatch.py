@@ -101,8 +101,8 @@ class DeferralRecord:
             f"The carbon-deferral advisor deferred run {self.run_id or '—'} of {_code(self.workflow)} on "
             f"branch {_code(self.branch)} (commit {_code(self.head_sha)}).",
             "",
-            f"- **Re-dispatch at:** {self.defer_until_utc} (the scheduled dispatcher runs hourly, so allow up "
-            f"to an hour, more under load)",
+            f"- **Re-dispatch at:** {self.defer_until_utc}, by the first dispatcher run after that time (on time "
+            f"with an external trigger; GitHub's own schedule can be hours late)",
             f"- **Deadline:** dispatched regardless after {(self.arrival + DEADLINE_AFTER).isoformat()}",
             "- **To cancel:** close this issue. Nothing then re-runs the build; run it yourself if needed.",
             "",

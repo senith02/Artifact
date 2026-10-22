@@ -50,6 +50,7 @@ Reference workflows in [`examples/`](examples/):
 | [`advisory.yml`](examples/advisory.yml) | the one-job setup above, beside a build |
 | [`redispatch.yml`](examples/redispatch.yml) + [`carbon-dispatch.yml`](examples/carbon-dispatch.yml) | skip a deferred build and re-run it later (below) |
 | [`whatif.yml`](examples/whatif.yml) | the Repo What-If Report, on demand |
+| [`vps-trigger/`](examples/vps-trigger/) | optional: re-run deferred builds exactly on time from your own server |
 
 **Pin the Action by full commit SHA.** GitHub's guidance is that this is the only way to use an action
 as an immutable release.
@@ -132,8 +133,8 @@ This is *deferred re-dispatch, not pausing* (DL-033 R3-C10; DL-038 §6). It need
 
 1. With `redispatch: true`, a DEFER is recorded as an open issue labelled **`carbon-deferral`**, one
    per (repository, workflow, commit). `deferred` is then `true`, and the build job is skipped.
-2. Every hour, `carbon-dispatch.yml` (`mode: dispatch`) dispatches each due issue on its branch, with
-   input `carbon_redispatch_sha`, then comments on the issue and closes it.
+2. When an issue's start time has passed, `carbon-dispatch.yml` (`mode: dispatch`) dispatches it on its
+   branch, with input `carbon_redispatch_sha`, then comments on the issue and closes it.
 3. The re-dispatched run is always RUN NOW. Its build checks out `build_sha`, the deferred commit.
 
 The guarantees:
@@ -146,8 +147,16 @@ The guarantees:
 - **Trusted input only.** Only issues created by `github-actions[bot]` with a well-formed record are
   dispatched.
 
+**On time, or late?** GitHub's `schedule` trigger is best-effort. On 2026-10-21/22 an hourly schedule
+ran only 3 times in 12 hours, and a build due at 02:00 UTC waited for a manual click at 03:11.
+- **For punctual re-runs:** start the dispatcher from outside at the due time.
+  [`vps-trigger/`](examples/vps-trigger/) is a ~150-line, standard-library script for any Linux server.
+  It sleeps until the exact due time, then starts the dispatcher once. A free hosted cron calling the
+  same API at minute 0 also works.
+- **The dispatcher's own schedule** (every 6 h) is then only a backup.
+
 The caveats:
-- GitHub runs scheduled workflows only from the default branch, can delay them under load, and
+- GitHub runs scheduled workflows only from the default branch, can delay or skip them under load, and
   disables them in a public repository after 60 days without activity.
 - The dispatch uses the branch head's version of the workflow file.
 - The workflow must declare the `carbon_redispatch_sha` input under `workflow_dispatch`.

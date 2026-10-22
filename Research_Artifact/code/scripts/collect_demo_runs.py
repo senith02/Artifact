@@ -1,4 +1,4 @@
-"""Collect the P4-T2 demo-repository runs into results/p4/demo_runs/ (DL-033 R3-E; DL-036 §7).
+"""Collect demo-repository runs into results/p4/ (DL-033 R3-E; DL-036 §7; DL-038).
 
 For each run it records the run and job metadata, downloads the advisor's
 workflow artifacts (request, response, Step Summary copy, audit record), then
@@ -7,7 +7,8 @@ assembles:
 - ``runs.json``            run links, events, branches, and every job's and step's conclusion;
 - ``combined_audit.jsonl`` every advisor audit record, in run order;
 - ``validator_result.json`` ``replay/validate_invariants.py`` over the combined audit log;
-- ``decisions.md``         one row per advisory job, generated from the files above.
+- ``decisions.md``         one row per decision (an advisory step, plus its GB scenario when
+                           ``show-gb-scenario`` ran), and one row per dispatcher outcome.
 
 Demonstration evidence, never research evidence (R3-B10). Network access is read-only GitHub REST.
 Artifact downloads need a token even on a public repository: ``GITHUB_TOKEN`` from the environment,
@@ -90,35 +91,62 @@ def fetch(repo: str, run_ids: list[str], out: Path, token: str) -> list[dict[str
     return runs
 
 
-def assemble(out: Path, runs: list[dict[str, Any]]) -> dict[str, Any]:
+def _decision_dirs(artifact_dir: Path) -> list[tuple[Path, str]]:
+    """An artifact's decision folders: the step's own, plus ``scenario/`` with show-gb-scenario (DL-038 §3)."""
+    found = [(artifact_dir, artifact_dir.name), (artifact_dir / "scenario", f"{artifact_dir.name} (GB scenario)")]
+    return [(d, name) for d, name in found if (d / "response.json").is_file()]
+
+
+def _decision_row(run: dict[str, Any], decision_dir: Path, job_name: str) -> dict[str, Any]:
+    response = json.loads((decision_dir / "response.json").read_text(encoding="utf-8"))
+    request = json.loads((decision_dir / "request.json").read_text(encoding="utf-8"))
+    advisor_steps = [s for j in run["jobs"] for s in j["steps"] if "github-action@" in s["name"]
+                     and not s["name"].startswith("Post ")]
+    defer = response.get("defer_until") or {}
+    redispatch = response.get("redispatch") or {}
+    return {
+        "run_id": run["run_id"], "html_url": run["html_url"], "event": run["event"],
+        "branch": request.get("branch"), "artifact": job_name,
+        "compute_region": request.get("compute_region"), "scenario": bool(response.get("scenario")),
+        "display": response.get("display"), "outcome_kind": response.get("outcome_kind"),
+        "policy_action": response.get("policy_action"), "stage1_rule": response.get("stage1_rule"),
+        "vetoes": response.get("vetoes") or [], "fail_safe_code": response.get("fail_safe_code"),
+        "d_hat_seconds": response.get("d_hat_seconds"), "d_hat_rung": response.get("d_hat_rung"),
+        "n_history": response.get("n_history"), "defer_until_utc": defer.get("utc"),
+        "deferred": bool(response.get("deferred")), "redispatch_issue": redispatch.get("issue_number"),
+        "advisor_steps_success": bool(advisor_steps) and all(s["conclusion"] == "success" for s in advisor_steps),
+    }
+
+
+def _cell(value: Any) -> str:
+    if value is None or value == [] or value == "":
+        return "—"
+    if isinstance(value, float):
+        return f"{value:.0f}"
+    return ", ".join(value) if isinstance(value, list) else str(value)
+
+
+def assemble(out: Path, runs: list[dict[str, Any]], *, title: str = "P4-T2 demo runs — decisions") -> dict[str, Any]:
     """Offline: combined audit log, validator result and the decisions table."""
     import pandas as pd
 
     from replay import validate_invariants
 
-    records, rows = [], []
+    records: list[dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
+    dispatches: list[dict[str, Any]] = []
     for run in runs:
         for artifact_dir in sorted((out / str(run["run_id"])).glob("*")):
-            response = json.loads((artifact_dir / "response.json").read_text(encoding="utf-8"))
-            request = json.loads((artifact_dir / "request.json").read_text(encoding="utf-8"))
-            audit = artifact_dir / "audit.jsonl"
-            if audit.is_file():
-                records += [json.loads(line) for line in audit.read_text(encoding="utf-8").splitlines() if line.strip()]
-            job_name = artifact_dir.name
-            advisor_steps = [s for j in run["jobs"] for s in j["steps"] if "github-action@" in s["name"]
-                             and not s["name"].startswith("Post ")]
-            defer = response.get("defer_until") or {}
-            rows.append({
-                "run_id": run["run_id"], "html_url": run["html_url"], "event": run["event"],
-                "branch": request.get("branch"), "artifact": job_name,
-                "compute_region": request.get("compute_region"), "scenario": bool(response.get("scenario")),
-                "display": response.get("display"), "outcome_kind": response.get("outcome_kind"),
-                "policy_action": response.get("policy_action"), "stage1_rule": response.get("stage1_rule"),
-                "vetoes": response.get("vetoes") or [], "fail_safe_code": response.get("fail_safe_code"),
-                "d_hat_seconds": response.get("d_hat_seconds"), "d_hat_rung": response.get("d_hat_rung"),
-                "n_history": response.get("n_history"), "defer_until_utc": defer.get("utc"),
-                "advisor_steps_success": bool(advisor_steps) and all(s["conclusion"] == "success" for s in advisor_steps),
-            })
+            dispatch = artifact_dir / "dispatch" / "dispatch.json"
+            if dispatch.is_file():
+                for result in json.loads(dispatch.read_text(encoding="utf-8"))["results"]:
+                    dispatches.append({"run_id": run["run_id"], "html_url": run["html_url"], **result})
+            for decision_dir, job_name in _decision_dirs(artifact_dir):
+                audit = decision_dir / "audit.jsonl"
+                if audit.is_file():
+                    records += [json.loads(line) for line in audit.read_text(encoding="utf-8").splitlines()
+                                if line.strip()]
+                rows.append(_decision_row(run, decision_dir, job_name))
 
     (out / "combined_audit.jsonl").write_text(
         "".join(json.dumps(r, sort_keys=True) + "\n" for r in records), encoding="utf-8")
@@ -126,31 +154,33 @@ def assemble(out: Path, runs: list[dict[str, Any]]) -> dict[str, Any]:
     validator = {**result.as_dict(), "records": len(records),
                  "command": "replay.validate_invariants.audit_frame over combined_audit.jsonl"}
     (out / "validator_result.json").write_text(json.dumps(validator, indent=2, default=str) + "\n", encoding="utf-8")
-    (out / "decisions.json").write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
-
-    def cell(value: Any) -> str:
-        if value is None or value == [] or value == "":
-            return "—"
-        if isinstance(value, float):
-            return f"{value:.0f}"
-        return ", ".join(value) if isinstance(value, list) else str(value)
+    (out / "decisions.json").write_text(json.dumps({"decisions": rows, "dispatches": dispatches} if dispatches
+                                                   else rows, indent=2) + "\n", encoding="utf-8")
 
     lines = [
-        "# P4-T2 demo runs — decisions",
+        f"# {title}",
         "",
         "> **Demonstration — not research evidence.** Generated by `scripts/collect_demo_runs.py` from the",
         "> downloaded workflow artifacts; every cell is a field of `decisions.json`.",
         "",
-        "| run | event | branch | job | region | display | kind | policy | stage-1 rule | vetoes | fail-safe | d̂ (s) | rung | n | defer until (UTC) | step exit 0 |",
-        "| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | --: | :-- | --: | :-- | :-: |",
+        "| run | event | branch | job | region | display | kind | policy | stage-1 rule | vetoes | fail-safe | d̂ (s) | rung | n | defer until (UTC) | deferred (issue) | step exit 0 |",
+        "| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | --: | :-- | --: | :-- | :-- | :-: |",
     ]
     for r in rows:
+        issue = f"yes (#{r['redispatch_issue']})" if r["deferred"] else "no"
         lines.append(
             f"| [{r['run_id']}]({r['html_url']}) | {r['event']} | `{r['branch']}` | {r['artifact']} | "
-            f"{cell(r['compute_region'])} | {r['display']} | {r['outcome_kind']} | {cell(r['policy_action'])} | "
-            f"{cell(r['stage1_rule'])} | {cell(r['vetoes'])} | {cell(r['fail_safe_code'])} | "
-            f"{cell(r['d_hat_seconds'])} | {cell(r['d_hat_rung'])} | {cell(r['n_history'])} | "
-            f"{cell(r['defer_until_utc'])} | {'✓' if r['advisor_steps_success'] else '✗'} |")
+            f"{_cell(r['compute_region'])} | {r['display']} | {r['outcome_kind']} | {_cell(r['policy_action'])} | "
+            f"{_cell(r['stage1_rule'])} | {_cell(r['vetoes'])} | {_cell(r['fail_safe_code'])} | "
+            f"{_cell(r['d_hat_seconds'])} | {_cell(r['d_hat_rung'])} | {_cell(r['n_history'])} | "
+            f"{_cell(r['defer_until_utc'])} | {issue} | {'✓' if r['advisor_steps_success'] else '✗'} |")
+    if dispatches:
+        lines += ["", "## Dispatcher passes", "",
+                  "| run | issue | outcome | scenario | ref | reason | detail |", "| :-- | --: | :-- | :-- | :-- | :-- | :-- |"]
+        for d in dispatches:
+            lines.append(f"| [{d['run_id']}]({d['html_url']}) | #{d.get('issue')} | {d.get('outcome')} | "
+                         f"{'yes' if d.get('scenario') else 'no'} | {_cell(d.get('ref'))} | {_cell(d.get('reason'))} | "
+                         f"{_cell(d.get('detail'))} |")
     lines += ["", f"Validator: {validator['violations']} violations over {validator['records']} audit records "
                   f"({validator['deferred']} deferred); passed = {validator['passed']}.", ""]
     (out / "decisions.md").write_text("\n".join(lines), encoding="utf-8")
@@ -161,6 +191,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--repo", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--title", default="P4-T2 demo runs — decisions")
     parser.add_argument("--token-from-git-credential", action="store_true")
     parser.add_argument("run_ids", nargs="+")
     args = parser.parse_args(argv)
@@ -172,7 +203,7 @@ def main(argv: list[str] | None = None) -> int:
     out.mkdir(parents=True, exist_ok=True)
     runs = fetch(args.repo, args.run_ids, out, token)
     (out / "runs.json").write_text(json.dumps(runs, indent=2) + "\n", encoding="utf-8")
-    validator = assemble(out, runs)
+    validator = assemble(out, runs, title=args.title)
     print(f"{len(runs)} runs; validator: {validator['violations']} violations over {validator['records']} records")
     return 0
 

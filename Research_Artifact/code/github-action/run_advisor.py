@@ -374,7 +374,8 @@ def run(env: Mapping[str, str], *, cli_main: CliMain | None = None) -> dict[str,
                 sc_config = scenario_config(env, request["workflow"], config, mode, scenario_dir)
                 sc_request = {**request, "compute_region": "GB", "scenario": "gb-hypothetical"}
                 scenario, sc_summary = _advise_once(main, sc_request, sc_config, scenario_dir, env)
-                summary = (summary or "") + "\n---\n\n### If this build ran on GB compute\n\n" + (sc_summary or "")
+                summary = ((summary or "") + "\n---\n\n### 🧪 If this build ran on GB compute\n\n"
+                           "The same build, advised as if its runner were in Great Britain:\n\n" + (sc_summary or ""))
             except Exception:  # noqa: BLE001 — the scenario is display; the real answer stands
                 traceback.print_exc()
                 scenario = None

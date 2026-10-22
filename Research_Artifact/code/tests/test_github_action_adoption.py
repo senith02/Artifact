@@ -132,7 +132,7 @@ def test_one_job_shows_the_real_answer_and_the_labelled_gb_scenario(tmp_path):
     assert out["scenario"] == "false" and out["deferred"] == "false"
     assert out["scenario_display"] == "DEFER RECOMMENDED (scenario)" and out["scenario_defer_until"]
     summary = (tmp_path / "summary.md").read_text(encoding="utf-8")
-    assert summary.index("RUN NOW") < summary.index("If this build ran on GB compute") < summary.index("SCENARIO")
+    assert summary.index("RUN NOW") < summary.index("If this build ran on GB compute") < summary.index("> **SCENARIO")
     folder = tmp_path / "tmp" / "carbon-advisor"
     assert (folder / "audit.jsonl").is_file() and (folder / "scenario" / "audit.jsonl").is_file()
     sc_config = yaml.safe_load((folder / "scenario" / "config.scenario.yml").read_text(encoding="utf-8"))
@@ -239,6 +239,96 @@ def test_dispatch_mode_publishes_the_pass_and_never_fails(tmp_path):
     assert "Carbon re-dispatch" in (tmp_path / "summary.md").read_text(encoding="utf-8")
     assert run_advisor.run_dispatch(env, cli_main=lambda argv: 1) == 0
     assert "stay open" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+# --------------------------------------------------------------------------- #
+# The readable summary layout (DL-038 §7).
+# --------------------------------------------------------------------------- #
+
+def _rendered(tmp_path, **env_extra) -> str:
+    run_advisor.run(_env(tmp_path, **env_extra), cli_main=_cli())
+    return (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+def test_a_deferral_leads_with_the_time_then_why_then_facts_then_collapsed_details(tmp_path):
+    from advisor.contract import NULL_STATEMENT, STATEMENTS
+
+    text = _rendered(tmp_path)
+    headline = next(l for l in text.splitlines() if l.startswith("## "))
+    assert headline.startswith("## 🟢 DEFER RECOMMENDED — ") and "UTC (in " in headline
+    order = [text.index(s) for s in ("## 🟢", "Nobody is waiting", "| Expected build time |",
+                                     "| Estimated carbon saved |", "<details><summary>Technical details",
+                                     "<details><summary>Assumptions and limits")]
+    assert order == sorted(order)
+    assert "advice only — nothing delays or re-runs" in text
+    for statement in STATEMENTS:  # every R3-C11 statement is still printed
+        assert statement in text
+    assert NULL_STATEMENT in text  # inside the full reason
+
+
+@pytest.mark.parametrize("extra,phrase", [
+    ({"ref_name": "main"}, "is a protected branch"),
+    ({"event_name": "pull_request", "GITHUB_HEAD_REF": "feature/x", "ref_name": "3/merge"}, "This is a pull request"),
+    ({"payload": {"head_commit": {"message": "fix [urgent]"}}}, "a team rule says run now: the commit message"),
+    ({"ADVISOR_COMPUTE_REGION": "GITHUB-HOSTED"}, "not Great Britain"),
+    ({"ADVISOR_COMPUTE_REGION": ""}, "incomplete or invalid"),
+])
+def test_each_run_now_says_why_in_one_sentence(tmp_path, extra, phrase):
+    text = _rendered(tmp_path, **extra)
+    assert "## 🔴 RUN NOW" in text and phrase in text
+
+
+def test_a_short_build_says_it_is_too_short(tmp_path):
+    run_advisor.run(_env(tmp_path), cli_main=_cli(history(duration=60.0)))
+    assert "too short for a delay to save much" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+def test_the_summary_keeps_a_hostile_branch_inert():
+    from advisor.render import render_markdown
+
+    md = render_markdown({"display": "RUN NOW", "action": "run_now", "outcome_kind": "policy",
+                          "stage1_rule": "protected:mainline", "statements": [], "reason": "x"},
+                         branch="main`<script>|x")
+    assert "| Branch | `main'<script>\\|x` |" in md  # one code span, one table cell
+    assert md.count("<script>") == md.count("`main'<script>")  # only ever inside a code span
+
+
+# --------------------------------------------------------------------------- #
+# Evidence collection over the new artifact layout.
+# --------------------------------------------------------------------------- #
+
+def _copy_tree(src: Path, dest: Path) -> None:
+    for f in src.rglob("*"):
+        if f.is_file():
+            target = dest / f.relative_to(src)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(f.read_bytes())
+
+
+def test_collected_runs_include_the_scenario_and_the_dispatcher(tmp_path):
+    from scripts import collect_demo_runs
+
+    out = tmp_path / "runs"
+    env = _env(tmp_path / "r1", ADVISOR_COMPUTE_REGION="GITHUB-HOSTED", ADVISOR_SHOW_GB_SCENARIO="true")
+    run_advisor.run(env, cli_main=_cli())
+    _copy_tree(Path(env["RUNNER_TEMP"]) / "carbon-advisor", out / "1" / "carbon-advisor-carbon-advisor-1")
+    dispatch = out / "2" / "carbon-advisor-dispatch-1" / "dispatch"
+    dispatch.mkdir(parents=True)
+    (dispatch / "dispatch.json").write_text(json.dumps({"results": [
+        {"issue": 1, "outcome": "dispatched", "scenario": True, "ref": "feature/x", "reason": "due"}]}),
+        encoding="utf-8")
+    step = "Run senith02/Artifact/Research_Artifact/code/github-action@" + "a" * 40
+    runs = [{"run_id": i, "html_url": f"https://example.invalid/{i}", "event": "push",
+             "jobs": [{"name": "j", "steps": [{"name": step, "conclusion": "success"}]}]} for i in (1, 2)]
+    validator = collect_demo_runs.assemble(out, runs, title="P4-T4 demo runs")
+    data = json.loads((out / "decisions.json").read_text(encoding="utf-8"))
+    assert [r["artifact"] for r in data["decisions"]] == ["carbon-advisor-carbon-advisor-1",
+                                                          "carbon-advisor-carbon-advisor-1 (GB scenario)"]
+    assert [r["display"] for r in data["decisions"]] == ["RUN NOW", "DEFER RECOMMENDED (scenario)"]
+    assert data["dispatches"][0]["outcome"] == "dispatched"
+    assert validator["violations"] == 0 and validator["records"] == 2
+    table = (out / "decisions.md").read_text(encoding="utf-8")
+    assert table.startswith("# P4-T4 demo runs") and "## Dispatcher passes" in table
 
 
 # --------------------------------------------------------------------------- #

@@ -3162,6 +3162,12 @@ recorded run times) but no researcher degrees of freedom.
        commit's.
      - If the branch no longer exists, the dispatch falls back to the default branch, and the issue
        records the fallback.
+     - **Declared limitation (found 2026-10-21 while tracing the demo).** A deferring run skips its
+       build, so its own wall-clock time is short, and that short time enters later runs' ④b history.
+       The re-dispatched run adds a full-length run for the same commit, so the median is not pulled
+       down while deferrals are re-dispatched. Deferrals cancelled by hand add only short runs and can
+       lower `d̂`. That error is in the safe direction: a lower `d̂` defers less. Excluding those runs
+       from history would need job-level data the run list does not carry, and is not done.
    - **(d) C10's duplicate check, as written, would refuse every dispatch.** The deferring run itself
      concludes `success`, because its build job is skipped and a skipped job does not fail a run. It is
      therefore read as: refuse if a `workflow_dispatch` run of that workflow at that SHA was created at
@@ -3217,5 +3223,60 @@ recorded run times) but no researcher degrees of freedom.
 9. **Publication.** As in DL-036 §6: the Action's code is committed and pushed as `P4-T4 (action)`
    commit(s); the demo repository then pins that SHA; one gate commit follows. Every push needs the
    author's authorization (DL-011).
+
+10. **A readable Step Summary** *(author request, 2026-10-21)*. Presentation only: `advisor/render.py`
+    is re-laid out; no decision, field or statement changes.
+    - **Order:** the headline (with the start time for a deferral), then one plain-English sentence
+      saying why, then a short table of key facts.
+    - **Collapsed sections:** "Technical details" holds every field the old table showed, plus the full
+      `reason` with the null statement and the provenance. "Assumptions and limits" holds every R3-C11
+      statement.
+    - **Where the sentence comes from:** the response's codes alone (`outcome_kind`, `stage1_rule`,
+      `vetoes`, `fail_safe_code`, `window_hours`). It states no threshold of its own.
+    - **Inert text:** request-derived text stays inside code spans, and a `|` is escaped in table
+      cells.
+
+11. **An external exact-time trigger; the GitHub schedule becomes a backup** *(author decision,
+    2026-10-22)*.
+    - **Evidence.** The demo dispatcher was scheduled hourly at minute 17 (`17 * * * *`). From
+      2026-10-21T14:06Z to 2026-10-22T03:03Z, GitHub started it only three times: at 18:40, 22:23 and
+      01:33 UTC (runs 39654912288, 39686129536 and 39706341223).
+      - Each pass correctly answered `not_due` for issues #2 and #3, which were due at 02:00Z.
+      - No pass ran after 02:00Z. The cycle completed only when the author clicked **Run workflow**
+        at 03:11:54Z (run 39715513101): both issues were dispatched, the `ci` runs 39715562738 and
+        39715566770 ran their builds, and the issues closed at 03:12Z.
+      - Nothing was dropped, but the builds started 1 h 12 min late.
+    - **Decision.** `code/github-action/examples/vps-trigger/carbon_tick.py` is a standard-library
+      service that runs on the author's own server.
+      - It reads the open `carbon-deferral` issues read-only and **sleeps until the earliest due
+        time**, re-checking every 5 minutes for new deferrals.
+      - At the due time it starts `carbon-dispatch.yml` once (`workflow_dispatch`).
+      - It re-triggers if a due issue is still open after 20 minutes.
+      - **It holds no decision logic.** It reads only a due time. The dispatcher on GitHub re-validates
+        every issue (§6e), so a fault in the trigger cannot cause a wrong dispatch, only an early
+        no-op or a late one.
+      - **Token:** a fine-grained token limited to one repository, with Actions read/write and Issues
+        read.
+      - **Service:** a systemd unit with `DynamicUser`.
+    - **The dispatcher workflow:**
+      - `workflow_dispatch` is the punctual path;
+      - `schedule` becomes a 6-hourly backup (`23 */6 * * *`), so a deferral is still never dropped
+        when the server is down;
+      - a `concurrency` group serialises passes, so two passes cannot both dispatch one issue.
+    - **Not done:**
+      - a job that sleeps on GitHub's runners (that would be pausing, and jobs on hosted runners
+        are limited to 6 hours);
+      - environment wait timers (also pausing, and they would need 24 environments).
+
+- **Observation (2026-10-21, real runs; no change made).** Two facts were recorded during P4-T4.
+  - **The dispatch endpoint returned HTTP 204 with an empty body** to the author's token. The pages
+    read on 2026-10-21 documented a 200 with run details. The client accepts both.
+  - **One dispatcher pass missed the open issue.** The pass at 14:01:30 UTC (run 39612984170)
+    listed no open `carbon-deferral` issues. Issue #2 had been created at 13:58:47 UTC, 2 min 43 s
+    earlier. The next pass, at 14:06:34 UTC (run 39613858282), found it and answered `not_due`.
+    - **Cause:** not determined. Lag in GitHub's label-filtered listing is one possibility; it is not
+      verified.
+    - **Effect:** an issue missed by one pass is read by the next, so a dispatch can be at most one
+      hourly pass late. It is never dropped, because nothing is closed without being read.
 
 <!-- Append DL-039, … below as the project progresses. -->

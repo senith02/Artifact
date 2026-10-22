@@ -1,0 +1,22 @@
+# systemd unit for carbon_tick.py (DL-038 §11). See README.md in this folder.
+# Install: sudo cp carbon-tick.service /etc/systemd/system/ && sudo systemctl enable --now carbon-tick
+[Unit]
+Description=Carbon advisor: start deferred CI builds at their due time
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+# GITHUB_TOKEN=... lives in this root-only file (chmod 600).
+EnvironmentFile=/etc/carbon-tick.env
+ExecStart=/usr/bin/python3 /opt/carbon-tick/carbon_tick.py --repo senith02/carbon-advisor-demo
+Restart=always
+RestartSec=30
+# Runs as a throwaway unprivileged user with a read-only view of the system.
+DynamicUser=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
