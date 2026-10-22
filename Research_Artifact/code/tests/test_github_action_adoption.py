@@ -242,6 +242,61 @@ def test_dispatch_mode_publishes_the_pass_and_never_fails(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
+# The What-If report inside every advisory artifact (DL-038 §12).
+# --------------------------------------------------------------------------- #
+
+_REPORT_JSON = {"decisions": {"analysed": 8, "eligible": 5, "deferred": 3}, "carbon": {"change_pct": -8.135}}
+
+
+def _with_whatif(status: int = 0):
+    """The real advise path, plus a stand-in for the What-If command (no network)."""
+    real = _cli()
+    calls = []
+
+    def fake(argv):
+        if argv[0] != "whatif":
+            return real(argv)
+        calls.append(argv)
+        out = Path(argv[argv.index("--out") + 1])
+        if status == 0:
+            out.mkdir(parents=True, exist_ok=True)
+            (out / "report.md").write_text("# What-If\n", encoding="utf-8")
+            (out / "report.html").write_text("<html></html>", encoding="utf-8")
+            (out / "report.json").write_text(json.dumps(_REPORT_JSON), encoding="utf-8")
+        return status
+
+    return fake, calls
+
+
+def test_the_whatif_report_is_off_by_default(tmp_path):
+    fake, calls = _with_whatif()
+    run_advisor.run(_env(tmp_path), cli_main=fake)
+    assert calls == [] and not (tmp_path / "tmp" / "carbon-advisor" / "whatif").exists()
+
+
+def test_with_whatif_report_on_the_html_lands_in_the_artifact_and_the_summary_points_to_it(tmp_path):
+    fake, calls = _with_whatif()
+    off = run_advisor.run(_env(tmp_path / "off"), cli_main=_cli())
+    on = run_advisor.run(_env(tmp_path / "on", ADVISOR_WHATIF_REPORT="true",
+                              ADVISOR_ARTIFACT_NAME="carbon-advisor-carbon-advisor-1"), cli_main=fake)
+    assert decision_view(on) == decision_view(off)  # the advice is untouched
+    assert calls[0][:5] == ["whatif", "--repo", "demo-owner/demo-repo", "--workflow", "ci.yml"]
+    assert (tmp_path / "on" / "tmp" / "carbon-advisor" / "whatif" / "report.html").is_file()
+    summary = (tmp_path / "on" / "summary.md").read_text(encoding="utf-8")
+    assert summary.index("## 🟢") < summary.index("### 📊 What-If report for `ci.yml`")
+    assert "5 could wait, 3 would have been deferred" in summary and "**-8.1 %**" in summary
+    assert "`carbon-advisor-carbon-advisor-1`" in summary and "whatif/report.html" in summary
+    assert _outputs(tmp_path / "on" / "output.txt")["action"] == "defer"
+
+
+def test_a_failed_whatif_report_is_a_note_and_the_advice_stands(tmp_path):
+    fake, _ = _with_whatif(status=1)
+    response = run_advisor.run(_env(tmp_path, ADVISOR_WHATIF_REPORT="true"), cli_main=fake)
+    assert response["action"] == "defer" and _outputs(tmp_path / "output.txt")["action"] == "defer"
+    assert "Not built this time" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+# --------------------------------------------------------------------------- #
 # The readable summary layout (DL-038 §7).
 # --------------------------------------------------------------------------- #
 

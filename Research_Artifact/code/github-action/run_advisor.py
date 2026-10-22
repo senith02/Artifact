@@ -404,6 +404,22 @@ def run(env: Mapping[str, str], *, cli_main: CliMain | None = None) -> dict[str,
         print(f"carbon advisor: {response.get('display')} - {response.get('reason')}")
     except Exception:  # noqa: BLE001 — e.g. a console that cannot encode the text; never fail the step
         pass
+
+    # Optional What-If report in the same artifact (DL-038 §12). It runs only after the decision
+    # is published, so it can neither change nor delay it; a failure is a note, never an error.
+    if _truthy(env.get("ADVISOR_WHATIF_REPORT")):
+        workflow = workflow_file(env.get("GITHUB_WORKFLOW_REF")) or ""
+        try:
+            digest = whatif_digest(env, workflow, build_whatif(env, workflow, cli_main))
+        except BaseException as exc:  # noqa: BLE001
+            if isinstance(exc, KeyboardInterrupt):
+                raise
+            digest = (f"\n---\n\n### 📊 What-If report\n\nNot built this time "
+                      f"(`{type(exc).__name__}: {str(exc).replace('`', chr(39))}`). The advice above is unaffected.\n")
+        try:
+            _append(env.get("GITHUB_STEP_SUMMARY"), digest)
+        except Exception:  # noqa: BLE001
+            traceback.print_exc()
     return response
 
 
@@ -419,25 +435,52 @@ def _report_error(env: Mapping[str, str], title: str, message: str) -> None:
         pass
 
 
-def run_whatif(env: Mapping[str, str], *, cli_main: CliMain | None = None) -> int:
-    """The Repo What-If Report for this repository (DL-038 §5). Demonstration only."""
+def build_whatif(env: Mapping[str, str], workflow: str, cli_main: CliMain | None = None) -> Path:
+    """Write the What-If report (md, json, html) for ``workflow`` into the uploaded folder.
+
+    Returns the report folder; raises if it could not be built. Demonstration only (DL-037).
+    """
     out_dir = Path(env.get("RUNNER_TEMP") or ".") / "carbon-advisor" / "whatif"
     # The snapshot holds per-run fields (DL-037 §6); it is kept out of the uploaded folder.
     snapshot = Path(env.get("RUNNER_TEMP") or ".") / "carbon-advisor-private" / "snapshot.json"
+    if not workflow:
+        raise ValueError("the What-If report needs a workflow file name, e.g. ci.yml")
+    argv = ["whatif", "--repo", env.get("GITHUB_REPOSITORY", ""), "--workflow", workflow, "--fetch",
+            "--snapshot", str(snapshot), "--out", str(out_dir)]
+    workspace = Path(env.get("GITHUB_WORKSPACE") or ".")
+    named = (env.get("ADVISOR_CONFIG") or "").strip()
+    if named or (workspace / DEFAULT_CONFIG).is_file():
+        argv += ["--config", str(workspace / (named or DEFAULT_CONFIG))]
+    status = _cli(cli_main)(argv)
+    if status != 0 or not (out_dir / "report.md").is_file():
+        raise RuntimeError(f"the What-If report did not complete (exit {status}); see the step log")
+    return out_dir
+
+
+def whatif_digest(env: Mapping[str, str], workflow: str, report_dir: Path) -> str:
+    """A short Step Summary section pointing at the full report in the artifact (DL-038 §12)."""
+    lines = ["", "---", "", f"### 📊 What-If report for `{workflow.replace('`', chr(39))}`", ""]
+    try:
+        report = json.loads((report_dir / "report.json").read_text(encoding="utf-8"))
+        d, change = report["decisions"], report["carbon"]["change_pct"]
+        lines.append(f"Replaying this workflow's last {d['analysed']} completed runs as if on GB compute: "
+                     f"{d['eligible']} could wait, {d['deferred']} would have been deferred, estimated carbon "
+                     f"change **{change:+.1f} %**.")
+    except (OSError, ValueError, KeyError, TypeError):
+        lines.append("The report was built; its summary could not be read here.")
+    artifact = env.get("ADVISOR_ARTIFACT_NAME") or "carbon-advisor-…"
+    lines += ["", f"Open it: scroll down to **Artifacts**, download **`{artifact}`**, and open "
+                  f"`whatif/report.html` in a browser. *Demonstration — not research evidence.*", ""]
+    return "\n".join(lines)
+
+
+def run_whatif(env: Mapping[str, str], *, cli_main: CliMain | None = None) -> int:
+    """The Repo What-If Report for this repository (DL-038 §5). Demonstration only."""
     try:
         workflow = (env.get("ADVISOR_WORKFLOW") or "").strip()
         if not workflow:
             raise ValueError("mode whatif needs the `workflow` input, e.g. ci.yml")
-        argv = ["whatif", "--repo", env.get("GITHUB_REPOSITORY", ""), "--workflow", workflow, "--fetch",
-                "--snapshot", str(snapshot), "--out", str(out_dir)]
-        workspace = Path(env.get("GITHUB_WORKSPACE") or ".")
-        named = (env.get("ADVISOR_CONFIG") or "").strip()
-        if named or (workspace / DEFAULT_CONFIG).is_file():
-            argv += ["--config", str(workspace / (named or DEFAULT_CONFIG))]
-        status = _cli(cli_main)(argv)
-        report = out_dir / "report.md"
-        if status != 0 or not report.is_file():
-            raise RuntimeError(f"the What-If report did not complete (exit {status}); see the step log")
+        report = build_whatif(env, workflow, cli_main) / "report.md"
         _append(env.get("GITHUB_STEP_SUMMARY"), report.read_text(encoding="utf-8"))
         print("::notice title=Carbon advisor::What-If report written to the run summary "
               "(demonstration - not research evidence)")

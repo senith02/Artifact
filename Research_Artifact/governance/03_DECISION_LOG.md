@@ -3268,6 +3268,20 @@ recorded run times) but no researcher degrees of freedom.
         are limited to 6 hours);
       - environment wait timers (also pausing, and they would need 24 environments).
 
+12. **The What-If report in every advisory artifact** *(author request, 2026-10-22)*.
+    - **What it adds.** An opt-in input `whatif-report: true`. After the advisory step has published
+      its outputs and Summary, it also builds the Repo What-If Report for the containing workflow,
+      with the same C8 rules and DL-037 §2 config as `mode: whatif`. The report (`report.html`, `.md`,
+      `.json`) goes into the same uploaded artifact, under `whatif/`. The Summary gains a short digest
+      (runs analysed, could wait, deferred, estimated change) and says where the HTML is.
+    - **It cannot affect the advice.** It runs after the decision is published, and a failure is
+      written as a note, never an error. A test shows the decision is identical with the report on
+      or off.
+    - **Unchanged:** the snapshot stays outside the uploaded folder (DL-037 §6), and the report stays
+      demonstration only.
+    - **Cost:** the report reads at most 500 completed runs (5 API pages) per advisory run, which is
+      why it is off by default.
+
 - **Observation (2026-10-21, real runs; no change made).** Two facts were recorded during P4-T4.
   - **The dispatch endpoint returned HTTP 204 with an empty body** to the author's token. The pages
     read on 2026-10-21 documented a 200 with run details. The client accepts both.

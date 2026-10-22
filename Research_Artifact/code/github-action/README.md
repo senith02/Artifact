@@ -97,6 +97,7 @@ The study evaluated commit-level software-engineering characteristics and did no
 | `max-delay-hours` | `24` | The longest delay you accept, in (0, 24]. A longer recommendation becomes RUN NOW. The window is never re-optimised. |
 | `grid-display-region` | *(none)* | Outward postcode or region id 1–17 for a live regional intensity, shown for display only. |
 | `redispatch` | `false` | `true` records each deferral as an issue so the build can be skipped and re-run later (below). |
+| `whatif-report` | `false` | `true` also puts the Repo What-If Report for this workflow (`whatif/report.html`, `.md`, `.json`) in this run's artifact, with a short digest in the Summary. It is built after the advice is published, so it never changes or delays it. |
 | `mode` | `advise` | `advise`, `whatif` (with `workflow`) or `dispatch`. |
 | `workflow` | *(empty)* | For `mode: whatif`, the workflow file to replay. |
 | `scenario` | *(empty)* | `gb-hypothetical` (with `compute-region: GB`) labels the whole run a SCENARIO. |
@@ -169,6 +170,9 @@ Scenario deferrals are never recorded. The exception is `redispatch: scenario-de
 so a demo repository on a non-GB runner can show the cycle; every issue it opens is titled **[SCENARIO]**.
 
 ## The Repo What-If Report
+
+To get it with every run instead (pushes, deferrals and re-dispatched builds), set
+`whatif-report: true` on the advisory step: the HTML then sits in that run's artifact.
 
 [`whatif.yml`](examples/whatif.yml) runs the same Action with `mode: whatif`. It replays this
 repository's completed runs of one workflow through the advisor on GB compute (labelled SCENARIO).

@@ -68,6 +68,12 @@ inputs:
       scenario-demo also records SCENARIO deferrals, for demo repositories only (DL-038 §8).
     required: false
     default: "false"
+  whatif-report:
+    description: >-
+      true also writes the Repo What-If Report for this workflow (report.html, .md, .json) into this
+      run's artifact, after the advice is published; demonstration only (DL-038 §12).
+    required: false
+    default: "false"
   workflow:
     description: For mode whatif, the workflow file to replay (e.g. ci.yml).
     required: false
@@ -181,6 +187,8 @@ runs:
         ADVISOR_GRID_DISPLAY_REGION: ${{ inputs.grid-display-region }}
         ADVISOR_REDISPATCH: ${{ inputs.redispatch }}
         ADVISOR_WORKFLOW: ${{ inputs.workflow }}
+        ADVISOR_WHATIF_REPORT: ${{ inputs.whatif-report }}
+        ADVISOR_ARTIFACT_NAME: ${{ inputs.artifact-name }}-${{ github.run_attempt }}
         ADVISOR_CONFIG: ${{ inputs.config }}
         ADVISOR_DEADLINE_UTC: ${{ inputs.deadline-utc }}
         ADVISOR_LIVE: ${{ inputs.live-intensity }}
