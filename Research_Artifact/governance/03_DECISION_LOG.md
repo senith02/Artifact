@@ -3282,6 +3282,19 @@ recorded run times) but no researcher degrees of freedom.
     - **Cost:** the report reads at most 500 completed runs (5 API pages) per advisory run, which is
       why it is off by default.
 
+- **Demo configuration (2026-10-23, author request; no code change).** The demo repository's `ci.yml`
+  now sets the existing input `live-intensity: false`.
+  - **Why.** The live GB value (display only, R3-J2) was often far below the typical-week profile that
+    the decision uses: for example 54 vs 121 gCO₂/kWh on 23 Oct. Side by side, the two invited
+    confusion between them.
+  - **What changes.** No decision, field or Action code changes; the live lookup is skipped, and its
+    row no longer appears.
+  - **The pending deferral.** Issue #5's branch (`feature/viva-check`) received the same workflow
+    through an `[urgent]` merge commit (run 39908595633: urgent veto, RUN NOW, build ran, no new
+    deferral). The re-dispatch of #5 therefore uses the updated workflow.
+  - **What remains true, and is stated as a limitation:** the policy uses the typical week, not
+    today's grid (`results/p3/evaluation_report.md` §6 item 1).
+
 - **Observation (2026-10-21, real runs; no change made).** Two facts were recorded during P4-T4.
   - **The dispatch endpoint returned HTTP 204 with an empty body** to the author's token. The pages
     read on 2026-10-21 documented a 200 with run details. The client accepts both.
