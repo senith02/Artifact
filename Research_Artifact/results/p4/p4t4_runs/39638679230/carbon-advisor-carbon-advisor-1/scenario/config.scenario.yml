@@ -1,0 +1,7 @@
+{
+  "compute_region": "GB",
+  "enabled_workflows": [
+    "ci.yml"
+  ],
+  "redispatch": "scenario-demo"
+}

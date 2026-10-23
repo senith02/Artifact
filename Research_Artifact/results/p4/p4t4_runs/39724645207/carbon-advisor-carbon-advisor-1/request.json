@@ -1,0 +1,15 @@
+{
+  "arrival_utc": "2026-10-22T04:51:02Z",
+  "branch": "main",
+  "compute_region": "GITHUB-HOSTED",
+  "event": "push",
+  "head_commit_message": "Put the What-If report in every advisory artifact\n\nci.yml: whatif-report: true, so each run's carbon-advisor artifact carries whatif/report.html, with a short digest in the Summary. All workflows pin senith02/Artifact 74d6132 (research DL-038 section 12).",
+  "head_sha": "db67721fd1f7c795a73bdca2fdc03149f5c078a5",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 39724645207,
+  "workflow": "ci.yml"
+}

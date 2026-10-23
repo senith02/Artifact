@@ -1,0 +1,16 @@
+{
+  "arrival_utc": "2026-10-23T04:59:50Z",
+  "branch": "feature/viva-check",
+  "compute_region": "GB",
+  "event": "push",
+  "head_commit_message": "Pre-viva check: a build that can wait",
+  "head_sha": "44dfcf4bb6f55e684e06dfd207274d983c31c0c5",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 39903285128,
+  "scenario": "gb-hypothetical",
+  "workflow": "ci.yml"
+}

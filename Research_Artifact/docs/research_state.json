@@ -12,7 +12,7 @@
       "planning/PROGRESS.md (live state)",
       "governance/03_DECISION_LOG.md (amendments)"
     ],
-    "last_updated": "2026-10-08",
+    "last_updated": "2026-10-23",
     "generated_by": "code/scripts/update_research_guide.py"
   },
   "central_question": {
@@ -599,6 +599,22 @@
       }
     },
     {
+      "id": "P4-T4",
+      "name": "One-job adoption + re-dispatch reference demonstration",
+      "rq": "artifact",
+      "purpose": "Make the Action adoptable as one job with no config file, and build DL-033's re-dispatch so a deferred build is skipped, recorded as a closable issue, and re-run at the deferred commit (DL-038).",
+      "will_produce": "The updated code/github-action/ (inline config, show-gb-scenario, modes whatif/dispatch, readable summary, What-If in every artifact) plus code/advisor/redispatch.py and an exact-time trigger in examples/vps-trigger/.",
+      "unknown": "Done. Real runs showed the deferral, issue, dispatch and re-run cycle (labelled SCENARIO). GitHub's hourly schedule ran 3 times in 12 hours, so an external trigger was added; it fired 21 s after a 02:00 UTC due time on 2026-10-23. Validator 0 violations over 18 records. Demonstration evidence only.",
+      "status": "done",
+      "completed_on": "2026-10-23",
+      "plan_heading": "One-job adoption and the re-dispatch reference demonstration (Should — DL-038)",
+      "tests": {
+        "passed": 894,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t4.txt"
+      }
+    },
+    {
       "id": "P5-T1",
       "name": "Literature verification + Introduction/LR",
       "rq": "framing",
@@ -869,6 +885,12 @@
       "title": "P4-T3: the public-repository selection rule, and how the Repo What-If Report reads DL-033 R3-C8",
       "date": "2026-10-08",
       "summary": "One repository per estimator language (Go, Java, Python, Ruby), first qualifying of 30 by stars, committed before any report (author decision). A GB-scenario default config; arrival is created_at; observed wall-clock used only after decide(); snapshots stay local and only aggregates are published; outputs refused under results/p0-p3."
+    },
+    {
+      "id": "DL-038",
+      "title": "P4-T4: one-job adoption of the Action, and the C10 re-dispatch built (a new task; amends DL-033 R3-B6/R3-C6/R3-C10 readings and DL-036 §8)",
+      "date": "2026-10-21",
+      "summary": "New task P4-T4 (29 tasks). The config file becomes optional: inputs build it, and the containing workflow is the opt-in. Re-dispatch built as an opt-in issue record plus a dispatcher; an unrecordable deferral fails safe to RUN NOW. A scenario-demo mode shows the cycle on a non-GB runner. Later additions: a readable summary, an exact-time external trigger (GitHub's schedule ran 3 times in 12 hours), and the What-If report in every artifact. No frozen file or research result changed."
     }
   ],
   "artifact_components": [
@@ -1186,18 +1208,22 @@
     {
       "date": "2026-10-08",
       "event": "P4-T3 gated: the Repo What-If Report replays a workflow's completed runs through the same advise(). Reports for the demo repository and four rule-selected public repositories (Go, Java, Python, Ruby); all byte-identical on re-run; aggregates only; 807 tests pass. Phase 4 complete (M4) (DL-037)."
+    },
+    {
+      "date": "2026-10-23",
+      "event": "P4-T4 gated (added by DL-038; 29 tasks): one-job adoption with no config file; re-dispatch built (deferral issue, dispatcher, redispatch_unavailable fail-safe); readable Step Summary; What-If report in every artifact. GitHub's schedule proved unreliable (3 runs in 12 h), so an external exact-time trigger was added; it fired 21 s after the due time. Validator 0 violations; 894 tests pass. Phase 4 complete (M4)."
     }
   ],
   "progress": {
-    "tasks_total": 28,
-    "tasks_done": 24,
+    "tasks_total": 29,
+    "tasks_done": 25,
     "pct": 86,
     "per_phase_total": {
       "P0": 4,
       "P1": 7,
       "P2": 5,
       "P3": 5,
-      "P4": 3,
+      "P4": 4,
       "P5": 4
     },
     "per_phase_done": {
@@ -1205,13 +1231,13 @@
       "P1": 7,
       "P2": 5,
       "P3": 5,
-      "P4": 3,
+      "P4": 4,
       "P5": 0
     },
     "current_task": "P5-T1",
     "next_task": "P5-T2",
-    "last_gate_passed": "P4-T3 (Repo What-If Report)",
-    "progress_md_updated": "2026-10-08",
+    "last_gate_passed": "P4-T4 (One-job adoption + re-dispatch reference demonstration)",
+    "progress_md_updated": "2026-10-23",
     "test_split_opened": true
   },
   "evidence": {
@@ -4557,6 +4583,11 @@
         "passed": 807,
         "skipped": 0,
         "file": "results/p4/pytest_p4_t3.txt"
+      },
+      "P4-T4": {
+        "passed": 894,
+        "skipped": 0,
+        "file": "results/p4/pytest_p4_t4.txt"
       }
     }
   }

@@ -1,0 +1,16 @@
+{
+  "arrival_utc": "2026-10-22T04:06:11Z",
+  "branch": "feature/vps-trigger-test",
+  "compute_region": "GB",
+  "event": "push",
+  "head_commit_message": "Test the VPS exact-time trigger",
+  "head_sha": "30d49a8fecfe892b16f3a1a12d7c0373a54560c7",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 39720458252,
+  "scenario": "gb-hypothetical",
+  "workflow": "ci.yml"
+}

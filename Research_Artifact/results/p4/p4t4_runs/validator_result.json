@@ -1,0 +1,11 @@
+{
+  "path": "combined_audit.jsonl",
+  "rows": 18,
+  "deferred": 4,
+  "violations": 0,
+  "passed": true,
+  "missing_columns": [],
+  "violation_rows": [],
+  "records": 18,
+  "command": "replay.validate_invariants.audit_frame over combined_audit.jsonl"
+}

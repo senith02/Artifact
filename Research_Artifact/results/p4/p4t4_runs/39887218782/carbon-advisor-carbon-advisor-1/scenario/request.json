@@ -1,0 +1,16 @@
+{
+  "arrival_utc": "2026-10-23T02:01:03Z",
+  "branch": "feature/vps-trigger-test",
+  "compute_region": "GB",
+  "event": "workflow_dispatch",
+  "head_sha": "30d49a8fecfe892b16f3a1a12d7c0373a54560c7",
+  "is_pr": false,
+  "redispatch_key": "30d49a8fecfe892b16f3a1a12d7c0373a54560c7",
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 39887218782,
+  "scenario": "gb-hypothetical",
+  "workflow": "ci.yml"
+}

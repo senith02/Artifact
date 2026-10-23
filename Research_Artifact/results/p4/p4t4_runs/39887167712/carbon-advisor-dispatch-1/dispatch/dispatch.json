@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T02:00:48.311560+00:00",
+  "repository": "senith02/carbon-advisor-demo",
+  "results": [
+    {
+      "defer_until_utc": "2026-10-23T02:00:00+00:00",
+      "fallback": false,
+      "head_sha": "30d49a8fecfe892b16f3a1a12d7c0373a54560c7",
+      "issue": 4,
+      "key": "senith02/carbon-advisor-demo|ci.yml|30d49a8fecfe892b16f3a1a12d7c0373a54560c7",
+      "outcome": "dispatched",
+      "reason": "due",
+      "ref": "feature/vps-trigger-test",
+      "run_url": null,
+      "scenario": true,
+      "workflow": "ci.yml"
+    }
+  ]
+}

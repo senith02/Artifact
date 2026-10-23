@@ -1,0 +1,15 @@
+{
+  "arrival_utc": "2026-10-21T13:54:20Z",
+  "branch": "main",
+  "compute_region": "GITHUB-HOSTED",
+  "event": "push",
+  "head_commit_message": "Move to the one-job advisor setup and add the re-dispatch cycle\n\nOne carbon-advisor job (no config file, no checkout) gives the real GITHUB-HOSTED answer and the labelled GB scenario; redispatch: scenario-demo records SCENARIO deferrals as carbon-deferral issues, the build is skipped, and carbon-dispatch.yml re-runs it at the deferred commit. whatif.yml uses mode: whatif. Pins senith02/Artifact 85e43ea (research DL-038).",
+  "head_sha": "a243f01115ca99752ce7715dc8adef44b299b9bd",
+  "is_pr": false,
+  "ref_type": "branch",
+  "repo_language": "Python",
+  "repository": "senith02/carbon-advisor-demo",
+  "run_attempt": 1,
+  "run_id": 39612059426,
+  "workflow": "ci.yml"
+}

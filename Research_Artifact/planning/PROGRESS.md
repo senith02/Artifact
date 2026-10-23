@@ -17,12 +17,12 @@
 
 ```yaml
 state:
-  tasks_total: 28        # derived — recounted 2026-10-05 (P0:4 P1:7 P2:5 P3:5 P4:3 P5:4)
-  tasks_done: 24
+  tasks_total: 29        # derived — recounted 2026-10-23 (P0:4 P1:7 P2:5 P3:5 P4:4 P5:4; DL-038 added P4-T4)
+  tasks_done: 25
   current_task: P5-T1    # Literature verification + Intro/LR — NOT started (awaits author go-ahead)
   next_task: P5-T2       # Methods & implementation chapters
   current_phase: P4
-  blocked_on: none — P4-T3 gated 2026-10-08 (Repo What-If Report; DL-037). Phase 4 complete → M4.
+  blocked_on: none — P4-T4 gated 2026-10-23 (one-job adoption + re-dispatch; DL-038). Phase 4 complete → M4.
   correction:     **CR-1 (DL-034) GATED 2026-10-02** — not a numbered task; tasks_total stays 28.
                   Full-chain rerun P1-T4..P3-T5 under completion-causal ④b history. **No RQ verdict
                   changed**; changed: F1 late-period V1 {F1} → ∅ (S-e late), ⑥ beats ⑤ on est. carbon
@@ -30,8 +30,14 @@ state:
                   (182 rows, 57 changed). Originals: git 2901d77 / 95c6d6d / 1e38db7 / 4d9e128 +
                   results/corrections/dl034/original/. **The per-task blocks below (p3_model_level …
                   policy_fit) carry PRE-DL-034 values and are superseded by comparison.md.**
-  last_gate_passed: P4-T3 (Repo What-If Report)
-  last_updated: 2026-10-08
+  last_gate_passed: P4-T4 (One-job adoption + re-dispatch reference demonstration)
+  last_updated: 2026-10-23
+  p4_adoption:    **P4-T4** — one job, no config file; re-dispatch built (`advisor/redispatch.py`,
+                  issue record, dispatcher, `redispatch_unavailable`); readable Step Summary; What-If in
+                  every artifact; exact-time trigger `examples/vps-trigger/` (GitHub schedule ran 3× in
+                  12 h). Punctual cycle: issue #4 due 02:00:00Z → VPS dispatch 02:00:21Z → build at
+                  30d49a8 success 02:10:38Z. 894 tests passed. results/p4/p4t4_runs/ (21 runs, validator
+                  0 violations / 18 records / 4 deferred). Demonstration evidence only (DL-038).
   p4_action:      **P4-T2** — `code/github-action/` (composite; pinned by SHA 7c19b9c3… from the public
                   demo `senith02/carbon-advisor-demo`); 789 tests passed (763 + 26). Seven real CI runs →
                   results/p4/demo_runs/ (13 advisory decisions, validator 0 violations / 1 deferral).
@@ -180,8 +186,8 @@ state:
 ```
 
 ```
-Overall   [█████████████████░░░]  86%   (24 / 28 tasks)   Milestone: ✅ M4 reached (P4 complete)
-Phase 4   [████████████████████] 100%   Prototype    (3 / 3 tasks)
+Overall   [█████████████████░░░]  86%   (25 / 29 tasks)   Milestone: ✅ M4 reached again (P4 complete)
+Phase 4   [████████████████████] 100%   Prototype    (4 / 4 tasks)
 
 ► CURRENT : P5-T1 — Literature verification + Intro/LR (not started)
 ○ NEXT    : P5-T2 — Methods & implementation chapters
@@ -189,7 +195,12 @@ Phase 4   [████████████████████] 100%   
 
 ## ── IN-FLIGHT NOTES (current task only — wipe at each gate) ──────
 
-*(empty — P4-T3 gated 2026-10-08; P5-T1 not started)*
+*(empty — P4-T4 gated 2026-10-23; P5-T1 not started)*
+
+Carried note (not a task): dissertation drafts for Ch 4–6 + appendices + user guide exist (commits
+0800bd4, 0d38364, 88926f6) outside any gated task; P5-T2/P5-T3 must audit them rather than redraft.
+Viva deck `Research\Docs\Final_Viva_Presentation_v2.pptx` (outside the repo); its literature slide uses
+spec §2 sources not yet verified under P5-T1.
 
 ---
 
@@ -223,6 +234,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | **P4 Prototype** | P4-T1 Advisor core + CLI + REST API | ✅ | `code/advisor/` + `code/api/` (parity-tested) | artifact |
 | | P4-T2 GitHub Action + demo repo | ✅ | `code/github-action/` | artifact |
 | | P4-T3 Repo What-If Report | ✅ | `code/advisor/whatif.py` + `results/p4/whatif/` | artifact |
+| | P4-T4 One-job adoption + re-dispatch | ✅ | `code/github-action/` + `advisor/redispatch.py` | artifact |
 | **P5 Write-up** | P5-T1 Literature verification + Intro/LR | ► ⬜ | chapters + `reference_audit.md` | framing |
 | | P5-T2 Methods & implementation | ⬜ | methodology/artifact chapters | all |
 | | P5-T3 Results & discussion + claims audit | ⬜ | results/discussion + `claims_audit.md` | all |
@@ -238,7 +250,7 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | P1 Commit-time evidence | 7 / 7 | `[████████████████████]` 100% ✅ |
 | P2 Core + simulator + policy | 5 / 5 | `[████████████████████]` 100% ✅ |
 | P3 Evaluation | 5 / 5 | `[████████████████████]` 100% ✅ |
-| P4 Prototype | 3 / 3 | `[████████████████████]` 100% ✅ |
+| P4 Prototype | 4 / 4 | `[████████████████████]` 100% ✅ |
 | P5 Write-up | 0 / 4 | `[░░░░░░░░░░░░░░░░░░░░]` 0% |
 
 ---
@@ -280,3 +292,4 @@ Legend: ✅ done · ⏳ in progress · ⬜ not started · ✗ DoD unmet · ► c
 | 2026-10-05 | P4-T1 Advisor core, history adapter, CLI and REST API | **DL-035 written first:** uvicorn + httpx added (pinned, `pip check` clean, lockfile dry-run resolves); pins line-ending-normalised (the profile's DL-033 hash `efdc9f38…` was the Windows CRLF working copy, which a Linux runner would never match; the pin is now `2af9992e…`, equal to the git blob); contract details (a)–(e), incl. `is_pr` accepted as the Stage-1 input although it is in F6. `context/p4_interface.md` written before code. External endpoints re-verified by real calls (`results/p4/endpoint_check/`, 2026-10-04T17:17:51Z): Carbon Intensity national/regional shapes; GitHub runs list, timing (`run_duration_ms` 40000 = wall-clock 40 s for the captured run), repo language. `code/advisor/` (13 modules) + `code/api/` (3): validate → trusted event → config/opt-in → region → pins → completed history → d̂ via the frozen `causal_project_history` + `predict_4b` → `decide()` → monotone veto layer → response/audit. `scheduler_core/` unchanged (`git diff` empty). **763 passed** (645 + 118; `results/p4/pytest_p4_t1.txt`). The property test's generator was rebalanced after a coverage check found only 4 / 250 standing deferrals; it now asserts ≥ 30 cases of each outcome. Real API capture on `127.0.0.1:8765` (synthetic history; illustrative): eligible → DEFER RECOMMENDED (d̂ 800 s, project rung, 14 runs); `main` → RUN NOW; `pull_request_target` → fail-safe. Real read-only GitHub run (`pallets/flask` tests.yaml, scenario mode, no token): 100 fetched, 99 admitted, d̂ 40 s → RUN NOW (below threshold). | **DL-035** |
 | 2026-10-08 | P4-T2 GitHub Action + demo repository | **DL-036 written first** (author directive: no self-hosted runner — GitHub's docs: public repos run free on standard GitHub-hosted runners, and self-hosted runners "should almost never be used for public repositories"). `code/github-action/` — composite `action.yml` (setup-python v7.0.0 / upload-artifact v7.0.2 pinned by SHA; setup + install `continue-on-error`; advisory step `|| true`), `run_advisor.py` (request from `GITHUB_*` + event payload file, nothing interpolated into `run:` lines; CLI in-process; 9 step outputs; fail-safe `internal_error` fallback), `requirements.action.txt` (12 packages = lock pins, `--no-deps`; `narwhals` added after the sufficiency test caught scikit-learn 1.9's hard requirement — DL-036 correction), README with every R3-C11 statement, `examples/`; `scripts/collect_demo_runs.py`; `tests/test_github_action.py` (26) — **789 passed** (`results/p4/pytest_p4_t2.txt`). Clean-venv wiring check from the subset alone → `results/p4/action_wiring/`. Action commit `7c19b9c` pushed and pinned by the public demo repo `senith02/carbon-advisor-demo` (author-authorized pushes; PR #1 opened via API with author consent, not merged). **Seven real runs** (`results/p4/demo_runs/decisions.md`): cold start `feature/first-run` → RUN NOW (scenario), veto `cold_start`, policy defer, d̂ 577 s language rung; `main` → RUN NOW (`protected:mainline`); `feature/eligible-change` → **DEFER RECOMMENDED (scenario)**, d̂ 549 s project rung n = 1, to 2026-10-09T02:00Z — GB case recorded as option **(b)** scenario mode; `feature/urgent-fix` → RUN NOW, veto `urgent_marker`; `demo/missing-region` → fail-safe `invalid_request`; real GitHub-hosted job on every run → fail-safe `region_not_gb`; `pull_request` → RUN NOW (`pr_blocking`); `pull_request_target` → fail-safe `untrusted_event`. Every advisory step and job concluded `success` (exit 0). Combined audit log: **0 violations / 13 records / 1 deferred** (`validator_result.json`). Demo build workload is **synthetic** (~9 min). **S3 re-dispatch CUT.** Frozen pins re-asserted; frozen paths unchanged since `386be51`. Demonstration evidence only. | **DL-036** |
 | 2026-10-08 | P4-T3 Repo What-If Report | **DL-037 written first** (author decision 2026-10-08: one repo per estimator language Go/Java/Python/Ruby, first qualifying of ≤ 30 by stars; plus C8 readings). **S1 rule committed before any report** (`e71effc`, `results/p4/whatif_selection.md`). `code/advisor/whatif.py` (snapshot → same `advise()` per run in arrival order → observed wall-clock only after `decide()`; ±50% band; TTFF p95 when n ≥ 20) + `whatif_html.py` (static page, inline SVG, no JS; rendered and inspected in headless Edge, histogram headroom fixed) + `python -m advisor whatif` + `scripts/select_whatif_repos.py` + `examples/whatif.yml` (not exercised); `tests/test_advisor_whatif.py` (18) — **807 passed** (`results/p4/pytest_p4_t3.txt`). Selection (`selection_result.json`, 90-day cut-off): avelino/awesome-go `pr-quality-check.yaml` · spring-projects/spring-boot `run-codeql-analysis.yml` · public-apis/public-apis `test_of_push_and_pull.yml` · rails/rails `rails-new-docker.yml` (busiest workflow per the rule — not always the main build). Reports for these + the demo repo → `results/p4/whatif/`. **All five byte-identical on re-run from saved snapshots** (`determinism.json`). Outcomes as reported: awesome-go 500/500 `untrusted_event` (its workflow runs on `pull_request_target`); public-apis 0 deferred (all PR/protected); spring-boot 0 deferred (24 eligible, all below threshold); rails 0 deferred (64 eligible, all below threshold); demo 2/6 deferred, −9.147% estimated. **Duration check** (`duration_check.md`): multi-day wall-clocks (≤ 616,558 s) equal GitHub's timing endpoint on all 18 sampled runs — source unchanged, limitation added. Snapshots local + gitignored; published output holds no emails/logins/per-run fields. `results/p0`–`p3` unchanged since `386be51` → no What-If number in RQ evidence. Pins re-asserted. **Phase 4 complete → M4 (24/28, 86%).** | **DL-037** |
+| 2026-10-23 | P4-T4 One-job adoption + re-dispatch reference demonstration | **DL-038 written first** (accepted 2026-10-21; author decisions: scope "simplification + re-dispatch", new task P4-T4 → 29 tasks, option (A) `scenario-demo`, pushes authorised). Action (`85e43ea`, `3ce9650`, `74d6132`): inline config (no file, no checkout; containing workflow = opt-in), `show-gb-scenario`, run-page notice, modes `whatif`/`dispatch`, outputs `deferred`/`build_sha`, readable Step Summary (§10), What-If in every artifact (§12); `advisor/redispatch.py` (issue per (repo, workflow, sha), monotone post-decision hook, `redispatch_unavailable`, trusted-creator dispatcher, default-branch fallback); `examples/vps-trigger/carbon_tick.py` (§11). **894 passed** (`results/p4/pytest_p4_t4.txt`). Real runs → `results/p4/p4t4_runs/` (21 runs; validator **0 violations / 18 records / 4 deferred**): GitHub's hourly schedule ran 3× in 12 h (all `not_due`, manual dispatch needed, DL-038 §11 evidence); with the VPS trigger, issue #4 due 02:00:00Z was dispatched at **02:00:21Z**, build at the deferred SHA 30d49a8 succeeded at 02:10:38Z, issue closed; a later pass 39903275346 found nothing to repeat; fresh deferral #5 due 2026-10-24T03:00Z. Frozen paths (`scheduler_core/`, spec, estimator, profile, results/p0–p3) unchanged. Demonstration evidence only. **Phase 4 complete → M4 (25/29, 86%).** | **DL-038** |

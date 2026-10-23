@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-21T18:41:29.565725+00:00",
+  "repository": "senith02/carbon-advisor-demo",
+  "results": [
+    {
+      "defer_until_utc": "2026-10-22T02:00:00+00:00",
+      "detail": "due at 2026-10-22T02:00:00+00:00",
+      "head_sha": "dd4f3250df822cb68d39a1b2d431838181fbafe3",
+      "issue": 3,
+      "key": "senith02/carbon-advisor-demo|ci.yml|dd4f3250df822cb68d39a1b2d431838181fbafe3",
+      "outcome": "not_due",
+      "scenario": true,
+      "workflow": "ci.yml"
+    },
+    {
+      "defer_until_utc": "2026-10-22T02:00:00+00:00",
+      "detail": "due at 2026-10-22T02:00:00+00:00",
+      "head_sha": "67b29752f12de6acb8b5fbfe1d1f5981b3fa51df",
+      "issue": 2,
+      "key": "senith02/carbon-advisor-demo|ci.yml|67b29752f12de6acb8b5fbfe1d1f5981b3fa51df",
+      "outcome": "not_due",
+      "scenario": true,
+      "workflow": "ci.yml"
+    }
+  ]
+}
